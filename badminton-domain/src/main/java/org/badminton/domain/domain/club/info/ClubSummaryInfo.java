@@ -13,6 +13,7 @@ import org.badminton.domain.domain.member.entity.Member;
 
 public record ClubSummaryInfo(
 	Long clubId,
+	String clubToken,
 	String clubName,
 	String clubDescription,
 	String clubImage,
@@ -23,6 +24,7 @@ public record ClubSummaryInfo(
 	public static ClubSummaryInfo toClubSummaryInfo(Club club) {
 		return new ClubSummaryInfo(
 			club.getClubId(),
+			club.getClubToken(),
 			club.getClubName(),
 			club.getClubDescription(),
 			club.getClubImage(),

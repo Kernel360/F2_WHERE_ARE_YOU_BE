@@ -11,33 +11,32 @@ import org.badminton.domain.domain.clubmember.entity.ClubMember;
 import org.badminton.domain.domain.clubmember.info.ClubMemberBanRecordInfo;
 import org.badminton.domain.domain.clubmember.info.ClubMemberInfo;
 import org.badminton.domain.domain.clubmember.info.ClubMemberJoinInfo;
+import org.badminton.domain.domain.clubmember.info.ClubMemberMyPageInfo;
 import org.badminton.domain.domain.clubmember.info.ClubMemberWithdrawInfo;
 
 public interface ClubMemberService {
 
-	ClubMemberJoinInfo joinClub(String memberToken, Long clubId);
+	ClubMemberJoinInfo joinClub(String memberToken, String clubToken);
 
-	void createClubJoinInfo(String memberToken, ClubCreateInfo clubInfo);
+	void clubMemberOwner(String memberToken, ClubCreateInfo clubInfo);
 
-	ClubMemberInfo updateClubMemberRole(ClubMemberRoleUpdateCommand request, Long clubMemberId);
+	ClubMemberInfo updateClubMemberRole(ClubMemberRoleUpdateCommand command, Long clubMemberId);
 
-	Map<ClubMember.ClubMemberRole, List<ClubMemberInfo>> findAllClubMembers(Long clubId);
+	Map<ClubMember.ClubMemberRole, List<ClubMemberInfo>> findAllClubMembers(String clubToken);
 
-	ClubMember getClubMember(String memberToken);
+	ClubMemberMyPageInfo getClubMember(String memberToken);
 
-	ClubMember getClubMember(Long clubMemberId);
+	ClubMemberBanRecordInfo expelClubMember(ClubMemberExpelCommand command, Long clubMemberId);
 
-	ClubMemberBanRecordInfo expelClubMember(ClubMemberExpelCommand request, Long clubMemberId);
+	ClubMemberBanRecordInfo banClubMember(ClubMemberBanCommand command, Long clubMemberId);
 
-	ClubMemberBanRecordInfo banClubMember(ClubMemberBanCommand request, Long clubMemberId);
+	ClubMemberWithdrawInfo withDrawClubMember(Long clubMemberId);
 
-	ClubMemberWithdrawInfo withDrawClubMember(Long clubId, String memberToken);
-
-	boolean checkIfMemberBelongsToClub(String memberToken, Long clubId);
+	boolean checkIfMemberBelongsToClub(String memberToken, String clubToken);
 
 	void checkMyOwnClub(String memberToken);
 
-	void deleteAllClubMembers(Long clubId);
+	void deleteAllClubMembers(String clubToken);
 }
 
 

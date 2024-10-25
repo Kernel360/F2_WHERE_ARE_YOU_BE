@@ -27,7 +27,7 @@ public class ClubReaderImpl implements ClubReader {
 	}
 
 	@Override
-	public Club readClub(Long id) {
-		return clubRepository.findById(id).orElseThrow(() -> new ClubNotExistException(id));
+	public Club readClub(String clubToken) {
+		return clubRepository.findByClubToken(clubToken).orElseThrow(() -> new ClubNotExistException(clubToken));
 	}
 }

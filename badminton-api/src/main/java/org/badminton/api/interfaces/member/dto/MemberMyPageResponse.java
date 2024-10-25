@@ -1,9 +1,9 @@
 package org.badminton.api.interfaces.member.dto;
 
-import org.badminton.api.interfaces.league.dto.LeagueRecordInfo;
-import org.badminton.domain.domain.clubmember.entity.ClubMember;
+import org.badminton.api.interfaces.clubmember.dto.ClubMemberMyPageResponse;
+import org.badminton.api.interfaces.league.dto.LeagueRecordResponse;
 import org.badminton.domain.domain.clubmember.info.ClubMemberMyPageInfo;
-import org.badminton.domain.domain.league.entity.LeagueRecord;
+import org.badminton.domain.domain.league.info.LeagueRecordInfo;
 import org.badminton.domain.domain.member.entity.Member;
 
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -22,32 +22,40 @@ public record MemberMyPageResponse(
 	@Schema(description = "Profile image URL", example = "https://example.com/profile.jpg")
 	String profileImage,
 
-	@Schema(description = "ClubMember information")
-	ClubMemberMyPageInfo clubMemberMyPageInfo,
+	@Schema(description = "Tier", example = "GOLD")
+	Member.MemberTier tier,
 
 	@Schema(description = "League record information")
-	LeagueRecordInfo leagueRecordInfo
+	LeagueRecordResponse leagueRecordResponse,
+
+	@Schema(description = "ClubMember information")
+	ClubMemberMyPageResponse clubMemberMyPageResponse
+
 ) {
-	public static MemberMyPageResponse fromMemberEntityAndClubMemberEntity(Member member,
-		ClubMember clubMember,
-		LeagueRecord leagueRecord) {
+	public static MemberMyPageResponse toMemberMyPageResponse(Member member,
+		LeagueRecordInfo leagueRecordInfo,
+		ClubMemberMyPageInfo clubMemberMyPageInfo
+	) {
 		return new MemberMyPageResponse(
 			member.getMemberToken(),
 			member.getName(),
 			member.getEmail(),
 			member.getProfileImage(),
-			ClubMemberMyPageInfo.from(clubMember),
-			LeagueRecordInfo.from(leagueRecord)
+			member.getTier(),
+			LeagueRecordResponse.toLeagueRecordResponse(leagueRecordInfo),
+			ClubMemberMyPageResponse.toClubMemberMyPageResponse(clubMemberMyPageInfo)
 		);
 	}
 
-	public static MemberMyPageResponse fromMemberEntity(Member member) {
+	public static MemberMyPageResponse toMemberMyPageResponse(Member member,
+		LeagueRecordInfo leagueRecordInfo) {
 		return new MemberMyPageResponse(
 			member.getMemberToken(),
 			member.getName(),
 			member.getEmail(),
 			member.getProfileImage(),
-			null,
+			member.getTier(),
+			LeagueRecordResponse.toLeagueRecordResponse(leagueRecordInfo),
 			null
 		);
 	}

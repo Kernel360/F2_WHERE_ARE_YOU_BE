@@ -13,6 +13,9 @@ public record ClubMemberMyPageInfo(
 
 ) {
 	public static ClubMemberMyPageInfo from(ClubMember clubMember) {
+		if (clubMember == null) {
+			return null;
+		}
 		return new ClubMemberMyPageInfo(clubMember.getClub().getClubId(), clubMember.getClubMemberId(),
 			clubMember.getClub().getClubName(), clubMember.getRole());
 	}

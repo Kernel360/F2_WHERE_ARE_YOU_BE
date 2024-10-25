@@ -8,6 +8,6 @@ public interface ClubReader {
 
 	Page<Club> keywordSearch(String keyword, Pageable pageable);
 
-	Club readClub(Long id);
+	Club readClub(String clubToken);
 
 }

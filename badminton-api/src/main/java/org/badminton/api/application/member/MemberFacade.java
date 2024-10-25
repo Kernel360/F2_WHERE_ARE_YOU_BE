@@ -1,9 +1,10 @@
 package org.badminton.api.application.member;
 
-import org.badminton.api.service.leaguerecord.LeagueRecordService;
-import org.badminton.domain.domain.clubmember.entity.ClubMember;
+import org.badminton.domain.domain.clubmember.info.ClubMemberMyPageInfo;
 import org.badminton.domain.domain.clubmember.service.ClubMemberService;
 import org.badminton.domain.domain.league.entity.LeagueRecord;
+import org.badminton.domain.domain.league.info.LeagueRecordInfo;
+import org.badminton.domain.domain.league.service.LeagueRecordService;
 import org.badminton.domain.domain.member.info.MemberIsClubMemberInfo;
 import org.badminton.domain.domain.member.info.MemberMyPageInfo;
 import org.badminton.domain.domain.member.info.MemberUpdateInfo;
@@ -23,14 +24,20 @@ public class MemberFacade {
 	private final ClubMemberService clubMemberService;
 
 	public MemberIsClubMemberInfo getMemberIsClubMember(String memberToken) {
-		ClubMember clubMember = clubMemberService.getClubMember(memberToken);
-		return memberService.getMemberIsClubMember(memberToken, clubMember);
+		ClubMemberMyPageInfo clubMemberMyPageInfo = clubMemberService.getClubMember(memberToken);
+
+		return memberService.getMemberIsClubMember(memberToken, clubMemberMyPageInfo);
 	}
 
 	public MemberMyPageInfo getMemberMyPageInfo(String memberToken) {
-		ClubMember clubMember = clubMemberService.getClubMember(memberToken);
+		ClubMemberMyPageInfo clubMemberMyPageInfo = clubMemberService.getClubMember(memberToken);
 		LeagueRecord leagueRecord = leagueRecordService.getLeagueRecord(memberToken);
-		return memberService.getMemberInfo(memberToken,leagueRecord, clubMember);
+		LeagueRecordInfo leagueRecordInfo = LeagueRecordInfo.from(leagueRecord);
+		return memberService.getMemberInfo(memberToken, leagueRecordInfo, clubMemberMyPageInfo);
+	}
+
+	public ClubMemberMyPageInfo getClubMember(String memberToken) {
+		return clubMemberService.getClubMember(memberToken);
 	}
 
 	public MemberUpdateInfo updateProfileImage(String memberToken, String imageUrl) {

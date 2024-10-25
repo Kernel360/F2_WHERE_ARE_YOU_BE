@@ -46,9 +46,8 @@ public class ClubMembershipFilter extends OncePerRequestFilter {
 		if (auth == null || !(auth.getPrincipal() instanceof CustomOAuth2Member)) {
 			return false;
 		}
-
 		CustomOAuth2Member member = (CustomOAuth2Member)auth.getPrincipal();
-		return clubMemberReader.existsMemberInClub(member.getMemberToken(), Long.valueOf(clubId));
+		return clubMemberReader.existsMemberInClub(member.getMemberToken(), clubId);
 	}
 }
 

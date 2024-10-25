@@ -18,6 +18,7 @@ import org.badminton.domain.domain.clubmember.entity.ClubMember;
 import org.badminton.domain.domain.clubmember.info.ClubMemberBanRecordInfo;
 import org.badminton.domain.domain.clubmember.info.ClubMemberInfo;
 import org.badminton.domain.domain.clubmember.info.ClubMemberJoinInfo;
+import org.badminton.domain.domain.clubmember.info.ClubMemberMyPageInfo;
 import org.badminton.domain.domain.clubmember.info.ClubMemberWithdrawInfo;
 import org.badminton.domain.domain.member.MemberReader;
 import org.badminton.domain.domain.member.entity.Member;
@@ -38,14 +39,14 @@ public class ClubMemberServiceImpl implements ClubMemberService {
 
 	@Override
 	public ClubMemberJoinInfo joinClub(
-		String memberToken, Long clubId) {
+		String memberToken, String clubToken) {
 
-		Club club = clubReader.readClub(clubId);
+		Club club = clubReader.readClub(clubToken);
 
 		Member member = memberReader.getMember(memberToken);
 
 		if (clubMemberReader.isExist(memberToken)) {
-			throw new ClubMemberDuplicateException(clubId, memberToken);
+			throw new ClubMemberDuplicateException(clubToken, memberToken);
 		}
 
 		ClubMember clubMember = new ClubMember(club, member, ClubMember.ClubMemberRole.ROLE_USER);
@@ -56,7 +57,7 @@ public class ClubMemberServiceImpl implements ClubMemberService {
 	}
 
 	@Override
-	public void createClubJoinInfo(String memberToken, ClubCreateInfo clubInfo) {
+	public void clubMemberOwner(String memberToken, ClubCreateInfo clubInfo) {
 		Member member = memberReader.getMember(memberToken);
 		var club = new Club(clubInfo);
 		ClubMember clubMember = new ClubMember(club, member, ClubMember.ClubMemberRole.ROLE_OWNER);
@@ -64,20 +65,20 @@ public class ClubMemberServiceImpl implements ClubMemberService {
 	}
 
 	@Override
-	public ClubMemberInfo updateClubMemberRole(ClubMemberRoleUpdateCommand request, Long clubMemberId) {
+	public ClubMemberInfo updateClubMemberRole(ClubMemberRoleUpdateCommand command, Long clubMemberId) {
 		ClubMember clubMember = clubMemberReader.getClubMember(clubMemberId);
-		clubMember.updateClubMemberRole(request.role());
+		clubMember.updateClubMemberRole(command.role());
 		clubMemberStore.store(clubMember);
 		return ClubMemberInfo.valueOf(clubMember);
 	}
 
 	@Override
-	public Map<ClubMember.ClubMemberRole, List<ClubMemberInfo>> findAllClubMembers(Long clubId) {
+	public Map<ClubMember.ClubMemberRole, List<ClubMemberInfo>> findAllClubMembers(String clubToken) {
 		Map<ClubMember.ClubMemberRole, List<ClubMemberInfo>> responseMap = new TreeMap<>(
 			new ClubMemberRoleComparator());
 
 		List<ClubMember> clubMembers =
-			clubMemberReader.getAllClubMemberByClubId(clubId);
+			clubMemberReader.getAllClubMemberByClubId(clubToken);
 
 		clubMembers.stream()
 			.map(ClubMemberInfo::valueOf) // 멤버를 응답 객체로 변환
@@ -90,36 +91,38 @@ public class ClubMemberServiceImpl implements ClubMemberService {
 	}
 
 	@Override
-	public ClubMember getClubMember(Long clubMemberId) {
-		return clubMemberReader.getClubMember(clubMemberId);
+	public ClubMemberMyPageInfo getClubMember(String memberToken) {
+		ClubMember clubMember = clubMemberReader.getClubMemberByMemberToken(memberToken);
+		return ClubMemberMyPageInfo.from(clubMember);
 	}
 
 	@Override
-	public ClubMemberBanRecordInfo expelClubMember(ClubMemberExpelCommand request, Long clubMemberId) {
+	public ClubMemberBanRecordInfo expelClubMember(ClubMemberExpelCommand command, Long clubMemberId) {
 		ExpelStrategy expelStrategy = new ExpelStrategy(clubMemberStore);
 
 		ClubMember clubMember = getClubMember(clubMemberId);
-		return expelStrategy.execute(clubMember, request);
+		return expelStrategy.execute(clubMember, command);
 	}
 
 	@Override
-	public ClubMemberBanRecordInfo banClubMember(ClubMemberBanCommand request, Long clubMemberId) {
+	public ClubMemberBanRecordInfo banClubMember(ClubMemberBanCommand command, Long clubMemberId) {
 		BanStrategy banStrategy = new BanStrategy(clubMemberStore);
 		ClubMember clubMember = getClubMember(clubMemberId);
-		return banStrategy.execute(clubMember, request);
+		return banStrategy.execute(clubMember, command);
 	}
 
 	@Override
-	public ClubMemberWithdrawInfo withDrawClubMember(Long clubId, String memberToken) {
-		ClubMember clubMember = clubMemberReader.getClubMember(clubId);
+	public ClubMemberWithdrawInfo withDrawClubMember(Long clubMemberId) {
+		ClubMember clubMember = clubMemberReader.getClubMember(clubMemberId);
 		clubMember.withdrawal();
 		clubMemberStore.store(clubMember);
-		return new ClubMemberWithdrawInfo(clubId, clubMember.getClubMemberId(), clubMember.isDeleted());
+		return new ClubMemberWithdrawInfo(clubMember.getClub().getClubId(), clubMember.getClubMemberId(),
+			clubMember.isDeleted());
 	}
 
 	@Override
-	public boolean checkIfMemberBelongsToClub(String memberToken, Long clubId) {
-		return clubMemberReader.checkIsClubMember(memberToken, clubId);
+	public boolean checkIfMemberBelongsToClub(String memberToken, String clubToken) {
+		return clubMemberReader.checkIsClubMember(memberToken, clubToken);
 	}
 
 	@Override
@@ -128,16 +131,16 @@ public class ClubMemberServiceImpl implements ClubMemberService {
 	}
 
 	@Override
-	public void deleteAllClubMembers(Long clubId) {
-		List<ClubMember> clubMembers = clubMemberReader.getAllMember(clubId);
+	public void deleteAllClubMembers(String clubToken) {
+		List<ClubMember> clubMembers = clubMemberReader.getAllMember(clubToken);
 		clubMembers.forEach(clubMember -> {
 			clubMember.deleteClubMember();
 			clubMemberStore.store(clubMember);
 		});
 	}
 
-	@Override
-	public ClubMember getClubMember(String memberToken) {
-		return clubMemberReader.getClubMemberByMemberToken(memberToken);
+	private ClubMember getClubMember(Long clubMemberId) {
+		return clubMemberReader.getClubMember(clubMemberId);
 	}
+
 }

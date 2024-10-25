@@ -10,23 +10,23 @@ import org.springframework.data.repository.query.Param;
 
 public interface ClubMemberRepository extends JpaRepository<ClubMember, Long> {
 
-    List<ClubMember> findAllByClub_ClubId(Long clubId);
+	List<ClubMember> findAllByClubClubToken(String clubToken);
 
-    Optional<ClubMember> findByDeletedFalseAndMemberMemberToken(String memberToken);
+	Optional<ClubMember> findByDeletedFalseAndMemberMemberToken(String memberToken);
 
-    Optional<ClubMember> findByClub_ClubIdAndMemberMemberToken(Long clubId, String memberToken);
+	Optional<ClubMember> findByClubClubTokenAndMemberMemberToken(String clubToken, String memberToken);
 
-    boolean existsByMember_MemberTokenAndDeletedFalse(String memberToken);
+	boolean existsByMember_MemberTokenAndDeletedFalse(String memberToken);
 
-    List<ClubMember> findAllByMemberMemberToken(String memberToken);
+	List<ClubMember> findAllByMemberMemberToken(String memberToken);
 
-    List<ClubMember> findAllByClubClubIdAndBannedFalseAndDeletedFalse(Long clubId);
+	List<ClubMember> findAllByClubClubTokenAndBannedFalseAndDeletedFalse(String clubToken);
 
-    boolean existsByMemberMemberTokenAndClubClubId(String MemberToken, Long clubId);
+	boolean existsByMemberMemberTokenAndClubClubToken(String MemberToken, String clubToken);
 
-    Optional<ClubMember> findByClubMemberId(Long clubMemberId);
+	Optional<ClubMember> findByClubMemberId(Long clubMemberId);
 
-    List<ClubMember> findAllByDeletedFalseAndClub_ClubId(Long clubId);
+	List<ClubMember> findAllByDeletedFalseAndClubClubToken(String clubToken);
 
 	@Query("SELECT COUNT(cm) FROM ClubMember cm WHERE cm.member.memberToken = :memberToken AND cm.role = 'ROLE_OWNER'")
 	long countByMemberIdAndRoleOwner(@Param("memberToken") String memberToken);
