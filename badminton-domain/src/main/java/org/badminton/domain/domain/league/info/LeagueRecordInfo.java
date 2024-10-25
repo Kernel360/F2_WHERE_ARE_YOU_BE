@@ -1,4 +1,4 @@
-package org.badminton.api.interfaces.league.dto;
+package org.badminton.domain.domain.league.info;
 
 import org.badminton.domain.domain.league.entity.LeagueRecord;
 

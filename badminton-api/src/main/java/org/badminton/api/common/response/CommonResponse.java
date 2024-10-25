@@ -17,16 +17,19 @@ public class CommonResponse<T> {
 	private String message;
 	private String errorCode;
 
+	public static <T> CommonResponse<T> success(T data) {
+		return CommonResponse.<T>builder()
+			.result(Result.SUCCESS)
+			.data(data)
+			.build();
+	}
+
 	public static <T> CommonResponse<T> success(T data, String message) {
-		return (CommonResponse<T>)CommonResponse.builder()
+		return CommonResponse.<T>builder()
 			.result(Result.SUCCESS)
 			.data(data)
 			.message(message)
 			.build();
-	}
-
-	public static <T> CommonResponse<T> success(T data) {
-		return success(data, null);
 	}
 
 	public static CommonResponse fail(String message, String errorCode) {

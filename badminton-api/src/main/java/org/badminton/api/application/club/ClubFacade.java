@@ -34,11 +34,11 @@ public class ClubFacade {
 		return clubService.readAllClubs(pageable);
 	}
 
-	public ClubDetailsInfo readClub(Long clubId, CustomOAuth2Member clubMember) {
+	public ClubDetailsInfo readClub(String clubToken, CustomOAuth2Member clubMember) {
 		String memberToken = clubMember.getMemberToken();
-		var club = clubService.readClub(clubId);
+		var club = clubService.readClub(clubToken);
 		Map<Member.MemberTier, Long> memberCountByTier = club.getClubMemberCountByTier();
-		boolean isClubMember = clubMemberService.checkIfMemberBelongsToClub(memberToken, clubId);
+		boolean isClubMember = clubMemberService.checkIfMemberBelongsToClub(memberToken, clubToken);
 		int clubMembersCount = club.clubMembers().size();
 		return ClubDetailsInfo.fromClubEntityAndMemberCountByTier(club, memberCountByTier, isClubMember,
 			clubMembersCount);
@@ -52,17 +52,17 @@ public class ClubFacade {
 	public ClubCreateInfo createClub(ClubCreateCommand createCommand, String memberToken) {
 		clubMemberService.checkMyOwnClub(memberToken);
 		var clubCreateInfo = clubService.createClub(createCommand);
-		clubMemberService.createClubJoinInfo(memberToken, clubCreateInfo);
+		clubMemberService.clubMemberOwner(memberToken, clubCreateInfo);
 		return clubCreateInfo;
 	}
 
-	public ClubUpdateInfo updateClubInfo(ClubUpdateCommand clubUpdateCommand, Long clubId) {
-		return clubService.updateClub(clubUpdateCommand, clubId);
+	public ClubUpdateInfo updateClubInfo(ClubUpdateCommand clubUpdateCommand, String clubToken) {
+		return clubService.updateClub(clubUpdateCommand, clubToken);
 	}
 
-	public ClubDeleteInfo deleteClubInfo(Long clubId) {
-		clubMemberService.deleteAllClubMembers(clubId);
-		return clubService.deleteClub(clubId);
+	public ClubDeleteInfo deleteClubInfo(String clubToken) {
+		clubMemberService.deleteAllClubMembers(clubToken);
+		return clubService.deleteClub(clubToken);
 	}
 
 }

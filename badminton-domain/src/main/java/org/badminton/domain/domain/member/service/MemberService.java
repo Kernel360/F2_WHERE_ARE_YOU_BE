@@ -1,20 +1,17 @@
 package org.badminton.domain.domain.member.service;
 
-import org.badminton.domain.domain.clubmember.entity.ClubMember;
-import org.badminton.domain.domain.league.entity.LeagueRecord;
-import org.badminton.domain.domain.member.info.MemberInfo;
+import org.badminton.domain.domain.clubmember.info.ClubMemberMyPageInfo;
+import org.badminton.domain.domain.league.info.LeagueRecordInfo;
 import org.badminton.domain.domain.member.info.MemberIsClubMemberInfo;
 import org.badminton.domain.domain.member.info.MemberMyPageInfo;
 import org.badminton.domain.domain.member.info.MemberUpdateInfo;
-import org.springframework.http.ResponseEntity;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-
-
 
 public interface MemberService {
 
-	MemberIsClubMemberInfo getMemberIsClubMember(String memberToken, ClubMember clubMember);
-	MemberMyPageInfo getMemberInfo(String memberToken , LeagueRecord leagueRecord , ClubMember clubMember);
+	MemberIsClubMemberInfo getMemberIsClubMember(String memberToken, ClubMemberMyPageInfo clubMemberMyPageInfo);
+
+	MemberMyPageInfo getMemberInfo(String memberToken, LeagueRecordInfo leagueRecordInfo,
+		ClubMemberMyPageInfo clubMemberMyPageInfo);
+
 	MemberUpdateInfo updateProfileImage(String memberToken, String imageUrl);
 }

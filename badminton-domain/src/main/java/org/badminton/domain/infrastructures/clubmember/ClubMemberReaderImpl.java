@@ -32,9 +32,9 @@ public class ClubMemberReaderImpl implements ClubMemberReader {
 	}
 
 	@Override
-	public boolean checkIsClubMember(String memberToken, Long clubId) {
-		return clubMemberRepository.findByClub_ClubIdAndMemberMemberToken(clubId, memberToken)
-			.map(clubMember -> Objects.equals(clubMember.getClub().getClubId(), clubId))
+	public boolean checkIsClubMember(String memberToken, String clubToken) {
+		return clubMemberRepository.findByClubClubTokenAndMemberMemberToken(clubToken, memberToken)
+			.map(clubMember -> Objects.equals(clubMember.getClub().getClubId(), clubToken))
 			.orElse(false);
 	}
 
@@ -57,18 +57,17 @@ public class ClubMemberReaderImpl implements ClubMemberReader {
 	}
 
 	@Override
-	public boolean existsMemberInClub(String memberToken, Long clubId) {
-		return clubMemberRepository.existsByMemberMemberTokenAndClubClubId(memberToken, clubId);
-
+	public boolean existsMemberInClub(String memberToken, String clubToken) {
+		return clubMemberRepository.existsByMemberMemberTokenAndClubClubToken(memberToken, clubToken);
 	}
 
-	public List<ClubMember> getAllMember(Long clubId) {
-		return clubMemberRepository.findAllByClub_ClubId(clubId);
+	public List<ClubMember> getAllMember(String clubToken) {
+		return clubMemberRepository.findAllByClubClubToken(clubToken);
 	}
 
 	@Override
-	public List<ClubMember> getAllClubMemberByClubId(Long clubId) {
-		return clubMemberRepository.findAllByClubClubIdAndBannedFalseAndDeletedFalse(clubId);
+	public List<ClubMember> getAllClubMemberByClubId(String clubToken) {
+		return clubMemberRepository.findAllByClubClubTokenAndBannedFalseAndDeletedFalse(clubToken);
 	}
 
 }

@@ -1,7 +1,8 @@
 package org.badminton.domain.domain.member.service;
 
 import org.badminton.domain.domain.clubmember.entity.ClubMember;
-import org.badminton.domain.domain.league.entity.LeagueRecord;
+import org.badminton.domain.domain.clubmember.info.ClubMemberMyPageInfo;
+import org.badminton.domain.domain.league.info.LeagueRecordInfo;
 import org.badminton.domain.domain.member.MemberReader;
 import org.badminton.domain.domain.member.MemberStore;
 import org.badminton.domain.domain.member.entity.Member;
@@ -19,46 +20,48 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class MemberServiceImpl implements MemberService {
 
-    private final MemberReader memberReader;
-    private final MemberStore memberStore;
+	private final MemberReader memberReader;
+	private final MemberStore memberStore;
 
-    @Override
-    public MemberIsClubMemberInfo getMemberIsClubMember(String memberToken, ClubMember clubMember) {
+	@Override
+	public MemberIsClubMemberInfo getMemberIsClubMember(String memberToken, ClubMemberMyPageInfo clubMemberMyPageInfo) {
 
-        if (clubMember == null) {
-            return new MemberIsClubMemberInfo(false, null, null);
-        } else {
-            ClubMember.ClubMemberRole clubMemberRole = clubMember.getRole();
-            Long clubId = clubMember.getClub().getClubId();
-            return new MemberIsClubMemberInfo(true, clubMemberRole, clubId);
-        }
-    }
+		if (clubMemberMyPageInfo == null) {
+			return new MemberIsClubMemberInfo(false, null, null);
+		} else {
+			ClubMember.ClubMemberRole clubMemberRole = clubMemberMyPageInfo.role();
+			Long clubId = clubMemberMyPageInfo.clubId();
+			return new MemberIsClubMemberInfo(true, clubMemberRole, clubId);
+		}
+	}
 
-    @Override
-    public MemberMyPageInfo getMemberInfo(String memberToken, LeagueRecord leagueRecord, ClubMember clubMember) {
-        Member member = memberReader.getMember(memberToken);
-        return createMemberMyPageInfo(member, clubMember, leagueRecord);
-    }
+	@Override
+	public MemberMyPageInfo getMemberInfo(String memberToken, LeagueRecordInfo leagueRecordInfo,
+		ClubMemberMyPageInfo clubMemberMyPageInfo) {
+		Member member = memberReader.getMember(memberToken);
+		return createMemberMyPageInfo(member, clubMemberMyPageInfo, leagueRecordInfo);
+	}
 
-    private MemberMyPageInfo createMemberMyPageInfo(Member member, ClubMember clubMember, LeagueRecord leagueRecord) {
-        if (!hasClubMember(clubMember)) {
-            return MemberMyPageInfo.from(member,leagueRecord);
-        }
+	private MemberMyPageInfo createMemberMyPageInfo(Member member, ClubMemberMyPageInfo clubMemberMyPageInfo,
+		LeagueRecordInfo leagueRecordInfo) {
+		if (!hasClubMember(clubMemberMyPageInfo)) {
+			return MemberMyPageInfo.from(member, leagueRecordInfo);
+		}
 
-        return MemberMyPageInfo.from(member, leagueRecord, clubMember);
-    }
+		return MemberMyPageInfo.from(member, leagueRecordInfo, clubMemberMyPageInfo);
+	}
 
-    private boolean hasClubMember(ClubMember clubMember) {
-        return clubMember != null;
-    }
+	private boolean hasClubMember(ClubMemberMyPageInfo clubMemberMyPageInfo) {
+		return clubMemberMyPageInfo != null;
+	}
 
-    @Override
-    @Transactional
-    public MemberUpdateInfo updateProfileImage(String memberToken, String imageUrl) {
-        Member member = memberReader.getMember(memberToken);
-        member.updateMember(imageUrl);
-        memberStore.store(member);
-        return MemberUpdateInfo.fromMemberEntity(member);
-    }
+	@Override
+	@Transactional
+	public MemberUpdateInfo updateProfileImage(String memberToken, String imageUrl) {
+		Member member = memberReader.getMember(memberToken);
+		member.updateMember(imageUrl);
+		memberStore.store(member);
+		return MemberUpdateInfo.fromMemberEntity(member);
+	}
 
 }

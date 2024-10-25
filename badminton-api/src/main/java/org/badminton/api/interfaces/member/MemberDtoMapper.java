@@ -8,6 +8,7 @@ import org.badminton.domain.domain.member.info.MemberIsClubMemberInfo;
 import org.badminton.domain.domain.member.info.MemberMyPageInfo;
 import org.mapstruct.InjectionStrategy;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 import org.mapstruct.ReportingPolicy;
 
 @Mapper(
@@ -17,6 +18,8 @@ import org.mapstruct.ReportingPolicy;
 )
 public interface MemberDtoMapper {
 
+	@Mapping(source = "leagueRecordInfo", target = "leagueRecordResponse")
+	@Mapping(source = "clubMemberMyPageInfo", target = "clubMemberMyPageResponse")
 	MemberMyPageResponse of(MemberMyPageInfo memberMyPageInfo);
 
 	MemberIsClubMemberResponse of(MemberIsClubMemberInfo memberIsClubMemberInfo);

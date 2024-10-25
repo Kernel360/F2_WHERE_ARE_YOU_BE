@@ -2,7 +2,11 @@ package org.badminton.domain.domain.club;
 
 import org.badminton.domain.domain.club.command.ClubCreateCommand;
 import org.badminton.domain.domain.club.command.ClubUpdateCommand;
-import org.badminton.domain.domain.club.info.*;
+import org.badminton.domain.domain.club.info.ClubCardInfo;
+import org.badminton.domain.domain.club.info.ClubCreateInfo;
+import org.badminton.domain.domain.club.info.ClubDeleteInfo;
+import org.badminton.domain.domain.club.info.ClubSummaryInfo;
+import org.badminton.domain.domain.club.info.ClubUpdateInfo;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -34,8 +38,8 @@ public class ClubServiceImpl implements ClubService {
 	}
 
 	@Override
-	public ClubSummaryInfo readClub(Long clubId) {
-		var club = clubReader.readClub(clubId);
+	public ClubSummaryInfo readClub(String clubToken) {
+		var club = clubReader.readClub(clubToken);
 		return ClubSummaryInfo.toClubSummaryInfo(club);
 	}
 
@@ -49,16 +53,16 @@ public class ClubServiceImpl implements ClubService {
 	}
 
 	@Override
-	public ClubUpdateInfo updateClub(ClubUpdateCommand clubUpdateCommand, Long clubId) {
-		var club = clubReader.readClub(clubId);
+	public ClubUpdateInfo updateClub(ClubUpdateCommand clubUpdateCommand, String clubToken) {
+		var club = clubReader.readClub(clubToken);
 		club.updateClub(clubUpdateCommand);
 		var updated = clubStore.store(club);
 		return ClubUpdateInfo.toClubUpdateInfo(updated);
 	}
 
 	@Override
-	public ClubDeleteInfo deleteClub(Long clubId) {
-		var club = clubReader.readClub(clubId);
+	public ClubDeleteInfo deleteClub(String clubToken) {
+		var club = clubReader.readClub(clubToken);
 		club.doWithdrawal();
 		var deleted = clubStore.store(club);
 		return ClubDeleteInfo.clubDeleteInfo(deleted);

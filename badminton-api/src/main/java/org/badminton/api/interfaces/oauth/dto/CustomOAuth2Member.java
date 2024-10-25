@@ -7,7 +7,6 @@ import java.util.Map;
 import java.util.Set;
 
 import org.badminton.api.interfaces.member.dto.MemberResponse;
-import org.badminton.domain.domain.member.info.MemberInfo;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.oauth2.core.user.OAuth2User;
@@ -18,68 +17,66 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class CustomOAuth2Member implements OAuth2User {
 
-    private final MemberResponse memberResponse;
+	private final MemberResponse memberResponse;
 
+	@Getter
+	private final String registrationId;
 
-    @Getter
-    private final String registrationId;
+	private final String oAuthAccessToken;
+	private Map<String, String> clubRoles = new HashMap<>();
 
-    private final String oAuthAccessToken;
+	public String getOAuthAccessToken() {
+		return this.oAuthAccessToken;
+	}
 
-    public String getOAuthAccessToken() {
-        return this.oAuthAccessToken;
-    }
+	public void addClubRole(String clubToken, String role) {
+		this.clubRoles.clear();
+		this.clubRoles.put(clubToken, role);
+	}
 
-    private Map<Long, String> clubRoles = new HashMap<>();
+	public String getClubRole(String clubToken) {
+		return this.clubRoles.get(clubToken);
+	}
 
-    public void addClubRole(Long clubId, String role) {
-        this.clubRoles.clear();
-        this.clubRoles.put(clubId, role);
-    }
+	@Override
+	public Map<String, Object> getAttributes() {
+		return null;
+	}
 
-    public String getClubRole(Long clubId) {
-        return this.clubRoles.get(clubId);
-    }
+	@Override
+	public Collection<? extends GrantedAuthority> getAuthorities() {
+		Set<GrantedAuthority> authorities = new HashSet<>();
+		authorities.add(new SimpleGrantedAuthority("ROLE_" + memberResponse.authorization()));
+		for (Map.Entry<String, String> entry : clubRoles.entrySet()) {
+			String role = entry.getValue().startsWith("ROLE_") ? entry.getValue() : "ROLE_" + entry.getValue();
+			authorities.add(new SimpleGrantedAuthority(entry.getKey() + ":" + role));
+		}
+		return authorities;
+	}
 
-    @Override
-    public Map<String, Object> getAttributes() {
-        return null;
-    }
+	@Override
+	public String getName() {
+		return memberResponse.name();
+	}
 
-    @Override
-    public Collection<? extends GrantedAuthority> getAuthorities() {
-        Set<GrantedAuthority> authorities = new HashSet<>();
-        authorities.add(new SimpleGrantedAuthority("ROLE_" + memberResponse.authorization()));
-        for (Map.Entry<Long, String> entry : clubRoles.entrySet()) {
-            String role = entry.getValue().startsWith("ROLE_") ? entry.getValue() : "ROLE_" + entry.getValue();
-            authorities.add(new SimpleGrantedAuthority(entry.getKey() + ":" + role));
-        }
-        return authorities;
-    }
+	public String getProviderId() {
+		return memberResponse.providerId();
+	}
 
-    @Override
-    public String getName() {
-        return memberResponse.name();
-    }
+	public String getAuthorization() {
+		return memberResponse.authorization();
+	}
 
-    public String getProviderId() {
-        return memberResponse.providerId();
-    }
+	public String getMemberToken() {
+		return memberResponse.memberToken();
+	}
 
-    public String getAuthorization() {
-        return memberResponse.authorization();
-    }
+	public String getEmail() {
+		return memberResponse.email();
+	}
 
-    public String getMemberToken() {
-        return memberResponse.memberToken();
-    }
-
-    public String getEmail() {
-        return memberResponse.email();
-    }
-
-    public String getProfileImage() {
-        return memberResponse.profileImage();
-    }
+	public String getProfileImage() {
+		return memberResponse.profileImage();
+	}
 
 }

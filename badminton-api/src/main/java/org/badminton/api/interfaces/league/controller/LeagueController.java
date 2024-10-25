@@ -2,6 +2,8 @@
 //
 // import java.util.List;
 //
+// import org.badminton.api.application.league.LeagueFacade;
+// import org.badminton.api.common.response.CommonResponse;
 // import org.badminton.api.interfaces.league.dto.LeagueByDateResponse;
 // import org.badminton.api.interfaces.league.dto.LeagueCancelResponse;
 // import org.badminton.api.interfaces.league.dto.LeagueCreateRequest;
@@ -10,10 +12,12 @@
 // import org.badminton.api.interfaces.league.dto.LeagueReadResponse;
 // import org.badminton.api.interfaces.league.dto.LeagueUpdateRequest;
 // import org.badminton.api.interfaces.league.dto.LeagueUpdateResponse;
-// import org.badminton.api.service.league.LeagueService;
 // import org.badminton.api.interfaces.oauth.dto.CustomOAuth2Member;
+// import org.badminton.domain.domain.league.info.LeagueByDateInfo;
+// import org.badminton.domain.domain.league.info.LeagueCancelInfo;
+// import org.badminton.domain.domain.league.info.LeagueDetailsInfo;
+// import org.badminton.domain.domain.league.info.LeagueReadInfo;
 // import org.springframework.format.annotation.DateTimeFormat;
-// import org.springframework.http.ResponseEntity;
 // import org.springframework.security.core.annotation.AuthenticationPrincipal;
 // import org.springframework.web.bind.annotation.DeleteMapping;
 // import org.springframework.web.bind.annotation.GetMapping;
@@ -32,88 +36,107 @@
 //
 // @RequiredArgsConstructor
 // @RestController
-// @RequestMapping("/v1/clubs/{clubId}/leagues")
+// @RequestMapping("/v1/clubs/{clubToken}/leagues")
 // public class LeagueController {
-//     private final LeagueService leagueService;
 //
-//     @Operation(
-//             summary = "월별로 경기 일정을 조회합니다.",
-//             description = "월별로 경기 일정을 리스트로 조회할 수 있습니다. 날짜는 'yyyy-MM' 형식으로 제공되어야 합니다.",
-//             tags = {"league"},
-//             parameters = {
-//                     @Parameter(name = "clubId", description = "조회할 클럽의 ID", required = true),
-//                     @Parameter(name = "date", description = "조회할 날짜, 'yyyy-MM' 형식으로 입력", required = true)
-//             }
-//     )
-//     @GetMapping("/month")
-//     public ResponseEntity<List<LeagueReadResponse>> getLeagueByMonth(@PathVariable Long clubId,
-//                                                                      @RequestParam
-//                                                                      @DateTimeFormat(pattern = "yyyy-MM") String date) {
-//         return ResponseEntity.ok(leagueService.getLeaguesByMonth(clubId, date));
-//     }
+// 	private final LeagueDtoMapper leagueDtoMapper;
+// 	private final LeagueFacade leagueFacade;
 //
-//     @Operation(
-//             summary = "일자별로 경기 일정을 조회합니다.",
-//             description = "일별로 경기 일정을 리스트로 조회할 수 있습니다. 검색 조건으로 날짜를 사용하며, 날짜는 'yyyy-MM' 형식으로 제공되어야 합니다.",
-//             tags = {"league"},
-//             parameters = {
-//                     @Parameter(name = "clubId", description = "조회할 클럽의 ID", required = true),
-//                     @Parameter(name = "date", description = "조회할 날짜, 'yyyy-MM-dd' 형식으로 입력", required = true)
-//             }
-//     )
+// 	@Operation(
+// 		summary = "월별로 경기 일정을 조회합니다.",
+// 		description = "월별로 경기 일정을 리스트로 조회할 수 있습니다. 날짜는 'yyyy-MM' 형식으로 제공되어야 합니다.",
+// 		tags = {"league"},
+// 		parameters = {
+// 			@Parameter(name = "clubId", description = "조회할 클럽의 ID", required = true),
+// 			@Parameter(name = "date", description = "조회할 날짜, 'yyyy-MM' 형식으로 입력", required = true)
+// 		}
+// 	)
+// 	@GetMapping("/month")
+// 	public CommonResponse<List<LeagueReadResponse>> getLeagueByMonth(@PathVariable String clubToken,
+// 		@RequestParam
+// 		@DateTimeFormat(pattern = "yyyy-MM") String date) {
+// 		List<LeagueReadInfo> responseInfo = leagueFacade.getLeaguesByMonth(clubToken, date);
+// 		List<LeagueReadResponse> response = leagueDtoMapper.mapLeagueReadInfoList(responseInfo);
+// 		return CommonResponse.success(response);
+// 	}
 //
-//     @GetMapping("/date")
-//     public ResponseEntity<List<LeagueByDateResponse>> getLeagueByDate(@PathVariable Long clubId,
-//                                                                       @RequestParam
-//                                                                       @DateTimeFormat(pattern = "yyyy-MM-dd") String date) {
-//         return ResponseEntity.ok(leagueService.getLeaguesByDate(clubId, date));
-//     }
+// 	@Operation(
+// 		summary = "일자별로 경기 일정을 조회합니다.",
+// 		description = "일별로 경기 일정을 리스트로 조회할 수 있습니다. 검색 조건으로 날짜를 사용하며, 날짜는 'yyyy-MM' 형식으로 제공되어야 합니다.",
+// 		tags = {"league"},
+// 		parameters = {
+// 			@Parameter(name = "clubId", description = "조회할 클럽의 ID", required = true),
+// 			@Parameter(name = "date", description = "조회할 날짜, 'yyyy-MM-dd' 형식으로 입력", required = true)
+// 		}
+// 	)
 //
-//     @Operation(
-//             summary = "경기를 생성합니다.",
-//             description = "경기 생성하고를 데이터베이스에 저장합니다.",
-//             tags = {"league"}
-//     )
-//     @PostMapping
-//     public ResponseEntity<LeagueCreateResponse> createLeague(
-//             @PathVariable Long clubId,
-//             @Valid @RequestBody LeagueCreateRequest leagueCreateRequest) {
-//         return ResponseEntity.ok(leagueService.createLeague(clubId, leagueCreateRequest));
-//     }
+// 	@GetMapping("/date")
+// 	public CommonResponse<List<LeagueByDateResponse>> getLeagueByDate(@PathVariable String clubToken,
+// 		@RequestParam
+// 		@DateTimeFormat(pattern = "yyyy-MM-dd") String date) {
+// 		List<LeagueByDateInfo> responseInfo = leagueFacade.getLeaguesByDate(clubToken, date);
+// 		List<LeagueByDateResponse> response = leagueDtoMapper.mapLeagueByDateInfoList(responseInfo);
+// 		return CommonResponse.success(response);
+// 	}
 //
-//     @Operation(
-//             summary = "특정 경기를 조회합니다.",
-//             description = "특정 경기를 경기 아이디를 통해 데이터베이스에서 조회합니다.",
-//             tags = {"league"}
-//     )
-//     @GetMapping("/{leagueId}")
-//     public ResponseEntity<LeagueDetailsResponse> leagueRead(@PathVariable Long clubId, @PathVariable Long leagueId,
-//                                                             @AuthenticationPrincipal CustomOAuth2Member member) {
-//         return ResponseEntity.ok(leagueService.getLeague(clubId, leagueId, member.getMemberId()));
-//     }
+// 	@Operation(
+// 		summary = "경기를 생성합니다.",
+// 		description = "경기 생성하고를 데이터베이스에 저장합니다.",
+// 		tags = {"league"}
+// 	)
+// 	@PostMapping
+// 	public CommonResponse<LeagueCreateResponse> createLeague(
+// 		@PathVariable String clubToken,
+// 		@Valid @RequestBody LeagueCreateRequest leagueCreateRequest) {
+// 		var command = leagueDtoMapper.of(leagueCreateRequest);
+// 		var responseInfo = leagueFacade.createLeague(clubToken, command);
+// 		LeagueCreateResponse response = leagueDtoMapper.of(responseInfo);
+// 		return CommonResponse.success(response);
+// 	}
 //
-//     @Operation(
-//             summary = "경기의 세부 정보를 변경합니다.",
-//             description = "경기 제목, 경기 상태 등을 변경할 수 있습니다.",
-//             tags = {"league"}
-//     )
-//     @PatchMapping("/{leagueId}")
-//     public ResponseEntity<LeagueUpdateResponse> updateLeague(
-//             @PathVariable Long clubId,
-//             @PathVariable Long leagueId,
-//             @Valid @RequestBody LeagueUpdateRequest leagueUpdateRequest) {
-//         return ResponseEntity.ok(leagueService.updateLeague(clubId, leagueId, leagueUpdateRequest));
-//     }
+// 	@Operation(
+// 		summary = "특정 경기를 조회합니다.",
+// 		description = "특정 경기를 경기 아이디를 통해 데이터베이스에서 조회합니다.",
+// 		tags = {"league"}
+// 	)
+// 	@GetMapping("/{leagueId}")
+// 	public CommonResponse<LeagueDetailsResponse> leagueRead(@PathVariable String clubToken,
+// 		@PathVariable String leagueId,
+// 		@AuthenticationPrincipal CustomOAuth2Member member) {
+// 		LeagueDetailsInfo leagueDetailsInfo =
+// 			leagueFacade.getLeague(clubToken, leagueId, member.getMemberToken());
+// 		LeagueDetailsResponse leagueDetailsResponse = leagueDtoMapper.of(leagueDetailsInfo);
+// 		return CommonResponse.success(leagueDetailsResponse);
+// 	}
 //
-//     @Operation(
-//             summary = "경기 취소",
-//             description = "경기를 취소합니다.",
-//             tags = {"league"}
-//     )
-//     @DeleteMapping("/{leagueId}")
-//     public ResponseEntity<LeagueCancelResponse> cancelLeague(
-//             @PathVariable Long clubId,
-//             @PathVariable Long leagueId) {
-//         return ResponseEntity.ok(leagueService.cancelLeague(clubId, leagueId));
-//     }
+// 	@Operation(
+// 		summary = "경기의 세부 정보를 변경합니다.",
+// 		description = "경기 제목, 경기 상태 등을 변경할 수 있습니다.",
+// 		tags = {"league"}
+// 	)
+// 	@PatchMapping("/{leagueId}")
+// 	public CommonResponse<LeagueUpdateResponse> updateLeague(
+// 		@PathVariable String clubToken,
+// 		@PathVariable Long leagueId,
+// 		@Valid @RequestBody LeagueUpdateRequest leagueUpdateRequest) {
+// 		var command = leagueDtoMapper.of(leagueUpdateRequest);
+// 		var leagueUpdateInfo = leagueFacade.updateLeague(clubToken, leagueId, command);
+// 		var leagueUpdateResponse = leagueDtoMapper.of(leagueUpdateInfo);
+// 		return CommonResponse.success(leagueUpdateResponse);
+// 	}
+//
+// 	@Operation(
+// 		summary = "경기 취소",
+// 		description = "경기를 취소합니다.",
+// 		tags = {"league"}
+// 	)
+// 	@DeleteMapping("/{leagueId}")
+// 	public CommonResponse<LeagueCancelResponse> cancelLeague(
+// 		@PathVariable String clubToken,
+// 		@PathVariable Long leagueId) {
+// 		LeagueCancelInfo leagueInfo = leagueFacade.cancelLeague(clubToken, leagueId);
+// 		LeagueCancelResponse LeagueCancelLeagueCancel = leagueDtoMapper.of(leagueInfo);
+//
+// 		return CommonResponse.success(LeagueCancelLeagueCancel);
+// 	}
 // }

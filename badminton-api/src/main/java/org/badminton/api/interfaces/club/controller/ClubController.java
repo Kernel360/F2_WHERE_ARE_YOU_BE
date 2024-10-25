@@ -40,18 +40,18 @@ public class ClubController {
 	private final ClubFacade clubFacade;
 	private final ClubDtoMapper clubDtoMapper;
 
-	@GetMapping("/{clubId}")
+	@GetMapping("/{clubToken}")
 	@Operation(summary = "동호회 조회",
 		description = "동호회를 조회합니다.",
 		tags = {"Club"})
-	public CommonResponse<ClubDetailsResponse> readClub(@PathVariable Long clubId,
+	public CommonResponse<ClubDetailsResponse> readClub(@PathVariable String clubToken,
 		@AuthenticationPrincipal(errorOnInvalidType = false) CustomOAuth2Member member) {
-		var result = clubFacade.readClub(clubId, member);
+		var result = clubFacade.readClub(clubToken, member);
 		var response = clubDtoMapper.of(result);
 		return CommonResponse.success(response);
 	}
 
-	@PatchMapping("{clubId}")
+	@PatchMapping("{clubToken}")
 	@Operation(summary = "동호회 수정",
 		description = """
 			새로운 동호회를 수정합니다. 다음 조건을 만족해야 합니다:
@@ -69,10 +69,10 @@ public class ClubController {
 			   - 파일 확장자: png, jpg, jpeg, gif 중 하나""",
 		tags = {"Club"}
 	)
-	public CommonResponse<ClubUpdateResponse> updateClub(@PathVariable Long clubId,
+	public CommonResponse<ClubUpdateResponse> updateClub(@PathVariable String clubToken,
 		@Valid @RequestBody ClubUpdateRequest clubUpdateRequest) {
 		ClubUpdateCommand command = clubDtoMapper.of(clubUpdateRequest);
-		var clubUpdateInfo = clubFacade.updateClubInfo(command, clubId);
+		var clubUpdateInfo = clubFacade.updateClubInfo(command, clubToken);
 		ClubUpdateResponse response = clubDtoMapper.of(clubUpdateInfo);
 		return CommonResponse.success(response);
 	}
@@ -104,12 +104,12 @@ public class ClubController {
 		return CommonResponse.success(response);
 	}
 
-	@DeleteMapping("{clubId}")
+	@DeleteMapping("{clubToken}")
 	@Operation(summary = "동호회 삭제",
 		description = "동호회를 삭제합니다.",
-		tags = {"Club"})
-	public CommonResponse<ClubDeleteResponse> deleteClub(@PathVariable Long clubId) {
-		var club = clubFacade.deleteClubInfo(clubId);
+		tags = {"clubToken"})
+	public CommonResponse<ClubDeleteResponse> deleteClub(@PathVariable String clubToken) {
+		var club = clubFacade.deleteClubInfo(clubToken);
 		ClubDeleteResponse deleted = clubDtoMapper.of(club);
 		return CommonResponse.success(deleted);
 	}

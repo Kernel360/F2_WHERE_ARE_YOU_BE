@@ -5,11 +5,11 @@ import org.badminton.domain.common.exception.BadmintonException;
 
 public class ClubNotExistException extends BadmintonException {
 
-    public ClubNotExistException(Long clubId) {
-        super(ErrorCode.CLUB_NOT_EXIST, "[동호회 아이디 : " + clubId + "]");
-    }
+	public ClubNotExistException(String clubId) {
+		super(ErrorCode.CLUB_NOT_EXIST, "[동호회 아이디 : " + clubId + "]");
+	}
 
-    public ClubNotExistException(Long clubId, Exception e) {
-        super(ErrorCode.CLUB_NOT_EXIST, "[동호회 아이디 : " + clubId + "]", e);
-    }
+	public ClubNotExistException(Long clubId, Exception e) {
+		super(ErrorCode.CLUB_NOT_EXIST, "[동호회 아이디 : " + clubId + "]", e);
+	}
 }

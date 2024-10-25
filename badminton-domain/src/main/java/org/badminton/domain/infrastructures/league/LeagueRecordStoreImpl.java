@@ -19,4 +19,9 @@ public class LeagueRecordStoreImpl implements LeagueRecordStore {
 		LeagueRecord leagueRecord = new LeagueRecord(member);
 		leagueRecordRepository.save(leagueRecord);
 	}
+
+	@Override
+	public void store(LeagueRecord leagueRecord) {
+		leagueRecordRepository.save(leagueRecord);
+	}
 }

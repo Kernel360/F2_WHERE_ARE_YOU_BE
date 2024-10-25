@@ -151,32 +151,32 @@ public class SecurityConfig {
 				return new AuthorizationDecision(false);
 			}
 
-			String clubId = getClubIdFromContext(context);
-			if (clubId == null) {
+			String clubToken = getClubTokenFromContext(context);
+			if (clubToken == null) {
 				return new AuthorizationDecision(false);
 			}
 
-			boolean hasRole = clubPermissionEvaluator.hasClubRole(auth, Long.parseLong(clubId), roles);
+			boolean hasRole = clubPermissionEvaluator.hasClubRole(auth, clubToken, roles);
 
 			log.info("""
-				Checking roles for clubId: {}
+				Checking roles for clubToken: {}
 				User authorities: {}
 				Required roles: {}
 				Has required role: {}
-				""", clubId, auth.getAuthorities(), Arrays.toString(roles), hasRole
+				""", clubToken, auth.getAuthorities(), Arrays.toString(roles), hasRole
 			);
 
 			return new AuthorizationDecision(hasRole);
 		};
 	}
 
-	private String getClubIdFromContext(RequestAuthorizationContext context) {
-		String clubId = context.getVariables().get("clubId");
-		if (clubId != null) {
-			return clubId;
+	private String getClubTokenFromContext(RequestAuthorizationContext context) {
+		String clubToken = context.getVariables().get("clubToken");
+		if (clubToken != null) {
+			return clubToken;
 		}
 		HttpServletRequest request = context.getRequest();
-		return Optional.ofNullable(request.getParameter("clubId"))
+		return Optional.ofNullable(request.getParameter("clubToken"))
 			.filter(s -> !s.isEmpty())
 			.orElse(null);
 	}

@@ -1,10 +1,13 @@
 package org.badminton.domain.domain.club;
 
+import static org.badminton.domain.domain.club.info.ClubSummaryInfo.*;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 import org.badminton.domain.common.BaseTimeEntity;
+import org.badminton.domain.common.TokenGenerator;
 import org.badminton.domain.domain.club.command.ClubUpdateCommand;
 import org.badminton.domain.domain.club.info.ClubCreateInfo;
 import org.badminton.domain.domain.clubmember.entity.ClubMember;
@@ -22,16 +25,18 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import static org.badminton.domain.domain.club.info.ClubSummaryInfo.getMemberTierLongMap;
-
 @Entity
 @Getter
 @Table(name = "club")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Club extends BaseTimeEntity {
+	public static final String CLUB_PREFIX = "club_";
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long clubId;
+
+	private String clubToken;
 
 	private String clubName;
 
@@ -47,6 +52,7 @@ public class Club extends BaseTimeEntity {
 
 	public Club(String clubName, String clubDescription, String clubImage) {
 		super();
+		this.clubToken = TokenGenerator.randomCharacterWithPrefix(CLUB_PREFIX);
 		this.clubName = clubName;
 		this.clubDescription = clubDescription;
 		this.clubImage = clubImage;
@@ -58,6 +64,7 @@ public class Club extends BaseTimeEntity {
 		this.clubDescription = clubCreateInfo.clubDescription();
 		this.clubName = clubCreateInfo.clubName();
 		this.clubImage = clubCreateInfo.clubImage();
+		this.clubToken = clubCreateInfo.clubToken();
 		this.isClubDeleted = false;
 	}
 

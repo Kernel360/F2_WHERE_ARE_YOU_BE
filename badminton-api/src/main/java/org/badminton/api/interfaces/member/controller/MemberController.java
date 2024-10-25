@@ -2,7 +2,6 @@ package org.badminton.api.interfaces.member.controller;
 
 import java.util.List;
 
-import org.badminton.api.application.auth.AuthService;
 import org.badminton.api.application.member.MemberFacade;
 import org.badminton.api.aws.s3.model.dto.ImageUploadRequest;
 import org.badminton.api.aws.s3.service.MemberProfileImageService;
@@ -10,21 +9,16 @@ import org.badminton.api.common.exception.member.ImageFileNotFoundException;
 import org.badminton.api.common.response.CommonResponse;
 import org.badminton.api.interfaces.match.dto.MatchResultResponse;
 import org.badminton.api.interfaces.member.MemberDtoMapper;
-import org.badminton.api.interfaces.member.dto.MemberDeleteResponse;
 import org.badminton.api.interfaces.member.dto.MemberIsClubMemberResponse;
 import org.badminton.api.interfaces.member.dto.MemberMyPageResponse;
 import org.badminton.api.interfaces.member.dto.MemberUpdateRequest;
 import org.badminton.api.interfaces.oauth.dto.CustomOAuth2Member;
 import org.badminton.api.service.match.MatchResultService;
-import org.badminton.domain.domain.clubmember.entity.ClubMember;
-import org.badminton.domain.domain.member.info.MemberDeleteInfo;
+import org.badminton.domain.domain.clubmember.info.ClubMemberMyPageInfo;
 import org.badminton.domain.domain.member.info.MemberIsClubMemberInfo;
 import org.badminton.domain.domain.member.info.MemberMyPageInfo;
 import org.badminton.domain.domain.member.info.MemberUpdateInfo;
-import org.badminton.domain.infrastructures.clubmember.ClubMemberRepository;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -37,8 +31,6 @@ import org.springframework.web.multipart.MultipartFile;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -49,8 +41,6 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class MemberController {
 
-	private final AuthService authService;
-	private final ClubMemberRepository clubMemberRepository;
 	private final MemberProfileImageService memberProfileImageService;
 	private final MatchResultService matchResultService;
 	private final MemberFacade memberFacade;
@@ -108,36 +98,13 @@ public class MemberController {
 	public CommonResponse<List<MatchResultResponse>> readMemberLeagueRecord(
 		@AuthenticationPrincipal CustomOAuth2Member member
 	) {
-		ClubMember clubMember = clubMemberRepository.findByDeletedFalseAndMemberMemberToken(
-			member.getMemberToken()).orElse(null);
-		if (clubMember == null) {
+		ClubMemberMyPageInfo clubMemberMyPageInfo = memberFacade.getClubMember(member.getMemberToken());
+
+		if (clubMemberMyPageInfo == null) {
 			return CommonResponse.success(null);
 		}
-		Long clubMemberId = clubMember.getClubMemberId();
+		Long clubMemberId = clubMemberMyPageInfo.clubMemberId();
 		return CommonResponse.success(matchResultService.getAllMatchResultsByClubMember(clubMemberId));
-	}
-
-	@Operation(
-		summary = "액세스 토큰을 재발급합니다",
-		description = "리프레시 토큰을 이용해서 액세스 토큰을 재발급합니다",
-		tags = {"Member"}
-	)
-	@PostMapping("/refresh")
-	public ResponseEntity<?> refreshToken(HttpServletRequest request, HttpServletResponse response) {
-		return authService.refreshToken(request, response);
-	}
-
-	@Operation(
-		summary = "로그아웃을 합니다",
-		description = "쿠키에서 JWT 토큰을 제거해 로그아웃을 합니다",
-		tags = {"Member"}
-	)
-	@PostMapping("/logout")
-	public CommonResponse<String> logout(HttpServletResponse response,
-		@AuthenticationPrincipal CustomOAuth2Member member) {
-		log.info("Logout request received");
-		authService.logoutMember(member.getMemberToken(), response);
-		return CommonResponse.success("Logged out successfully");
 	}
 
 	@Operation(
@@ -161,19 +128,6 @@ public class MemberController {
 		}
 		ImageUploadRequest request = new ImageUploadRequest(multipartFile);
 		return CommonResponse.success(memberProfileImageService.uploadFile(request, member.getMemberToken()));
-	}
-
-	@Operation(
-		summary = "회원 탈퇴를 합니다",
-		description = "멤버 필드의 isDeleted 를 true 로 변경합니다",
-		tags = {"Member"}
-	)
-	@DeleteMapping
-	public CommonResponse<MemberDeleteResponse> deleteMember(HttpServletRequest request, HttpServletResponse response,
-		@AuthenticationPrincipal CustomOAuth2Member member) {
-		MemberDeleteInfo deleteResponse = authService.deleteMember(member, request, response);
-		MemberDeleteResponse memberDeleteResponse = memberDtoMapper.of(deleteResponse);
-		return CommonResponse.success(memberDeleteResponse);
 	}
 }
 

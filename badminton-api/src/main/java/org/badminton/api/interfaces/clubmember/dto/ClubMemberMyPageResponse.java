@@ -19,7 +19,7 @@ public record ClubMemberMyPageResponse(
 	ClubMember.ClubMemberRole role
 
 ) {
-	public static ClubMemberMyPageResponse fromClubMemberEntity(ClubMemberMyPageInfo info) {
+	public static ClubMemberMyPageResponse toClubMemberMyPageResponse(ClubMemberMyPageInfo info) {
 		return new ClubMemberMyPageResponse(
 			info.clubId(),
 			info.clubMemberId(),
