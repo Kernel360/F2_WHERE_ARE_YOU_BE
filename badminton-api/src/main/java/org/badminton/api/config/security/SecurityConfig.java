@@ -109,34 +109,34 @@ public class SecurityConfig {
 			.addFilterAfter(new ClubMembershipFilter(clubMemberReader), JwtAuthenticationFilter.class)
 			.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 			.authorizeHttpRequests(auth -> auth
-				.requestMatchers(HttpMethod.GET, "/v1/clubs", "/v1/clubs/{clubId}", "/v1/clubs/search")
+				.requestMatchers(HttpMethod.GET, "/v1/clubs", "/v1/clubs/{clubToken}", "/v1/clubs/search")
 				.permitAll()
 				.requestMatchers(HttpMethod.POST, "/v1/clubs")
 				.permitAll()
-				.requestMatchers(HttpMethod.DELETE, "/v1/clubs/{clubId}")
+				.requestMatchers(HttpMethod.DELETE, "/v1/clubs/{clubToken}")
 				.access(hasClubRole("OWNER"))
-				.requestMatchers(HttpMethod.PATCH, "/v1/clubs/{clubId}")
+				.requestMatchers(HttpMethod.PATCH, "/v1/clubs/{clubToken}")
 				.access(hasClubRole("OWNER", "MANAGER"))
-				.requestMatchers(HttpMethod.GET, "/v1/clubs/{clubId}/leagues/{leagueId}")
+				.requestMatchers(HttpMethod.GET, "/v1/clubs/{clubToken}/leagues/{leagueId}")
 				.access(hasClubRole("OWNER", "MANAGER", "USER"))
-				.requestMatchers(HttpMethod.GET, "/v1/clubs/{clubId}/clubMembers")
+				.requestMatchers(HttpMethod.GET, "/v1/clubs/{clubToken}/clubMembers")
 				.access(hasClubRole("OWNER", "MANAGER", "USER"))
-				.requestMatchers(HttpMethod.GET, "/v1/clubs/{clubId}")
+				.requestMatchers(HttpMethod.GET, "/v1/clubs/{clubToken}")
 				.authenticated()
-				.requestMatchers(HttpMethod.POST, "/v1/clubs/{clubId}/leagues")
+				.requestMatchers(HttpMethod.POST, "/v1/clubs/{clubToken}/leagues")
 				.access(hasClubRole("OWNER", "MANAGER"))
-				.requestMatchers(HttpMethod.POST, "/v1/clubs/{clubId}/league", "/v1/clubs/images")
+				.requestMatchers(HttpMethod.POST, "/v1/clubs/{clubToken}/league", "/v1/clubs/images")
 				.access(hasClubRole("OWNER", "MANAGER"))
-				.requestMatchers(HttpMethod.DELETE, "/v1/clubs/{clubId}/leagues/{leagueId}")
+				.requestMatchers(HttpMethod.DELETE, "/v1/clubs/{clubToken}/leagues/{leagueId}")
 				.access(hasClubRole("OWNER", "MANAGER"))
-				.requestMatchers(HttpMethod.PATCH, "/v1/clubs/{clubId}/leagues/{leagueId}")
+				.requestMatchers(HttpMethod.PATCH, "/v1/clubs/{clubToken}/leagues/{leagueId}")
 				.access(hasClubRole("OWNER", "MANAGER"))
-				.requestMatchers(HttpMethod.POST, "/v1/clubs/{clubId}/leagues/{leagueId}/participation")
+				.requestMatchers(HttpMethod.POST, "/v1/clubs/{clubToken}/leagues/{leagueId}/participation")
 				.access(hasClubRole("OWNER", "MANAGER", "USER"))
-				.requestMatchers(HttpMethod.DELETE, "/v1/clubs/{clubId}/leagues/{leagueId}/participation")
+				.requestMatchers(HttpMethod.DELETE, "/v1/clubs/{clubToken}/leagues/{leagueId}/participation")
 				.access(hasClubRole("OWNER", "MANAGER", "USER"))
-				.requestMatchers(HttpMethod.PATCH, "/v1/clubs/{clubId}/clubMembers/role",
-					"v1/clubs/{clubId}/clubMembers/ban", "v1/clubs/{clubId}/clubMembers/expel")
+				.requestMatchers(HttpMethod.PATCH, "/v1/clubs/{clubToken}/clubMembers/role",
+					"v1/clubs/{clubToken}/clubMembers/ban", "v1/clubs/{clubToken}/clubMembers/expel")
 				.access(hasClubRole("OWNER"))
 				.anyRequest()
 				.authenticated()
@@ -171,6 +171,7 @@ public class SecurityConfig {
 	}
 
 	private String getClubTokenFromContext(RequestAuthorizationContext context) {
+
 		String clubToken = context.getVariables().get("clubToken");
 		if (clubToken != null) {
 			return clubToken;

@@ -31,9 +31,9 @@ public class ClubMembershipFilter extends OncePerRequestFilter {
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
 		FilterChain filterChain) throws ServletException, IOException {
-		String clubId = SecurityUtil.extractClubIdFromRequest(request);
+		String clubToken = SecurityUtil.extractClubIdFromRequest(request);
 
-		if (clubId != null && !isClubMember(clubId)) {
+		if (clubToken != null && !isClubMember(clubToken)) {
 			response.sendError(HttpServletResponse.SC_FORBIDDEN, "You are not a member of this club");
 			return;
 		}
@@ -41,13 +41,13 @@ public class ClubMembershipFilter extends OncePerRequestFilter {
 		filterChain.doFilter(request, response);
 	}
 
-	private boolean isClubMember(String clubId) {
+	private boolean isClubMember(String clubToken) {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		if (auth == null || !(auth.getPrincipal() instanceof CustomOAuth2Member)) {
 			return false;
 		}
 		CustomOAuth2Member member = (CustomOAuth2Member)auth.getPrincipal();
-		return clubMemberReader.existsMemberInClub(member.getMemberToken(), clubId);
+		return clubMemberReader.existsMemberInClub(member.getMemberToken(), clubToken);
 	}
 }
 
