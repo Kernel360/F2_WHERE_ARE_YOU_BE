@@ -5,16 +5,16 @@ import jakarta.validation.Valid;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.badminton.api.application.match.MatchFacade;
+import org.badminton.api.interfaces.match.dto.BracketResponse;
 import org.badminton.api.interfaces.match.dto.MatchDetailsResponse;
-import org.badminton.api.interfaces.match.dto.MatchResponse;
 import org.badminton.api.interfaces.match.dto.SetScoreResponse;
 import org.badminton.api.interfaces.match.dto.SetScoreUpdateRequest;
 import org.badminton.api.interfaces.match.dto.SetScoreUpdateResponse;
 import org.badminton.domain.domain.match.command.MatchCommand.UpdateSetScore;
+import org.badminton.domain.domain.match.info.BracketInfo;
 import org.badminton.domain.domain.match.info.MatchInfo;
 import org.badminton.domain.domain.match.info.SetInfo;
-import org.badminton.domain.domain.match.service.MatchInitService;
-import org.badminton.domain.domain.match.service.MatchProgressService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -29,22 +29,18 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/v1/clubs/{clubId}/leagues/{leagueId}/matches")
 public class MatchController {
 
-    private final MatchInitService matchInitService;
-    private final MatchProgressService matchProgressService;
+    private final MatchFacade matchFacade;
 
     @GetMapping
     @Operation(summary = "대진표 조회",
             description = "대진표를 조회합니다.",
             tags = {"Match"})
-    public ResponseEntity<List<MatchResponse>> getAllMatches(
+    public ResponseEntity<BracketResponse> getAllMatches(
             @PathVariable Long clubId,
             @PathVariable Long leagueId
     ) {
-        List<MatchInfo.Main> matchInfo = matchInitService.getAllMatchesInLeague(clubId, leagueId);
-        List<MatchResponse> matchResponseList = matchInfo.stream()
-                .map(MatchResponse::fromMatchInfo)
-                .toList();
-        return ResponseEntity.ok(matchResponseList);
+        BracketInfo bracketInfo = matchFacade.retrieveBracket(leagueId);
+        return ResponseEntity.ok(BracketResponse.fromBracketInfo(bracketInfo));
     }
 
     @GetMapping("/{matchId}")
@@ -56,8 +52,7 @@ public class MatchController {
             @PathVariable Long leagueId,
             @PathVariable Long matchId
     ) {
-        MatchInfo.SetScoreDetails matchDetailsInLeague = matchInitService.getMatchDetailsInLeague(clubId, leagueId,
-                matchId);
+        MatchInfo.SetScoreDetails matchDetailsInLeague = matchFacade.retrieveAllSetsScoreInMatch(leagueId, matchId);
         return ResponseEntity.ok(MatchDetailsResponse.fromMatchDetailsInfo(matchDetailsInLeague));
     }
 
@@ -65,15 +60,12 @@ public class MatchController {
     @Operation(summary = "대진표 생성",
             description = "대진표를 생성합니다.",
             tags = {"Match"})
-    public ResponseEntity<List<MatchResponse>> makeMatches(
+    public ResponseEntity<BracketResponse> makeMatches(
             @PathVariable Long clubId,
             @PathVariable Long leagueId
     ) {
-        List<MatchInfo.Main> matchInfoList = matchInitService.makeMatches(clubId, leagueId);
-        List<MatchResponse> matchResponseList = matchInfoList.stream()
-                .map(MatchResponse::fromMatchInfo)
-                .toList();
-        return ResponseEntity.ok(matchResponseList);
+        BracketInfo bracketInfo = matchFacade.generateInitialBracket(leagueId);
+        return ResponseEntity.ok(BracketResponse.fromBracketInfo(bracketInfo));
     }
 
     @GetMapping("/sets")
@@ -84,9 +76,7 @@ public class MatchController {
             @PathVariable Long clubId,
             @PathVariable Long leagueId
     ) {
-
-        List<SetInfo.Main> allSetsScoreInLeague = matchInitService.getAllSetsScoreInLeague(clubId,
-                leagueId);
+        List<SetInfo.Main> allSetsScoreInLeague = matchFacade.retrieveAllSetsScoreInBracket(leagueId);
         List<SetScoreResponse> setScoreResponseList = allSetsScoreInLeague.stream()
                 .map(SetScoreResponse::fromSetInfo)
                 .toList();
@@ -108,7 +98,7 @@ public class MatchController {
                 .score2(setScoreUpdateRequest.score2())
                 .build();
 
-        SetInfo.Main updateSetScoreInfo = matchProgressService.updateSetScore(clubId, leagueId, matchId,
+        SetInfo.Main updateSetScoreInfo = matchFacade.registerSetScoreInMatch(leagueId, matchId,
                 setIndex, updateSetScoreCommand);
         return ResponseEntity.ok(SetScoreUpdateResponse.fromUpdateSetScoreInfo(updateSetScoreInfo));
     }

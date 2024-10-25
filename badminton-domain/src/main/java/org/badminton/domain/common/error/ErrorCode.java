@@ -36,6 +36,7 @@ public enum ErrorCode {
     CLUB_NOT_EXIST(404, "해당하는 동호회가 존재하지 않습니다."),
     LEAGUE_NOT_EXIST(404, "해당하는 경기 일정이 존재하지 않습니다."),
     MATCH_NOT_EXIST(404, "해당하는 대진이 존재하지 않습니다."),
+    BRACKET_NOT_EXIST(404, "해당하는 경기의 대진표가 존재하지 않습니다."),
     SET_NOT_EXIST(404, "해당하는 세트는 존재하지 않습니다."),
     MEMBER_NOT_JOINED_CLUB(404, "해당하는 회원은 동호회에 가입하지 않았습니다."),
     CLUB_MEMBER_NOT_EXIST(404, "해당하는 회원은 해당 동호회에 아직 가입하지 않았습니다."),
@@ -65,6 +66,7 @@ public enum ErrorCode {
     INVALID_PLAYER_COUNT(411, "아직 모집 인원이 채워지지 않았습니다."),
 
     INSUFFICIENT_TIER(412, "현재 경기의 티어와 맞지 않습니다"),
+    LEAGUE_RECRUITING_MUST_BE_COMPLETED_WHEN_BRACKET_GENERATION(412, "아직 모집 중이거나 취소된 경기에 대해서 대진표를 생성할 수 없습니다."),
 
     // 500 Errors
     INTERNAL_SERVER_ERROR(500, "서버 내부 오류가 발생했습니다."),
