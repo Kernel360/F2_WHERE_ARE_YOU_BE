@@ -68,6 +68,17 @@ public class Club extends BaseTimeEntity {
 		this.isClubDeleted = false;
 	}
 
+	public Club(Long clubId, String clubToken, String clubName, String clubDescription, String clubImage,
+		List<ClubMember> clubMembers) {
+		this.clubId = clubId;
+		this.clubToken = clubToken;
+		this.clubName = clubName;
+		this.clubDescription = clubDescription;
+		this.clubImage = clubImage;
+		this.clubMembers = clubMembers;
+		isClubDeleted = false;
+	}
+
 	public void updateClub(ClubUpdateCommand clubUpdateCommand) {
 		this.clubName = clubUpdateCommand.clubName();
 		this.clubDescription = clubUpdateCommand.clubDescription();

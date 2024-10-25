@@ -5,7 +5,6 @@ import java.util.Map;
 
 import org.badminton.domain.domain.club.Club;
 import org.badminton.domain.domain.club.ClubMemberCountByTier;
-import org.badminton.domain.domain.club.entity.ClubEntity;
 import org.badminton.domain.domain.member.entity.Member;
 
 public record ClubCardResponse(

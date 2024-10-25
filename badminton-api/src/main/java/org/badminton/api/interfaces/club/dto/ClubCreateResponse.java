@@ -5,7 +5,7 @@ import java.time.LocalDateTime;
 import org.badminton.domain.domain.club.Club;
 
 public record ClubCreateResponse(
-	Long clubId,
+	String clubToken,
 	String clubName,
 	String clubDescription,
 	String clubImage,
@@ -14,7 +14,7 @@ public record ClubCreateResponse(
 ) {
 
 	public static ClubCreateResponse fromClubEntity(Club club) {
-		return new ClubCreateResponse(club.getClubId(), club.getClubName(), club.getClubDescription(),
+		return new ClubCreateResponse(club.getClubToken(), club.getClubName(), club.getClubDescription(),
 			club.getClubImage(),
 			club.getCreatedAt(),
 			club.getModifiedAt());

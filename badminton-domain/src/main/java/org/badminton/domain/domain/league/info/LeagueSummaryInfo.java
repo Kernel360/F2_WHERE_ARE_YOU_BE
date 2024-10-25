@@ -8,33 +8,49 @@ import org.badminton.domain.domain.league.entity.League;
 import org.badminton.domain.domain.league.enums.LeagueStatus;
 import org.badminton.domain.domain.member.entity.Member;
 
-public record LeagueCreateInfo(
-	String leagueName,
-	String description,
-	Member.MemberTier requiredTier,
-	LeagueStatus status,
-	MatchType matchType,
-	LocalDateTime leagueAt,
-	LocalDateTime recruitingClosedAt,
-	int playerLimitCount,
-	LocalDateTime createdAt,
-	LocalDateTime modifiedAt,
-	MatchGenerationType matchGenerationType
-) {
+public record LeagueSummaryInfo(
+	Long leagueId,
 
-	public static LeagueCreateInfo leagueCreateInfo(League league) {
-		return new LeagueCreateInfo(
+	String leagueName,
+
+	String leagueDescription,
+
+	String leagueLocation,
+
+	Member.MemberTier requiredTier,
+
+	LeagueStatus leagueStatus,
+
+	MatchType matchType,
+
+	LocalDateTime leagueAt,
+
+	LocalDateTime recruitingClosedAt,
+
+	int playerLimitCount,
+
+	MatchGenerationType matchGenerationType,
+
+	LocalDateTime createdAt,
+
+	LocalDateTime modifiedAt
+
+) {
+	public static LeagueSummaryInfo toLeagueSummaryInfo(League league) {
+		return new LeagueSummaryInfo(
+			league.getLeagueId(),
 			league.getLeagueName(),
 			league.getDescription(),
+			league.getLeagueLocation(),
 			league.getRequiredTier(),
 			league.getLeagueStatus(),
 			league.getMatchType(),
 			league.getLeagueAt(),
 			league.getRecruitingClosedAt(),
 			league.getPlayerLimitCount(),
+			league.getMatchGenerationType(),
 			league.getCreatedAt(),
-			league.getModifiedAt(),
-			league.getMatchGenerationType()
+			league.getModifiedAt()
 		);
 	}
 }

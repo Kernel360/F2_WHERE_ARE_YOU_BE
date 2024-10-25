@@ -1,4 +1,4 @@
-package org.badminton.domain.domain.league.info;
+package org.badminton.domain.domain.league.command;
 
 import java.time.LocalDateTime;
 
@@ -7,16 +7,16 @@ import org.badminton.domain.common.enums.MatchType;
 import org.badminton.domain.domain.league.enums.LeagueStatus;
 import org.badminton.domain.domain.member.entity.Member;
 
-public record LeagueUpdateInfo(
-	Long leagueId,
-
+public record LeagueCreateNoIncludeClubCommand(
+	String leagueToken,
+	
 	String leagueName,
 
-	String leagueDescription,
+	String description,
 
 	String leagueLocation,
 
-	Member.MemberTier requiredTier,
+	Member.MemberTier tierLimit,
 
 	LeagueStatus leagueStatus,
 
@@ -26,14 +26,8 @@ public record LeagueUpdateInfo(
 
 	LocalDateTime recruitingClosedAt,
 
-	MatchGenerationType matchGenerationType,
-
 	int playerLimitCount,
 
-	int recruitedMemberCount,
-
-	LocalDateTime createdAt,
-
-	LocalDateTime modifiedAt
+	MatchGenerationType matchGenerationType
 ) {
 }

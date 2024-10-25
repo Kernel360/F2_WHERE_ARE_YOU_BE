@@ -2,7 +2,6 @@ package org.badminton.domain.domain.league.entity;
 
 import java.time.LocalDateTime;
 
-import org.badminton.domain.domain.club.entity.ClubEntity;
 import org.badminton.domain.common.BaseTimeEntity;
 import org.badminton.domain.common.enums.MatchGenerationType;
 import org.badminton.domain.common.enums.MatchType;

@@ -1,6 +1,6 @@
 package org.badminton.domain.domain.league.vo;
 
-import org.badminton.domain.domain.league.entity.LeagueParticipantEntity;
+import org.badminton.domain.domain.league.entity.LeagueParticipant;
 
 import jakarta.persistence.Embeddable;
 import jakarta.persistence.FetchType;
@@ -11,17 +11,17 @@ import lombok.Getter;
 @Getter
 public class Team {
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    private LeagueParticipantEntity leagueParticipant1;
+	@ManyToOne(fetch = FetchType.LAZY)
+	private LeagueParticipant leagueParticipant1;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    private LeagueParticipantEntity leagueParticipant2;
+	@ManyToOne(fetch = FetchType.LAZY)
+	private LeagueParticipant leagueParticipant2;
 
-    protected Team() {
-    }
+	protected Team() {
+	}
 
-    public Team(LeagueParticipantEntity leagueParticipant1, LeagueParticipantEntity leagueParticipant2) {
-        this.leagueParticipant1 = leagueParticipant1;
-        this.leagueParticipant2 = leagueParticipant2;
-    }
+	public Team(LeagueParticipant leagueParticipant1, LeagueParticipant leagueParticipant2) {
+		this.leagueParticipant1 = leagueParticipant1;
+		this.leagueParticipant2 = leagueParticipant2;
+	}
 }
