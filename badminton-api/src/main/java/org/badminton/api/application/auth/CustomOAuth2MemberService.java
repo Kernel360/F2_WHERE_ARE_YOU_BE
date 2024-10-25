@@ -1,12 +1,12 @@
 package org.badminton.api.application.auth;
 
+import org.badminton.api.interfaces.auth.dto.CustomOAuth2Member;
+import org.badminton.api.interfaces.auth.dto.GoogleResponse;
+import org.badminton.api.interfaces.auth.dto.KakaoResponse;
+import org.badminton.api.interfaces.auth.dto.NaverResponse;
+import org.badminton.api.interfaces.auth.dto.OAuthResponse;
 import org.badminton.api.interfaces.member.dto.MemberRequest;
 import org.badminton.api.interfaces.member.dto.MemberResponse;
-import org.badminton.api.interfaces.oauth.dto.CustomOAuth2Member;
-import org.badminton.api.interfaces.oauth.dto.GoogleResponse;
-import org.badminton.api.interfaces.oauth.dto.KakaoResponse;
-import org.badminton.api.interfaces.oauth.dto.NaverResponse;
-import org.badminton.api.interfaces.oauth.dto.OAuthResponse;
 import org.badminton.domain.domain.member.MemberStore;
 import org.badminton.domain.domain.member.command.MemberCommand;
 import org.badminton.domain.domain.member.entity.Member;

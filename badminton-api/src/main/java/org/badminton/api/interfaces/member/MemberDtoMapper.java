@@ -1,9 +1,7 @@
 package org.badminton.api.interfaces.member;
 
-import org.badminton.api.interfaces.member.dto.MemberDeleteResponse;
 import org.badminton.api.interfaces.member.dto.MemberIsClubMemberResponse;
 import org.badminton.api.interfaces.member.dto.MemberMyPageResponse;
-import org.badminton.domain.domain.member.info.MemberDeleteInfo;
 import org.badminton.domain.domain.member.info.MemberIsClubMemberInfo;
 import org.badminton.domain.domain.member.info.MemberMyPageInfo;
 import org.mapstruct.InjectionStrategy;
@@ -24,5 +22,4 @@ public interface MemberDtoMapper {
 
 	MemberIsClubMemberResponse of(MemberIsClubMemberInfo memberIsClubMemberInfo);
 
-	MemberDeleteResponse of(MemberDeleteInfo deleteResponse);
 }

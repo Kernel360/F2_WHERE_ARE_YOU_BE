@@ -3,9 +3,9 @@ package org.badminton.api.filter;
 import java.io.IOException;
 import java.util.List;
 
+import org.badminton.api.interfaces.auth.dto.CustomOAuth2Member;
+import org.badminton.api.interfaces.auth.jwt.JwtUtil;
 import org.badminton.api.interfaces.member.dto.MemberResponse;
-import org.badminton.api.interfaces.oauth.dto.CustomOAuth2Member;
-import org.badminton.api.interfaces.oauth.jwt.JwtUtil;
 import org.badminton.domain.domain.clubmember.ClubMemberReader;
 import org.badminton.domain.domain.clubmember.entity.ClubMember;
 import org.badminton.domain.domain.member.entity.MemberAuthorization;

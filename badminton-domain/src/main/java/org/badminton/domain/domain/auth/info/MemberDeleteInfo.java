@@ -1,4 +1,4 @@
-package org.badminton.domain.domain.member.info;
+package org.badminton.domain.domain.auth.info;
 
 import org.badminton.domain.domain.member.entity.Member;
 

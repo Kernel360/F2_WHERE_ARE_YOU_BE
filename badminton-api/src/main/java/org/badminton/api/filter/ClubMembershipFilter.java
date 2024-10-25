@@ -3,7 +3,7 @@ package org.badminton.api.filter;
 import java.io.IOException;
 
 import org.badminton.api.config.security.SecurityUtil;
-import org.badminton.api.interfaces.oauth.dto.CustomOAuth2Member;
+import org.badminton.api.interfaces.auth.dto.CustomOAuth2Member;
 import org.badminton.domain.domain.clubmember.ClubMemberReader;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
