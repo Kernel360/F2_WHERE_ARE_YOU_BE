@@ -17,5 +17,7 @@ public interface DoublesMatchRepository extends JpaRepository<DoublesMatchEntity
             "OR doubleMatch.team2.leagueParticipant2.clubMember.clubMemberId = :clubMemberId) " +
             "AND doubleMatch.matchStatus = org.badminton.domain.common.enums.MatchStatus.COMPLETED")
     List<DoublesMatchEntity> findAllCompletedByClubMemberId(@Param("clubMemberId") Long clubMemberId);
+
+    void deleteAllByLeague_LeagueId(Long leagueId);
 }
 

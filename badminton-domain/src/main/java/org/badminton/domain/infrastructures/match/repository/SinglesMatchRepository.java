@@ -16,4 +16,7 @@ public interface SinglesMatchRepository extends JpaRepository<SinglesMatchEntity
             "AND singleMatch.matchStatus = org.badminton.domain.common.enums.MatchStatus.COMPLETED")
     List<SinglesMatchEntity> findAllCompletedByClubMemberId(@Param("clubMemberId") Long clubMemberId);
 
+
+    void deleteAllByLeague_LeagueId(Long leagueId);
+
 }

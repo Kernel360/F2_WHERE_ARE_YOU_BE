@@ -1,36 +1,38 @@
-package org.badminton.domain.infrastructures.match;
+package org.badminton.domain.infrastructures.match.strategy;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import lombok.AllArgsConstructor;
-import org.badminton.domain.common.enums.MatchType;
-import org.badminton.domain.common.exception.match.MatchDetailsNotExistException;
-import org.badminton.domain.common.exception.match.MatchDuplicateException;
-import org.badminton.domain.common.exception.match.MatchNotExistException;
 import org.badminton.domain.domain.league.entity.League;
 import org.badminton.domain.domain.league.entity.LeagueParticipantEntity;
 import org.badminton.domain.domain.league.vo.Team;
 import org.badminton.domain.domain.match.command.MatchCommand;
 import org.badminton.domain.domain.match.entity.DoublesMatchEntity;
 import org.badminton.domain.domain.match.entity.DoublesSetEntity;
+import org.badminton.domain.domain.match.info.BracketInfo;
 import org.badminton.domain.domain.match.info.MatchInfo;
 import org.badminton.domain.domain.match.info.SetInfo;
-import org.badminton.domain.infrastructures.match.repository.DoublesMatchRepository;
+import org.badminton.domain.domain.match.reader.DoublesMatchStore;
+import org.badminton.domain.domain.match.service.MatchStrategy;
+import org.badminton.domain.domain.match.store.DoublesMatchReader;
 
 @AllArgsConstructor
-public class DoublesMatchProgress implements MatchProgress {
-    private DoublesMatchRepository doublesMatchRepository;
+public class FreeDoublesMatchStrategy implements MatchStrategy {
+
+    private final DoublesMatchReader doublesMatchReader;
+    private final DoublesMatchStore doublesMatchStore;
 
     @Override
-    public List<MatchInfo.Main> getAllMatchesInLeague(Long leagueId) {
-        return doublesMatchRepository.findAllByLeague_LeagueId(leagueId).stream()
-                .map(MatchInfo.Main::fromDoublesMatchToMain)
-                .toList();
+    public BracketInfo retrieveFreeBracketInLeague(Long leagueId) {
+        List<DoublesMatchEntity> bracketInLeague = doublesMatchReader.getDoublesBracket(leagueId);
+        return BracketInfo.fromDoubles(1, bracketInLeague);
     }
 
     @Override
-    public List<SetInfo.Main> getAllMatchesAndSetsScoreInLeague(Long leagueId) {
-        return doublesMatchRepository.findAllByLeague_LeagueId(leagueId).stream()
+    public List<SetInfo.Main> retrieveAllSetsScoreInLeague(Long leagueId) {
+        return doublesMatchReader.getDoublesBracket(leagueId).stream()
                 .flatMap(doublesMatch ->
                         doublesMatch.getDoublesSets().stream()
                                 .map(doublesSet -> SetInfo.fromDoublesSet(doublesMatch.getDoublesMatchId(),
@@ -40,30 +42,34 @@ public class DoublesMatchProgress implements MatchProgress {
     }
 
     @Override
-    public MatchInfo.SetScoreDetails getMatchDetails(Long matchId) {
-        DoublesMatchEntity doublesMatch = doublesMatchRepository.findById(matchId)
-                .orElseThrow(() -> new MatchDetailsNotExistException(matchId));
+    public MatchInfo.SetScoreDetails retrieveAllSetsScoreInMatch(Long matchId) {
+        DoublesMatchEntity doublesMatch = doublesMatchReader.getDoublesMatch(matchId);
         return MatchInfo.SetScoreDetails.fromDoublesMatchToMatchDetails(doublesMatch);
     }
 
     @Override
-    public List<MatchInfo.Main> makeMatches(League league, List<LeagueParticipantEntity> leagueParticipantList) {
-        List<DoublesMatchEntity> doublesMatches = makeDoublesMatches(leagueParticipantList, league);
-        return doublesMatches
-                .stream()
-                .map(this::initDoublesMatch)
-                .map(MatchInfo.Main::fromDoublesMatchToMain)
-                .toList();
+    public void checkDuplicateInitialBracket(LocalDateTime leagueAt, Long leagueId) {
+        boolean isBracketEmpty = doublesMatchReader.checkIfBracketEmpty(leagueId);
+        if (!isBracketEmpty && LocalDateTime.now().isBefore(leagueAt)) {
+            doublesMatchStore.deleteDoublesBracket(leagueId);
+        } else if (!isBracketEmpty && LocalDateTime.now().isAfter(leagueAt)) {
+            // TODO: 경기 시작 시간이 지났는데, 이미 대진표가 있는데 또 생성하고 싶다면? -> 막을지, 안막을지
+        }
     }
 
     @Override
-    public SetInfo.Main updateSetScore(Long matchId, int setIndex,
-                                       MatchCommand.UpdateSetScore updateSetScoreCommand) {
-        // DoublesSetEntity를 꺼내온다.
+    public BracketInfo makeInitialBracket(League league,
+                                          List<LeagueParticipantEntity> leagueParticipantList) {
+        Collections.shuffle(leagueParticipantList);
+        List<DoublesMatchEntity> doublesMatches = makeDoublesMatches(leagueParticipantList, league);
+        doublesMatches.forEach(this::makeDoublesSetsInMatch);
+        return BracketInfo.fromDoubles(1, doublesMatches);
+    }
 
-        DoublesMatchEntity doublesMatch = doublesMatchRepository.findById(matchId).orElseThrow(
-                () -> new MatchNotExistException(matchId, MatchType.DOUBLES));
-
+    @Override
+    public SetInfo.Main registerSetScoreInMatch(Long matchId, int setIndex,
+                                                MatchCommand.UpdateSetScore updateSetScoreCommand) {
+        DoublesMatchEntity doublesMatch = doublesMatchReader.getDoublesMatch(matchId);
         // 세트 스코어를 기록한다.
         doublesMatch.getDoublesSets()
                 .get(setIndex - 1)
@@ -76,19 +82,11 @@ public class DoublesMatchProgress implements MatchProgress {
             doublesMatch.team2WinSet();
         }
 
-        doublesMatchRepository.save(doublesMatch);
+        doublesMatchStore.store(doublesMatch);
         return SetInfo.fromDoublesSet(matchId, setIndex, doublesMatch.getDoublesSets().get(setIndex - 1));
     }
 
-    @Override
-    public void checkDuplicateMatchInLeague(Long leagueId, MatchType matchType) {
-        List<DoublesMatchEntity> doublesMatchEntityList = doublesMatchRepository.findAllByLeague_LeagueId(leagueId);
-        if (!doublesMatchEntityList.isEmpty()) {
-            throw new MatchDuplicateException(matchType, leagueId);
-        }
-    }
-
-    private DoublesMatchEntity initDoublesMatch(DoublesMatchEntity doublesMatch) {
+    private void makeDoublesSetsInMatch(DoublesMatchEntity doublesMatch) {
         // 복식 게임 세트를 3개 생성
         DoublesSetEntity set1 = new DoublesSetEntity(doublesMatch, 1);
         DoublesSetEntity set2 = new DoublesSetEntity(doublesMatch, 2);
@@ -99,8 +97,7 @@ public class DoublesMatchProgress implements MatchProgress {
         doublesMatch.addSet(set2);
         doublesMatch.addSet(set3);
 
-        doublesMatchRepository.save(doublesMatch);
-        return doublesMatch;
+        doublesMatchStore.store(doublesMatch);
     }
 
     private List<DoublesMatchEntity> makeDoublesMatches(List<LeagueParticipantEntity> leagueParticipantList,
@@ -112,7 +109,7 @@ public class DoublesMatchProgress implements MatchProgress {
             Team team2 = new Team(leagueParticipantList.get(i + 2), leagueParticipantList.get(i + 3));
             DoublesMatchEntity doublesMatch = new DoublesMatchEntity(league, team1, team2);
             doublesMatches.add(doublesMatch);
-            doublesMatchRepository.save(doublesMatch);
+            doublesMatchStore.store(doublesMatch);
         }
         return doublesMatches;
     }
