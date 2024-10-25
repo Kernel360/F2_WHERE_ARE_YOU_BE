@@ -4,9 +4,9 @@ import java.time.LocalDateTime;
 
 import org.badminton.domain.common.enums.MatchGenerationType;
 import org.badminton.domain.common.enums.MatchType;
-import org.badminton.domain.common.enums.MemberTier;
-import org.badminton.domain.domain.league.entity.LeagueEntity;
+import org.badminton.domain.domain.league.entity.League;
 import org.badminton.domain.domain.league.enums.LeagueStatus;
+import org.badminton.domain.domain.member.entity.Member;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 
@@ -18,7 +18,7 @@ public record LeagueCreateResponse(
         String description,
 
         @Schema(description = "최소 티어", example = "GOLD")
-        MemberTier tierLimit,
+        Member.MemberTier tierLimit,
 
         @Schema(description = "현재 경기 상태", example = "OPEN")
         LeagueStatus status,
@@ -45,7 +45,7 @@ public record LeagueCreateResponse(
         MatchGenerationType matchGenerationType
 ) {
 
-    public LeagueCreateResponse(LeagueEntity entity) {
+    public LeagueCreateResponse(League entity) {
         this(
                 entity.getLeagueName(),
                 entity.getDescription(),
@@ -61,7 +61,7 @@ public record LeagueCreateResponse(
         );
     }
 
-    public static LeagueCreateResponse leagueCreateEntityToResponse(LeagueEntity entity) {
+    public static LeagueCreateResponse leagueCreateEntityToResponse(League entity) {
         return new LeagueCreateResponse(entity);
     }
 }

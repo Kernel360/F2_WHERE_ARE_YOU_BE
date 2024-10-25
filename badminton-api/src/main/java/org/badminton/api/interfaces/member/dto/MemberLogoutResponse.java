@@ -1,6 +1,8 @@
 package org.badminton.api.interfaces.member.dto;
 
-import org.badminton.domain.domain.member.entity.MemberEntity;
+import org.badminton.domain.domain.member.entity.Member;
+import org.badminton.domain.domain.member.entity.MemberAuthorization;
+import org.badminton.domain.domain.member.info.MemberLogoutInfo;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 
@@ -21,9 +23,9 @@ public record MemberLogoutResponse(
         @Schema(description = "oAuth 제공 이미지", example = "1070449979547641023123")
         String profileImage
 ) {
-    public static MemberLogoutResponse memberEntityToLogoutResponse(MemberEntity memberEntity) {
-        return new MemberLogoutResponse(memberEntity.getAuthorization(), memberEntity.getName(),
-                memberEntity.getEmail(),
-                memberEntity.getProviderId(), memberEntity.getProfileImage());
+    public static MemberLogoutResponse fromMemberLogoutInfo(MemberLogoutInfo info) {
+        return new MemberLogoutResponse(info.authorization(), info.name(),
+            info.email(),
+            info.providerId(), info.profileImage());
     }
 }

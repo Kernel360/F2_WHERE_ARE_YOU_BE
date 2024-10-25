@@ -3,27 +3,32 @@ package org.badminton.domain.infrastructures.clubmember;
 import java.util.List;
 import java.util.Optional;
 
-import org.badminton.domain.domain.clubmember.entity.ClubMemberEntity;
+import org.badminton.domain.domain.clubmember.entity.ClubMember;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
-public interface ClubMemberRepository extends JpaRepository<ClubMemberEntity, Long> {
+public interface ClubMemberRepository extends JpaRepository<ClubMember, Long> {
 
-    List<ClubMemberEntity> findAllByClub_ClubId(Long clubId);
+	List<ClubMember> findAllByClubClubToken(String clubToken);
 
-    Optional<ClubMemberEntity> findByMember_MemberIdAndDeletedFalse(Long memberId);
+	Optional<ClubMember> findByDeletedFalseAndMemberMemberToken(String memberToken);
 
-    Optional<ClubMemberEntity> findByClub_ClubIdAndMember_MemberId(Long clubId, Long memberId);
+	Optional<ClubMember> findByClubClubTokenAndMemberMemberToken(String clubToken, String memberToken);
 
-    boolean existsByMember_MemberIdAndDeletedFalse(Long memberId);
+	boolean existsByMember_MemberTokenAndDeletedFalse(String memberToken);
 
-    List<ClubMemberEntity> findAllByMember_MemberId(Long memberId);
+	List<ClubMember> findAllByMemberMemberToken(String memberToken);
 
-    List<ClubMemberEntity> findAllByClubClubIdAndBannedFalseAndDeletedFalse(Long clubId);
+	List<ClubMember> findAllByClubClubTokenAndBannedFalseAndDeletedFalse(String clubToken);
 
-    boolean existsByMember_MemberIdAndClub_ClubId(Long memberId, Long clubId);
+	boolean existsByMemberMemberTokenAndClubClubToken(String MemberToken, String clubToken);
 
-    Optional<ClubMemberEntity> findByClubMemberId(Long clubMemberId);
+	Optional<ClubMember> findByClubMemberId(Long clubMemberId);
 
-    List<ClubMemberEntity> findAllByDeletedFalseAndClub_ClubId(Long clubId);
+	List<ClubMember> findAllByDeletedFalseAndClubClubToken(String clubToken);
+
+	@Query("SELECT COUNT(cm) FROM ClubMember cm WHERE cm.member.memberToken = :memberToken AND cm.role = 'ROLE_OWNER'")
+	long countByMemberIdAndRoleOwner(@Param("memberToken") String memberToken);
 }
 

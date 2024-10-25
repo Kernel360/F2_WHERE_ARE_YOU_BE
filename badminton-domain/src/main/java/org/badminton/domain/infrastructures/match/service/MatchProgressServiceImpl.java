@@ -2,7 +2,7 @@ package org.badminton.domain.infrastructures.match.service;
 
 import lombok.RequiredArgsConstructor;
 import org.badminton.domain.common.exception.league.LeagueNotExistException;
-import org.badminton.domain.domain.league.entity.LeagueEntity;
+import org.badminton.domain.domain.league.entity.League;
 import org.badminton.domain.domain.match.command.MatchCommand.UpdateSetScore;
 import org.badminton.domain.domain.match.info.SetInfo.Main;
 import org.badminton.domain.domain.match.reader.DoublesMatchStore;
@@ -28,7 +28,7 @@ public class MatchProgressServiceImpl implements MatchProgressService {
 
     @Override
     public MatchStrategy makeSinglesOrDoublesMatchStrategy(Long leagueId) {
-        LeagueEntity league = findLeague(leagueId);
+        League league = findLeague(leagueId);
         return switch (league.getMatchType()) {
             case SINGLES -> new FreeSinglesMatchStrategy(singlesMatchReader, singlesMatchStore);
             case DOUBLES -> new FreeDoublesMatchStrategy(doublesMatchReader, doublesMatchStore);
@@ -41,7 +41,7 @@ public class MatchProgressServiceImpl implements MatchProgressService {
         return matchStrategy.registerSetScoreInMatch(matchId, setIndex, updateSetScoreCommand);
     }
 
-    private LeagueEntity findLeague(Long leagueId) {
+    private League findLeague(Long leagueId) {
         return leagueRepository.findById(leagueId)
                 .orElseThrow(() -> new LeagueNotExistException(leagueId));
     }

@@ -7,9 +7,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import org.badminton.domain.domain.clubmember.entity.ClubMemberEntity;
+import org.badminton.domain.domain.clubmember.entity.ClubMember;
 import org.badminton.domain.common.BaseTimeEntity;
-import org.badminton.domain.common.enums.MemberTier;
+import org.badminton.domain.domain.member.entity.Member;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -43,7 +43,7 @@ public class ClubEntity extends BaseTimeEntity {
     private boolean isClubDeleted;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "club")
-    private List<ClubMemberEntity> clubMembers = new ArrayList<>();
+    private List<ClubMember> clubMembers = new ArrayList<>();
 
     public ClubEntity(String clubName, String clubDescription, String clubImage) {
         this.clubName = clubName;
@@ -58,29 +58,40 @@ public class ClubEntity extends BaseTimeEntity {
         this.clubImage = clubImage;
     }
 
-    public Map<MemberTier, Long> getClubMemberCountByTier() {
+    public Map<Member.MemberTier, Long> getClubMemberCountByTier() {
+        List<Member.MemberTier> tierListForInit = Arrays.asList(Member.MemberTier.BRONZE, Member.MemberTier.SILVER, Member.MemberTier.GOLD);
+        Map<Member.MemberTier, Long> tierCounts = new LinkedHashMap<>();
 
-        List<MemberTier> tierListForInit = Arrays.asList(MemberTier.BRONZE, MemberTier.SILVER, MemberTier.GOLD);
-        Map<MemberTier, Long> tierCounts = new LinkedHashMap<>();
-
-        for (MemberTier tier : tierListForInit) {
+        for (Member.MemberTier tier : tierListForInit) {
             tierCounts.put(tier, 0L);
         }
 
-        Map<MemberTier, Long> actualCounts = clubMembers.stream()
-                .filter(clubMember -> clubMember.getLeagueRecord() != null)
-                .filter(clubMember -> !clubMember.isDeleted())
-                .collect(Collectors.groupingBy(
-                        ClubMemberEntity::getTier,
-                        Collectors.counting()
-                ));
-
+        Map<Member.MemberTier, Long> actualCounts = getActualMemberCounts(this.clubMembers);
         tierCounts.putAll(actualCounts);
 
         return tierCounts;
     }
 
+    private Map<Member.MemberTier, Long> getActualMemberCounts(List<ClubMember> clubMembers) {
+        return clubMembers.stream()
+            .filter(this::isValidMember)
+            .filter(clubMember -> !clubMember.isDeleted())
+            .collect(Collectors.groupingBy(
+                this::getMemberTier,
+                Collectors.counting()
+            ));
+    }
+
     public void doWithdrawal() {
         this.isClubDeleted = true;
+    }
+
+    private boolean isValidMember(ClubMember clubMember) {
+        Member member = clubMember.getMember();
+        return member != null && member.getLeagueRecord() != null;
+    }
+
+    private Member.MemberTier getMemberTier(ClubMember clubMember) {
+        return clubMember.getMember().getTier();
     }
 }

@@ -3,7 +3,7 @@ package org.badminton.domain.infrastructures.match.service;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.badminton.domain.common.exception.league.LeagueNotExistException;
-import org.badminton.domain.domain.league.entity.LeagueEntity;
+import org.badminton.domain.domain.league.entity.League;
 import org.badminton.domain.domain.match.info.BracketInfo;
 import org.badminton.domain.domain.match.info.MatchInfo.SetScoreDetails;
 import org.badminton.domain.domain.match.info.SetInfo;
@@ -30,7 +30,7 @@ public class MatchRetrieveServiceImpl implements MatchRetrieveService {
 
     @Override
     public MatchStrategy makeSinglesOrDoublesMatchStrategy(Long leagueId) {
-        LeagueEntity league = findLeague(leagueId);
+        League league = findLeague(leagueId);
         return switch (league.getMatchType()) {
             case SINGLES -> new FreeSinglesMatchStrategy(singlesMatchReader, singlesMatchStore);
             case DOUBLES -> new FreeDoublesMatchStrategy(doublesMatchReader, doublesMatchStore);
@@ -52,7 +52,7 @@ public class MatchRetrieveServiceImpl implements MatchRetrieveService {
         return matchStrategy.retrieveAllSetsScoreInMatch(matchId);
     }
 
-    private LeagueEntity findLeague(Long leagueId) {
+    private League findLeague(Long leagueId) {
         return leagueRepository.findById(leagueId)
                 .orElseThrow(() -> new LeagueNotExistException(leagueId));
     }

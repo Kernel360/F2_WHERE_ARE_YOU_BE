@@ -8,7 +8,7 @@ import java.util.List;
 import org.badminton.domain.common.BaseTimeEntity;
 import org.badminton.domain.common.enums.MatchResult;
 import org.badminton.domain.common.enums.MatchStatus;
-import org.badminton.domain.domain.league.entity.LeagueEntity;
+import org.badminton.domain.domain.league.entity.League;
 import org.badminton.domain.domain.league.vo.Team;
 
 import jakarta.persistence.AssociationOverride;
@@ -42,7 +42,7 @@ public class DoublesMatchEntity extends BaseTimeEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "leagueId")
-    private LeagueEntity league;
+    private League league;
 
     @Embedded
     @AssociationOverrides({
@@ -73,7 +73,7 @@ public class DoublesMatchEntity extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)
     private MatchStatus matchStatus = MatchStatus.NOT_STARTED;
 
-    public DoublesMatchEntity(LeagueEntity league, Team team1, Team team2) {
+    public DoublesMatchEntity(League league, Team team1, Team team2) {
         this.league = league;
         this.team1 = team1;
         this.team2 = team2;

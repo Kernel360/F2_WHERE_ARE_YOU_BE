@@ -1,8 +1,7 @@
 package org.badminton.api.interfaces.member.dto;
 
+import org.badminton.domain.domain.member.command.MemberCommand;
 import org.badminton.domain.domain.member.entity.MemberAuthorization;
-import org.badminton.domain.domain.member.entity.MemberEntity;
-
 import io.swagger.v3.oas.annotations.media.Schema;
 
 @Schema(description = "회원 요청 DTO")
@@ -24,14 +23,8 @@ public record MemberRequest(
         String profileImage
 ) {
 
-    // public static MemberEntity memberRequestToEntity(MemberRequest memberRequest) {
-    // 	return new MemberEntity(memberRequest.email(), memberRequest.name(), memberRequest.providerId(),
-    // 		memberRequest.profileImage, memberRequest.authorization());
-    // }
-
-    public MemberEntity memberRequestToEntity() {
-        return new MemberEntity(this.email(), this.name(), this.providerId(),
-                this.profileImage, this.authorization());
+    public MemberCommand of() {
+        return new MemberCommand(this.authorization, this.name, this.email, this.providerId, this.profileImage);
     }
 }
 

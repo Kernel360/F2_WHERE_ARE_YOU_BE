@@ -8,7 +8,8 @@ dependencies {
     implementation 'io.jsonwebtoken:jjwt-api:0.12.3'
     implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.5.RELEASE'
 
-
+    implementation 'org.mapstruct:mapstruct:1.4.2.Final'
+    annotationProcessor "org.mapstruct:mapstruct-processor:1.4.2.Final"
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-validation', version: '3.3.4'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
     implementation group: 'jakarta.validation', name: 'jakarta.validation-api', version: '3.1.0'

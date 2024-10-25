@@ -5,11 +5,11 @@ import org.badminton.domain.common.exception.BadmintonException;
 
 public class ClubMemberDuplicateException extends BadmintonException {
 
-    public ClubMemberDuplicateException(Long clubId, Long memberId) {
-        super(ErrorCode.CLUB_MEMBER_ALREADY_EXIST, "[동호회 아이디 : " + clubId + " 회원 아이디 : " + memberId + "]");
-    }
+	public ClubMemberDuplicateException(String clubToken, String memberToken) {
+		super(ErrorCode.CLUB_MEMBER_ALREADY_EXIST, "[동호회 아이디 : " + clubToken + " 회원 아이디 : " + memberToken + "]");
+	}
 
-    public ClubMemberDuplicateException(Long clubId, Long memberId, Exception e) {
-        super(ErrorCode.CLUB_MEMBER_ALREADY_EXIST, "[동호회 아이디 : " + clubId + " 회원 아이디 : " + memberId + "]", e);
-    }
+	public ClubMemberDuplicateException(String clubToken, String memberToken, Exception e) {
+		super(ErrorCode.CLUB_MEMBER_ALREADY_EXIST, "[동호회 아이디 : " + clubToken + " 회원 아이디 : " + memberToken + "]", e);
+	}
 }

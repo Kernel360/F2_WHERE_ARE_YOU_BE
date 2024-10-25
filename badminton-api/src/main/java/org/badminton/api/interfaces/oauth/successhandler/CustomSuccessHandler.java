@@ -7,8 +7,8 @@ import org.badminton.api.common.exception.member.MemberNotExistException;
 import org.badminton.api.interfaces.oauth.jwt.JwtUtil;
 import org.badminton.api.interfaces.oauth.dto.CustomOAuth2Member;
 import org.badminton.domain.infrastructures.clubmember.ClubMemberRepository;
-import org.badminton.domain.domain.member.entity.MemberEntity;
-import org.badminton.domain.infrastructures.member.MemberRepository;
+import org.badminton.domain.domain.member.entity.Member;
+import org.badminton.domain.infrastructures.member.repository.MemberRepository;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseCookie;
 import org.springframework.security.core.Authentication;
@@ -41,11 +41,11 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
 
         CustomOAuth2Member customUserDetails = (CustomOAuth2Member) authentication.getPrincipal(); // 인증된 사용자 객체 가져오기
 
-        Long memberId = customUserDetails.getMemberId();
-        MemberEntity memberEntity = memberRepository.findByMemberId(memberId)
-                .orElseThrow(() -> new MemberNotExistException(memberId));
+        String memberToken = customUserDetails.getMemberToken();
+        Member member = memberRepository.findByMemberToken(memberToken)
+                .orElseThrow(() -> new MemberNotExistException(memberToken));
 
-        memberEntity.updateLastConnection();
+        member.updateLastConnection();
 
         String registrationId = customUserDetails.getRegistrationId();
 
@@ -57,16 +57,16 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
 
         log.info("roles: {}", roles);
 
-        String accessToken = jwtUtil.createAccessToken(String.valueOf(memberId), roles, registrationId,
+        String accessToken = jwtUtil.createAccessToken(String.valueOf(memberToken), roles, registrationId,
                 oAuthAccessToken);
 
         log.info("Extracted from JWT - registrationId: {}, oAuthAccessToken: {}",
                 jwtUtil.getRegistrationId(accessToken), jwtUtil.getOAuthToken(accessToken));
 
-        String refreshToken = jwtUtil.createRefreshToken(String.valueOf(memberId), roles, registrationId);
+        String refreshToken = jwtUtil.createRefreshToken(String.valueOf(memberToken), roles, registrationId);
 
-        memberEntity.updateRefreshToken(refreshToken);
-        memberRepository.save(memberEntity);
+        member.updateRefreshToken(refreshToken);
+        memberRepository.save(member);
 
         clearSession(request, response);
 

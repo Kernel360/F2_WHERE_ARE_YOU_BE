@@ -1,8 +1,8 @@
 package org.badminton.domain.domain.league.entity;
 
-import org.badminton.domain.domain.clubmember.entity.ClubMemberEntity;
+import org.badminton.domain.domain.clubmember.entity.ClubMember;
 import org.badminton.domain.common.BaseTimeEntity;
-import org.badminton.domain.domain.member.entity.MemberEntity;
+import org.badminton.domain.domain.member.entity.Member;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
@@ -29,19 +29,19 @@ public class LeagueParticipantEntity extends BaseTimeEntity {
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "clubMemberId")
-    private ClubMemberEntity clubMember;
+    private ClubMember clubMember;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "memberId")
-    private MemberEntity member;
+    private Member member;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "leagueId")
-    private LeagueEntity league;
+    private League league;
 
     private boolean canceled;
 
-    public LeagueParticipantEntity(ClubMemberEntity clubMember, LeagueEntity league) {
+    public LeagueParticipantEntity(ClubMember clubMember, League league) {
         this.clubMember = clubMember;
         this.league = league;
         this.canceled = false;

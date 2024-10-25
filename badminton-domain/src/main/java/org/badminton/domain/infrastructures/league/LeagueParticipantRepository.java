@@ -11,7 +11,7 @@ public interface LeagueParticipantRepository extends JpaRepository<LeaguePartici
     Optional<LeagueParticipantEntity> findByLeagueLeagueIdAndClubMemberClubMemberIdAndCanceledFalse(Long leagueId,
                                                                                                     Long clubMemberId);
 
-    List<LeagueParticipantEntity> findByMemberMemberIdAndLeagueLeagueIdAndCanceledFalse(Long memberId, Long leagueId);
+    List<LeagueParticipantEntity> findByMemberMemberTokenAndLeagueLeagueIdAndCanceledFalse(String memberToken, Long leagueId);
 
     List<LeagueParticipantEntity> findAllByLeagueLeagueIdAndCanceledFalse(Long leagueId);
 

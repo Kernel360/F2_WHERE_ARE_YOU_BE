@@ -34,11 +34,11 @@ public class JwtUtil {
                 Jwts.SIG.HS256.key().build().getAlgorithm());
     }
 
-    public String createAccessToken(String memberId, List<String> roles, String registrationId,
+    public String createAccessToken(String memberToken, List<String> roles, String registrationId,
                                     String oAuthAccessToken) {
 
         return Jwts.builder()
-                .claim("memberId", memberId)
+                .claim("memberToken", memberToken)
                 .claim("roles", String.join(",", roles))
                 .claim("registrationId", registrationId)
                 .claim("oAuthAccessToken", oAuthAccessToken)
@@ -48,9 +48,9 @@ public class JwtUtil {
                 .compact();
     }
 
-    public String createRefreshToken(String memberId, List<String> roles, String registrationId) {
+    public String createRefreshToken(String memberToken, List<String> roles, String registrationId) {
         return Jwts.builder()
-                .claim("memberId", memberId)
+                .claim("memberToken", memberToken)
                 .claim("roles", String.join(",", roles))
                 .claim("registrationId", registrationId)
                 .expiration(new Date(System.currentTimeMillis() + REFRESH_TOKEN_EXPIRY))
@@ -86,8 +86,8 @@ public class JwtUtil {
         response.addHeader("Set-Cookie", cookie.toString());
     }
 
-    public String getMemberId(String token) {
-        return getDetail(token, "memberId");
+    public String getMemberToken(String token) {
+        return getDetail(token, "memberToken");
     }
 
     public String getRegistrationId(String token) {

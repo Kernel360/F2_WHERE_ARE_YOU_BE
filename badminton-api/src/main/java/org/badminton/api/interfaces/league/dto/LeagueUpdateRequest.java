@@ -4,7 +4,7 @@ import java.time.LocalDateTime;
 
 import org.badminton.domain.common.enums.MatchGenerationType;
 import org.badminton.domain.common.enums.MatchType;
-import org.badminton.domain.common.enums.MemberTier;
+import org.badminton.domain.domain.member.entity.Member;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 
@@ -20,7 +20,7 @@ public record LeagueUpdateRequest(
         String leagueLocation,
 
         @Schema(description = "최소 티어", example = "GOLD")
-        MemberTier tierLimit,
+        Member.MemberTier tierLimit,
 
         @Schema(description = "경기 방식", example = "SINGLES")
         MatchType matchType,

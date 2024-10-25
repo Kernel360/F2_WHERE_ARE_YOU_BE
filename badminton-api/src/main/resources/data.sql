@@ -1,38 +1,37 @@
 -- Member 데이터 삽입 (이미지 URL 교체)
 use badminton;
 INSERT INTO member (providerId, email, name, authorization, profileImage, isDeleted, lastConnectionAt, createdAt,
-                    modifiedAt)
+                    modifiedAt, tier, memberToken)
 VALUES ('provider_1', 'honggildong@example.com', '홍길동', 'AUTHORIZATION_USER',
         'https://d36om9pjoifd2y.cloudfront.net/member/cat.jpg', false, '2024-01-01 10:00:00',
-        '2024-01-01 09:00:00', '2024-01-01 09:00:00'),
+        '2024-01-01 09:00:00', '2024-01-01 09:00:00', 'BRONZE', 'me_token_01'),
        ('provider_2', 'satang@example.com', '사탕', 'AUTHORIZATION_USER',
         'https://d36om9pjoifd2y.cloudfront.net/member/cow.jpg', false, '2024-01-02 10:00:00',
-        '2024-01-02 09:00:00', '2024-01-02 09:00:00'),
+        '2024-01-02 09:00:00', '2024-01-02 09:00:00', 'BRONZE', 'me_token_02'),
        ('provider_3', 'candyman@example.com', '캔디맨', 'AUTHORIZATION_USER',
         'https://d36om9pjoifd2y.cloudfront.net/member/lion.jpg', false, '2024-01-03 10:00:00',
-        '2024-01-03 09:00:00', '2024-01-03 09:00:00'),
+        '2024-01-03 09:00:00', '2024-01-03 09:00:00', 'BRONZE', 'me_token_03'),
        ('provider_4', 'admin1@example.com', '관리자1', 'AUTHORIZATION_ADMIN',
         'https://d36om9pjoifd2y.cloudfront.net/member/pelican.jpg', false, '2024-01-04 10:00:00',
-        '2024-01-04 09:00:00', '2024-01-04 09:00:00'),
+        '2024-01-04 09:00:00', '2024-01-04 09:00:00', 'BRONZE', 'me_token_04'),
        ('provider_5', 'yulsooa@example.com', '율수아', 'AUTHORIZATION_USER',
         'https://d36om9pjoifd2y.cloudfront.net/member/zebra.jpg', false, '2024-01-05 10:00:00',
-        '2024-01-05 09:00:00', '2024-01-05 09:00:00'),
+        '2024-01-05 09:00:00', '2024-01-05 09:00:00', 'BRONZE', 'me_token_05'),
        ('provider_6', 'cheesecake@example.com', '치즈케이크', 'AUTHORIZATION_USER',
         'https://d36om9pjoifd2y.cloudfront.net/member/cat.jpg', true, '2024-01-06 10:00:00',
-        '2024-01-06 09:00:00', '2024-01-06 09:00:00'),
+        '2024-01-06 09:00:00', '2024-01-06 09:00:00', 'BRONZE', 'me_token_06'),
        ('provider_7', 'jellybean@example.com', '젤리빈', 'AUTHORIZATION_USER',
         'https://d36om9pjoifd2y.cloudfront.net/member/cow.jpg', false, '2024-01-07 10:00:00',
-        '2024-01-07 09:00:00', '2024-01-07 09:00:00'),
+        '2024-01-07 09:00:00', '2024-01-07 09:00:00', 'BRONZE', 'me_token_07'),
        ('provider_8', 'admin2@example.com', '관리자2', 'AUTHORIZATION_ADMIN',
         'https://d36om9pjoifd2y.cloudfront.net/member/lion.jpg', false, '2024-01-08 10:00:00',
-        '2024-01-08 09:00:00', '2024-01-08 09:00:00'),
+        '2024-01-08 09:00:00', '2024-01-08 09:00:00', 'BRONZE', 'me_token_08'),
        ('provider_9', 'honeydew@example.com', '허니듀', 'AUTHORIZATION_USER',
         'https://d36om9pjoifd2y.cloudfront.net/member/pelican.jpg', false, '2024-01-09 10:00:00',
-        '2024-01-09 09:00:00', '2024-01-09 09:00:00'),
+        '2024-01-09 09:00:00', '2024-01-09 09:00:00', 'BRONZE', 'me_token_09'),
        ('provider_10', 'chocobar@example.com', '초코바', 'AUTHORIZATION_USER',
         'https://d36om9pjoifd2y.cloudfront.net/member/zebra.jpg', false, '2024-01-10 10:00:00',
-        '2024-01-10 09:00:00', '2024-01-10 09:00:00');
-
+        '2024-01-10 09:00:00', '2024-01-10 09:00:00', 'BRONZE', 'me_token_10');
 
 -- Club 데이터 삽입
 INSERT INTO club (clubName, clubDescription, clubImage, isClubDeleted, createdAt, modifiedAt)
@@ -78,17 +77,17 @@ VALUES ('Badminton Club 1', 'This is the first badminton club.',
         '2024-01-10 09:00:00', '2024-01-10 09:00:00');
 
 -- ClubMember 데이터 삽입
-INSERT INTO club_member (clubId, memberId, role, tier, deleted, banned, createdAt, modifiedAt)
-VALUES (1, 1, 'ROLE_OWNER', 'GOLD', false, false, '2024-01-01 09:00:00', '2024-01-01 09:00:00'),
-       (1, 2, 'ROLE_MANAGER', 'SILVER', false, false, '2024-01-02 09:00:00', '2024-01-02 09:00:00'),
-       (1, 3, 'ROLE_USER', 'GOLD', false, false, '2024-01-03 09:00:00', '2024-01-03 09:00:00'),
-       (1, 4, 'ROLE_USER', 'BRONZE', false, false, '2024-01-04 09:00:00', '2024-01-04 09:00:00'),
-       (1, 5, 'ROLE_USER', 'SILVER', false, false, '2024-01-05 09:00:00', '2024-01-05 09:00:00'),
-       (1, 6, 'ROLE_USER', 'GOLD', false, false, '2024-01-06 09:00:00', '2024-01-06 09:00:00'),
-       (2, 7, 'ROLE_OWNER', 'BRONZE', false, false, '2024-01-07 09:00:00', '2024-01-07 09:00:00'),
-       (2, 8, 'ROLE_USER', 'GOLD', false, false, '2024-01-08 09:00:00', '2024-01-08 09:00:00'),
-       (2, 9, 'ROLE_OWNER', 'GOLD', false, false, '2024-01-09 09:00:00', '2024-01-09 09:00:00'),
-       (2, 10, 'ROLE_MANAGER', 'SILVER', false, false, '2024-01-10 09:00:00', '2024-01-10 09:00:00');
+INSERT INTO club_member (clubId, memberId, role, deleted, banned, createdAt, modifiedAt)
+VALUES (1, 1, 'ROLE_OWNER', false, false, '2024-01-01 09:00:00', '2024-01-01 09:00:00'),
+       (1, 2, 'ROLE_MANAGER', false, false, '2024-01-02 09:00:00', '2024-01-02 09:00:00'),
+       (1, 3, 'ROLE_USER', false, false, '2024-01-03 09:00:00', '2024-01-03 09:00:00'),
+       (1, 4, 'ROLE_USER' , false, false, '2024-01-04 09:00:00', '2024-01-04 09:00:00'),
+       (1, 5, 'ROLE_USER' , false, false, '2024-01-05 09:00:00', '2024-01-05 09:00:00'),
+       (1, 6, 'ROLE_USER', false, false, '2024-01-06 09:00:00', '2024-01-06 09:00:00'),
+       (2, 7, 'ROLE_OWNER' , false, false, '2024-01-07 09:00:00', '2024-01-07 09:00:00'),
+       (2, 8, 'ROLE_USER', false, false, '2024-01-08 09:00:00', '2024-01-08 09:00:00'),
+       (2, 9, 'ROLE_OWNER', false, false, '2024-01-09 09:00:00', '2024-01-09 09:00:00'),
+       (2, 10, 'ROLE_MANAGER' , false, false, '2024-01-10 09:00:00', '2024-01-10 09:00:00');
 
 
 -- League 데이터 삽입 (leagueLocation 필드 추가)
@@ -142,7 +141,7 @@ VALUES (1, 1, false, '2024-01-01 09:00:00', '2024-01-01 09:00:00', 1),
        (10, 5, false, '2024-01-20 09:00:00', '2024-01-20 09:00:00', 10);
 
 -- LeagueRecord 데이터 삽입 (티어 기준표 반영)
-INSERT INTO league_record (winCount, loseCount, drawCount, matchCount, clubMemberId, createdAt, modifiedAt)
+INSERT INTO league_record (winCount, loseCount, drawCount, matchCount, memberId, createdAt, modifiedAt)
 VALUES (16, 3, 1, 20, 1, '2024-01-01 09:00:00', '2024-01-01 09:00:00'),
        (7, 2, 1, 10, 2, '2024-01-02 09:00:00', '2024-01-02 09:00:00'),
        (19, 1, 0, 20, 3, '2024-01-03 09:00:00', '2024-01-03 09:00:00'),

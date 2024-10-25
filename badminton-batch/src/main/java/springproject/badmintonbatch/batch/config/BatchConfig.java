@@ -1,6 +1,6 @@
 package springproject.badmintonbatch.batch.config;
 
-import org.badminton.domain.domain.member.entity.MemberEntity;
+import org.badminton.domain.domain.member.entity.Member;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
@@ -29,11 +29,11 @@ public class BatchConfig {
     }
 
     @Bean
-    public Step deleteMemberStep(ItemReader<MemberEntity> reader, ItemProcessor<MemberEntity, MemberEntity> processor,
-                                 ItemWriter<MemberEntity> writer, JobRepository jobRepository,
+    public Step deleteMemberStep(ItemReader<Member> reader, ItemProcessor<Member, Member> processor,
+                                 ItemWriter<Member> writer, JobRepository jobRepository,
                                  PlatformTransactionManager transactionManager) {
         return new StepBuilder("deleteMemberStep", jobRepository)
-                .<MemberEntity, MemberEntity>chunk(10, transactionManager)
+                .<Member, Member>chunk(10, transactionManager)
                 .reader(reader)
                 .processor(processor)
                 .writer(writer)

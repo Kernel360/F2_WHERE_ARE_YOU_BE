@@ -2,7 +2,7 @@ package org.badminton.domain.domain.match.service;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import org.badminton.domain.domain.league.entity.LeagueEntity;
+import org.badminton.domain.domain.league.entity.League;
 import org.badminton.domain.domain.league.entity.LeagueParticipantEntity;
 import org.badminton.domain.domain.match.command.MatchCommand;
 import org.badminton.domain.domain.match.info.BracketInfo;
@@ -26,7 +26,7 @@ public interface MatchStrategy {
 
     void checkDuplicateInitialBracket(LocalDateTime leagueAt, Long leagueId);
 
-    BracketInfo makeInitialBracket(LeagueEntity league, List<LeagueParticipantEntity> leagueParticipantList);
+    BracketInfo makeInitialBracket(League league, List<LeagueParticipantEntity> leagueParticipantList);
 
     SetInfo.Main registerSetScoreInMatch(Long matchId, int setIndex, MatchCommand.UpdateSetScore updateSetScoreCommand);
 }

@@ -1,16 +1,15 @@
 package org.badminton.api.interfaces.clubmember.dto;
 
-import org.badminton.domain.domain.clubmember.entity.ClubMemberEntity;
+import org.badminton.domain.domain.clubmember.entity.ClubMember;
+import org.badminton.domain.domain.clubmember.info.ClubMemberJoinInfo;
 
 public record ClubMemberJoinResponse(
         Long clubMemberId,
         String role
 ) {
-    public static ClubMemberJoinResponse clubMemberEntityToClubMemberJoinResponse(
-            ClubMemberEntity clubMemberEntity) {
+    public static ClubMemberJoinResponse fromClubMemberJoinInfo(ClubMemberJoinInfo info){
         return new ClubMemberJoinResponse(
-                clubMemberEntity.getClubMemberId(),
-                clubMemberEntity.getRole().name()
+            info.clubMemberId(), info.role()
         );
 
     }

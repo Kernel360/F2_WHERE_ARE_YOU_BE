@@ -4,9 +4,9 @@ import java.time.LocalDateTime;
 
 import org.badminton.domain.common.enums.MatchGenerationType;
 import org.badminton.domain.common.enums.MatchType;
-import org.badminton.domain.common.enums.MemberTier;
-import org.badminton.domain.domain.league.entity.LeagueEntity;
+import org.badminton.domain.domain.league.entity.League;
 import org.badminton.domain.domain.league.enums.LeagueStatus;
+import org.badminton.domain.domain.member.entity.Member;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 
@@ -24,7 +24,7 @@ public record LeagueUpdateResponse(
         String leagueLocation,
 
         @Schema(description = "최소 티어, 예시) GOLD | SILVER | BRONZE", example = "GOLD")
-        MemberTier requiredTier,
+        Member.MemberTier requiredTier,
 
         @Schema(description = "현재 경기 상태, 예시) RECRUITING | COMPLETED | CANCELED", example = "RECRUITING")
         LeagueStatus leagueStatus,
@@ -55,7 +55,7 @@ public record LeagueUpdateResponse(
 
 ) {
 
-    public static LeagueUpdateResponse fromLeagueEntityAndRecruitedMemberCountAndIsParticipated(LeagueEntity league,
+    public static LeagueUpdateResponse fromLeagueEntityAndRecruitedMemberCountAndIsParticipated(League league,
                                                                                                 int recruitedMemberCount) {
         return new LeagueUpdateResponse(
                 league.getLeagueId(),

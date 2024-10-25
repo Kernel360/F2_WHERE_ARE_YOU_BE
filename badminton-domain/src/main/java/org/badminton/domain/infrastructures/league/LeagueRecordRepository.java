@@ -1,15 +1,14 @@
 package org.badminton.domain.infrastructures.league;
 
 import java.util.Optional;
-
-import org.badminton.domain.domain.clubmember.entity.ClubMemberEntity;
-import org.badminton.domain.domain.league.entity.LeagueRecordEntity;
+import org.badminton.domain.domain.league.entity.LeagueRecord;
+import org.badminton.domain.domain.member.entity.Member;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 
-public interface LeagueRecordRepository extends JpaRepository<LeagueRecordEntity, Long> {
-    Optional<LeagueRecordEntity> findByClubMember(ClubMemberEntity clubMember);
+public interface LeagueRecordRepository extends JpaRepository<LeagueRecord, Long> {
+    Optional<LeagueRecord> findByMember(Member member);
 
-    Optional<LeagueRecordEntity> findByClubMember_ClubMemberId(Long clubMemberId);
+    Optional<LeagueRecord> findByMemberMemberToken(String memberToken);
 
 }

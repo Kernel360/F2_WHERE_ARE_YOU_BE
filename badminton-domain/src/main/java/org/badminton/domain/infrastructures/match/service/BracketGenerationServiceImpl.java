@@ -6,7 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.badminton.domain.common.exception.league.InvalidPlayerCountException;
 import org.badminton.domain.common.exception.league.LeagueNotExistException;
 import org.badminton.domain.common.exception.match.LeagueRecruitingMustBeCompletedWhenBracketGenerationException;
-import org.badminton.domain.domain.league.entity.LeagueEntity;
+import org.badminton.domain.domain.league.entity.League;
 import org.badminton.domain.domain.league.entity.LeagueParticipantEntity;
 import org.badminton.domain.domain.league.enums.LeagueStatus;
 import org.badminton.domain.domain.match.info.BracketInfo;
@@ -35,7 +35,7 @@ public class BracketGenerationServiceImpl implements BracketGenerationService {
 
     @Override
     public void checkLeagueRecruitingStatus(Long leagueId) {
-        LeagueEntity league = findLeague(leagueId);
+        League league = findLeague(leagueId);
         /*
          * 경기 상태가 COMPLETED 일 수 있는 상황
          * 1. 모집 마감 날짜가 지났고, 모집 인원이 채워짐
@@ -49,7 +49,7 @@ public class BracketGenerationServiceImpl implements BracketGenerationService {
 
     @Override
     public MatchStrategy makeSinglesOrDoublesMatchStrategy(Long leagueId) {
-        LeagueEntity league = findLeague(leagueId);
+        League league = findLeague(leagueId);
         return switch (league.getMatchType()) {
             case SINGLES -> new FreeSinglesMatchStrategy(singlesMatchReader, singlesMatchStore);
             case DOUBLES -> new FreeDoublesMatchStrategy(doublesMatchReader, doublesMatchStore);
@@ -59,7 +59,7 @@ public class BracketGenerationServiceImpl implements BracketGenerationService {
     @Override
     @Transactional
     public BracketInfo makeInitialBracket(MatchStrategy matchStrategy, Long leagueId) {
-        LeagueEntity league = findLeague(leagueId);
+        League league = findLeague(leagueId);
         matchStrategy.checkDuplicateInitialBracket(league.getLeagueAt(), leagueId);
 
         List<LeagueParticipantEntity> leagueParticipantList = findLeagueParticipantList(leagueId);
@@ -67,7 +67,7 @@ public class BracketGenerationServiceImpl implements BracketGenerationService {
         return matchStrategy.makeInitialBracket(findLeague(leagueId), leagueParticipantList);
     }
 
-    private LeagueEntity findLeague(Long leagueId) {
+    private League findLeague(Long leagueId) {
         return leagueRepository.findById(leagueId)
                 .orElseThrow(() -> new LeagueNotExistException(leagueId));
     }

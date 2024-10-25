@@ -6,7 +6,7 @@ import java.util.Collections;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.badminton.domain.domain.league.entity.LeagueEntity;
+import org.badminton.domain.domain.league.entity.League;
 import org.badminton.domain.domain.league.entity.LeagueParticipantEntity;
 import org.badminton.domain.domain.match.command.MatchCommand;
 import org.badminton.domain.domain.match.entity.SinglesMatchEntity;
@@ -63,7 +63,7 @@ public class FreeSinglesMatchStrategy implements MatchStrategy {
     }
 
     @Override
-    public BracketInfo makeInitialBracket(LeagueEntity league,
+    public BracketInfo makeInitialBracket(League league,
                                           List<LeagueParticipantEntity> leagueParticipantList) {
         Collections.shuffle(leagueParticipantList);
         List<SinglesMatchEntity> singlesMatches = makeSinglesMatches(leagueParticipantList, league);
@@ -92,7 +92,7 @@ public class FreeSinglesMatchStrategy implements MatchStrategy {
     }
 
     // TODO: 리팩토링
-    private SinglesMatchEntity makeSetsInMatch(SinglesMatchEntity singlesMatch) {
+    private void makeSetsInMatch(SinglesMatchEntity singlesMatch) {
         //단식 게임 세트를 3개 생성
         SinglesSetEntity set1 = new SinglesSetEntity(singlesMatch, 1);
         SinglesSetEntity set2 = new SinglesSetEntity(singlesMatch, 2);
@@ -103,11 +103,10 @@ public class FreeSinglesMatchStrategy implements MatchStrategy {
         singlesMatch.addSet(set3);
 
         singlesMatchStore.store(singlesMatch);
-        return singlesMatch;
     }
 
     private List<SinglesMatchEntity> makeSinglesMatches(List<LeagueParticipantEntity> leagueParticipantList,
-                                                        LeagueEntity league) {
+                                                        League league) {
 
         List<SinglesMatchEntity> singlesMatches = new ArrayList<>();
         for (int i = 0; i < leagueParticipantList.size() - 1; i += 2) {

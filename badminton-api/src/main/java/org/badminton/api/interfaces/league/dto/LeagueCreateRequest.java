@@ -6,7 +6,7 @@ import org.badminton.api.interfaces.league.validation.annotation.LeagueDescripti
 import org.badminton.api.interfaces.league.validation.annotation.LeagueNameValidator;
 import org.badminton.domain.common.enums.MatchGenerationType;
 import org.badminton.domain.common.enums.MatchType;
-import org.badminton.domain.common.enums.MemberTier;
+import org.badminton.domain.domain.member.entity.Member;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 
@@ -26,7 +26,7 @@ public record LeagueCreateRequest(
 
         //TODO: DTO 마다 검증 로직을 두지 않는 방법 알아보기
         @Schema(description = "최소 티어", example = "BRONZE")
-        MemberTier tierLimit,
+        Member.MemberTier tierLimit,
 
         @Schema(description = "경기 방식", example = "SINGLES")
         MatchType matchType,

@@ -8,7 +8,7 @@ import java.util.List;
 import org.badminton.domain.common.BaseTimeEntity;
 import org.badminton.domain.common.enums.MatchResult;
 import org.badminton.domain.common.enums.MatchStatus;
-import org.badminton.domain.domain.league.entity.LeagueEntity;
+import org.badminton.domain.domain.league.entity.League;
 import org.badminton.domain.domain.league.entity.LeagueParticipantEntity;
 
 import jakarta.persistence.CascadeType;
@@ -39,7 +39,7 @@ public class SinglesMatchEntity extends BaseTimeEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "leagueId")
-    private LeagueEntity league;
+    private League league;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "leagueParticipant1Id")
@@ -64,7 +64,7 @@ public class SinglesMatchEntity extends BaseTimeEntity {
     @OneToMany(mappedBy = "singlesMatch", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<SinglesSetEntity> singlesSets;
 
-    public SinglesMatchEntity(LeagueEntity league, LeagueParticipantEntity leagueParticipant1,
+    public SinglesMatchEntity(League league, LeagueParticipantEntity leagueParticipant1,
                               LeagueParticipantEntity leagueParticipant2) {
         this.league = league;
         this.leagueParticipant1 = leagueParticipant1;

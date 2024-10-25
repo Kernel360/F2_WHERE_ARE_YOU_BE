@@ -2,8 +2,8 @@ package springproject.badmintonbatch.batch.reader;
 
 import java.util.List;
 
-import org.badminton.domain.domain.member.entity.MemberEntity;
-import org.badminton.domain.infrastructures.member.MemberRepository;
+import org.badminton.domain.domain.member.entity.Member;
+import org.badminton.domain.infrastructures.member.repository.MemberRepository;
 import org.springframework.batch.item.ItemReader;
 import org.springframework.stereotype.Component;
 
@@ -11,13 +11,13 @@ import lombok.RequiredArgsConstructor;
 
 @Component
 @RequiredArgsConstructor
-public class MemberItemReader implements ItemReader<MemberEntity> {
+public class MemberItemReader implements ItemReader<Member> {
 
     private final MemberRepository memberRepository;
-    private List<MemberEntity> membersToDelete;
+    private List<Member> membersToDelete;
 
     @Override
-    public MemberEntity read() {
+    public Member read() {
         if (membersToDelete == null || membersToDelete.isEmpty()) {
             membersToDelete = memberRepository.findAllByIsDeletedTrue();
         }

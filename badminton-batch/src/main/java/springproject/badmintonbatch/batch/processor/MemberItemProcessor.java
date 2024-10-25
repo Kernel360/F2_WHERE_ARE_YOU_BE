@@ -3,18 +3,18 @@ package springproject.badmintonbatch.batch.processor;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 
-import org.badminton.domain.domain.member.entity.MemberEntity;
+import org.badminton.domain.domain.member.entity.Member;
 import org.springframework.batch.item.ItemProcessor;
 import org.springframework.stereotype.Component;
 
 @Component
-public class MemberItemProcessor implements ItemProcessor<MemberEntity, MemberEntity> {
+public class MemberItemProcessor implements ItemProcessor<Member, Member> {
 
     @Override
-    public MemberEntity process(MemberEntity memberEntity) throws Exception {
-        LocalDateTime lastConnectionAt = memberEntity.getLastConnectionAt();
+    public Member process(Member member) throws Exception {
+        LocalDateTime lastConnectionAt = member.getLastConnectionAt();
         if (Before7Days(lastConnectionAt)) {
-            return memberEntity;
+            return member;
         }
         return null;
     }

@@ -1,6 +1,8 @@
 package org.badminton.api.interfaces.member.dto;
 
-import org.badminton.domain.domain.member.entity.MemberEntity;
+import org.badminton.domain.domain.member.entity.Member;
+import org.badminton.domain.domain.member.entity.MemberAuthorization;
+import org.badminton.domain.domain.member.info.MemberUpdateInfo;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 
@@ -21,9 +23,9 @@ public record MemberUpdateResponse(
         @Schema(description = "oAuth 제공 이미지", example = "1070449979547641023123")
         String profileImage
 ) {
-    public static MemberUpdateResponse memberEntityToUpdateResponse(MemberEntity memberEntity) {
-        return new MemberUpdateResponse(memberEntity.getAuthorization(), memberEntity.getName(),
-                memberEntity.getEmail(),
-                memberEntity.getProviderId(), memberEntity.getProfileImage());
+    public static MemberUpdateResponse fromMemberUpdateInfo(MemberUpdateInfo info) {
+        return new MemberUpdateResponse(info.authorization(), info.name(),
+            info.email(),
+            info.providerId(), info.profileImage());
     }
 }

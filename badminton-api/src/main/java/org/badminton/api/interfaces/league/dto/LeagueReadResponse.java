@@ -2,7 +2,7 @@ package org.badminton.api.interfaces.league.dto;
 
 import java.time.LocalDateTime;
 
-import org.badminton.domain.domain.league.entity.LeagueEntity;
+import org.badminton.domain.domain.league.entity.League;
 import org.badminton.domain.domain.league.enums.LeagueStatus;
 
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -23,7 +23,7 @@ public record LeagueReadResponse(
         @Schema(description = "참가 인원", example = "16")
         int playerCount
 ) {
-    public LeagueReadResponse(LeagueEntity entity) {
+    public LeagueReadResponse(League entity) {
         this(
                 entity.getLeagueId(),
                 entity.getLeagueName(),
@@ -33,7 +33,7 @@ public record LeagueReadResponse(
         );
     }
 
-    public static LeagueReadResponse leagueReadEntityToResponse(LeagueEntity entity) {
+    public static LeagueReadResponse leagueReadEntityToResponse(League entity) {
         return new LeagueReadResponse(entity);
     }
 }

@@ -1,10 +1,12 @@
 package org.badminton.api.interfaces.member.dto;
 
-import org.badminton.domain.domain.clubmember.entity.ClubMemberRole;
+import org.badminton.domain.domain.clubmember.entity.ClubMember;
+
 
 public record MemberIsClubMemberResponse(
         boolean isClubMember,
-        ClubMemberRole role,
+        ClubMember.ClubMemberRole role,
         Long clubId
 ) {
+
 }
