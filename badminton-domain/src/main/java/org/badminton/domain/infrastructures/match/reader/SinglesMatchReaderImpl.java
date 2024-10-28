@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.badminton.domain.common.enums.MatchType;
 import org.badminton.domain.common.exception.match.BracketNotExistException;
 import org.badminton.domain.common.exception.match.MatchNotExistException;
-import org.badminton.domain.domain.match.entity.SinglesMatchEntity;
+import org.badminton.domain.domain.match.entity.SinglesMatch;
 import org.badminton.domain.domain.match.store.SinglesMatchReader;
 import org.badminton.domain.infrastructures.match.repository.SinglesMatchRepository;
 import org.springframework.stereotype.Component;
@@ -16,8 +16,8 @@ public class SinglesMatchReaderImpl implements SinglesMatchReader {
     private final SinglesMatchRepository singlesMatchRepository;
 
     @Override
-    public List<SinglesMatchEntity> getSinglesBracket(Long leagueId) {
-        List<SinglesMatchEntity> bracketInLeague = singlesMatchRepository.findAllByLeague_LeagueId(leagueId);
+    public List<SinglesMatch> getSinglesBracket(Long leagueId) {
+        List<SinglesMatch> bracketInLeague = singlesMatchRepository.findAllByLeague_LeagueId(leagueId);
         if (bracketInLeague.isEmpty()) {
             throw new BracketNotExistException(leagueId);
         }
@@ -26,12 +26,12 @@ public class SinglesMatchReaderImpl implements SinglesMatchReader {
 
     @Override
     public boolean checkIfBracketEmpty(Long leagueId) {
-        List<SinglesMatchEntity> bracketInLeague = singlesMatchRepository.findAllByLeague_LeagueId(leagueId);
+        List<SinglesMatch> bracketInLeague = singlesMatchRepository.findAllByLeague_LeagueId(leagueId);
         return bracketInLeague.isEmpty();
     }
 
     @Override
-    public SinglesMatchEntity getSinglesMatch(Long matchId) {
+    public SinglesMatch getSinglesMatch(Long matchId) {
         return singlesMatchRepository.findById(matchId)
                 .orElseThrow(() -> new MatchNotExistException(matchId, MatchType.SINGLES));
     }

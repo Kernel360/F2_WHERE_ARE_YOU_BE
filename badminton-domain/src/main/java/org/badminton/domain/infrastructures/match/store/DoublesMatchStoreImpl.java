@@ -1,7 +1,7 @@
 package org.badminton.domain.infrastructures.match.store;
 
 import lombok.RequiredArgsConstructor;
-import org.badminton.domain.domain.match.entity.DoublesMatchEntity;
+import org.badminton.domain.domain.match.entity.DoublesMatch;
 import org.badminton.domain.domain.match.reader.DoublesMatchStore;
 import org.badminton.domain.infrastructures.match.repository.DoublesMatchRepository;
 import org.springframework.stereotype.Component;
@@ -18,7 +18,7 @@ public class DoublesMatchStoreImpl implements DoublesMatchStore {
     }
 
     @Override
-    public void store(DoublesMatchEntity doublesMatch) {
+    public void store(DoublesMatch doublesMatch) {
         doublesMatchRepository.save(doublesMatch);
     }
 }

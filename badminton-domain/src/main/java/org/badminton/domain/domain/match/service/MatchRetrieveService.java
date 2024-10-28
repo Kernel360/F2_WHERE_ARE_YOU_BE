@@ -15,4 +15,5 @@ public interface MatchRetrieveService {
 
     MatchInfo.SetScoreDetails retrieveAllSetsScoreInMatch(MatchStrategy matchStrategy, Long matchId);
 
+    boolean isMatchInLeague(MatchStrategy matchStrategy, Long leagueId);
 }

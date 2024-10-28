@@ -1,12 +1,12 @@
 package org.badminton.domain.domain.match.store;
 
 import java.util.List;
-import org.badminton.domain.domain.match.entity.DoublesMatchEntity;
+import org.badminton.domain.domain.match.entity.DoublesMatch;
 
 public interface DoublesMatchReader {
-    List<DoublesMatchEntity> getDoublesBracket(Long leagueId);
+    List<DoublesMatch> getDoublesBracket(Long leagueId);
 
     boolean checkIfBracketEmpty(Long leagueId);
 
-    DoublesMatchEntity getDoublesMatch(Long matchId);
+    DoublesMatch getDoublesMatch(Long matchId);
 }

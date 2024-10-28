@@ -28,13 +28,13 @@ public class SinglesSetEntity extends BaseTimeEntity {
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "singlesMatchId")
-    SinglesMatchEntity singlesMatch;
+    SinglesMatch singlesMatch;
 
     private int setIndex;
     private int player1Score;
     private int player2Score;
 
-    public SinglesSetEntity(SinglesMatchEntity singlesMatch, int setIndex) {
+    public SinglesSetEntity(SinglesMatch singlesMatch, int setIndex) {
         this.singlesMatch = singlesMatch;
         this.setIndex = setIndex;
         this.player1Score = INITIAL_SET_SCORE;
