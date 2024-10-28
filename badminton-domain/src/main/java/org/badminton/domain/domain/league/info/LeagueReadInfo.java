@@ -1,4 +1,32 @@
 package org.badminton.domain.domain.league.info;
 
-public record LeagueReadInfo() {
+import java.time.LocalDateTime;
+
+import org.badminton.domain.domain.league.entity.League;
+import org.badminton.domain.domain.league.enums.LeagueStatus;
+
+public record LeagueReadInfo(
+	Long leagueId,
+
+	String leagueName,
+
+	LeagueStatus status,
+
+	LocalDateTime leagueAt,
+
+	int playerCount
+) {
+	public LeagueReadInfo(League entity) {
+		this(
+			entity.getLeagueId(),
+			entity.getLeagueName(),
+			entity.getLeagueStatus(),
+			entity.getLeagueAt(),
+			entity.getPlayerLimitCount()
+		);
+	}
+
+	public static LeagueReadInfo leagueReadEntityToInfo(League entity) {
+		return new LeagueReadInfo(entity);
+	}
 }

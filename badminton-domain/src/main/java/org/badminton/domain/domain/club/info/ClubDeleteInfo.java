@@ -3,7 +3,7 @@ package org.badminton.domain.domain.club.info;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import org.badminton.domain.domain.club.Club;
+import org.badminton.domain.domain.club.entity.Club;
 import org.badminton.domain.domain.clubmember.entity.ClubMember;
 
 public record ClubDeleteInfo(

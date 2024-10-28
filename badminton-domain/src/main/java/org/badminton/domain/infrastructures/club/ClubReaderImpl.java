@@ -1,7 +1,7 @@
 package org.badminton.domain.infrastructures.club;
 
 import org.badminton.domain.common.exception.club.ClubNotExistException;
-import org.badminton.domain.domain.club.Club;
+import org.badminton.domain.domain.club.entity.Club;
 import org.badminton.domain.domain.club.ClubReader;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

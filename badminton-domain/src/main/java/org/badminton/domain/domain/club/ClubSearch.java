@@ -2,6 +2,7 @@ package org.badminton.domain.domain.club;
 
 import java.util.Objects;
 
+import org.badminton.domain.domain.club.entity.Club;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 

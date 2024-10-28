@@ -34,60 +34,59 @@ VALUES ('provider_1', 'honggildong@example.com', '홍길동', 'AUTHORIZATION_USE
         '2024-01-10 09:00:00', '2024-01-10 09:00:00', 'BRONZE', 'me_token_10');
 
 -- Club 데이터 삽입
-INSERT INTO club (clubName, clubDescription, clubImage, isClubDeleted, createdAt, modifiedAt)
+INSERT INTO club (clubName, clubDescription, clubImage, isClubDeleted, createdAt, modifiedAt, clubToken)
 VALUES ('Badminton Club 1', 'This is the first badminton club.',
         'https://d36om9pjoifd2y.cloudfront.net/club-banner/3257bbf2-52dc-41b2-9d1f-a6c66f3c7216.avif',
-        false, '2024-01-01 09:00:00',
-        '2024-01-01 09:00:00'),
+        false, '2024-01-01 09:00:00', '2024-01-01 09:00:00', 'club_stf2UjhInO0BhBO'),
        ('Badminton Club 2', 'This is the second badminton club.',
         'https://d36om9pjoifd2y.cloudfront.net/club-banner/505adfb7-b355-4721-a622-3ce0f50eef4e.avif',
         false, '2024-01-02 09:00:00',
-        '2024-01-02 09:00:00'),
+        '2024-01-02 09:00:00', 'club_stflUjhInO0BhqO'),
        ('Badminton Club 3', 'This is the third badminton club.',
         'https://d36om9pjoifd2y.cloudfront.net/club-banner/66fd31cd-f112-4796-b823-682016c4f58b.avif',
         false, '2024-01-03 09:00:00',
-        '2024-01-03 09:00:00'),
+        '2024-01-03 09:00:00', 'club_stflUjh64560BhBO'),
        ('Super Smashers', 'A club for power players.',
         'https://d36om9pjoifd2y.cloudfront.net/club-banner/c87e6e09-71ce-43a1-bd5e-b8ce73fcd646.webp',
         false, '2024-01-04 09:00:00',
-        '2024-01-04 09:00:00'),
+        '2024-01-04 09:00:00', 'club_stflUjhInO0hgBO'),
        ('Shuttle Masters', 'Top-tier badminton players gather here.',
         'https://d36om9pjoifd2y.cloudfront.net/club-banner/ca6419f1-021a-4af2-97e3-03b66eb63669.webp',
         false,
-        '2024-01-05 09:00:00', '2024-01-05 09:00:00'),
+        '2024-01-05 09:00:00', '2024-01-05 09:00:00', 'club_stnlUjhInO0BhBO'),
        ('Net Warriors', 'A club focused on defense and strategy.',
         'https://d36om9pjoifd2y.cloudfront.net/club-banner/ee4a20ec-03ae-4031-94d3-4379af2f0540.webp',
         true, '2024-01-06 09:00:00',
-        '2024-01-06 09:00:00'),
+        '2024-01-06 09:00:00', 'club_stelUjhInO0BhBO'),
        ('Birdie', 'Badminton lovers who play competitively.',
         'https://d36om9pjoifd2y.cloudfront.net/club-banner/ca6419f1-021a-4af2-97e3-03b66eb63669.webp',
         false, '2024-01-07 09:00:00',
-        '2024-01-07 09:00:00'),
+        '2024-01-07 09:00:00', 'club_stflUjgInO0BhBO'),
        ('Feather', 'Focusing on technique and skill.',
         'https://d36om9pjoifd2y.cloudfront.net/club-banner/acc98299-4f71-45bf-8279-815ef597bc63.webp',
         false, '2024-01-08 09:00:00',
-        '2024-01-08 09:00:00'),
+        '2024-01-08 09:00:00', 'club_stflUjfInO0BhBO'),
        ('Smash Kings', 'Club for those who love aggressive play.',
         'https://d36om9pjoifd2y.cloudfront.net/club-banner/45c13288-9d26-46bd-93ec-37e7e83ac700.webp',
         false, '2024-01-09 09:00:00',
-        '2024-01-09 09:00:00'),
+        '2024-01-09 09:00:00', 'club_stflUjhInO04hBO'),
        ('Rally Rulers', 'Endurance and long rallies define this club.',
         'https://d36om9pjoifd2y.cloudfront.net/club-banner/9cd6bb46-53f8-4480-9c91-4eaeed0686a9.webp',
         false,
-        '2024-01-10 09:00:00', '2024-01-10 09:00:00');
+        '2024-01-10 09:00:00', '2024-01-10 09:00:00', 'club_stflUjhI3O0BhBO');
 
 -- ClubMember 데이터 삽입
 INSERT INTO club_member (clubId, memberId, role, deleted, banned, createdAt, modifiedAt)
 VALUES (1, 1, 'ROLE_OWNER', false, false, '2024-01-01 09:00:00', '2024-01-01 09:00:00'),
        (1, 2, 'ROLE_MANAGER', false, false, '2024-01-02 09:00:00', '2024-01-02 09:00:00'),
        (1, 3, 'ROLE_USER', false, false, '2024-01-03 09:00:00', '2024-01-03 09:00:00'),
-       (1, 4, 'ROLE_USER' , false, false, '2024-01-04 09:00:00', '2024-01-04 09:00:00'),
-       (1, 5, 'ROLE_USER' , false, false, '2024-01-05 09:00:00', '2024-01-05 09:00:00'),
+       (1, 4, 'ROLE_USER', false, false, '2024-01-04 09:00:00', '2024-01-04 09:00:00'),
+       (1, 5, 'ROLE_USER', false, false, '2024-01-05 09:00:00', '2024-01-05 09:00:00'),
        (1, 6, 'ROLE_USER', false, false, '2024-01-06 09:00:00', '2024-01-06 09:00:00'),
-       (2, 7, 'ROLE_OWNER' , false, false, '2024-01-07 09:00:00', '2024-01-07 09:00:00'),
+       (2, 7, 'ROLE_OWNER', false, false, '2024-01-07 09:00:00', '2024-01-07 09:00:00'),
        (2, 8, 'ROLE_USER', false, false, '2024-01-08 09:00:00', '2024-01-08 09:00:00'),
        (2, 9, 'ROLE_OWNER', false, false, '2024-01-09 09:00:00', '2024-01-09 09:00:00'),
-       (2, 10, 'ROLE_MANAGER' , false, false, '2024-01-10 09:00:00', '2024-01-10 09:00:00');
+       (2, 10, 'ROLE_MANAGER', false, false, '2024-01-10 09:00:00', '2024-01-10 09:00:00');
 
 
 -- League 데이터 삽입 (leagueLocation 필드 추가)

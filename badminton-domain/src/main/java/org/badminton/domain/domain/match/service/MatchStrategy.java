@@ -2,8 +2,9 @@ package org.badminton.domain.domain.match.service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+
 import org.badminton.domain.domain.league.entity.League;
-import org.badminton.domain.domain.league.entity.LeagueParticipantEntity;
+import org.badminton.domain.domain.league.entity.LeagueParticipant;
 import org.badminton.domain.domain.match.command.MatchCommand;
 import org.badminton.domain.domain.match.info.BracketInfo;
 import org.badminton.domain.domain.match.info.MatchInfo.SetScoreDetails;
@@ -18,15 +19,15 @@ import org.badminton.domain.domain.match.info.SetInfo;
  */
 public interface MatchStrategy {
 
-    BracketInfo retrieveFreeBracketInLeague(Long leagueId);
+	BracketInfo retrieveFreeBracketInLeague(Long leagueId);
 
-    List<SetInfo.Main> retrieveAllSetsScoreInLeague(Long leagueId);
+	List<SetInfo.Main> retrieveAllSetsScoreInLeague(Long leagueId);
 
-    SetScoreDetails retrieveAllSetsScoreInMatch(Long matchId);
+	SetScoreDetails retrieveAllSetsScoreInMatch(Long matchId);
 
-    void checkDuplicateInitialBracket(LocalDateTime leagueAt, Long leagueId);
+	void checkDuplicateInitialBracket(LocalDateTime leagueAt, Long leagueId);
 
-    BracketInfo makeInitialBracket(League league, List<LeagueParticipantEntity> leagueParticipantList);
+	BracketInfo makeInitialBracket(League league, List<LeagueParticipant> leagueParticipantList);
 
-    SetInfo.Main registerSetScoreInMatch(Long matchId, int setIndex, MatchCommand.UpdateSetScore updateSetScoreCommand);
+	SetInfo.Main registerSetScoreInMatch(Long matchId, int setIndex, MatchCommand.UpdateSetScore updateSetScoreCommand);
 }
