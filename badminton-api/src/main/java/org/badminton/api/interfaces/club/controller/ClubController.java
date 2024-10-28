@@ -2,6 +2,7 @@ package org.badminton.api.interfaces.club.controller;
 
 import org.badminton.api.application.club.ClubFacade;
 import org.badminton.api.common.response.CommonResponse;
+import org.badminton.api.interfaces.auth.dto.CustomOAuth2Member;
 import org.badminton.api.interfaces.club.dto.ClubCardResponse;
 import org.badminton.api.interfaces.club.dto.ClubCreateRequest;
 import org.badminton.api.interfaces.club.dto.ClubCreateResponse;
@@ -9,7 +10,6 @@ import org.badminton.api.interfaces.club.dto.ClubDeleteResponse;
 import org.badminton.api.interfaces.club.dto.ClubDetailsResponse;
 import org.badminton.api.interfaces.club.dto.ClubUpdateRequest;
 import org.badminton.api.interfaces.club.dto.ClubUpdateResponse;
-import org.badminton.api.interfaces.oauth.dto.CustomOAuth2Member;
 import org.badminton.domain.domain.club.command.ClubUpdateCommand;
 import org.springframework.data.domain.Page;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;

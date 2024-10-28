@@ -5,6 +5,7 @@ import java.util.Map;
 
 import org.badminton.api.application.clubMember.ClubMemberFacade;
 import org.badminton.api.common.response.CommonResponse;
+import org.badminton.api.interfaces.auth.dto.CustomOAuth2Member;
 import org.badminton.api.interfaces.clubmember.ClubMemberDtoMapper;
 import org.badminton.api.interfaces.clubmember.dto.ClubMemberBanRecordResponse;
 import org.badminton.api.interfaces.clubmember.dto.ClubMemberBanRequest;
@@ -13,7 +14,6 @@ import org.badminton.api.interfaces.clubmember.dto.ClubMemberJoinResponse;
 import org.badminton.api.interfaces.clubmember.dto.ClubMemberResponse;
 import org.badminton.api.interfaces.clubmember.dto.ClubMemberRoleUpdateRequest;
 import org.badminton.api.interfaces.clubmember.dto.ClubMemberWithdrawResponse;
-import org.badminton.api.interfaces.oauth.dto.CustomOAuth2Member;
 import org.badminton.domain.domain.clubmember.command.ClubMemberBanCommand;
 import org.badminton.domain.domain.clubmember.command.ClubMemberExpelCommand;
 import org.badminton.domain.domain.clubmember.command.ClubMemberRoleUpdateCommand;

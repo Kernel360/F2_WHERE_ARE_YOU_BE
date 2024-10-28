@@ -1,4 +1,4 @@
-package org.badminton.api.interfaces.oauth.dto;
+package org.badminton.api.interfaces.auth.dto;
 
 import java.util.Collection;
 import java.util.HashMap;

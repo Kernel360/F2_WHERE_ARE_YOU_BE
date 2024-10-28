@@ -2,7 +2,7 @@ package org.badminton.api.application.club;
 
 import java.util.Map;
 
-import org.badminton.api.interfaces.oauth.dto.CustomOAuth2Member;
+import org.badminton.api.interfaces.auth.dto.CustomOAuth2Member;
 import org.badminton.domain.domain.club.ClubService;
 import org.badminton.domain.domain.club.command.ClubCreateCommand;
 import org.badminton.domain.domain.club.command.ClubUpdateCommand;

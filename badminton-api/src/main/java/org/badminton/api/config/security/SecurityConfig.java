@@ -6,10 +6,9 @@ import java.util.Optional;
 import org.badminton.api.application.auth.CustomOAuth2MemberService;
 import org.badminton.api.filter.ClubMembershipFilter;
 import org.badminton.api.filter.JwtAuthenticationFilter;
-import org.badminton.api.interfaces.oauth.jwt.JwtUtil;
-import org.badminton.api.interfaces.oauth.successhandler.CustomSuccessHandler;
+import org.badminton.api.interfaces.auth.jwt.JwtUtil;
+import org.badminton.api.interfaces.auth.successhandler.CustomSuccessHandler;
 import org.badminton.domain.domain.clubmember.ClubMemberReader;
-import org.badminton.domain.domain.clubmember.service.ClubMemberService;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -41,7 +40,6 @@ public class SecurityConfig {
 	private final CustomOAuth2MemberService customOAuth2MemberService;
 	private final CustomSuccessHandler customSuccessHandler;
 	private final JwtUtil jwtUtil;
-	private final ClubMemberService clubMemberService;
 	private final ClubPermissionEvaluator clubPermissionEvaluator;
 	private final ClubMemberReader clubMemberReader;
 	@Value("${custom.server.front}")
