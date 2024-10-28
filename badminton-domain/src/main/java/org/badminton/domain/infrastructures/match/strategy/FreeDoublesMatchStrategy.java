@@ -86,6 +86,11 @@ public class FreeDoublesMatchStrategy implements MatchStrategy {
         return SetInfo.fromDoublesSet(matchId, setIndex, doublesMatch.getDoublesSets().get(setIndex - 1));
     }
 
+    @Override
+    public boolean isMatchInLeague(Long leagueId) {
+        return !doublesMatchReader.checkIfBracketEmpty(leagueId);
+    }
+
     private void makeDoublesSetsInMatch(DoublesMatch doublesMatch) {
         // 복식 게임 세트를 3개 생성
         DoublesSetEntity set1 = new DoublesSetEntity(doublesMatch, 1);

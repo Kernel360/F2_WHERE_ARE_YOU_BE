@@ -29,4 +29,6 @@ public interface MatchStrategy {
     BracketInfo makeInitialBracket(League league, List<LeagueParticipantEntity> leagueParticipantList);
 
     SetInfo.Main registerSetScoreInMatch(Long matchId, int setIndex, MatchCommand.UpdateSetScore updateSetScoreCommand);
+
+    boolean isMatchInLeague(Long leagueId);
 }

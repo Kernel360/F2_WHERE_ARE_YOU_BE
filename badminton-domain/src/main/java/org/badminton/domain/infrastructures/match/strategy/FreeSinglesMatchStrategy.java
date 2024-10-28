@@ -91,6 +91,11 @@ public class FreeSinglesMatchStrategy implements MatchStrategy {
         return SetInfo.fromSinglesSet(matchId, setIndex, singlesMatch.getSinglesSets().get(setIndex - 1));
     }
 
+    @Override
+    public boolean isMatchInLeague(Long leagueId) {
+        return !singlesMatchReader.checkIfBracketEmpty(leagueId);
+    }
+
     // TODO: 리팩토링
     private void makeSetsInMatch(SinglesMatch singlesMatch) {
         //단식 게임 세트를 3개 생성

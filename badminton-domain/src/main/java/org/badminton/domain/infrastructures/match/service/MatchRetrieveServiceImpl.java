@@ -52,6 +52,11 @@ public class MatchRetrieveServiceImpl implements MatchRetrieveService {
         return matchStrategy.retrieveAllSetsScoreInMatch(matchId);
     }
 
+    @Override
+    public boolean isMatchInLeague(MatchStrategy matchStrategy, Long leagueId) {
+        return matchStrategy.isMatchInLeague(leagueId);
+    }
+
     private League findLeague(Long leagueId) {
         return leagueRepository.findById(leagueId)
                 .orElseThrow(() -> new LeagueNotExistException(leagueId));
