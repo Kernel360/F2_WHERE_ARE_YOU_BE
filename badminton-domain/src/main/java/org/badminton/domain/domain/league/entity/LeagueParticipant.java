@@ -1,6 +1,6 @@
 package org.badminton.domain.domain.league.entity;
 
-import org.badminton.domain.common.BaseTimeEntity;
+import org.badminton.domain.common.AbstractBaseTime;
 import org.badminton.domain.domain.clubmember.entity.ClubMember;
 import org.badminton.domain.domain.member.entity.Member;
 
@@ -21,7 +21,7 @@ import lombok.NoArgsConstructor;
 @Table(name = "league_participant")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-public class LeagueParticipant extends BaseTimeEntity {
+public class LeagueParticipant extends AbstractBaseTime {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

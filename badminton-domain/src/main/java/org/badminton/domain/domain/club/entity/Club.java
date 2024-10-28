@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import org.badminton.domain.common.BaseTimeEntity;
+import org.badminton.domain.common.AbstractBaseTime;
 import org.badminton.domain.common.TokenGenerator;
 import org.badminton.domain.domain.club.command.ClubUpdateCommand;
 import org.badminton.domain.domain.club.info.ClubCreateInfo;
@@ -22,14 +22,16 @@ import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
 @Getter
 @Table(name = "club")
+@AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Club extends BaseTimeEntity {
+public class Club extends AbstractBaseTime {
 	public static final String CLUB_PREFIX = "club_";
 
 	@Id

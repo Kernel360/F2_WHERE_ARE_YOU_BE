@@ -1,7 +1,6 @@
 package org.badminton.domain.domain.league.entity;
 
-import org.badminton.domain.domain.clubmember.entity.ClubMember;
-import org.badminton.domain.common.BaseTimeEntity;
+import org.badminton.domain.common.AbstractBaseTime;
 import org.badminton.domain.domain.member.entity.Member;
 
 import jakarta.persistence.Entity;
@@ -22,46 +21,46 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 @Table(name = "league_record")
-public class LeagueRecord extends BaseTimeEntity {
+public class LeagueRecord extends AbstractBaseTime {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long leagueRecordId;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long leagueRecordId;
 
-    private int winCount;
+	private int winCount;
 
-    private int loseCount;
+	private int loseCount;
 
-    private int drawCount;
+	private int drawCount;
 
-    private int matchCount;
+	private int matchCount;
 
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "memberId")
-    private Member member;
+	@OneToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "memberId")
+	private Member member;
 
-    public LeagueRecord(Member member) {
-        this.member = member;
-        this.winCount = 0;
-        this.loseCount = 0;
-        this.drawCount = 0;
-        this.matchCount = 0;
-    }
+	public LeagueRecord(Member member) {
+		this.member = member;
+		this.winCount = 0;
+		this.loseCount = 0;
+		this.drawCount = 0;
+		this.matchCount = 0;
+	}
 
-    public void updateWinCount(int winCount) {
-        this.winCount = winCount;
-    }
+	public void updateWinCount(int winCount) {
+		this.winCount = winCount;
+	}
 
-    public void updateLoseCount(int loseCount) {
-        this.loseCount = loseCount;
-    }
+	public void updateLoseCount(int loseCount) {
+		this.loseCount = loseCount;
+	}
 
-    public void updateDrawCount(int drawCount) {
-        this.drawCount = drawCount;
-    }
+	public void updateDrawCount(int drawCount) {
+		this.drawCount = drawCount;
+	}
 
-    public void updateMatchCount(int matchCount) {
-        this.matchCount = matchCount;
-    }
+	public void updateMatchCount(int matchCount) {
+		this.matchCount = matchCount;
+	}
 
 }

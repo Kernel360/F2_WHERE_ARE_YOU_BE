@@ -2,7 +2,7 @@ package org.badminton.domain.domain.member.entity;
 
 import java.time.LocalDateTime;
 
-import org.badminton.domain.common.BaseTimeEntity;
+import org.badminton.domain.common.AbstractBaseTime;
 import org.badminton.domain.common.TokenGenerator;
 import org.badminton.domain.domain.league.entity.LeagueRecord;
 
@@ -24,7 +24,7 @@ import lombok.NoArgsConstructor;
 @Table(name = "member")
 @NoArgsConstructor
 @Getter
-public class Member extends BaseTimeEntity {
+public class Member extends AbstractBaseTime {
 
 	public static final String MEMBER_PREFIX = "me_";
 	@Id

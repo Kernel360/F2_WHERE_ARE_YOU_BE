@@ -3,7 +3,7 @@ package org.badminton.domain.domain.clubmember.entity;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.badminton.domain.common.BaseTimeEntity;
+import org.badminton.domain.common.AbstractBaseTime;
 import org.badminton.domain.domain.club.entity.Club;
 import org.badminton.domain.domain.member.entity.Member;
 
@@ -28,7 +28,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Getter
-public class ClubMember extends BaseTimeEntity {
+public class ClubMember extends AbstractBaseTime {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

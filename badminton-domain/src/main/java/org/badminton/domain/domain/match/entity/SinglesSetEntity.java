@@ -2,7 +2,7 @@ package org.badminton.domain.domain.match.entity;
 
 import static org.badminton.domain.common.consts.Constants.*;
 
-import org.badminton.domain.common.BaseTimeEntity;
+import org.badminton.domain.common.AbstractBaseTime;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
@@ -21,28 +21,28 @@ import lombok.NoArgsConstructor;
 @Table(name = "singles_set")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-public class SinglesSetEntity extends BaseTimeEntity {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long singlesSetId;
+public class SinglesSetEntity extends AbstractBaseTime {
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long singlesSetId;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "singlesMatchId")
-    SinglesMatch singlesMatch;
+	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@JoinColumn(name = "singlesMatchId")
+	SinglesMatch singlesMatch;
 
-    private int setIndex;
-    private int player1Score;
-    private int player2Score;
+	private int setIndex;
+	private int player1Score;
+	private int player2Score;
 
-    public SinglesSetEntity(SinglesMatch singlesMatch, int setIndex) {
-        this.singlesMatch = singlesMatch;
-        this.setIndex = setIndex;
-        this.player1Score = INITIAL_SET_SCORE;
-        this.player2Score = INITIAL_SET_SCORE;
-    }
+	public SinglesSetEntity(SinglesMatch singlesMatch, int setIndex) {
+		this.singlesMatch = singlesMatch;
+		this.setIndex = setIndex;
+		this.player1Score = INITIAL_SET_SCORE;
+		this.player2Score = INITIAL_SET_SCORE;
+	}
 
-    public void saveSetScore(int player1Score, int player2Score) {
-        this.player1Score = player1Score;
-        this.player2Score = player2Score;
-    }
+	public void saveSetScore(int player1Score, int player2Score) {
+		this.player1Score = player1Score;
+		this.player2Score = player2Score;
+	}
 }
