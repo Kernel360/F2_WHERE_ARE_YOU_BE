@@ -2,34 +2,35 @@ package org.badminton.api.interfaces.auth.dto;
 
 import java.util.Map;
 
-import lombok.RequiredArgsConstructor;
-
-@RequiredArgsConstructor
 public class GoogleResponse implements OAuthResponse {
 
-	private final Map<String, Object> attribute;
+	private final GoogleAttributeDto attributes;
+
+	public GoogleResponse(Map<String, Object> attributes) {
+		this.attributes = GoogleAttributeDto.fromAttributes(attributes);
+	}
 
 	@Override
 	public String getProvider() {
-		return "google";
+		return attributes.providerName();
 	}
 
 	@Override
 	public String getProviderId() {
-		return attribute.get("sub").toString();
+		return attributes.sub();
 	}
 
 	@Override
 	public String getEmail() {
-		return attribute.get("email").toString();
+		return attributes.email();
 	}
 
 	@Override
 	public String getName() {
-		return attribute.get("name").toString();
+		return attributes.name();
 	}
 
 	public String getProfileImage() {
-		return attribute.get("picture").toString();
+		return attributes.picture();
 	}
 }

@@ -4,40 +4,35 @@ import java.util.Map;
 
 public class KakaoResponse implements OAuthResponse {
 
-	private final Map<String, Object> attributes;
-	private final Map<String, Object> kakaoAccount;
-	private final Map<String, Object> profile;
+	private final KakaoAttributeDto attributes;
 
 	public KakaoResponse(Map<String, Object> attributes) {
-		this.attributes = attributes;
-		this.kakaoAccount = (Map<String, Object>)attributes.get("kakao_account");
-		this.profile = (Map<String, Object>)kakaoAccount.get("profile");
+		this.attributes = KakaoAttributeDto.fromAttributes(attributes);
 	}
 
 	@Override
 	public String getProvider() {
-		return "kakao";
+		return attributes.providerName();
 	}
 
 	@Override
 	public String getProviderId() {
-		return attributes.get("id").toString();
+		return attributes.id();
 	}
 
 	@Override
 	public String getEmail() {
-		return kakaoAccount.get("email").toString();
+		return attributes.kakaoAccountDto().email();
 	}
 
 	@Override
 	public String getName() {
-		Map<String, Object> profile = (Map<String, Object>)kakaoAccount.get("profile");
-		return profile.get("nickname").toString();
+		return attributes.kakaoAccountDto().profile().nickname();
 	}
 
 	@Override
 	public String getProfileImage() {
-		return profile.get("profile_image_url").toString();
+		return attributes.kakaoAccountDto().profile().profileImageUrl();
 	}
 
 }

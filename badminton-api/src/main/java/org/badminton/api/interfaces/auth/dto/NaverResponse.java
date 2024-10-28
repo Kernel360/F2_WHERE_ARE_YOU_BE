@@ -4,35 +4,34 @@ import java.util.Map;
 
 public class NaverResponse implements OAuthResponse {
 
-	private final Map<String, Object> attribute;
+	private final NaverAttributeDto attribute;
 
 	public NaverResponse(Map<String, Object> attribute) {
-
-		this.attribute = (Map<String, Object>)attribute.get("response");
+		this.attribute = NaverAttributeDto.fromAttributes(attribute);
 	}
 
 	@Override
 	public String getProvider() {
-		return "naver";
+		return attribute.providerName();
 	}
 
 	@Override
 	public String getProviderId() {
-		return attribute.get("id").toString();
+		return attribute.id();
 	}
 
 	@Override
 	public String getEmail() {
-		return attribute.get("email").toString();
+		return attribute.email();
 	}
 
 	@Override
 	public String getName() {
-		return attribute.get("name").toString();
+		return attribute.name();
 	}
 
 	public String getProfileImage() {
-		return attribute.get("profile_image").toString();
+		return attribute.profileImage();
 	}
 
 }
