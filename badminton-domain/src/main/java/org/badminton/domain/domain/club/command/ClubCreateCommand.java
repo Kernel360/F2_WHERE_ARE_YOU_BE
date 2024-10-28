@@ -1,6 +1,6 @@
 package org.badminton.domain.domain.club.command;
 
-import org.badminton.domain.domain.club.Club;
+import org.badminton.domain.domain.club.entity.Club;
 
 public record ClubCreateCommand(
 	String clubName,

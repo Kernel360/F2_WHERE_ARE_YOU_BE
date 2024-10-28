@@ -7,7 +7,7 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.badminton.domain.domain.league.entity.League;
-import org.badminton.domain.domain.league.entity.LeagueParticipantEntity;
+import org.badminton.domain.domain.league.entity.LeagueParticipant;
 import org.badminton.domain.domain.match.command.MatchCommand;
 import org.badminton.domain.domain.match.entity.SinglesMatch;
 import org.badminton.domain.domain.match.entity.SinglesSetEntity;
@@ -64,7 +64,7 @@ public class FreeSinglesMatchStrategy implements MatchStrategy {
 
     @Override
     public BracketInfo makeInitialBracket(League league,
-                                          List<LeagueParticipantEntity> leagueParticipantList) {
+                                          List<LeagueParticipant> leagueParticipantList) {
         Collections.shuffle(leagueParticipantList);
         List<SinglesMatch> singlesMatches = makeSinglesMatches(leagueParticipantList, league);
         singlesMatches.forEach(this::makeSetsInMatch);
@@ -110,7 +110,7 @@ public class FreeSinglesMatchStrategy implements MatchStrategy {
         singlesMatchStore.store(singlesMatch);
     }
 
-    private List<SinglesMatch> makeSinglesMatches(List<LeagueParticipantEntity> leagueParticipantList,
+    private List<SinglesMatch> makeSinglesMatches(List<LeagueParticipant> leagueParticipantList,
                                                   League league) {
 
         List<SinglesMatch> singlesMatches = new ArrayList<>();

@@ -6,7 +6,7 @@ import java.util.Collections;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import org.badminton.domain.domain.league.entity.League;
-import org.badminton.domain.domain.league.entity.LeagueParticipantEntity;
+import org.badminton.domain.domain.league.entity.LeagueParticipant;
 import org.badminton.domain.domain.league.vo.Team;
 import org.badminton.domain.domain.match.command.MatchCommand;
 import org.badminton.domain.domain.match.entity.DoublesMatch;
@@ -59,7 +59,7 @@ public class FreeDoublesMatchStrategy implements MatchStrategy {
 
     @Override
     public BracketInfo makeInitialBracket(League league,
-                                          List<LeagueParticipantEntity> leagueParticipantList) {
+                                          List<LeagueParticipant> leagueParticipantList) {
         Collections.shuffle(leagueParticipantList);
         List<DoublesMatch> doublesMatches = makeDoublesMatches(leagueParticipantList, league);
         doublesMatches.forEach(this::makeDoublesSetsInMatch);
@@ -105,7 +105,7 @@ public class FreeDoublesMatchStrategy implements MatchStrategy {
         doublesMatchStore.store(doublesMatch);
     }
 
-    private List<DoublesMatch> makeDoublesMatches(List<LeagueParticipantEntity> leagueParticipantList,
+    private List<DoublesMatch> makeDoublesMatches(List<LeagueParticipant> leagueParticipantList,
                                                   League league) {
 
         List<DoublesMatch> doublesMatches = new ArrayList<>();

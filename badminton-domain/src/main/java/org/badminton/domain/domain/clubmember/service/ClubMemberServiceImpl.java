@@ -6,8 +6,8 @@ import java.util.Map;
 import java.util.TreeMap;
 
 import org.badminton.domain.common.exception.clubmember.ClubMemberDuplicateException;
-import org.badminton.domain.domain.club.Club;
 import org.badminton.domain.domain.club.ClubReader;
+import org.badminton.domain.domain.club.entity.Club;
 import org.badminton.domain.domain.club.info.ClubCreateInfo;
 import org.badminton.domain.domain.clubmember.ClubMemberReader;
 import org.badminton.domain.domain.clubmember.ClubMemberStore;
@@ -16,6 +16,7 @@ import org.badminton.domain.domain.clubmember.command.ClubMemberExpelCommand;
 import org.badminton.domain.domain.clubmember.command.ClubMemberRoleUpdateCommand;
 import org.badminton.domain.domain.clubmember.entity.ClubMember;
 import org.badminton.domain.domain.clubmember.info.ClubMemberBanRecordInfo;
+import org.badminton.domain.domain.clubmember.info.ClubMemberDetailInfo;
 import org.badminton.domain.domain.clubmember.info.ClubMemberInfo;
 import org.badminton.domain.domain.clubmember.info.ClubMemberJoinInfo;
 import org.badminton.domain.domain.clubmember.info.ClubMemberMyPageInfo;
@@ -97,6 +98,12 @@ public class ClubMemberServiceImpl implements ClubMemberService {
 	}
 
 	@Override
+	public ClubMemberDetailInfo getClubMemberDetail(String memberToken) {
+		ClubMember clubMember = clubMemberReader.getClubMemberByMemberToken(memberToken);
+		return ClubMemberDetailInfo.from(clubMember);
+	}
+
+	@Override
 	public ClubMemberBanRecordInfo expelClubMember(ClubMemberExpelCommand command, Long clubMemberId) {
 		ExpelStrategy expelStrategy = new ExpelStrategy(clubMemberStore);
 
@@ -137,6 +144,12 @@ public class ClubMemberServiceImpl implements ClubMemberService {
 			clubMember.deleteClubMember();
 			clubMemberStore.store(clubMember);
 		});
+	}
+
+	@Override
+	public ClubMemberDetailInfo getClubMemberDetailByClubToken(String clubToken, String memberToken) {
+		ClubMember clubMember = clubMemberReader.getClubMemberByMemberTokenAndClubToken(clubToken, memberToken);
+		return ClubMemberDetailInfo.from(clubMember);
 	}
 
 	private ClubMember getClubMember(Long clubMemberId) {

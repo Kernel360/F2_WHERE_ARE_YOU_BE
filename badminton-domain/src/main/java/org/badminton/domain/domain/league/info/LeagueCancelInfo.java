@@ -1,4 +1,16 @@
 package org.badminton.domain.domain.league.info;
 
-public record LeagueCancelInfo() {
+import org.badminton.domain.domain.league.entity.League;
+import org.badminton.domain.domain.league.enums.LeagueStatus;
+
+public record LeagueCancelInfo(
+	Long leagueId,
+	LeagueStatus leagueStatus
+) {
+	public static LeagueCancelInfo leagueCancelInfo(League cancelLeague) {
+		return new LeagueCancelInfo(
+			cancelLeague.getLeagueId(),
+			cancelLeague.getLeagueStatus()
+		);
+	}
 }

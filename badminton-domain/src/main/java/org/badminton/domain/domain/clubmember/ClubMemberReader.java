@@ -23,4 +23,6 @@ public interface ClubMemberReader {
 	void checkIsClubOwner(String memberToken);
 
 	List<ClubMember> getAllMember(String clubToken);
+
+	ClubMember getClubMemberByMemberTokenAndClubToken(String clubToken, String memberToken);
 }
