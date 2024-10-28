@@ -9,6 +9,7 @@ import org.badminton.domain.domain.clubmember.command.ClubMemberExpelCommand;
 import org.badminton.domain.domain.clubmember.command.ClubMemberRoleUpdateCommand;
 import org.badminton.domain.domain.clubmember.entity.ClubMember;
 import org.badminton.domain.domain.clubmember.info.ClubMemberBanRecordInfo;
+import org.badminton.domain.domain.clubmember.info.ClubMemberDetailInfo;
 import org.badminton.domain.domain.clubmember.info.ClubMemberInfo;
 import org.badminton.domain.domain.clubmember.info.ClubMemberJoinInfo;
 import org.badminton.domain.domain.clubmember.info.ClubMemberMyPageInfo;
@@ -26,6 +27,8 @@ public interface ClubMemberService {
 
 	ClubMemberMyPageInfo getClubMember(String memberToken);
 
+	ClubMemberDetailInfo getClubMemberDetail(String memberToken);
+
 	ClubMemberBanRecordInfo expelClubMember(ClubMemberExpelCommand command, Long clubMemberId);
 
 	ClubMemberBanRecordInfo banClubMember(ClubMemberBanCommand command, Long clubMemberId);
@@ -37,6 +40,8 @@ public interface ClubMemberService {
 	void checkMyOwnClub(String memberToken);
 
 	void deleteAllClubMembers(String clubToken);
+
+	ClubMemberDetailInfo getClubMemberDetailByClubToken(String clubToken, String memberToken);
 }
 
 

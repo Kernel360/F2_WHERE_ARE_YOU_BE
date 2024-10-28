@@ -6,10 +6,9 @@ import org.badminton.domain.common.enums.MatchGenerationType;
 import org.badminton.domain.common.enums.MatchType;
 import org.badminton.domain.domain.club.entity.Club;
 import org.badminton.domain.domain.league.entity.League;
-import org.badminton.domain.domain.league.enums.LeagueStatus;
 import org.badminton.domain.domain.member.entity.Member;
 
-public record LeagueCreateCommand(
+public record LeagueUpdatedCommand(
 	String leagueName,
 
 	String description,
@@ -17,8 +16,6 @@ public record LeagueCreateCommand(
 	String leagueLocation,
 
 	Member.MemberTier tierLimit,
-
-	LeagueStatus leagueStatus,
 
 	MatchType matchType,
 
@@ -32,22 +29,6 @@ public record LeagueCreateCommand(
 
 	Club club
 ) {
-	public static LeagueCreateCommand build(LeagueCreateNoIncludeClubCommand originCommand, Club club) {
-		return new LeagueCreateCommand(
-			originCommand.leagueName(),
-			originCommand.description(),
-			originCommand.leagueLocation(),
-			originCommand.tierLimit(),
-			originCommand.leagueStatus(),
-			originCommand.matchType(),
-			originCommand.leagueAt(),
-			originCommand.recruitingClosedAt(),
-			originCommand.playerLimitCount(),
-			originCommand.matchGenerationType(),
-			club
-		);
-	}
-
 	public League toEntity() {
 		return new League(
 			this.leagueName,
@@ -62,5 +43,4 @@ public record LeagueCreateCommand(
 			this.club
 		);
 	}
-
 }

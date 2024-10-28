@@ -2,7 +2,7 @@ package org.badminton.api.interfaces.club.dto;
 
 import java.time.LocalDateTime;
 
-import org.badminton.domain.domain.club.Club;
+import org.badminton.domain.domain.club.entity.Club;
 
 public record ClubCreateResponse(
 	String clubToken,

@@ -5,7 +5,6 @@ import java.time.LocalDateTime;
 import org.badminton.domain.domain.league.entity.LeagueParticipant;
 
 public record LeagueParticipationCancelResponse(
-
 	Long leagueId,
 	Long clubMemberId,
 	LocalDateTime createdAt,

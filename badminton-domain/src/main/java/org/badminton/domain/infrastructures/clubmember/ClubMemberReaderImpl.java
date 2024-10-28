@@ -66,6 +66,12 @@ public class ClubMemberReaderImpl implements ClubMemberReader {
 	}
 
 	@Override
+	public ClubMember getClubMemberByMemberTokenAndClubToken(String clubToken, String memberToken) {
+		return clubMemberRepository.findByClubClubTokenAndMemberMemberToken(clubToken, memberToken)
+			.orElseThrow(() -> new ClubMemberNotExistException(clubToken, memberToken));
+	}
+
+	@Override
 	public List<ClubMember> getAllClubMemberByClubId(String clubToken) {
 		return clubMemberRepository.findAllByClubClubTokenAndBannedFalseAndDeletedFalse(clubToken);
 	}

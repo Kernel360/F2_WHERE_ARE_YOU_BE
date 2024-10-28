@@ -5,7 +5,7 @@ import java.time.LocalDateTime;
 import org.badminton.domain.common.BaseTimeEntity;
 import org.badminton.domain.common.enums.MatchGenerationType;
 import org.badminton.domain.common.enums.MatchType;
-import org.badminton.domain.domain.club.Club;
+import org.badminton.domain.domain.club.entity.Club;
 import org.badminton.domain.domain.league.enums.LeagueStatus;
 import org.badminton.domain.domain.member.entity.Member;
 
@@ -77,23 +77,6 @@ public class League extends BaseTimeEntity {
 		this.matchType = matchType;
 		this.matchGenerationType = matchGenerationType;
 		this.club = club;
-	}
-
-	public void updateLeague(String leagueName, String description, String leagueLocation,
-		Member.MemberTier requiredTier,
-		LocalDateTime leagueAt,
-		LocalDateTime closedAt, int playerLimitCount, MatchType matchType,
-		MatchGenerationType matchGenerationType) {
-		this.leagueName = leagueName;
-		this.description = description;
-		this.leagueLocation = leagueLocation;
-		this.leagueAt = leagueAt;
-		this.requiredTier = requiredTier;
-		this.recruitingClosedAt = closedAt;
-		this.playerLimitCount = playerLimitCount;
-		this.matchType = matchType;
-		this.matchGenerationType = matchGenerationType;
-
 	}
 
 	public void completeLeagueRecruiting() {

@@ -11,12 +11,12 @@ import org.badminton.api.interfaces.league.dto.LeagueCreateResponse;
 import org.badminton.api.interfaces.league.dto.LeagueDetailsResponse;
 import org.badminton.api.interfaces.league.dto.LeagueReadResponse;
 import org.badminton.api.interfaces.league.dto.LeagueUpdateRequest;
-import org.badminton.api.interfaces.league.dto.LeagueUpdateResponse;
 import org.badminton.api.interfaces.oauth.dto.CustomOAuth2Member;
-import org.badminton.domain.domain.league.info.LeagueByDateInfo;
+import org.badminton.domain.domain.league.info.LeagueByDateInfoWithParticipantCountInfo;
 import org.badminton.domain.domain.league.info.LeagueCancelInfo;
 import org.badminton.domain.domain.league.info.LeagueDetailsInfo;
 import org.badminton.domain.domain.league.info.LeagueReadInfo;
+import org.badminton.domain.domain.league.info.LeagueUpdateInfoWithParticipantCountInfo;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -47,7 +47,7 @@ public class LeagueController {
 		description = "월별로 경기 일정을 리스트로 조회할 수 있습니다. 날짜는 'yyyy-MM' 형식으로 제공되어야 합니다.",
 		tags = {"league"},
 		parameters = {
-			@Parameter(name = "clubId", description = "조회할 클럽의 ID", required = true),
+			@Parameter(name = "clubToken", description = "조회할 클럽의 토큰", required = true),
 			@Parameter(name = "date", description = "조회할 날짜, 'yyyy-MM' 형식으로 입력", required = true)
 		}
 	)
@@ -65,7 +65,7 @@ public class LeagueController {
 		description = "일별로 경기 일정을 리스트로 조회할 수 있습니다. 검색 조건으로 날짜를 사용하며, 날짜는 'yyyy-MM' 형식으로 제공되어야 합니다.",
 		tags = {"league"},
 		parameters = {
-			@Parameter(name = "clubId", description = "조회할 클럽의 ID", required = true),
+			@Parameter(name = "clubToken", description = "조회할 클럽의 토큰", required = true),
 			@Parameter(name = "date", description = "조회할 날짜, 'yyyy-MM-dd' 형식으로 입력", required = true)
 		}
 	)
@@ -73,7 +73,7 @@ public class LeagueController {
 	public CommonResponse<List<LeagueByDateResponse>> getLeagueByDate(@PathVariable String clubToken,
 		@RequestParam
 		@DateTimeFormat(pattern = "yyyy-MM-dd") String date) {
-		List<LeagueByDateInfo> responseInfo = leagueFacade.getLeaguesByDate(clubToken, date);
+		List<LeagueByDateInfoWithParticipantCountInfo> responseInfo = leagueFacade.getLeaguesByDate(clubToken, date);
 		List<LeagueByDateResponse> response = leagueDtoMapper.mapLeagueByDateInfoList(responseInfo);
 		return CommonResponse.success(response);
 	}
@@ -114,7 +114,7 @@ public class LeagueController {
 		tags = {"league"}
 	)
 	@PatchMapping("/{leagueId}")
-	public CommonResponse<LeagueUpdateResponse> updateLeague(
+	public CommonResponse<LeagueUpdateInfoWithParticipantCountInfo> updateLeague(
 		@PathVariable String clubToken,
 		@PathVariable Long leagueId,
 		@Valid @RequestBody LeagueUpdateRequest leagueUpdateRequest) {
@@ -135,7 +135,6 @@ public class LeagueController {
 		@PathVariable Long leagueId) {
 		LeagueCancelInfo leagueInfo = leagueFacade.cancelLeague(clubToken, leagueId);
 		LeagueCancelResponse LeagueCancel = leagueDtoMapper.of(leagueInfo);
-
 		return CommonResponse.success(LeagueCancel);
 	}
 }

@@ -1,4 +1,4 @@
-package org.badminton.domain.domain.club;
+package org.badminton.domain.domain.club.entity;
 
 import static org.badminton.domain.domain.club.info.ClubSummaryInfo.*;
 
@@ -36,6 +36,7 @@ public class Club extends BaseTimeEntity {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long clubId;
 
+	@Column(name = "clubToken")
 	private String clubToken;
 
 	private String clubName;

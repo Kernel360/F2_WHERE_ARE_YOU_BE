@@ -1,5 +1,8 @@
 package org.badminton.domain.infrastructures.league;
 
+import java.time.LocalDateTime;
+import java.util.List;
+
 import org.badminton.domain.common.exception.league.LeagueNotExistException;
 import org.badminton.domain.domain.league.LeagueReader;
 import org.badminton.domain.domain.league.entity.League;
@@ -18,5 +21,21 @@ public class LeagueReaderImpl implements LeagueReader {
 	public League readLeague(String clubToken, Long leagueId) {
 		return leagueRepository.findByClubClubTokenAndLeagueId(clubToken, leagueId).orElseThrow(
 			() -> new LeagueNotExistException(clubToken, leagueId));
+	}
+
+	@Override
+	public League readLeagueById(Long leagueId) {
+		return leagueRepository.findById(leagueId)
+			.orElseThrow(() -> new LeagueNotExistException(leagueId));
+	}
+
+	@Override
+	public List<League> readLeagueByMonth(String clubToken, LocalDateTime startOfMonth, LocalDateTime endOfMonth) {
+		return leagueRepository.findAllByClubClubTokenAndLeagueAtBetween(clubToken, startOfMonth, endOfMonth);
+	}
+
+	@Override
+	public List<League> readLeagueByDate(String clubToken, LocalDateTime startOfMonth, LocalDateTime endOfMonth) {
+		return leagueRepository.findAllByClubClubTokenAndLeagueAtBetween(clubToken, startOfMonth, endOfMonth);
 	}
 }

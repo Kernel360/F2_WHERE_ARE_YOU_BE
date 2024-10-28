@@ -36,7 +36,7 @@ public record LeagueUpdateResponse(
 	LocalDateTime leagueAt,
 
 	@Schema(description = "모집 마감 날짜", example = "2024-09-08T23:59:59")
-	LocalDateTime recruitingClosedAt,
+	LocalDateTime recruitingCloseAt,
 
 	@Schema(description = "매칭 조건", example = "RANDOM")
 	MatchGenerationType matchGenerationType,

@@ -9,7 +9,9 @@ import org.badminton.domain.domain.league.entity.League;
 import org.badminton.domain.domain.league.enums.LeagueStatus;
 import org.badminton.domain.domain.member.entity.Member;
 
-public record LeagueCreateCommand(
+public record LeagueCancelCommand(
+	Long leagueId,
+
 	String leagueName,
 
 	String description,
@@ -32,35 +34,37 @@ public record LeagueCreateCommand(
 
 	Club club
 ) {
-	public static LeagueCreateCommand build(LeagueCreateNoIncludeClubCommand originCommand, Club club) {
-		return new LeagueCreateCommand(
-			originCommand.leagueName(),
-			originCommand.description(),
-			originCommand.leagueLocation(),
-			originCommand.tierLimit(),
-			originCommand.leagueStatus(),
-			originCommand.matchType(),
-			originCommand.leagueAt(),
-			originCommand.recruitingClosedAt(),
-			originCommand.playerLimitCount(),
-			originCommand.matchGenerationType(),
-			club
+	public static LeagueCancelCommand toCommand(League league) {
+		return new LeagueCancelCommand(
+			league.getLeagueId(),
+			league.getLeagueName(),
+			league.getDescription(),
+			league.getLeagueLocation(),
+			league.getRequiredTier(),
+			league.getLeagueStatus(),
+			league.getMatchType(),
+			league.getLeagueAt(),
+			league.getRecruitingClosedAt(),
+			league.getPlayerLimitCount(),
+			league.getMatchGenerationType(),
+			league.getClub()
 		);
 	}
 
 	public League toEntity() {
 		return new League(
+			this.leagueId,
 			this.leagueName,
 			this.description,
 			this.leagueLocation,
-			this.leagueAt,
 			this.tierLimit,
+			this.leagueStatus,
+			this.matchType,
+			this.leagueAt,
 			this.recruitingClosedAt,
 			this.playerLimitCount,
-			this.matchType,
 			this.matchGenerationType,
 			this.club
 		);
 	}
-
 }

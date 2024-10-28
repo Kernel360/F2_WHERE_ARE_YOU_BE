@@ -7,16 +7,19 @@ import org.badminton.domain.common.enums.MatchType;
 import org.badminton.domain.domain.club.entity.Club;
 import org.badminton.domain.domain.league.entity.League;
 import org.badminton.domain.domain.league.enums.LeagueStatus;
+import org.badminton.domain.domain.league.info.LeagueDetailInfo;
 import org.badminton.domain.domain.member.entity.Member;
 
-public record LeagueCreateCommand(
+public record LeagueDetailCommand(
+	Long leagueId,
+
 	String leagueName,
 
 	String description,
 
 	String leagueLocation,
 
-	Member.MemberTier tierLimit,
+	Member.MemberTier requiredTier,
 
 	LeagueStatus leagueStatus,
 
@@ -28,39 +31,41 @@ public record LeagueCreateCommand(
 
 	int playerLimitCount,
 
-	MatchGenerationType matchGenerationType,
+	MatchGenerationType matchGenerationType,  //RANDOM, TIER, AGE
 
 	Club club
 ) {
-	public static LeagueCreateCommand build(LeagueCreateNoIncludeClubCommand originCommand, Club club) {
-		return new LeagueCreateCommand(
-			originCommand.leagueName(),
-			originCommand.description(),
-			originCommand.leagueLocation(),
-			originCommand.tierLimit(),
-			originCommand.leagueStatus(),
-			originCommand.matchType(),
-			originCommand.leagueAt(),
-			originCommand.recruitingClosedAt(),
-			originCommand.playerLimitCount(),
-			originCommand.matchGenerationType(),
-			club
+	public static LeagueDetailCommand toCommand(LeagueDetailInfo league) {
+		return new LeagueDetailCommand(
+			league.leagueId(),
+			league.leagueName(),
+			league.description(),
+			league.leagueLocation(),
+			league.requiredTier(),
+			league.leagueStatus(),
+			league.matchType(),
+			league.leagueAt(),
+			league.recruitingClosedAt(),
+			league.playerLimitCount(),
+			league.matchGenerationType(),
+			league.club()
 		);
 	}
 
 	public League toEntity() {
 		return new League(
+			this.leagueId,
 			this.leagueName,
 			this.description,
 			this.leagueLocation,
+			this.requiredTier,
+			this.leagueStatus,
+			this.matchType,
 			this.leagueAt,
-			this.tierLimit,
 			this.recruitingClosedAt,
 			this.playerLimitCount,
-			this.matchType,
 			this.matchGenerationType,
 			this.club
 		);
 	}
-
 }

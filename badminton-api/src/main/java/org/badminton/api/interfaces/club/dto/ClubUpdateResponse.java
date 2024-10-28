@@ -2,10 +2,10 @@ package org.badminton.api.interfaces.club.dto;
 
 import java.time.LocalDateTime;
 
-import org.badminton.domain.domain.club.Club;
+import org.badminton.domain.domain.club.entity.Club;
 
 public record ClubUpdateResponse(
-	Long clubId,
+	String clubToken,
 	String clubName,
 	String clubDescription,
 	String clubImage,
@@ -14,7 +14,7 @@ public record ClubUpdateResponse(
 ) {
 	public static ClubUpdateResponse fromClubEntity(Club club) {
 		return new ClubUpdateResponse(
-			club.getClubId(),
+			club.getClubToken(),
 			club.getClubName(),
 			club.getClubDescription(),
 			club.getClubImage(),

@@ -1,6 +1,6 @@
 package org.badminton.domain.infrastructures.club;
 
-import org.badminton.domain.domain.club.Club;
+import org.badminton.domain.domain.club.entity.Club;
 import org.badminton.domain.domain.club.ClubStore;
 import org.springframework.stereotype.Component;
 

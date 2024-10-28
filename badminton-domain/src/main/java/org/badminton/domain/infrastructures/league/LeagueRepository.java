@@ -11,7 +11,7 @@ public interface LeagueRepository extends JpaRepository<League, Long> {
 
 	Optional<League> findByClubClubTokenAndLeagueId(String clubToken, Long leagueId);
 
-	List<League> findAllByClubClubIdAndLeagueAtBetween(Long clubId, LocalDateTime startOfMonth,
+	List<League> findAllByClubClubTokenAndLeagueAtBetween(String clubToken, LocalDateTime startOfMonth,
 		LocalDateTime endOfMonth);
 
 	void deleteByLeagueId(Long leagueId);
