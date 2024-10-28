@@ -22,7 +22,7 @@ public interface ClubMemberRepository extends JpaRepository<ClubMember, Long> {
 
 	List<ClubMember> findAllByClubClubTokenAndBannedFalseAndDeletedFalse(String clubToken);
 
-	boolean existsByMemberMemberTokenAndClubClubToken(String MemberToken, String clubToken);
+	boolean existsByMemberMemberTokenAndClubClubToken(String memberToken, String clubToken);
 
 	Optional<ClubMember> findByClubMemberId(Long clubMemberId);
 

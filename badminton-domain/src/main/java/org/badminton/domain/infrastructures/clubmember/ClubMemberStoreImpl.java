@@ -1,6 +1,6 @@
 package org.badminton.domain.infrastructures.clubmember;
 
-import org.badminton.domain.domain.club.Club;
+import org.badminton.domain.domain.club.entity.Club;
 import org.badminton.domain.domain.club.info.ClubCreateInfo;
 import org.badminton.domain.domain.clubmember.ClubMemberStore;
 import org.badminton.domain.domain.clubmember.entity.ClubMember;

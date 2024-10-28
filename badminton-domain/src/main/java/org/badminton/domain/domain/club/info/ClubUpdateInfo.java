@@ -3,11 +3,12 @@ package org.badminton.domain.domain.club.info;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import org.badminton.domain.domain.club.Club;
+import org.badminton.domain.domain.club.entity.Club;
 import org.badminton.domain.domain.clubmember.entity.ClubMember;
 
 public record ClubUpdateInfo(
 	Long clubId,
+	String clubToken,
 	String clubName,
 	String clubDescription,
 	String clubImage,
@@ -19,6 +20,7 @@ public record ClubUpdateInfo(
 	public static ClubUpdateInfo toClubUpdateInfo(Club club) {
 		return new ClubUpdateInfo(
 			club.getClubId(),
+			club.getClubToken(),
 			club.getClubName(),
 			club.getClubDescription(),
 			club.getClubImage(),

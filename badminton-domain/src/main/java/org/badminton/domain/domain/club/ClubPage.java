@@ -2,6 +2,7 @@ package org.badminton.domain.domain.club;
 
 import java.util.Map;
 
+import org.badminton.domain.domain.club.entity.Club;
 import org.badminton.domain.domain.club.info.ClubCardInfo;
 import org.badminton.domain.domain.member.entity.Member;
 import org.springframework.data.domain.Page;

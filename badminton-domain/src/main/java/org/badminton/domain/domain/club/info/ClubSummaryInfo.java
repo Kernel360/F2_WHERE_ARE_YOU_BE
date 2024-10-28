@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import org.badminton.domain.domain.club.Club;
+import org.badminton.domain.domain.club.entity.Club;
 import org.badminton.domain.domain.clubmember.entity.ClubMember;
 import org.badminton.domain.domain.member.entity.Member;
 
@@ -17,9 +17,23 @@ public record ClubSummaryInfo(
 	String clubName,
 	String clubDescription,
 	String clubImage,
-	LocalDateTime createdAt,
-	List<ClubMember> clubMembers
+	boolean isClubDeleted,
+	List<ClubMember> clubMembers,
+	LocalDateTime createdAt
 ) {
+
+	public Club toClub() {
+		Club club = new Club(
+			this.clubId,
+			this.clubToken,
+			this.clubName,
+			this.clubDescription,
+			this.clubImage,
+			this.clubMembers
+		);
+		System.out.println(club.getClubId());
+		return club;
+	}
 
 	public static ClubSummaryInfo toClubSummaryInfo(Club club) {
 		return new ClubSummaryInfo(
@@ -28,8 +42,9 @@ public record ClubSummaryInfo(
 			club.getClubName(),
 			club.getClubDescription(),
 			club.getClubImage(),
-			club.getCreatedAt(),
-			club.getClubMembers()
+			club.isClubDeleted(),
+			club.getClubMembers(),
+			club.getCreatedAt()
 		);
 	}
 
