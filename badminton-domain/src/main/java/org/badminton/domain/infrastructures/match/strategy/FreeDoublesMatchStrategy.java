@@ -9,7 +9,7 @@ import org.badminton.domain.domain.league.entity.League;
 import org.badminton.domain.domain.league.entity.LeagueParticipantEntity;
 import org.badminton.domain.domain.league.vo.Team;
 import org.badminton.domain.domain.match.command.MatchCommand;
-import org.badminton.domain.domain.match.entity.DoublesMatchEntity;
+import org.badminton.domain.domain.match.entity.DoublesMatch;
 import org.badminton.domain.domain.match.entity.DoublesSetEntity;
 import org.badminton.domain.domain.match.info.BracketInfo;
 import org.badminton.domain.domain.match.info.MatchInfo;
@@ -26,7 +26,7 @@ public class FreeDoublesMatchStrategy implements MatchStrategy {
 
     @Override
     public BracketInfo retrieveFreeBracketInLeague(Long leagueId) {
-        List<DoublesMatchEntity> bracketInLeague = doublesMatchReader.getDoublesBracket(leagueId);
+        List<DoublesMatch> bracketInLeague = doublesMatchReader.getDoublesBracket(leagueId);
         return BracketInfo.fromDoubles(1, bracketInLeague);
     }
 
@@ -35,7 +35,7 @@ public class FreeDoublesMatchStrategy implements MatchStrategy {
         return doublesMatchReader.getDoublesBracket(leagueId).stream()
                 .flatMap(doublesMatch ->
                         doublesMatch.getDoublesSets().stream()
-                                .map(doublesSet -> SetInfo.fromDoublesSet(doublesMatch.getDoublesMatchId(),
+                                .map(doublesSet -> SetInfo.fromDoublesSet(doublesMatch.getId(),
                                         doublesSet.getSetIndex(), doublesSet))
                 )
                 .toList();
@@ -43,7 +43,7 @@ public class FreeDoublesMatchStrategy implements MatchStrategy {
 
     @Override
     public MatchInfo.SetScoreDetails retrieveAllSetsScoreInMatch(Long matchId) {
-        DoublesMatchEntity doublesMatch = doublesMatchReader.getDoublesMatch(matchId);
+        DoublesMatch doublesMatch = doublesMatchReader.getDoublesMatch(matchId);
         return MatchInfo.SetScoreDetails.fromDoublesMatchToMatchDetails(doublesMatch);
     }
 
@@ -61,7 +61,7 @@ public class FreeDoublesMatchStrategy implements MatchStrategy {
     public BracketInfo makeInitialBracket(League league,
                                           List<LeagueParticipantEntity> leagueParticipantList) {
         Collections.shuffle(leagueParticipantList);
-        List<DoublesMatchEntity> doublesMatches = makeDoublesMatches(leagueParticipantList, league);
+        List<DoublesMatch> doublesMatches = makeDoublesMatches(leagueParticipantList, league);
         doublesMatches.forEach(this::makeDoublesSetsInMatch);
         return BracketInfo.fromDoubles(1, doublesMatches);
     }
@@ -69,7 +69,7 @@ public class FreeDoublesMatchStrategy implements MatchStrategy {
     @Override
     public SetInfo.Main registerSetScoreInMatch(Long matchId, int setIndex,
                                                 MatchCommand.UpdateSetScore updateSetScoreCommand) {
-        DoublesMatchEntity doublesMatch = doublesMatchReader.getDoublesMatch(matchId);
+        DoublesMatch doublesMatch = doublesMatchReader.getDoublesMatch(matchId);
         // 세트 스코어를 기록한다.
         doublesMatch.getDoublesSets()
                 .get(setIndex - 1)
@@ -86,7 +86,7 @@ public class FreeDoublesMatchStrategy implements MatchStrategy {
         return SetInfo.fromDoublesSet(matchId, setIndex, doublesMatch.getDoublesSets().get(setIndex - 1));
     }
 
-    private void makeDoublesSetsInMatch(DoublesMatchEntity doublesMatch) {
+    private void makeDoublesSetsInMatch(DoublesMatch doublesMatch) {
         // 복식 게임 세트를 3개 생성
         DoublesSetEntity set1 = new DoublesSetEntity(doublesMatch, 1);
         DoublesSetEntity set2 = new DoublesSetEntity(doublesMatch, 2);
@@ -100,14 +100,14 @@ public class FreeDoublesMatchStrategy implements MatchStrategy {
         doublesMatchStore.store(doublesMatch);
     }
 
-    private List<DoublesMatchEntity> makeDoublesMatches(List<LeagueParticipantEntity> leagueParticipantList,
-                                                        League league) {
+    private List<DoublesMatch> makeDoublesMatches(List<LeagueParticipantEntity> leagueParticipantList,
+                                                  League league) {
 
-        List<DoublesMatchEntity> doublesMatches = new ArrayList<>();
+        List<DoublesMatch> doublesMatches = new ArrayList<>();
         for (int i = 0; i < leagueParticipantList.size() - 3; i += 4) {
             Team team1 = new Team(leagueParticipantList.get(i), leagueParticipantList.get(i + 1));
             Team team2 = new Team(leagueParticipantList.get(i + 2), leagueParticipantList.get(i + 3));
-            DoublesMatchEntity doublesMatch = new DoublesMatchEntity(league, team1, team2);
+            DoublesMatch doublesMatch = new DoublesMatch(league, team1, team2);
             doublesMatches.add(doublesMatch);
             doublesMatchStore.store(doublesMatch);
         }

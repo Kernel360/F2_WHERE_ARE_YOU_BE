@@ -1,6 +1,6 @@
 package org.badminton.domain.domain.match.info;
 
-import org.badminton.domain.domain.match.entity.DoublesMatchEntity;
+import org.badminton.domain.domain.match.entity.DoublesMatch;
 
 public record DoublesMatchInfo(
         Long matchId,
@@ -10,9 +10,9 @@ public record DoublesMatchInfo(
         int team2WinSetCount
 ) {
 
-    public static DoublesMatchInfo fromDoublesMatchEntity(DoublesMatchEntity doublesMatch) {
+    public static DoublesMatchInfo fromDoublesMatch(DoublesMatch doublesMatch) {
         return new DoublesMatchInfo(
-                doublesMatch.getDoublesMatchId(),
+                doublesMatch.getId(),
                 TeamInfo.teamToTeamResponse(doublesMatch.getTeam1()),
                 doublesMatch.getTeam1WinSetCount(),
                 TeamInfo.teamToTeamResponse(doublesMatch.getTeam2()),

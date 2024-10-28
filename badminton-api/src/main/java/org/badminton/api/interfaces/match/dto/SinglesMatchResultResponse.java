@@ -1,7 +1,7 @@
 package org.badminton.api.interfaces.match.dto;
 
 import org.badminton.domain.common.enums.MatchResult;
-import org.badminton.domain.domain.match.entity.SinglesMatchEntity;
+import org.badminton.domain.domain.match.entity.SinglesMatch;
 
 public record SinglesMatchResultResponse(
         String currentPlayerName,
@@ -9,7 +9,7 @@ public record SinglesMatchResultResponse(
         MatchResult currentPlayerResult,
         MatchResult opponentResult
 ) {
-    public static SinglesMatchResultResponse fromSinglesMatch(SinglesMatchEntity singlesMatch, boolean isPlayer1,
+    public static SinglesMatchResultResponse fromSinglesMatch(SinglesMatch singlesMatch, boolean isPlayer1,
                                                               Long clubMemberId) {
         String player1Name = singlesMatch.getLeagueParticipant1().getClubMember().getMember().getName();
         String player2Name = singlesMatch.getLeagueParticipant2().getClubMember().getMember().getName();

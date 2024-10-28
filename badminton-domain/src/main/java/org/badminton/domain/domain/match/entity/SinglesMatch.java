@@ -1,15 +1,7 @@
 package org.badminton.domain.domain.match.entity;
 
-import static org.badminton.domain.common.consts.Constants.*;
-
-import java.util.ArrayList;
-import java.util.List;
-
-import org.badminton.domain.common.BaseTimeEntity;
-import org.badminton.domain.common.enums.MatchResult;
-import org.badminton.domain.common.enums.MatchStatus;
-import org.badminton.domain.domain.league.entity.League;
-import org.badminton.domain.domain.league.entity.LeagueParticipantEntity;
+import static org.badminton.domain.common.consts.Constants.INITIAL_WIN_SET_COUNT;
+import static org.badminton.domain.common.consts.Constants.SETS_REQUIRED_TO_WIN_MATCH;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
@@ -23,19 +15,26 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import java.util.ArrayList;
+import java.util.List;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.badminton.domain.common.BaseTimeEntity;
+import org.badminton.domain.common.enums.MatchResult;
+import org.badminton.domain.common.enums.MatchStatus;
+import org.badminton.domain.domain.league.entity.League;
+import org.badminton.domain.domain.league.entity.LeagueParticipantEntity;
 
 @Entity
 @Table(name = "singles_match")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-public class SinglesMatchEntity extends BaseTimeEntity {
+public class SinglesMatch extends BaseTimeEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long singlesMatchId;
+    private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "leagueId")
@@ -64,8 +63,8 @@ public class SinglesMatchEntity extends BaseTimeEntity {
     @OneToMany(mappedBy = "singlesMatch", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<SinglesSetEntity> singlesSets;
 
-    public SinglesMatchEntity(League league, LeagueParticipantEntity leagueParticipant1,
-                              LeagueParticipantEntity leagueParticipant2) {
+    public SinglesMatch(League league, LeagueParticipantEntity leagueParticipant1,
+                        LeagueParticipantEntity leagueParticipant2) {
         this.league = league;
         this.leagueParticipant1 = leagueParticipant1;
         this.leagueParticipant2 = leagueParticipant2;

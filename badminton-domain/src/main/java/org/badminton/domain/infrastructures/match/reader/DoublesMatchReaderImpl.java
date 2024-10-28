@@ -5,7 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.badminton.domain.common.enums.MatchType;
 import org.badminton.domain.common.exception.match.BracketNotExistException;
 import org.badminton.domain.common.exception.match.MatchNotExistException;
-import org.badminton.domain.domain.match.entity.DoublesMatchEntity;
+import org.badminton.domain.domain.match.entity.DoublesMatch;
 import org.badminton.domain.domain.match.store.DoublesMatchReader;
 import org.badminton.domain.infrastructures.match.repository.DoublesMatchRepository;
 import org.springframework.stereotype.Component;
@@ -17,8 +17,8 @@ public class DoublesMatchReaderImpl implements DoublesMatchReader {
     private final DoublesMatchRepository doublesMatchRepository;
 
     @Override
-    public List<DoublesMatchEntity> getDoublesBracket(Long leagueId) {
-        List<DoublesMatchEntity> bracketInLeague = doublesMatchRepository.findAllByLeague_LeagueId(leagueId);
+    public List<DoublesMatch> getDoublesBracket(Long leagueId) {
+        List<DoublesMatch> bracketInLeague = doublesMatchRepository.findAllByLeague_LeagueId(leagueId);
         if (bracketInLeague.isEmpty()) {
             throw new BracketNotExistException(leagueId);
         }
@@ -27,7 +27,7 @@ public class DoublesMatchReaderImpl implements DoublesMatchReader {
 
     @Override
     public boolean checkIfBracketEmpty(Long leagueId) {
-        List<DoublesMatchEntity> bracketInLeague = doublesMatchRepository.findAllByLeague_LeagueId(leagueId);
+        List<DoublesMatch> bracketInLeague = doublesMatchRepository.findAllByLeague_LeagueId(leagueId);
         if (bracketInLeague.isEmpty()) {
             return true;
         }
@@ -35,7 +35,7 @@ public class DoublesMatchReaderImpl implements DoublesMatchReader {
     }
 
     @Override
-    public DoublesMatchEntity getDoublesMatch(Long matchId) {
+    public DoublesMatch getDoublesMatch(Long matchId) {
         return doublesMatchRepository.findById(matchId).orElseThrow(() ->
                 new MatchNotExistException(matchId, MatchType.DOUBLES));
     }

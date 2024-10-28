@@ -1,8 +1,8 @@
 package org.badminton.api.interfaces.match.dto;
 
 import org.badminton.domain.common.enums.MatchResult;
-import org.badminton.domain.domain.match.entity.DoublesMatchEntity;
 import org.badminton.domain.domain.league.vo.Team;
+import org.badminton.domain.domain.match.entity.DoublesMatch;
 
 public record DoublesMatchResultResponse(
         TeamResultResponse currentTeam,
@@ -10,8 +10,8 @@ public record DoublesMatchResultResponse(
         MatchResult currentTeamResult,
         MatchResult opponentTeamResult
 ) {
-    public static DoublesMatchResultResponse fromDoublesMatchEntity(DoublesMatchEntity doublesMatch, boolean isTeam1,
-                                                                    Long clubMemberId) {
+    public static DoublesMatchResultResponse fromDoublesMatch(DoublesMatch doublesMatch, boolean isTeam1,
+                                                              Long clubMemberId) {
         Team team1 = doublesMatch.getTeam1();
         Team team2 = doublesMatch.getTeam2();
 

@@ -3,8 +3,8 @@ package org.badminton.domain.domain.match.info;
 import java.util.List;
 import lombok.Getter;
 import org.badminton.domain.common.enums.MatchType;
-import org.badminton.domain.domain.match.entity.DoublesMatchEntity;
-import org.badminton.domain.domain.match.entity.SinglesMatchEntity;
+import org.badminton.domain.domain.match.entity.DoublesMatch;
+import org.badminton.domain.domain.match.entity.SinglesMatch;
 
 @Getter
 public class MatchInfo {
@@ -19,9 +19,9 @@ public class MatchInfo {
             List<DoublesSetInfo> doublesSets
     ) {
 
-        public static SetScoreDetails fromSinglesMatchToMatchDetails(SinglesMatchEntity singlesMatch) {
+        public static SetScoreDetails fromSinglesMatchToMatchDetails(SinglesMatch singlesMatch) {
 
-            return new SetScoreDetails(singlesMatch.getSinglesMatchId(),
+            return new SetScoreDetails(singlesMatch.getId(),
                     singlesMatch.getLeague().getLeagueId(),
                     MatchType.SINGLES,
                     SinglesMatchInfo.fromSinglesMatch(singlesMatch),
@@ -31,13 +31,13 @@ public class MatchInfo {
 
         }
 
-        public static SetScoreDetails fromDoublesMatchToMatchDetails(DoublesMatchEntity doublesMatch) {
+        public static SetScoreDetails fromDoublesMatchToMatchDetails(DoublesMatch doublesMatch) {
 
-            return new SetScoreDetails(doublesMatch.getDoublesMatchId(),
+            return new SetScoreDetails(doublesMatch.getId(),
                     doublesMatch.getLeague().getLeagueId(),
                     MatchType.DOUBLES,
                     null,
-                    DoublesMatchInfo.fromDoublesMatchEntity(doublesMatch),
+                    DoublesMatchInfo.fromDoublesMatch(doublesMatch),
                     null,
                     DoublesSetInfo.fromDoublesSets(doublesMatch.getDoublesSets()));
 

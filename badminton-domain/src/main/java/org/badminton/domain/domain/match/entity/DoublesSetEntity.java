@@ -26,13 +26,13 @@ public class DoublesSetEntity extends BaseTimeEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "doublesMatchId")
-    private DoublesMatchEntity doublesMatch;
+    private DoublesMatch doublesMatch;
 
     private int setIndex;
     private int team1Score;
     private int team2Score;
 
-    public DoublesSetEntity(DoublesMatchEntity doublesMatch, int setIndex) {
+    public DoublesSetEntity(DoublesMatch doublesMatch, int setIndex) {
         this.doublesMatch = doublesMatch;
         this.setIndex = setIndex;
         this.team1Score = INITIAL_SET_SCORE;

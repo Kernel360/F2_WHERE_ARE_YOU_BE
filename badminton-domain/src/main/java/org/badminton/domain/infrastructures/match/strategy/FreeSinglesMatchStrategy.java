@@ -9,7 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.badminton.domain.domain.league.entity.League;
 import org.badminton.domain.domain.league.entity.LeagueParticipantEntity;
 import org.badminton.domain.domain.match.command.MatchCommand;
-import org.badminton.domain.domain.match.entity.SinglesMatchEntity;
+import org.badminton.domain.domain.match.entity.SinglesMatch;
 import org.badminton.domain.domain.match.entity.SinglesSetEntity;
 import org.badminton.domain.domain.match.info.BracketInfo;
 import org.badminton.domain.domain.match.info.MatchInfo;
@@ -29,7 +29,7 @@ public class FreeSinglesMatchStrategy implements MatchStrategy {
 
     @Override
     public BracketInfo retrieveFreeBracketInLeague(Long leagueId) {
-        List<SinglesMatchEntity> bracketInLeague = singlesMatchReader.getSinglesBracket(leagueId);
+        List<SinglesMatch> bracketInLeague = singlesMatchReader.getSinglesBracket(leagueId);
         return BracketInfo.fromSingles(1, bracketInLeague);
     }
 
@@ -40,7 +40,7 @@ public class FreeSinglesMatchStrategy implements MatchStrategy {
                 .flatMap(singlesMatch ->
                         singlesMatch.getSinglesSets().stream()
                                 .map(singlesSet -> SetInfo.fromSinglesSet(
-                                        singlesMatch.getSinglesMatchId(),
+                                        singlesMatch.getId(),
                                         singlesSet.getSetIndex(), singlesSet))
                 )
                 .toList();
@@ -48,7 +48,7 @@ public class FreeSinglesMatchStrategy implements MatchStrategy {
 
     @Override
     public MatchInfo.SetScoreDetails retrieveAllSetsScoreInMatch(Long matchId) {
-        SinglesMatchEntity singlesMatch = singlesMatchReader.getSinglesMatch(matchId);
+        SinglesMatch singlesMatch = singlesMatchReader.getSinglesMatch(matchId);
         return MatchInfo.SetScoreDetails.fromSinglesMatchToMatchDetails(singlesMatch);
     }
 
@@ -66,7 +66,7 @@ public class FreeSinglesMatchStrategy implements MatchStrategy {
     public BracketInfo makeInitialBracket(League league,
                                           List<LeagueParticipantEntity> leagueParticipantList) {
         Collections.shuffle(leagueParticipantList);
-        List<SinglesMatchEntity> singlesMatches = makeSinglesMatches(leagueParticipantList, league);
+        List<SinglesMatch> singlesMatches = makeSinglesMatches(leagueParticipantList, league);
         singlesMatches.forEach(this::makeSetsInMatch);
         return BracketInfo.fromSingles(1, singlesMatches);
     }
@@ -74,7 +74,7 @@ public class FreeSinglesMatchStrategy implements MatchStrategy {
     @Override
     public SetInfo.Main registerSetScoreInMatch(Long matchId, int setIndex,
                                                 MatchCommand.UpdateSetScore updateSetScoreCommand) {
-        SinglesMatchEntity singlesMatch = singlesMatchReader.getSinglesMatch(matchId);
+        SinglesMatch singlesMatch = singlesMatchReader.getSinglesMatch(matchId);
         // 세트 스코어를 기록한다.
         singlesMatch.getSinglesSets()
                 .get(setIndex - 1)
@@ -92,7 +92,7 @@ public class FreeSinglesMatchStrategy implements MatchStrategy {
     }
 
     // TODO: 리팩토링
-    private void makeSetsInMatch(SinglesMatchEntity singlesMatch) {
+    private void makeSetsInMatch(SinglesMatch singlesMatch) {
         //단식 게임 세트를 3개 생성
         SinglesSetEntity set1 = new SinglesSetEntity(singlesMatch, 1);
         SinglesSetEntity set2 = new SinglesSetEntity(singlesMatch, 2);
@@ -105,12 +105,12 @@ public class FreeSinglesMatchStrategy implements MatchStrategy {
         singlesMatchStore.store(singlesMatch);
     }
 
-    private List<SinglesMatchEntity> makeSinglesMatches(List<LeagueParticipantEntity> leagueParticipantList,
-                                                        League league) {
+    private List<SinglesMatch> makeSinglesMatches(List<LeagueParticipantEntity> leagueParticipantList,
+                                                  League league) {
 
-        List<SinglesMatchEntity> singlesMatches = new ArrayList<>();
+        List<SinglesMatch> singlesMatches = new ArrayList<>();
         for (int i = 0; i < leagueParticipantList.size() - 1; i += 2) {
-            SinglesMatchEntity singlesMatch = new SinglesMatchEntity(league, leagueParticipantList.get(i),
+            SinglesMatch singlesMatch = new SinglesMatch(league, leagueParticipantList.get(i),
                     leagueParticipantList.get(i + 1));
             singlesMatches.add(singlesMatch);
             singlesMatchStore.store(singlesMatch);

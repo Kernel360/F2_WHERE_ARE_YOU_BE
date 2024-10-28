@@ -1,11 +1,10 @@
 package org.badminton.api.interfaces.match.dto;
 
 import java.time.LocalDateTime;
-
 import org.badminton.domain.common.enums.MatchStatus;
 import org.badminton.domain.common.enums.MatchType;
-import org.badminton.domain.domain.match.entity.DoublesMatchEntity;
-import org.badminton.domain.domain.match.entity.SinglesMatchEntity;
+import org.badminton.domain.domain.match.entity.DoublesMatch;
+import org.badminton.domain.domain.match.entity.SinglesMatch;
 
 public record MatchResultResponse(
         Long matchId,
@@ -16,10 +15,10 @@ public record MatchResultResponse(
         MatchStatus matchStatus,
         LocalDateTime leagueAt
 ) {
-    public static MatchResultResponse fromSinglesMatchEntity(SinglesMatchEntity singlesMatch, Long clubMemberId) {
+    public static MatchResultResponse fromSinglesMatch(SinglesMatch singlesMatch, Long clubMemberId) {
         boolean isPlayer1 = singlesMatch.getLeagueParticipant1().getClubMember().getClubMemberId().equals(clubMemberId);
         return new MatchResultResponse(
-                singlesMatch.getSinglesMatchId(),
+                singlesMatch.getId(),
                 singlesMatch.getLeague().getLeagueId(),
                 MatchType.SINGLES,
                 SinglesMatchResultResponse.fromSinglesMatch(singlesMatch, isPlayer1, clubMemberId),
@@ -29,20 +28,20 @@ public record MatchResultResponse(
         );
     }
 
-    public static MatchResultResponse fromDoublesMatchEntity(DoublesMatchEntity doublesMatch, Long clubMemberId) {
+    public static MatchResultResponse fromDoublesMatch(DoublesMatch doublesMatch, Long clubMemberId) {
         boolean isTeam1 = isPlayerInTeam1(doublesMatch, clubMemberId);
         return new MatchResultResponse(
-                doublesMatch.getDoublesMatchId(),
+                doublesMatch.getId(),
                 doublesMatch.getLeague().getLeagueId(),
                 MatchType.DOUBLES,
                 null,
-                DoublesMatchResultResponse.fromDoublesMatchEntity(doublesMatch, isTeam1, clubMemberId),
+                DoublesMatchResultResponse.fromDoublesMatch(doublesMatch, isTeam1, clubMemberId),
                 doublesMatch.getMatchStatus(),
                 doublesMatch.getLeague().getLeagueAt()
         );
     }
 
-    private static boolean isPlayerInTeam1(DoublesMatchEntity match, Long clubMemberId) {
+    private static boolean isPlayerInTeam1(DoublesMatch match, Long clubMemberId) {
         return match.getTeam1().getLeagueParticipant1().getClubMember().getClubMemberId().equals(clubMemberId) ||
                 match.getTeam1().getLeagueParticipant2().getClubMember().getClubMemberId().equals(clubMemberId);
     }
