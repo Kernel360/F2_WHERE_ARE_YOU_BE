@@ -9,7 +9,7 @@ public record TeamInfo(
         String participant2Image
 ) {
 
-    public static TeamInfo teamToTeamResponse(Team team) {
+    public static TeamInfo fromTeam(Team team) {
         return new TeamInfo(
                 team.getLeagueParticipant1().getMember().getName(),
                 team.getLeagueParticipant1().getMember().getProfileImage(),

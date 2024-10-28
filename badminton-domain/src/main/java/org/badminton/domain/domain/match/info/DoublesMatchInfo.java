@@ -13,9 +13,9 @@ public record DoublesMatchInfo(
     public static DoublesMatchInfo fromDoublesMatch(DoublesMatch doublesMatch) {
         return new DoublesMatchInfo(
                 doublesMatch.getId(),
-                TeamInfo.teamToTeamResponse(doublesMatch.getTeam1()),
+                TeamInfo.fromTeam(doublesMatch.getTeam1()),
                 doublesMatch.getTeam1WinSetCount(),
-                TeamInfo.teamToTeamResponse(doublesMatch.getTeam2()),
+                TeamInfo.fromTeam(doublesMatch.getTeam2()),
                 doublesMatch.getTeam2WinSetCount()
         );
     }
