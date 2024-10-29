@@ -48,6 +48,8 @@ public interface ClubMemberService {
 	ClubMemberStatusInfo approvedClubMember(ClubMemberStatusCommand clubMemberApprovedCommand);
 
 	ClubMemberStatusInfo rejectClubMember(ClubMemberStatusCommand clubMemberStatusCommand);
+
+	Integer getClubMemberApproveCount(Long clubId);
 }
 
 

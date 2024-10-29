@@ -1,5 +1,7 @@
 package org.badminton.domain.domain.statistics;
 
+import java.util.List;
+
 import org.badminton.domain.domain.club.info.ClubCreateInfo;
 import org.springframework.stereotype.Service;
 
@@ -22,5 +24,17 @@ public class ClubStatisticsServiceImpl implements ClubStatisticsService {
 	@Override
 	public void createStatistic(ClubCreateInfo clubCreateInfo) {
 		clubStatisticsStore.store(clubCreateInfo);
+	}
+
+	@Override
+	public List<Long> clubIdByList() {
+		return clubStatisticsReader.findAllClubId();
+	}
+
+	@Override
+	public void updateByCountAndClubId(Long clubId, int count) {
+		var originStatistic = clubStatisticsReader.findByClubId(clubId);
+		originStatistic.increaseRegistrationCount(count);
+		clubStatisticsStore.update(originStatistic);
 	}
 }

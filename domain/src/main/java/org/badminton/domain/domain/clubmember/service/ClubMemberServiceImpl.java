@@ -171,6 +171,11 @@ public class ClubMemberServiceImpl implements ClubMemberService {
 		return ClubMemberStatusInfo.from(clubMember);
 	}
 
+	@Override
+	public Integer getClubMemberApproveCount(Long clubId) {
+		return clubMemberReader.getClubMemberApproveCount(clubId);
+	}
+
 	private ClubMember getClubMember(Long clubMemberId) {
 		return clubMemberReader.getClubMember(clubMemberId);
 	}

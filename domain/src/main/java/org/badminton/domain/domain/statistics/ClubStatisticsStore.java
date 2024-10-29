@@ -6,4 +6,6 @@ public interface ClubStatisticsStore {
 	void increaseVisitCount(ClubStatistics origin);
 
 	void store(ClubCreateInfo clubCreateInfo);
+
+	void update(ClubStatistics originStatistic);
 }
