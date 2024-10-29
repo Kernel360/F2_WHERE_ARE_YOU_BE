@@ -1,4 +1,6 @@
 rootProject.name = 'badminton'
-include 'badminton-domain'
-include 'badminton-api'
-include 'badminton-batch'
+include 'domain'
+include 'api'
+include 'batch'
+include 'infrastructure'
+
