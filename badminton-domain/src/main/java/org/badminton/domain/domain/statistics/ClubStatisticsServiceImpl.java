@@ -1,0 +1,26 @@
+package org.badminton.domain.domain.statistics;
+
+import org.badminton.domain.domain.club.info.ClubCreateInfo;
+import org.springframework.stereotype.Service;
+
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
+@Service
+@RequiredArgsConstructor
+public class ClubStatisticsServiceImpl implements ClubStatisticsService {
+	private final ClubStatisticsReader clubStatisticsReader;
+	private final ClubStatisticsStore clubStatisticsStore;
+
+	@Override
+	public void increaseVisitedClubCount(String clubToken) {
+		ClubStatistics increasedResult = clubStatisticsReader.getClubStaticsWithIncrease(clubToken);
+		clubStatisticsStore.increaseVisitCount(increasedResult);
+	}
+
+	@Override
+	public void createStatistic(ClubCreateInfo clubCreateInfo) {
+		clubStatisticsStore.store(clubCreateInfo);
+	}
+}

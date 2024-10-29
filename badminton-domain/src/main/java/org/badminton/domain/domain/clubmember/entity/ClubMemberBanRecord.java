@@ -2,7 +2,7 @@ package org.badminton.domain.domain.clubmember.entity;
 
 import java.time.LocalDateTime;
 
-import org.badminton.domain.common.BaseTimeEntity;
+import org.badminton.domain.common.AbstractBaseTime;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -22,31 +22,30 @@ import lombok.NoArgsConstructor;
 @Table(name = "banned_club_member")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-public class ClubMemberBanRecord extends BaseTimeEntity {
+public class ClubMemberBanRecord extends AbstractBaseTime {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long clubMemberBanRecordId;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long clubMemberBanRecordId;
 
-    @Enumerated(EnumType.STRING)
-    private ClubMember.BannedType bannedType;
+	@Enumerated(EnumType.STRING)
+	private ClubMember.BannedType bannedType;
 
-    private String bannedReason;
+	private String bannedReason;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "clubMemberId")
-    private ClubMember clubMember;
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "clubMemberId")
+	private ClubMember clubMember;
 
-    private boolean isActive;
+	private boolean isActive;
 
-    private LocalDateTime endDate;
+	private LocalDateTime endDate;
 
-
-    public ClubMemberBanRecord(ClubMember clubMember, ClubMember.BannedType bannedType, String bannedReason) {
-        this.clubMember = clubMember;
-        this.bannedType = bannedType;
-        this.bannedReason = bannedReason;
-        this.endDate = bannedType.isPermanent() ? null : LocalDateTime.now().plusDays(bannedType.getDays());
-        this.isActive = true;
-    }
+	public ClubMemberBanRecord(ClubMember clubMember, ClubMember.BannedType bannedType, String bannedReason) {
+		this.clubMember = clubMember;
+		this.bannedType = bannedType;
+		this.bannedReason = bannedReason;
+		this.endDate = bannedType.isPermanent() ? null : LocalDateTime.now().plusDays(bannedType.getDays());
+		this.isActive = true;
+	}
 }

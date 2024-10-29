@@ -2,7 +2,7 @@ package org.badminton.domain.domain.league.entity;
 
 import java.time.LocalDateTime;
 
-import org.badminton.domain.common.BaseTimeEntity;
+import org.badminton.domain.common.AbstractBaseTime;
 import org.badminton.domain.common.enums.MatchGenerationType;
 import org.badminton.domain.common.enums.MatchType;
 import org.badminton.domain.domain.club.entity.Club;
@@ -29,7 +29,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
 @Table(name = "league")
-public class League extends BaseTimeEntity {
+public class League extends AbstractBaseTime {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

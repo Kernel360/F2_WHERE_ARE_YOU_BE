@@ -30,4 +30,15 @@ public record ClubCreateInfo(
 			club.getModifiedAt());
 	}
 
+	public Club toEntity() {
+		return new Club(
+			this.clubId,
+			this.clubToken,
+			this.clubName,
+			this.clubDescription,
+			this.clubImage,
+			this.isClubDeleted,
+			this.clubMembers
+		);
+	}
 }
