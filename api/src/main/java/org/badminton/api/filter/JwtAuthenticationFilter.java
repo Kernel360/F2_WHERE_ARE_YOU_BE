@@ -12,7 +12,6 @@ import org.badminton.domain.domain.clubmember.entity.ClubMember;
 import org.badminton.domain.domain.member.entity.MemberAuthorization;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -37,13 +36,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
 		String accessToken = jwtUtil.extractAccessTokenFromCookie(request);
 		String oauthToken = jwtUtil.extractOauthTokenFromCookie(request);
-		if (accessToken == null || oauthToken == null) {
-			SecurityContextHolder.clearContext();
-			filterChain.doFilter(request, response);
-		}
-		SecurityContext context = SecurityContextHolder.getContext();
 		try {
-			if (jwtUtil.refreshAccessToken(context, accessToken, response) && jwtUtil.validate(oauthToken)) {
+			if (jwtUtil.refreshAccessToken(accessToken, response) && jwtUtil.isAliveOauthToken(oauthToken)) {
 
 				String memberToken = jwtUtil.getMemberToken(accessToken);
 				String registrationId = jwtUtil.getRegistrationId(oauthToken);

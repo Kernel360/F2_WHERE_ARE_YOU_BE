@@ -5,18 +5,18 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 
-import org.badminton.api.interfaces.auth.dto.CustomOAuth2Member;
 import org.badminton.domain.domain.member.MemberReader;
 import org.badminton.domain.domain.member.entity.Member;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseCookie;
-import org.springframework.security.core.context.SecurityContext;
 import org.springframework.stereotype.Component;
 
+import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
@@ -26,8 +26,8 @@ import lombok.extern.slf4j.Slf4j;
 @Component
 @Slf4j
 public class JwtUtil {
-	private static final long ACCESS_TOKEN_EXPIRY = 30 * 60 * 1000L;
-	private static final long REFRESH_TOKEN_EXPIRY = 7 * 24 * 60 * 60 * 1000L;
+	private static final long ACCESS_TOKEN_EXPIRY = 30 * 1000L;
+	private static final long REFRESH_TOKEN_EXPIRY = 60 * 1000L;
 
 	private final SecretKey secretKey;
 	private final MemberReader memberReader;
@@ -131,6 +131,9 @@ public class JwtUtil {
 	}
 
 	public String cookieValue(Cookie[] cookies, String key) {
+		if (cookies == null) {
+			return null;
+		}
 		return Arrays.stream(cookies)
 			.filter(cookie -> key.equals(cookie.getName()))
 			.map(Cookie::getValue)
@@ -162,47 +165,76 @@ public class JwtUtil {
 		response.addHeader("Set-Cookie", cookie.toString());
 	}
 
-	public boolean refreshAccessToken(SecurityContext context, String accessToken, HttpServletResponse response) {
-		if (validate(accessToken)) {
+	public boolean refreshAccessToken(String accessToken, HttpServletResponse response) {
+		if (accessToken == null || accessToken.isEmpty()) {
+			removeAccessTokenCookie(response);
+			removeOauthTokenCookie(response);
+			return false;
+		}
+
+		String memberToken = getMemberTokenIfAccessTokenExpired(accessToken);
+		if (Objects.isNull(memberToken)) {
 			return true;
 		}
-		Object details = context.getAuthentication().getDetails();
 
-		String memberToken = ((CustomOAuth2Member)details).getMemberToken();
 		Member member = memberReader.getMember(memberToken);
-
 		String refreshToken = member.getRefreshToken();
 
-		if (validate(refreshToken)) {
-			List<String> roles = getRoles(refreshToken);
-			String newAccessToken = createAccessToken(memberToken, roles);
-			setAccessTokenCookie(response, newAccessToken);
-			return true;
+		if (refreshToken == null || refreshToken.isEmpty()) {
+			log.error("Refresh token is null or empty");
+			removeAccessTokenCookie(response);
+			removeOauthTokenCookie(response);
+			return false; // 실패 처리
+		}
+
+		try {
+			String validate = getMemberTokenIfAccessTokenExpired(refreshToken);
+			if (Objects.isNull(validate)) {
+				List<String> roles = getRoles(refreshToken);
+				String newAccessToken = createAccessToken(memberToken, roles);
+				setAccessTokenCookie(response, newAccessToken);
+				return true;
+			}
+		} catch (Exception e) {
+			log.error("Failed to validate refresh token", e);
 		}
 
 		removeAccessTokenCookie(response);
 		removeOauthTokenCookie(response);
-
 		return false;
-
 	}
 
-	public boolean validate(String token) {
-		var claims = Jwts.parser()
-			.verifyWith(secretKey)
-			.build()
-			.parseSignedClaims(token)
-			.getPayload();
+	public String getMemberTokenIfAccessTokenExpired(String token) {
+		if (token == null || token.isEmpty()) {
+			log.error("Access token is null or empty");
+			return null;
+		}
+		try {
+			var claims = Jwts.parser()
+				.verifyWith(secretKey)
+				.build()
+				.parseSignedClaims(token)
+				.getPayload();
 
-		// 현재 시간과 만료 시간을 비교
-		Date expiration = claims.getExpiration();
-		Date now = new Date();
+			return null;
 
-		if (expiration == null || now.after(expiration)) {
+		} catch (ExpiredJwtException e) {
+			return e.getClaims().get("memberToken", String.class); // 만료된 경우 memberToken 반환
+		}
+	}
+
+	public boolean isAliveOauthToken(String token) {
+		try {
+			var claims = Jwts.parser()
+				.verifyWith(secretKey)
+				.build()
+				.parseSignedClaims(token)
+				.getPayload();
+
+			return true;
+
+		} catch (Exception e) {
 			return false;
 		}
-
-		return true;
-
 	}
 }
