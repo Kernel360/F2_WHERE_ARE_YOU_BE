@@ -1,8 +1,8 @@
 package org.badminton.infrastructure.club;
 
 import org.badminton.domain.common.exception.club.ClubNotExistException;
-import org.badminton.domain.domain.club.entity.Club;
 import org.badminton.domain.domain.club.ClubReader;
+import org.badminton.domain.domain.club.entity.Club;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
@@ -29,5 +29,10 @@ public class ClubReaderImpl implements ClubReader {
 	@Override
 	public Club readClub(String clubToken) {
 		return clubRepository.findByClubToken(clubToken).orElseThrow(() -> new ClubNotExistException(clubToken));
+	}
+
+	@Override
+	public Club readClubByClubId(Long clubId) {
+		return clubRepository.findByClubId(clubId);
 	}
 }

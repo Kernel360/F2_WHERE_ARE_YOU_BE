@@ -68,4 +68,10 @@ public class ClubServiceImpl implements ClubService {
 		var deleted = clubStore.store(club);
 		return ClubDeleteInfo.clubDeleteInfo(deleted);
 	}
+
+	@Override
+	public ClubCardInfo readClubById(Long clubId) {
+		var club = clubReader.readClubByClubId(clubId);
+		return ClubCardInfo.clubEntityToClubsCardResponse(club, club.getClubMemberCountByTier());
+	}
 }

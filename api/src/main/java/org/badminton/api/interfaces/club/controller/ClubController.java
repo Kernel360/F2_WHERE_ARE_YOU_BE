@@ -1,6 +1,11 @@
 package org.badminton.api.interfaces.club.controller;
 
+import java.util.List;
+
 import org.badminton.api.application.club.ClubFacade;
+import org.badminton.api.application.club.ClubRankFacade;
+import org.badminton.api.application.club.strategy.ActivityClub;
+import org.badminton.api.application.club.strategy.PopularClub;
 import org.badminton.api.common.response.CommonResponse;
 import org.badminton.api.interfaces.auth.dto.CustomOAuth2Member;
 import org.badminton.api.interfaces.club.dto.ClubCardResponse;
@@ -38,6 +43,7 @@ public class ClubController {
 	private static final String DEFAULT_SIZE_VALUE = "9";
 	private static final String DEFAULT_SORT_BY_VALUE = "clubId";
 	private final ClubFacade clubFacade;
+	private final ClubRankFacade clubRankFacade;
 	private final ClubDtoMapper clubDtoMapper;
 
 	@GetMapping("/{clubToken}")
@@ -55,14 +61,14 @@ public class ClubController {
 	@Operation(summary = "동호회 수정",
 		description = """
 			새로운 동호회를 수정합니다. 다음 조건을 만족해야 합니다:
-			
+						
 			1. 동호회 이름:
 			   - 필수 입력
 			   - 2자 이상 20자 이하
-			
+						
 			2. 동호회 소개:
 			   - 2자 이상 1000자 이하
-			
+						
 			3. 동호회 이미지 URL:
 			   - 호스트: badminton-team.s3.ap-northeast-2.amazonaws.com
 			   - 경로: /club-banner/로 시작
@@ -84,10 +90,10 @@ public class ClubController {
 			1. 동호회 이름:
 			   - 필수 입력
 			   - 2자 이상 20자 이하
-			
+						
 			2. 동호회 소개:
 			   - 2자 이상 1000자 이하
-			
+						
 			3. 동호회 이미지 URL:
 			   - 호스트: badminton-team.s3.ap-northeast-2.amazonaws.com
 			   - 경로: /club-banner/로 시작
@@ -107,7 +113,7 @@ public class ClubController {
 	@DeleteMapping("{clubToken}")
 	@Operation(summary = "동호회 삭제",
 		description = "동호회를 삭제합니다.",
-		tags = {"clubToken"})
+		tags = {"Club"})
 	public CommonResponse<ClubDeleteResponse> deleteClub(@PathVariable String clubToken) {
 		var club = clubFacade.deleteClubInfo(clubToken);
 		ClubDeleteResponse deleted = clubDtoMapper.of(club);
@@ -140,7 +146,24 @@ public class ClubController {
 		var clubCard = clubFacade.searchClubs(keyword, page, size, sort);
 		var response = clubDtoMapper.of(clubCard);
 		return CommonResponse.success(response);
-
 	}
 
+	@Operation(summary = "인기 top10 동호회 검색",
+		description = "인기 top10 도호회를 검색합니다.",
+		tags = {"Club"})
+	@GetMapping("/popular")
+	public CommonResponse<List<ClubCardResponse>> clubSearchPopular() {
+		var clubCardList = clubRankFacade.rankClub(new PopularClub());
+		return CommonResponse.success(clubDtoMapper.of(clubCardList));
+	}
+
+	@Operation(summary = "최근 활동이 많은 top10 동호회 검색",
+		description = "최근 활동이 많은 동호회 top10을 검색합니다.",
+		tags = {"Club"})
+	@GetMapping("/activity")
+	public CommonResponse<List<ClubCardResponse>> clubSearchActivity() {
+		var clubCardList = clubRankFacade.rankClub(new ActivityClub());
+		return CommonResponse.success(clubDtoMapper.of(clubCardList));
+
+	}
 }
