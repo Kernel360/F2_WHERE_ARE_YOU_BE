@@ -9,4 +9,6 @@ public interface ClubStatisticsReader {
 	List<Long> findAllClubId();
 
 	ClubStatistics findByClubId(Long clubId);
+
+	List<ClubStatistics> findAll();
 }
