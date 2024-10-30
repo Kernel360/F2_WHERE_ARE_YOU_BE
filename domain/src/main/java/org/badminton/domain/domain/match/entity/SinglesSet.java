@@ -41,7 +41,7 @@ public class SinglesSet extends AbstractBaseTime {
         this.setIndex = setIndex;
         this.player1Score = INITIAL_SET_SCORE;
         this.player2Score = INITIAL_SET_SCORE;
-        this.setStatus = SetStatus.NOT_STARTED;
+        this.setStatus = SetStatus.IN_PROGRESS;
     }
 
     public void saveSetScore(int player1Score, int player2Score) {
