@@ -4,8 +4,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.ToString;
 import org.badminton.domain.common.enums.MatchType;
-import org.badminton.domain.domain.match.entity.DoublesSetEntity;
-import org.badminton.domain.domain.match.entity.SinglesSetEntity;
+import org.badminton.domain.domain.match.entity.DoublesSet;
+import org.badminton.domain.domain.match.entity.SinglesSet;
 
 public class SetInfo {
 
@@ -21,23 +21,23 @@ public class SetInfo {
     }
 
     public static Main fromSinglesSet(Long matchId, int setIndex,
-                                      SinglesSetEntity singlesSetEntity) {
+                                      SinglesSet singlesSet) {
         return Main.builder()
                 .matchId(matchId)
                 .setIndex(setIndex)
-                .score1(singlesSetEntity.getPlayer1Score())
-                .score2(singlesSetEntity.getPlayer2Score())
+                .score1(singlesSet.getPlayer1Score())
+                .score2(singlesSet.getPlayer2Score())
                 .matchType(MatchType.SINGLES)
                 .build();
     }
 
     public static Main fromDoublesSet(Long matchId, int setIndex,
-                                      DoublesSetEntity doublesSetEntity) {
+                                      DoublesSet doublesSet) {
         return Main.builder()
                 .matchId(matchId)
                 .setIndex(setIndex)
-                .score1(doublesSetEntity.getTeam1Score())
-                .score2(doublesSetEntity.getTeam2Score())
+                .score1(doublesSet.getTeam1Score())
+                .score2(doublesSet.getTeam2Score())
                 .matchType(MatchType.DOUBLES)
                 .build();
     }

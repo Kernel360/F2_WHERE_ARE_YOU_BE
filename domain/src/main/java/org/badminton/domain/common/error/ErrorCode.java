@@ -70,6 +70,7 @@ public enum ErrorCode {
     LEAGUE_RECRUITING_MUST_BE_COMPLETED_WHEN_BRACKET_GENERATION(412, "대진표를 만들기 위해서는 모집이 종료되어야 합니다."),
 
     INSUFFICIENT_TIER(412, "현재 경기의 티어와 맞지 않습니다"),
+    ONGOING_AND_UPCOMING_LEAGUE_CANNOT_BE_PAST(412, "메인 페이지에서 오늘 날짜 이전의 경기는 조회할 수 없습니다."),
 
     // 500 Errors
     INTERNAL_SERVER_ERROR(500, "서버 내부 오류가 발생했습니다."),

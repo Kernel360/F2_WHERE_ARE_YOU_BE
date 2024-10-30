@@ -1,5 +1,6 @@
 package org.badminton.domain.domain.league;
 
+import java.time.LocalDate;
 import java.util.List;
 
 import org.badminton.domain.domain.club.info.ClubSummaryInfo;
@@ -12,6 +13,7 @@ import org.badminton.domain.domain.league.info.LeagueDetailInfo;
 import org.badminton.domain.domain.league.info.LeagueReadInfo;
 import org.badminton.domain.domain.league.info.LeagueSummaryInfo;
 import org.badminton.domain.domain.league.info.LeagueUpdateInfo;
+import org.badminton.domain.domain.league.info.OngoingAndUpcomingLeagueInfo;
 
 public interface LeagueService {
 
@@ -19,7 +21,9 @@ public interface LeagueService {
 
 	List<LeagueByDateInfo> getLeaguesByDate(String clubToken, String date);
 
-	LeagueCancelInfo cancelLeague(String clubToken, Long leagueId);
+    List<OngoingAndUpcomingLeagueInfo> getOngoingAndUpcomingLeaguesByDate(LocalDate localDate);
+
+    LeagueCancelInfo cancelLeague(String clubToken, Long leagueId);
 
 	LeagueCreateInfo createLeague(ClubSummaryInfo clubSummaryInfo,
 		LeagueCreateNoIncludeClubCommand leagueCreateNoIncludeClubCommand);

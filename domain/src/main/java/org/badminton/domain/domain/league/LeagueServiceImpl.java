@@ -1,11 +1,14 @@
 package org.badminton.domain.domain.league;
 
+import jakarta.transaction.Transactional;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Collectors;
-
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.badminton.domain.common.exception.league.OngoingAndUpcomingLeagueCanNotBePastException;
 import org.badminton.domain.domain.club.entity.Club;
 import org.badminton.domain.domain.club.info.ClubSummaryInfo;
 import org.badminton.domain.domain.league.command.LeagueCancelCommand;
@@ -23,6 +26,7 @@ import org.badminton.domain.domain.league.info.LeagueDetailInfo;
 import org.badminton.domain.domain.league.info.LeagueReadInfo;
 import org.badminton.domain.domain.league.info.LeagueSummaryInfo;
 import org.badminton.domain.domain.league.info.LeagueUpdateInfo;
+import org.badminton.domain.domain.league.info.OngoingAndUpcomingLeagueInfo;
 import org.springframework.stereotype.Service;
 
 import jakarta.transaction.Transactional;
@@ -34,8 +38,9 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class LeagueServiceImpl implements LeagueService {
 
-	private final LeagueReader leagueReader;
-	private final LeagueStore leagueStore;
+    private final LeagueReader leagueReader;
+    private final LeagueStore leagueStore;
+    private final LeagueParticipantReader leagueParticipantReader;
 
 	@Override
 	@Transactional
@@ -85,26 +90,38 @@ public class LeagueServiceImpl implements LeagueService {
 				Collectors.toList());
 	}
 
-	@Override
-	public List<LeagueByDateInfo> getLeaguesByDate(String clubToken, String date) {
-		LocalDate parsedDate = parseDateByMonth(date);
-		LocalDateTime startOfMonth = getStartOfMonth(parsedDate);
-		LocalDateTime endOfMonth = getEndOfMonth(parsedDate);
-		List<League> result =
-			leagueReader.readLeagueByDate(clubToken, startOfMonth, endOfMonth);
-		return result.stream()
-			.map(LeagueByDateInfo::leagueByDateEntityToInfo)
-			.collect(
-				Collectors.toList());
-	}
+    @Override
+    public List<LeagueByDateInfo> getLeaguesByDate(String clubToken, String date) {
+        LocalDate parsedDate = parseDateByMonth(date);
+        LocalDateTime startOfMonth = getStartOfMonth(parsedDate);
+        LocalDateTime endOfMonth = getEndOfMonth(parsedDate);
+        List<League> result =
+                leagueReader.readLeagueByDate(clubToken, startOfMonth, endOfMonth);
+        return result.stream()
+                .map(LeagueByDateInfo::leagueByDateEntityToInfo)
+                .collect(
+                        Collectors.toList());
+    }
 
-	@Override
-	public LeagueCancelInfo cancelLeague(String clubToken, Long leagueId) {
-		var league = leagueReader.readLeague(clubToken, leagueId);
-		league.cancelLeague();
-		var command = LeagueCancelCommand.toCommand(league);
-		return leagueStore.cancelLeague(command);
-	}
+    @Override
+    public List<OngoingAndUpcomingLeagueInfo> getOngoingAndUpcomingLeaguesByDate(LocalDate date) {
+        if (date.isBefore(LocalDate.now())) {
+            throw new OngoingAndUpcomingLeagueCanNotBePastException(date, LocalDate.now());
+        }
+        List<League> leagues = leagueReader.readOngoingAndUpcomingLeagueByDate(date);
+        return leagues.stream()
+                .map(league -> OngoingAndUpcomingLeagueInfo.from(league,
+                        leagueParticipantReader.countParticipantMember(league.getLeagueId())))
+                .toList();
+    }
+
+    @Override
+    public LeagueCancelInfo cancelLeague(String clubToken, Long leagueId) {
+        var league = leagueReader.readLeague(clubToken, leagueId);
+        league.cancelLeague();
+        var command = LeagueCancelCommand.toCommand(league);
+        return leagueStore.cancelLeague(command);
+    }
 
 	private LocalDate parseDateByMonth(String date) {
 		String[] parts = date.split("-");

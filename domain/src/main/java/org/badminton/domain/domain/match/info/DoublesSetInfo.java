@@ -2,7 +2,7 @@ package org.badminton.domain.domain.match.info;
 
 import java.util.ArrayList;
 import java.util.List;
-import org.badminton.domain.domain.match.entity.DoublesSetEntity;
+import org.badminton.domain.domain.match.entity.DoublesSet;
 
 public record DoublesSetInfo(
         int setIndex,
@@ -10,9 +10,9 @@ public record DoublesSetInfo(
         int score2
 ) {
 
-    public static List<DoublesSetInfo> fromDoublesSets(List<DoublesSetEntity> doublesSets) {
+    public static List<DoublesSetInfo> fromDoublesSets(List<DoublesSet> doublesSets) {
         List<DoublesSetInfo> doublesSetResponseList = new ArrayList<>();
-        for (DoublesSetEntity doublesSet : doublesSets) {
+        for (DoublesSet doublesSet : doublesSets) {
             doublesSetResponseList.add(new DoublesSetInfo(doublesSet.getSetIndex(), doublesSet.getTeam1Score(),
                     doublesSet.getTeam2Score()));
         }

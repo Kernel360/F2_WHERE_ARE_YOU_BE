@@ -1,11 +1,9 @@
 package org.badminton.api.interfaces.league.validation.validator;
 
-import java.util.Objects;
-
-import org.badminton.api.interfaces.league.validation.annotation.LeagueNameValidator;
-
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
+import java.util.Objects;
+import org.badminton.api.interfaces.league.validation.annotation.LeagueNameValidator;
 
 public class LeagueNameValidatorImpl implements ConstraintValidator<LeagueNameValidator, String> {
 
@@ -27,6 +25,6 @@ public class LeagueNameValidatorImpl implements ConstraintValidator<LeagueNameVa
 
     private boolean isLengthValid(String leagueName) {
         int length = leagueName.length();
-        return length >= MIN_LENGTH && length <= MAX_LENGTH;  // 길이가 2 이상 20 이하일 때만 유효
+        return length >= MIN_LENGTH && length <= MAX_LENGTH;
     }
 }
