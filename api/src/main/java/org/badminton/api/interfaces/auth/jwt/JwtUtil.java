@@ -26,8 +26,8 @@ import lombok.extern.slf4j.Slf4j;
 @Component
 @Slf4j
 public class JwtUtil {
-	private static final long ACCESS_TOKEN_EXPIRY = 30 * 1000L;
-	private static final long REFRESH_TOKEN_EXPIRY = 60 * 1000L;
+	private static final long ACCESS_TOKEN_EXPIRY = 60 * 60 * 1000L;
+	private static final long REFRESH_TOKEN_EXPIRY = 7 * 24 * 60 * 60 * 1000L;
 
 	private final SecretKey secretKey;
 	private final MemberReader memberReader;
