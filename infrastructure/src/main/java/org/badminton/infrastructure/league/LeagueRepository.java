@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import org.badminton.domain.domain.league.entity.League;
+import org.badminton.domain.domain.league.enums.LeagueStatus;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface LeagueRepository extends JpaRepository<League, Long> {
@@ -15,5 +16,6 @@ public interface LeagueRepository extends JpaRepository<League, Long> {
 
     void deleteByLeagueId(Long leagueId);
 
-    List<League> findAllByLeagueAtBetween(LocalDateTime startOfMonth, LocalDateTime endOfMonth);
+    List<League> findAllByLeagueAtBetweenAndLeagueStatusNotIn(LocalDateTime startOfDay, LocalDateTime endOfDay,
+                                                              List<LeagueStatus> excludedLeagueStatusList);
 }

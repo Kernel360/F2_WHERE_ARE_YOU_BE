@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.badminton.domain.common.exception.league.OngoingAndUpcomingLeagueCanNotBePastException;
 import org.badminton.domain.domain.club.entity.Club;
 import org.badminton.domain.domain.club.info.ClubSummaryInfo;
 import org.badminton.domain.domain.league.command.LeagueCancelCommand;
@@ -93,8 +94,11 @@ public class LeagueServiceImpl implements LeagueService {
     }
 
     @Override
-    public List<OngoingAndUpcomingLeagueInfo> getOngoingAndUpcomingLeaguesByDate(LocalDate localDate) {
-        List<League> leagues = leagueReader.readOngoingAndUpcomingLeagueByDate(localDate);
+    public List<OngoingAndUpcomingLeagueInfo> getOngoingAndUpcomingLeaguesByDate(LocalDate date) {
+        if (date.isBefore(LocalDate.now())) {
+            throw new OngoingAndUpcomingLeagueCanNotBePastException(date, LocalDate.now());
+        }
+        List<League> leagues = leagueReader.readOngoingAndUpcomingLeagueByDate(date);
         return leagues.stream()
                 .map(league -> OngoingAndUpcomingLeagueInfo.from(league,
                         leagueParticipantReader.countParticipantMember(league.getLeagueId())))

@@ -3,12 +3,14 @@ package org.badminton.infrastructure.league;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.Arrays;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.badminton.domain.common.exception.league.LeagueNotExistException;
 import org.badminton.domain.domain.league.LeagueReader;
 import org.badminton.domain.domain.league.entity.League;
+import org.badminton.domain.domain.league.enums.LeagueStatus;
 import org.springframework.stereotype.Component;
 
 @Slf4j
@@ -43,6 +45,7 @@ public class LeagueReaderImpl implements LeagueReader {
     public List<League> readOngoingAndUpcomingLeagueByDate(LocalDate date) {
         LocalDateTime startOfDay = date.atStartOfDay();
         LocalDateTime endOfDay = date.atTime(LocalTime.MAX);
-        return leagueRepository.findAllByLeagueAtBetween(startOfDay, endOfDay);
+        return leagueRepository.findAllByLeagueAtBetweenAndLeagueStatusNotIn(startOfDay, endOfDay, Arrays.asList(
+                LeagueStatus.CANCELED, LeagueStatus.FINISHED));
     }
 }
