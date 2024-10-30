@@ -12,7 +12,7 @@ public interface ClubMemberRepository extends JpaRepository<ClubMember, Long> {
 
 	List<ClubMember> findAllByClubClubToken(String clubToken);
 
-	Optional<ClubMember> findByDeletedFalseAndMemberMemberToken(String memberToken);
+	List<ClubMember> findAllByDeletedFalseAndMemberMemberToken(String memberToken);
 
 	Optional<ClubMember> findByClubClubTokenAndMemberMemberToken(String clubToken, String memberToken);
 
@@ -31,6 +31,6 @@ public interface ClubMemberRepository extends JpaRepository<ClubMember, Long> {
 	@Query("SELECT COUNT(cm) FROM ClubMember cm WHERE cm.member.memberToken = :memberToken AND cm.role = 'ROLE_OWNER'")
 	long countByMemberIdAndRoleOwner(@Param("memberToken") String memberToken);
 
-	Integer countByClubClubIdAndStatus(Long clubId, ClubMember.ClubMemberStatus status);
+	Integer countByClubClubIdAndDeletedFalse(Long clubId);
 }
 

@@ -3,20 +3,19 @@ package org.badminton.api.application.clubMember;
 import java.util.List;
 import java.util.Map;
 
+import org.badminton.domain.domain.club.ClubRegistrationService;
 import org.badminton.domain.domain.clubmember.command.ClubMemberBanCommand;
 import org.badminton.domain.domain.clubmember.command.ClubMemberExpelCommand;
 import org.badminton.domain.domain.clubmember.command.ClubMemberRoleUpdateCommand;
-import org.badminton.domain.domain.clubmember.command.ClubMemberStatusCommand;
 import org.badminton.domain.domain.clubmember.entity.ClubMember;
 import org.badminton.domain.domain.clubmember.info.ClubMemberBanRecordInfo;
 import org.badminton.domain.domain.clubmember.info.ClubMemberInfo;
 import org.badminton.domain.domain.clubmember.info.ClubMemberJoinInfo;
-import org.badminton.domain.domain.clubmember.info.ClubMemberMyPageInfo;
-import org.badminton.domain.domain.clubmember.info.ClubMemberStatusInfo;
 import org.badminton.domain.domain.clubmember.info.ClubMemberWithdrawInfo;
 import org.badminton.domain.domain.clubmember.service.ClubMemberService;
 import org.springframework.stereotype.Service;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -26,6 +25,9 @@ import lombok.extern.slf4j.Slf4j;
 public class ClubMemberFacade {
 	private final ClubMemberService clubMemberService;
 
+	private final ClubRegistrationService clubRegistrationService;
+
+	@Transactional
 	public ClubMemberJoinInfo joinClub(String memberToken, String clubToken) {
 		return clubMemberService.joinClub(memberToken, clubToken);
 	}
@@ -50,15 +52,8 @@ public class ClubMemberFacade {
 		return clubMemberService.withDrawClubMember(clubMemberId);
 	}
 
-	public ClubMemberMyPageInfo getClubMember(String memberToken) {
-		return clubMemberService.getClubMember(memberToken);
+	public ClubMemberInfo getClubMember(String memberToken, String clubToken) {
+		return clubMemberService.getClubMember(memberToken, clubToken);
 	}
 
-	public ClubMemberStatusInfo approvedClubMember(ClubMemberStatusCommand clubMemberStatusCommand) {
-		return clubMemberService.approvedClubMember(clubMemberStatusCommand);
-	}
-
-	public ClubMemberStatusInfo rejectClub(ClubMemberStatusCommand clubMemberStatusCommand) {
-		return clubMemberService.rejectClubMember(clubMemberStatusCommand);
-	}
 }

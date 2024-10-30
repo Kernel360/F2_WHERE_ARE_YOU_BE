@@ -6,7 +6,7 @@ import org.badminton.domain.domain.clubmember.entity.ClubMember;
 
 public interface ClubMemberReader {
 
-	ClubMember getClubMemberByMemberToken(String memberToken);
+	// List<ClubMember> getClubMemberByMemberToken(String memberToken);
 
 	ClubMember getClubMember(Long clubMemberId);
 

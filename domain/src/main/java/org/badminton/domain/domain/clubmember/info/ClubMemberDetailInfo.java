@@ -20,9 +20,7 @@ public record ClubMemberDetailInfo(
 
 	Member member,
 
-	List<ClubMemberBanRecord> banHistory,
-
-	ClubMember.ClubMemberStatus status
+	List<ClubMemberBanRecord> banHistory
 ) {
 	public static ClubMemberDetailInfo from(ClubMember clubMember) {
 		return new ClubMemberDetailInfo(
@@ -32,8 +30,7 @@ public record ClubMemberDetailInfo(
 			clubMember.getRole(),
 			clubMember.getClub(),
 			clubMember.getMember(),
-			clubMember.getBanHistory(),
-			clubMember.getStatus()
+			clubMember.getBanHistory()
 		);
 	}
 }

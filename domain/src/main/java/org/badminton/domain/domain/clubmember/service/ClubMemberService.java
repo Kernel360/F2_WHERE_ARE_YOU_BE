@@ -7,14 +7,12 @@ import org.badminton.domain.domain.club.info.ClubCreateInfo;
 import org.badminton.domain.domain.clubmember.command.ClubMemberBanCommand;
 import org.badminton.domain.domain.clubmember.command.ClubMemberExpelCommand;
 import org.badminton.domain.domain.clubmember.command.ClubMemberRoleUpdateCommand;
-import org.badminton.domain.domain.clubmember.command.ClubMemberStatusCommand;
 import org.badminton.domain.domain.clubmember.entity.ClubMember;
 import org.badminton.domain.domain.clubmember.info.ClubMemberBanRecordInfo;
 import org.badminton.domain.domain.clubmember.info.ClubMemberDetailInfo;
 import org.badminton.domain.domain.clubmember.info.ClubMemberInfo;
 import org.badminton.domain.domain.clubmember.info.ClubMemberJoinInfo;
 import org.badminton.domain.domain.clubmember.info.ClubMemberMyPageInfo;
-import org.badminton.domain.domain.clubmember.info.ClubMemberStatusInfo;
 import org.badminton.domain.domain.clubmember.info.ClubMemberWithdrawInfo;
 
 public interface ClubMemberService {
@@ -27,9 +25,11 @@ public interface ClubMemberService {
 
 	Map<ClubMember.ClubMemberRole, List<ClubMemberInfo>> findAllClubMembers(String clubToken);
 
-	ClubMemberMyPageInfo getClubMember(String memberToken);
+	List<ClubMemberMyPageInfo> getClubMembers(String memberToken);
 
-	ClubMemberDetailInfo getClubMemberDetail(String memberToken);
+	ClubMemberInfo getClubMember(String memberToken, String clubToken);
+
+	ClubMemberDetailInfo getClubMemberDetail(String memberToken, String clubToken);
 
 	ClubMemberBanRecordInfo expelClubMember(ClubMemberExpelCommand command, Long clubMemberId);
 
@@ -44,10 +44,6 @@ public interface ClubMemberService {
 	void deleteAllClubMembers(String clubToken);
 
 	ClubMemberDetailInfo getClubMemberDetailByClubToken(String clubToken, String memberToken);
-
-	ClubMemberStatusInfo approvedClubMember(ClubMemberStatusCommand clubMemberApprovedCommand);
-
-	ClubMemberStatusInfo rejectClubMember(ClubMemberStatusCommand clubMemberStatusCommand);
 
 	Integer getClubMemberApproveCount(Long clubId);
 }

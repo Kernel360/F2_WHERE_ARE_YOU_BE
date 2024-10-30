@@ -1,0 +1,58 @@
+package org.badminton.domain.domain.club.entity;
+
+import org.badminton.domain.domain.member.entity.Member;
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+
+@Entity
+@Getter
+@AllArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+public class ClubRegistration {
+
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long clubRegistrationId;
+
+	private ApplyStatus status;
+
+	@ManyToOne
+	@JoinColumn(name = "clubId")
+	private Club club;
+
+	@ManyToOne
+	@JoinColumn(name = "memberId")
+	private Member member;
+
+	private String contents;
+
+	public void rejectedClubMember() {
+		this.status = ApplyStatus.REJECTED;
+	}
+
+	public void approvedClubMember() {
+		this.status = ApplyStatus.APPROVED;
+	}
+
+	@Getter
+	public enum ApplyStatus {
+		APPROVED("승인"),
+		PENDING("승인 대기중"),
+		REJECTED("거부");
+
+		private final String description;
+
+		ApplyStatus(String description) {
+			this.description = description;
+		}
+	}
+}

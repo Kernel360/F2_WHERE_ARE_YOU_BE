@@ -101,7 +101,7 @@ public class ClubController {
 			   - https://d36om9pjoifd2y.cloudfront.net/club-banner/804a0dfc-947f-4039-acbe-d95a85893087.png
 			""", tags = {"Club"}
 	)
-	public CommonResponse<ClubCreateResponse> createClub(@Valid @RequestBody ClubCreateRequest clubCreateRequest,
+	public CommonResponse<ClubCreateResponse> createClub(@RequestBody ClubCreateRequest clubCreateRequest,
 		@AuthenticationPrincipal CustomOAuth2Member member) {
 		String memberToken = member.getMemberToken();
 		var clubCreateCommand = clubDtoMapper.of(clubCreateRequest);

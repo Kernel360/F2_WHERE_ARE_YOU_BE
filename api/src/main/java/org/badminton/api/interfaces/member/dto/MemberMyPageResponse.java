@@ -1,5 +1,8 @@
 package org.badminton.api.interfaces.member.dto;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.badminton.api.interfaces.clubmember.dto.ClubMemberMyPageResponse;
 import org.badminton.api.interfaces.league.dto.LeagueRecordResponse;
 import org.badminton.domain.domain.clubmember.info.ClubMemberMyPageInfo;
@@ -29,13 +32,18 @@ public record MemberMyPageResponse(
 	LeagueRecordResponse leagueRecordResponse,
 
 	@Schema(description = "ClubMember information")
-	ClubMemberMyPageResponse clubMemberMyPageResponse
+	List<ClubMemberMyPageResponse> clubMemberMyPageResponses
 
 ) {
 	public static MemberMyPageResponse toMemberMyPageResponse(Member member,
 		LeagueRecordInfo leagueRecordInfo,
-		ClubMemberMyPageInfo clubMemberMyPageInfo
+		List<ClubMemberMyPageInfo> clubMemberMyPageInfos
 	) {
+
+		List<ClubMemberMyPageResponse> clubMemberMyPageResponses = clubMemberMyPageInfos.stream()
+			.map(ClubMemberMyPageResponse::toClubMemberMyPageResponse)
+			.collect(Collectors.toList());
+
 		return new MemberMyPageResponse(
 			member.getMemberToken(),
 			member.getName(),
@@ -43,7 +51,7 @@ public record MemberMyPageResponse(
 			member.getProfileImage(),
 			member.getTier(),
 			LeagueRecordResponse.toLeagueRecordResponse(leagueRecordInfo),
-			ClubMemberMyPageResponse.toClubMemberMyPageResponse(clubMemberMyPageInfo)
+			clubMemberMyPageResponses
 		);
 	}
 

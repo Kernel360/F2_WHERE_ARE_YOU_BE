@@ -22,7 +22,7 @@ public class LeagueParticipationFacade {
 
 	public LeagueParticipantInfo participateInLeague(String memberToken, String clubToken, Long leagueId) {
 		var league = leagueService.getLeagueDetail(clubToken, leagueId);
-		var clubMember = clubMemberService.getClubMemberDetail(memberToken);
+		var clubMember = clubMemberService.getClubMemberDetail(memberToken, clubToken);
 		var commandLeague = LeagueDetailCommand.toCommand(league);
 		var commandClubMember = ClubMemberMyPageCommand.toCommand(clubMember);
 		return leagueParticipantService.participantLeague(commandClubMember, commandLeague);

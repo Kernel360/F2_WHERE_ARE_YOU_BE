@@ -1,5 +1,7 @@
 package org.badminton.domain.domain.member.info;
 
+import java.util.List;
+
 import org.badminton.domain.domain.clubmember.info.ClubMemberMyPageInfo;
 import org.badminton.domain.domain.league.info.LeagueRecordInfo;
 import org.badminton.domain.domain.member.entity.Member;
@@ -17,14 +19,13 @@ public record MemberMyPageInfo(
 
 	LeagueRecordInfo leagueRecordInfo,
 
-	ClubMemberMyPageInfo clubMemberMyPageInfo
-
+	List<ClubMemberMyPageInfo> clubMemberMyPageInfos
 ) {
 	public static MemberMyPageInfo from(Member member, LeagueRecordInfo leagueRecordInfo,
-		ClubMemberMyPageInfo clubMemberMyPageInfo) {
+		List<ClubMemberMyPageInfo> clubMemberMyPageInfos) {
 		return new MemberMyPageInfo(
 			member.getMemberToken(), member.getName(), member.getEmail(), member.getProfileImage(), member.getTier(),
-			leagueRecordInfo, clubMemberMyPageInfo);
+			leagueRecordInfo, clubMemberMyPageInfos);
 
 	}
 
