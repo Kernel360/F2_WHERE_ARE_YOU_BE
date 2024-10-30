@@ -31,4 +31,9 @@ public class ClubStatisticsReaderImpl implements ClubStatisticsReader {
 	public ClubStatistics findByClubId(Long clubId) {
 		return clubStatisticsRepository.findByClubClubId(clubId);
 	}
+
+	@Override
+	public List<ClubStatistics> findAll() {
+		return clubStatisticsRepository.findAll();
+	}
 }

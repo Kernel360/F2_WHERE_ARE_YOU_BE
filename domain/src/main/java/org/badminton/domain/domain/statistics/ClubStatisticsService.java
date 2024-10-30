@@ -15,4 +15,6 @@ public interface ClubStatisticsService {
 	void updateLeagueCountByClubIdAndCount(Long clubId, int count);
 
 	void updateByCountAndClubId(Long clubId, int count);
+
+	List<ClubStatistics> getAll();
 }

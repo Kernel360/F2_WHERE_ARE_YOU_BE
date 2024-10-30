@@ -22,4 +22,6 @@ public interface ClubService {
 	ClubUpdateInfo updateClub(ClubUpdateCommand clubUpdateCommand, String clubToken);
 
 	ClubDeleteInfo deleteClub(String clubToken);
+
+	ClubCardInfo readClubById(Long clubId);
 }

@@ -39,6 +39,11 @@ public class ClubStatisticsServiceImpl implements ClubStatisticsService {
 	}
 
 	@Override
+	public List<ClubStatistics> getAll() {
+		return clubStatisticsReader.findAll();
+	}
+
+	@Override
 	public void updateLeagueCountByClubIdAndCount(Long clubId, int count) {
 		var originStatistic = clubStatisticsReader.findByClubId(clubId);
 		originStatistic.increaseLeagueCount(count);
