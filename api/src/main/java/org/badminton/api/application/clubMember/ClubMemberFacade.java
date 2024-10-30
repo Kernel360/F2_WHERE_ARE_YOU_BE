@@ -6,11 +6,13 @@ import java.util.Map;
 import org.badminton.domain.domain.clubmember.command.ClubMemberBanCommand;
 import org.badminton.domain.domain.clubmember.command.ClubMemberExpelCommand;
 import org.badminton.domain.domain.clubmember.command.ClubMemberRoleUpdateCommand;
+import org.badminton.domain.domain.clubmember.command.ClubMemberStatusCommand;
 import org.badminton.domain.domain.clubmember.entity.ClubMember;
 import org.badminton.domain.domain.clubmember.info.ClubMemberBanRecordInfo;
 import org.badminton.domain.domain.clubmember.info.ClubMemberInfo;
 import org.badminton.domain.domain.clubmember.info.ClubMemberJoinInfo;
 import org.badminton.domain.domain.clubmember.info.ClubMemberMyPageInfo;
+import org.badminton.domain.domain.clubmember.info.ClubMemberStatusInfo;
 import org.badminton.domain.domain.clubmember.info.ClubMemberWithdrawInfo;
 import org.badminton.domain.domain.clubmember.service.ClubMemberService;
 import org.springframework.stereotype.Service;
@@ -52,4 +54,11 @@ public class ClubMemberFacade {
 		return clubMemberService.getClubMember(memberToken);
 	}
 
+	public ClubMemberStatusInfo approvedClubMember(ClubMemberStatusCommand clubMemberStatusCommand) {
+		return clubMemberService.approvedClubMember(clubMemberStatusCommand);
+	}
+
+	public ClubMemberStatusInfo rejectClub(ClubMemberStatusCommand clubMemberStatusCommand) {
+		return clubMemberService.rejectClubMember(clubMemberStatusCommand);
+	}
 }

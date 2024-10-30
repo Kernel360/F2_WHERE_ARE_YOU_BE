@@ -72,6 +72,11 @@ public class ClubMemberReaderImpl implements ClubMemberReader {
 	}
 
 	@Override
+	public Integer getClubMemberApproveCount(Long clubId) {
+		return clubMemberRepository.countByClubClubIdAndStatus(clubId, ClubMember.ClubMemberStatus.APPROVED);
+	}
+
+	@Override
 	public List<ClubMember> getAllClubMemberByClubId(String clubToken) {
 		return clubMemberRepository.findAllByClubClubTokenAndBannedFalseAndDeletedFalse(clubToken);
 	}

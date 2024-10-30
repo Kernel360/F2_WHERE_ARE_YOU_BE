@@ -30,5 +30,7 @@ public interface ClubMemberRepository extends JpaRepository<ClubMember, Long> {
 
 	@Query("SELECT COUNT(cm) FROM ClubMember cm WHERE cm.member.memberToken = :memberToken AND cm.role = 'ROLE_OWNER'")
 	long countByMemberIdAndRoleOwner(@Param("memberToken") String memberToken);
+
+	Integer countByClubClubIdAndStatus(Long clubId, ClubMember.ClubMemberStatus status);
 }
 

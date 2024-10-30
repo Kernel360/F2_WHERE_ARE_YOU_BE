@@ -24,4 +24,9 @@ public class ClubStatisticsStoreImpl implements ClubStatisticsStore {
 		ClubStatistics clubStatistics = new ClubStatistics(clubCreateInfo);
 		clubStatisticsRepository.save(clubStatistics);
 	}
+
+	@Override
+	public void update(ClubStatistics originStatistic) {
+		clubStatisticsRepository.save(originStatistic);
+	}
 }
