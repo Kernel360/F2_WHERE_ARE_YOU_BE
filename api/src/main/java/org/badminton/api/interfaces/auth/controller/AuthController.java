@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.v3.oas.annotations.Operation;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -54,16 +53,4 @@ public class AuthController {
 		return CommonResponse.success("Logout success");
 
 	}
-
-	@Operation(
-		summary = "액세스 토큰을 재발급합니다",
-		description = "리프레시 토큰을 이용해서 액세스 토큰을 재발급합니다",
-		tags = {"Member"}
-	)
-	@PostMapping("/refresh")
-	public CommonResponse<String> refreshToken(HttpServletRequest request, HttpServletResponse response) {
-
-		return CommonResponse.success(authFacade.refreshAccessToken(request, response));
-	}
-
 }

@@ -25,4 +25,6 @@ public interface ClubMemberReader {
 	List<ClubMember> getAllMember(String clubToken);
 
 	ClubMember getClubMemberByMemberTokenAndClubToken(String clubToken, String memberToken);
+
+	Integer getClubMemberApproveCount(Long clubId);
 }

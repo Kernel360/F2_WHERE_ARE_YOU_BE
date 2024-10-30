@@ -16,6 +16,10 @@ dependencies {
     testImplementation 'org.junit.jupiter:junit-jupiter'
 }
 
-test {
-    useJUnitPlatform()
+bootJar {
+    enabled = false
+}
+
+jar {
+    enabled = true
 }

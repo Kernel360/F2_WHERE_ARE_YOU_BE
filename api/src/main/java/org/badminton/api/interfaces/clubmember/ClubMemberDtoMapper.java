@@ -7,11 +7,14 @@ import java.util.stream.Collectors;
 import org.badminton.api.interfaces.clubmember.dto.ClubMemberBanRecordResponse;
 import org.badminton.api.interfaces.clubmember.dto.ClubMemberJoinResponse;
 import org.badminton.api.interfaces.clubmember.dto.ClubMemberResponse;
+import org.badminton.api.interfaces.clubmember.dto.ClubMemberStatusResponse;
 import org.badminton.api.interfaces.clubmember.dto.ClubMemberWithdrawResponse;
+import org.badminton.domain.domain.clubmember.command.ClubMemberStatusCommand;
 import org.badminton.domain.domain.clubmember.entity.ClubMember;
 import org.badminton.domain.domain.clubmember.info.ClubMemberBanRecordInfo;
 import org.badminton.domain.domain.clubmember.info.ClubMemberInfo;
 import org.badminton.domain.domain.clubmember.info.ClubMemberJoinInfo;
+import org.badminton.domain.domain.clubmember.info.ClubMemberStatusInfo;
 import org.badminton.domain.domain.clubmember.info.ClubMemberWithdrawInfo;
 import org.mapstruct.InjectionStrategy;
 import org.mapstruct.Mapper;
@@ -43,4 +46,7 @@ public interface ClubMemberDtoMapper {
 			));
 	}
 
+	ClubMemberStatusCommand of(String clubToken, Long clubMemberId);
+
+	ClubMemberStatusResponse of(ClubMemberStatusInfo clubMemberApprovedInfo);
 }

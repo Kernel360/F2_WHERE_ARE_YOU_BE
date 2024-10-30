@@ -21,29 +21,29 @@ jobs:
 
       - name: Set environment values badminton-api
         run: |
-          cd ./badminton-api/src/main/resources
+          cd ./api/src/main/resources
           touch ./.env
           echo "${{ secrets.ENV_TEST }}" > ./.env
         shell: bash
 
-      - name: Generate logback.xml for badminton-api
+      - name: Generate logback.xml for api
         run: |
-          cd ./badminton-api/src/main/resources
+          cd ./api/src/main/resources
           cat <<EOF > logback.xml
           ${{ secrets.LOGBACK_API_TEST }}
           EOF
         shell: bash
 
-      - name: Set environment values badminton-batch
+      - name: Set environment values batch
         run: |
-          cd ./badminton-batch/src/main/resources
+          cd ./batch/src/main/resources
           touch ./.env
           echo "${{ secrets.ENV_TEST }}" > ./.env
         shell: bash
 
-      - name: Generate logback.xml for badminton-batch
+      - name: Generate logback.xml for batch
         run: |
-          cd ./badminton-batch/src/main/resources
+          cd ./batch/src/main/resources
           cat <<EOF > logback.xml
           ${{ secrets.LOGBACK_BATCH_TEST  }}
           EOF
