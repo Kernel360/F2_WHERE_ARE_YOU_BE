@@ -6,6 +6,7 @@ import java.util.List;
 import org.badminton.domain.common.exception.league.LeagueNotExistException;
 import org.badminton.domain.domain.league.LeagueReader;
 import org.badminton.domain.domain.league.entity.League;
+import org.badminton.domain.domain.league.enums.LeagueStatus;
 import org.springframework.stereotype.Component;
 
 import lombok.RequiredArgsConstructor;
@@ -37,5 +38,10 @@ public class LeagueReaderImpl implements LeagueReader {
 	@Override
 	public List<League> readLeagueByDate(String clubToken, LocalDateTime startOfMonth, LocalDateTime endOfMonth) {
 		return leagueRepository.findAllByClubClubTokenAndLeagueAtBetween(clubToken, startOfMonth, endOfMonth);
+	}
+
+	@Override
+	public Integer getCountByClubId(Long clubId) {
+		return leagueRepository.countByClubClubIdAndLeagueStatus(clubId, LeagueStatus.COMPLETED);
 	}
 }

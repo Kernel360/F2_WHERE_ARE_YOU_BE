@@ -68,6 +68,11 @@ public class LeagueServiceImpl implements LeagueService {
 	}
 
 	@Override
+	public Integer getLeagueCountByClubId(Long clubId) {
+		return leagueReader.getCountByClubId(clubId);
+	}
+
+	@Override
 	public List<LeagueReadInfo> getLeaguesByMonth(String clubToken, String date) {
 		LocalDate parsedDate = parseDateByMonth(date);
 		LocalDateTime startOfMonth = getStartOfMonth(parsedDate);

@@ -29,4 +29,6 @@ public interface LeagueService {
 	LeagueDetailInfo getLeagueDetail(String clubToken, Long leagueId);
 
 	LeagueUpdateInfo updateLeague(LeagueDetailInfo origin, LeagueUpdateCommand leagueUpdateCommand);
+
+	Integer getLeagueCountByClubId(Long clubId);
 }
