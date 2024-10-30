@@ -12,5 +12,7 @@ public interface ClubStatisticsService {
 
 	List<Long> clubIdByList();
 
+	void updateLeagueCountByClubIdAndCount(Long clubId, int count);
+
 	void updateByCountAndClubId(Long clubId, int count);
 }

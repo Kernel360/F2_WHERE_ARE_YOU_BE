@@ -37,4 +37,11 @@ public class ClubStatisticsServiceImpl implements ClubStatisticsService {
 		originStatistic.increaseRegistrationCount(count);
 		clubStatisticsStore.update(originStatistic);
 	}
+
+	@Override
+	public void updateLeagueCountByClubIdAndCount(Long clubId, int count) {
+		var originStatistic = clubStatisticsReader.findByClubId(clubId);
+		originStatistic.increaseLeagueCount(count);
+		clubStatisticsStore.update(originStatistic);
+	}
 }
