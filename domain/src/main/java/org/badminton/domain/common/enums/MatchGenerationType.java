@@ -1,17 +1,16 @@
 package org.badminton.domain.common.enums;
 
+import lombok.Getter;
+
+@Getter
 public enum MatchGenerationType {
-	RANDOM("랜덤 생성"),
-	TIER("티어별 생성");
+    FREE("프리 모드"),
+    TOURNAMENT("토너먼트 모드");
 
-	private final String description;
+    private final String description;
 
-	MatchGenerationType(String description) {
-		this.description = description;
-	}
-
-	public String getDescription() {
-		return description;
-	}
+    MatchGenerationType(String description) {
+        this.description = description;
+    }
 
 }

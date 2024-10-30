@@ -1,7 +1,7 @@
 package org.badminton.domain.domain.league;
 
+import java.time.LocalDate;
 import java.util.List;
-
 import org.badminton.domain.domain.club.info.ClubSummaryInfo;
 import org.badminton.domain.domain.league.command.LeagueCreateNoIncludeClubCommand;
 import org.badminton.domain.domain.league.command.LeagueUpdateCommand;
@@ -12,21 +12,24 @@ import org.badminton.domain.domain.league.info.LeagueDetailInfo;
 import org.badminton.domain.domain.league.info.LeagueReadInfo;
 import org.badminton.domain.domain.league.info.LeagueSummaryInfo;
 import org.badminton.domain.domain.league.info.LeagueUpdateInfo;
+import org.badminton.domain.domain.league.info.OngoingAndUpcomingLeagueInfo;
 
 public interface LeagueService {
 
-	List<LeagueReadInfo> getLeaguesByMonth(String clubToken, String date);
+    List<LeagueReadInfo> getLeaguesByMonth(String clubToken, String date);
 
-	List<LeagueByDateInfo> getLeaguesByDate(String clubToken, String date);
+    List<LeagueByDateInfo> getLeaguesByDate(String clubToken, String date);
 
-	LeagueCancelInfo cancelLeague(String clubToken, Long leagueId);
+    List<OngoingAndUpcomingLeagueInfo> getOngoingAndUpcomingLeaguesByDate(LocalDate localDate);
 
-	LeagueCreateInfo createLeague(ClubSummaryInfo clubSummaryInfo,
-		LeagueCreateNoIncludeClubCommand leagueCreateNoIncludeClubCommand);
+    LeagueCancelInfo cancelLeague(String clubToken, Long leagueId);
 
-	LeagueSummaryInfo getLeague(String clubToken, Long leagueId);
+    LeagueCreateInfo createLeague(ClubSummaryInfo clubSummaryInfo,
+                                  LeagueCreateNoIncludeClubCommand leagueCreateNoIncludeClubCommand);
 
-	LeagueDetailInfo getLeagueDetail(String clubToken, Long leagueId);
+    LeagueSummaryInfo getLeague(String clubToken, Long leagueId);
 
-	LeagueUpdateInfo updateLeague(LeagueDetailInfo origin, LeagueUpdateCommand leagueUpdateCommand);
+    LeagueDetailInfo getLeagueDetail(String clubToken, Long leagueId);
+
+    LeagueUpdateInfo updateLeague(LeagueDetailInfo origin, LeagueUpdateCommand leagueUpdateCommand);
 }
