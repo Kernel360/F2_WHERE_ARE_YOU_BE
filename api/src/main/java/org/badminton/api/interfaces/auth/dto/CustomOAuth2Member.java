@@ -29,6 +29,7 @@ public class CustomOAuth2Member implements OAuth2User {
 		return this.oAuthAccessToken;
 	}
 
+	//TODO: clubRole 수정
 	public void addClubRole(String clubToken, String role) {
 		this.clubRoles.clear();
 		this.clubRoles.put(clubToken, role);
@@ -58,11 +59,7 @@ public class CustomOAuth2Member implements OAuth2User {
 	public String getName() {
 		return memberResponse.name();
 	}
-
-	public String getProviderId() {
-		return memberResponse.providerId();
-	}
-
+	
 	public String getAuthorization() {
 		return memberResponse.authorization();
 	}

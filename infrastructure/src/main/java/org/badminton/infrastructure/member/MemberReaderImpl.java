@@ -20,9 +20,4 @@ public class MemberReaderImpl implements MemberReader {
 		return memberRepository.findByMemberToken(memberToken)
 			.orElseThrow(() -> new MemberNotExistException(memberToken));
 	}
-
-	@Override
-	public Member getMemberByProviderId(String providerId) {
-		return memberRepository.findByProviderId(providerId).orElseThrow(() -> new MemberNotExistException(providerId));
-	}
 }

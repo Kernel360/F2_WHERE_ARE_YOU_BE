@@ -55,22 +55,23 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
 
 		log.info("roles: {}", roles);
 
-		String accessToken = jwtUtil.createAccessToken(String.valueOf(memberToken), roles, registrationId,
-			oAuthAccessToken);
+		String accessToken = jwtUtil.createAccessToken(memberToken, roles);
+
+		String oAuthToken = jwtUtil.createOauthToken(registrationId, oAuthAccessToken);
+
+		String refreshToken = jwtUtil.createRefreshToken(memberToken);
 
 		log.info("Extracted from JWT - registrationId: {}, oAuthAccessToken: {}",
-			jwtUtil.getRegistrationId(accessToken), jwtUtil.getOAuthToken(accessToken));
-
-		String refreshToken = jwtUtil.createRefreshToken(String.valueOf(memberToken), roles, registrationId);
+			jwtUtil.getRegistrationId(oAuthToken), jwtUtil.getOAuthToken(oAuthToken));
 
 		member.updateRefreshToken(refreshToken);
+
 		memberStore.store(member);
 
 		clearSession(request, response);
 
-		jwtUtil.setAccessTokenHeader(response, accessToken);
 		jwtUtil.setAccessTokenCookie(response, accessToken);
-		jwtUtil.setRefreshTokenCookie(response, refreshToken);
+		jwtUtil.setOauthTokenCookie(response, oAuthToken);
 
 		response.sendRedirect(frontUrl);
 

@@ -38,10 +38,10 @@ public class AuthServiceImpl implements AuthService {
 	private String naverClientSecret;
 
 	@Override
-	public MemberDeleteInfo deleteMember(String memberToken, String accessToken, String registrationId) {
+	public MemberDeleteInfo deleteMember(String memberToken, String oauthToken, String registrationId) {
 
 		MemberDeleteInfo memberDeleteInfo = changeIsDeleted(memberToken);
-		unLinkOAuth(registrationId, accessToken);
+		unLinkOAuth(registrationId, oauthToken);
 
 		return memberDeleteInfo;
 	}
@@ -62,19 +62,19 @@ public class AuthServiceImpl implements AuthService {
 		return MemberDeleteInfo.fromMemberDeleteInfo(member);
 	}
 
-	private void unLinkOAuth(String registrationId, String accessToken) {
+	private void unLinkOAuth(String registrationId, String oauthToken) {
 		log.info("Unlinking OAuth for provider: {}", registrationId);
 
 		try {
 			switch (registrationId.toLowerCase()) {
 				case "google":
-					unlinkGoogle(accessToken);
+					unlinkGoogle(oauthToken);
 					break;
 				case "naver":
-					unlinkNaver(accessToken);
+					unlinkNaver(oauthToken);
 					break;
 				case "kakao":
-					unlinkKakao(accessToken);
+					unlinkKakao(oauthToken);
 					break;
 				default:
 					log.error("Unsupported OAuth provider: {}", registrationId);
@@ -86,9 +86,9 @@ public class AuthServiceImpl implements AuthService {
 		}
 	}
 
-	private void unlinkGoogle(String accessToken) {
+	private void unlinkGoogle(String oauthToken) {
 		String unlinkUrl = UriComponentsBuilder.fromHttpUrl(googleRevokeUrl)
-			.queryParam("token", accessToken)
+			.queryParam("token", oauthToken)
 			.build()
 			.toUriString();
 
@@ -101,12 +101,12 @@ public class AuthServiceImpl implements AuthService {
 		}
 	}
 
-	private void unlinkNaver(String accessToken) {
+	private void unlinkNaver(String oauthToken) {
 		String unlinkUrl = UriComponentsBuilder.fromHttpUrl(naverRevokeUrl)
 			.queryParam("grant_type", "delete")
 			.queryParam("client_id", naverClientId)
 			.queryParam("client_secret", naverClientSecret)
-			.queryParam("access_token", accessToken)
+			.queryParam("access_token", oauthToken)
 			.queryParam("service_provider", "NAVER")
 			.build()
 			.toUriString();
@@ -123,12 +123,12 @@ public class AuthServiceImpl implements AuthService {
 
 	}
 
-	private void unlinkKakao(String accessToken) {
+	private void unlinkKakao(String oauthToken) {
 		String unlinkUrl = UriComponentsBuilder.fromHttpUrl(kakaoRevokeUrl)
 			.build()
 			.toUriString();
 		HttpHeaders headers = new HttpHeaders();
-		headers.setBearerAuth(accessToken);
+		headers.setBearerAuth(oauthToken);
 		HttpEntity<String> entity = new HttpEntity<>("", headers);
 
 		ResponseEntity<String> response = restTemplate.exchange(unlinkUrl, HttpMethod.POST, entity, String.class);
