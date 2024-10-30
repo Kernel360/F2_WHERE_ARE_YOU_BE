@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import java.time.LocalDate;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.badminton.api.common.response.CommonResponse;
 import org.badminton.api.interfaces.league.dto.OngoingAndUpcomingLeagueResponse;
 import org.badminton.domain.domain.league.LeagueService;
 import org.badminton.domain.domain.league.info.OngoingAndUpcomingLeagueInfo;
@@ -26,14 +27,14 @@ public class MainLeagueController {
             tags = {"league"}
     )
     @GetMapping
-    public List<OngoingAndUpcomingLeagueResponse> getLeaguesByDate(
+    public CommonResponse getLeaguesByDate(
             @RequestParam("date")
             @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date) {
 
         List<OngoingAndUpcomingLeagueInfo> ongoingAndUpcomingLeaguesByDate = leagueService.getOngoingAndUpcomingLeaguesByDate(
                 date);
-        return ongoingAndUpcomingLeaguesByDate.stream()
+        return CommonResponse.success(ongoingAndUpcomingLeaguesByDate.stream()
                 .map(OngoingAndUpcomingLeagueResponse::from)
-                .toList();
+                .toList());
     }
 }
