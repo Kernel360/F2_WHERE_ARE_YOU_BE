@@ -13,6 +13,7 @@ import org.badminton.domain.domain.league.entity.League;
 import org.badminton.domain.domain.league.enums.LeagueStatus;
 import org.springframework.stereotype.Component;
 
+
 @Slf4j
 @Component
 @RequiredArgsConstructor
@@ -39,6 +40,11 @@ public class LeagueReaderImpl implements LeagueReader {
     @Override
     public List<League> readLeagueByDate(String clubToken, LocalDateTime startOfMonth, LocalDateTime endOfMonth) {
         return leagueRepository.findAllByClubClubTokenAndLeagueAtBetween(clubToken, startOfMonth, endOfMonth);
+    }
+
+    @Override
+    public Integer getCountByClubId(Long clubId) {
+        return leagueRepository.countByClubClubIdAndLeagueStatus(clubId, LeagueStatus.RECRUITING_COMPLETED);
     }
 
     @Override

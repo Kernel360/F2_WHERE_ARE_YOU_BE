@@ -2,6 +2,7 @@ package org.badminton.domain.domain.league;
 
 import java.time.LocalDate;
 import java.util.List;
+
 import org.badminton.domain.domain.club.info.ClubSummaryInfo;
 import org.badminton.domain.domain.league.command.LeagueCreateNoIncludeClubCommand;
 import org.badminton.domain.domain.league.command.LeagueUpdateCommand;
@@ -16,20 +17,22 @@ import org.badminton.domain.domain.league.info.OngoingAndUpcomingLeagueInfo;
 
 public interface LeagueService {
 
-    List<LeagueReadInfo> getLeaguesByMonth(String clubToken, String date);
+	List<LeagueReadInfo> getLeaguesByMonth(String clubToken, String date);
 
-    List<LeagueByDateInfo> getLeaguesByDate(String clubToken, String date);
+	List<LeagueByDateInfo> getLeaguesByDate(String clubToken, String date);
 
     List<OngoingAndUpcomingLeagueInfo> getOngoingAndUpcomingLeaguesByDate(LocalDate localDate);
 
     LeagueCancelInfo cancelLeague(String clubToken, Long leagueId);
 
-    LeagueCreateInfo createLeague(ClubSummaryInfo clubSummaryInfo,
-                                  LeagueCreateNoIncludeClubCommand leagueCreateNoIncludeClubCommand);
+	LeagueCreateInfo createLeague(ClubSummaryInfo clubSummaryInfo,
+		LeagueCreateNoIncludeClubCommand leagueCreateNoIncludeClubCommand);
 
-    LeagueSummaryInfo getLeague(String clubToken, Long leagueId);
+	LeagueSummaryInfo getLeague(String clubToken, Long leagueId);
 
-    LeagueDetailInfo getLeagueDetail(String clubToken, Long leagueId);
+	LeagueDetailInfo getLeagueDetail(String clubToken, Long leagueId);
 
-    LeagueUpdateInfo updateLeague(LeagueDetailInfo origin, LeagueUpdateCommand leagueUpdateCommand);
+	LeagueUpdateInfo updateLeague(LeagueDetailInfo origin, LeagueUpdateCommand leagueUpdateCommand);
+
+	Integer getLeagueCountByClubId(Long clubId);
 }

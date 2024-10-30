@@ -15,4 +15,6 @@ public interface LeagueReader {
     List<League> readLeagueByDate(String clubToken, LocalDateTime startOfMonth, LocalDateTime endOfMonth);
 
     List<League> readOngoingAndUpcomingLeagueByDate(LocalDate date);
+
+    Integer getCountByClubId(Long clubId);
 }

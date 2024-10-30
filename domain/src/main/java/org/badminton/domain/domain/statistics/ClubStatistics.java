@@ -32,6 +32,8 @@ public class ClubStatistics extends AbstractBaseTime {
 
 	private int visitedCount;
 
+	private int leagueCount;
+
 	private int registrationCount;
 
 	public void increaseVisitedCount() {
@@ -42,6 +44,10 @@ public class ClubStatistics extends AbstractBaseTime {
 		this.registrationCount = count;
 	}
 
+	public void increaseLeagueCount(int count) {
+		this.leagueCount = count;
+	}
+	
 	public ClubStatistics(ClubCreateInfo clubCreateInfo) {
 		this.club = clubCreateInfo.toEntity();
 		this.visitedCount = 0;
