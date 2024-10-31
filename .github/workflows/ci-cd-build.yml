@@ -8,6 +8,9 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    outputs:
+      api: ${{ steps.determine_changes.outputs.api }}
+      batch: ${{ steps.determine_changes.outputs.batch }}
 
     steps:
       - name: Checkout code
@@ -19,14 +22,45 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
-      - name: Set environment values badminton-api
+      - name: Determine changed modules
+        id: determine_changes
+        run: |
+          BASE_BRANCH=deploy-test
+          
+          git fetch --prune --unshallow origin $BASE_BRANCH --tags
+
+          if git rev-parse --quiet --verify "origin/$BASE_BRANCH~1"; then
+            PREVIOUS_COMMIT=$(git rev-parse origin/$BASE_BRANCH~1) 
+          else
+            echo "No previous commit found for branch $BASE_BRANCH."
+            exit 0
+          fi
+          CURRENT_COMMIT=$(git rev-parse origin/$BASE_BRANCH)
+
+          # Check for changes in api and domain/infrastructure
+          if git diff --name-only $PREVIOUS_COMMIT $CURRENT_COMMIT | grep -E '^api/|^domain/|^infrastructure/'; then
+            echo "::set-output name=api::true"
+          else
+            echo "::set-output name=api::false"
+          fi
+          
+          # Check for changes in batch
+          if git diff --name-only $PREVIOUS_COMMIT $CURRENT_COMMIT | grep -E '^batch/'; then
+            echo "::set-output name=batch::true"
+          else
+            echo "::set-output name=batch::false"
+          fi
+
+      - name: Set environment values for badminton-api
+        if: steps.determine_changes.outputs.api == 'true'
         run: |
           cd ./api/src/main/resources
           touch ./.env
-          echo '${{ secrets.ENV }}' > ./.env
+          echo "${{ secrets.ENV }}" > ./.env
         shell: bash
 
       - name: Generate logback.xml for badminton-api
+        if: steps.determine_changes.outputs.api == 'true'
         run: |
           cd ./api/src/main/resources
           cat <<EOF > logback.xml
@@ -34,7 +68,8 @@ jobs:
           EOF
         shell: bash
 
-      - name: Set environment values badminton-batch
+      - name: Set environment values for badminton-batch
+        if: steps.determine_changes.outputs.batch == 'true'
         run: |
           cd ./batch/src/main/resources
           touch ./.env
@@ -42,40 +77,49 @@ jobs:
         shell: bash
 
       - name: Generate logback.xml for badminton-batch
+        if: steps.determine_changes.outputs.batch == 'true'
         run: |
           cd ./batch/src/main/resources
           cat <<EOF > logback.xml
-          ${{ secrets.LOGBACK_BATCH  }}
+          ${{ secrets.LOGBACK_BATCH }}
           EOF
         shell: bash
 
       - name: Set Gradle Wrapper Permissions
         run: chmod +x ./gradlew
 
-      - name: Build with Gradle
-        run: ./gradlew assemble
+      - name: Build badminton-api
+        if: steps.determine_changes.outputs.api == 'true'
+        run: ./gradlew :api:assemble
+
+      - name: Build badminton-batch
+        if: steps.determine_changes.outputs.batch == 'true'
+        run: ./gradlew :batch:assemble
 
       - name: Install Docker Compose
         run: |
           sudo apt-get update
           sudo apt-get install -y docker-compose
 
-      - name: Build and push Docker image
+      - name: Build and push Docker image for badminton-api
+        if: steps.determine_changes.outputs.api == 'true'
         run: |
-          # Log in to Docker Hub
           echo "${{ secrets.DOCKERHUB_PASSWORD }}" | docker login -u ${{ secrets.DOCKERHUB_USERNAME }} --password-stdin
-          
-          # Build the Docker image with the 'latest' tag
-          docker-compose build
-          
-          # Push the Docker image to Docker Hub
-          docker-compose push
+          docker-compose build badminton-api
+          docker-compose push badminton-api
 
-      - name: Clean up dangling Docker images locally
+      - name: Build and push Docker image for badminton-batch
+        if: steps.determine_changes.outputs.batch == 'true'
         run: |
-          # Clean up any dangling images after the build
-          sudo docker image prune -f
+          echo "${{ secrets.DOCKERHUB_PASSWORD }}" | docker login -u ${{ secrets.DOCKERHUB_USERNAME }} --password-stdin
+          docker-compose build badminton-batch
+          docker-compose push badminton-batch
 
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build
+
+    steps:
       - name: Test SSH connection
         uses: appleboy/ssh-action@master
         with:
@@ -85,9 +129,8 @@ jobs:
           port: 22
           script: |
             echo "Testing SSH connection"
-            uptime
 
-      - name: Deploy to EC2 Server
+      - name: SSH and deploy updated modules
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.PUBLIC_DNS }}
@@ -95,24 +138,23 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           port: 22
           script: |
-            echo "Docker Hub에 로그인 하기"
+            echo "Docker Hub에 로그인"
             echo "${{ secrets.DOCKERHUB_PASSWORD }}" | sudo docker login -u ${{ secrets.DOCKERHUB_USERNAME }} --password-stdin
             
-            echo "모든 실행 중인 컨테이너 중지"
-            sudo docker stop $(sudo docker ps -aq)  # 모든 실행 중인 컨테이너 중지
+            echo "API flag: ${{ needs.build.outputs.api }}"
+            echo "Batch flag: ${{ needs.build.outputs.batch }}"
             
-            echo "모든 컨테이너 및 네트워크 삭제"
-            sudo docker rm $(sudo docker ps -aq)  # 모든 컨테이너 삭제
-            sudo docker network prune -f  # 모든 브리지 네트워크 삭제 (주의: 사용 중인 네트워크도 삭제됨)
-            
-            echo "모든 이미지 삭제"
-            sudo docker rmi $(sudo docker images -q)  # 모든 이미지 삭제
-            
-            echo "최신 Docker 이미지 Pull"
-            sudo docker-compose pull  # Docker Compose 파일에 정의된 이미지 pull
-            
-            echo "새로운 컨테이너 실행"
-            sudo docker-compose up -d  # 모든 서비스를 백그라운드에서 실행
-            
-            echo "서버에서 오래된 Docker 이미지 정리"
-            sudo docker image prune -f  # 불필요한 이미지 정리
+            if [[ "${{ needs.build.outputs.api }}" == "true" ]]; then
+              echo "badminton-api 서비스 업데이트"
+              sudo docker-compose pull badminton-api
+              sudo docker-compose up -d badminton-api
+            fi
+
+            if [[ "${{ needs.build.outputs.batch }}" == "true" ]]; then
+              echo "badminton-batch 서비스 업데이트"
+              sudo docker-compose pull badminton-batch
+              sudo docker-compose up -d badminton-batch
+            fi
+
+            echo "오래된 Docker 이미지 정리"
+            sudo docker image prune -f

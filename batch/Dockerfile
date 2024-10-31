@@ -4,6 +4,6 @@ FROM amazoncorretto:17
 
 LABEL authors="hit team"
 
-COPY build/libs/batch.jar /docker-springboot-batch.jar
+COPY build/libs/batch.jar /batch.jar
 
-ENTRYPOINT ["java", "-jar", "/docker-springboot-batch.jar"]
+ENTRYPOINT ["java", "-jar", "/batch.jar"]
