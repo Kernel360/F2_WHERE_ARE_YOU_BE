@@ -1,10 +1,14 @@
 package org.badminton.domain.domain.club;
 
+import org.badminton.domain.domain.clubmember.info.ApplyClubInfo;
+import org.badminton.domain.domain.clubmember.info.ApproveApplyInfo;
+import org.badminton.domain.domain.clubmember.info.RejectApplyInfo;
+
 public interface ClubApplyService {
-	void approveApplying(Long clubApplyId);
+	ApproveApplyInfo approveApplying(Long clubApplyId);
 
-	void rejectApplying(Long clubApplyId);
+	RejectApplyInfo rejectApplying(Long clubApplyId);
 
-	void applyClub(String memberToken, String clubToken);
+	ApplyClubInfo applyClub(String memberToken, String clubToken);
 
 }

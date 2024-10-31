@@ -3,19 +3,20 @@ package org.badminton.api.application.clubMember;
 import java.util.List;
 import java.util.Map;
 
-import org.badminton.domain.domain.club.ClubRegistrationService;
+import org.badminton.domain.domain.club.ClubApplyService;
 import org.badminton.domain.domain.clubmember.command.ClubMemberBanCommand;
 import org.badminton.domain.domain.clubmember.command.ClubMemberExpelCommand;
 import org.badminton.domain.domain.clubmember.command.ClubMemberRoleUpdateCommand;
 import org.badminton.domain.domain.clubmember.entity.ClubMember;
+import org.badminton.domain.domain.clubmember.info.ApplyClubInfo;
+import org.badminton.domain.domain.clubmember.info.ApproveApplyInfo;
 import org.badminton.domain.domain.clubmember.info.ClubMemberBanRecordInfo;
 import org.badminton.domain.domain.clubmember.info.ClubMemberInfo;
-import org.badminton.domain.domain.clubmember.info.ClubMemberJoinInfo;
 import org.badminton.domain.domain.clubmember.info.ClubMemberWithdrawInfo;
+import org.badminton.domain.domain.clubmember.info.RejectApplyInfo;
 import org.badminton.domain.domain.clubmember.service.ClubMemberService;
 import org.springframework.stereotype.Service;
 
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -24,12 +25,18 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class ClubMemberFacade {
 	private final ClubMemberService clubMemberService;
+	private final ClubApplyService clubApplyService;
 
-	private final ClubRegistrationService clubRegistrationService;
+	public ApplyClubInfo applyClub(String memberToken, String clubToken) {
+		return clubApplyService.applyClub(memberToken, clubToken);
+	}
 
-	@Transactional
-	public ClubMemberJoinInfo joinClub(String memberToken, String clubToken) {
-		return clubMemberService.joinClub(memberToken, clubToken);
+	public ApproveApplyInfo approveApplying(Long clubApplyId) {
+		return clubApplyService.approveApplying(clubApplyId);
+	}
+
+	public RejectApplyInfo rejectApplying(Long clubApplyId) {
+		return clubApplyService.rejectApplying(clubApplyId);
 	}
 
 	public ClubMemberInfo updateClubMemberRole(ClubMemberRoleUpdateCommand command, Long clubMemberId) {

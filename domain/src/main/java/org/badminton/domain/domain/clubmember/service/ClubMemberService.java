@@ -11,13 +11,12 @@ import org.badminton.domain.domain.clubmember.entity.ClubMember;
 import org.badminton.domain.domain.clubmember.info.ClubMemberBanRecordInfo;
 import org.badminton.domain.domain.clubmember.info.ClubMemberDetailInfo;
 import org.badminton.domain.domain.clubmember.info.ClubMemberInfo;
-import org.badminton.domain.domain.clubmember.info.ClubMemberJoinInfo;
 import org.badminton.domain.domain.clubmember.info.ClubMemberMyPageInfo;
 import org.badminton.domain.domain.clubmember.info.ClubMemberWithdrawInfo;
 
 public interface ClubMemberService {
 
-	ClubMemberJoinInfo joinClub(String memberToken, String clubToken);
+	// ClubMemberJoinInfo applyClub(String memberToken, String clubToken);
 
 	void clubMemberOwner(String memberToken, ClubCreateInfo clubInfo);
 

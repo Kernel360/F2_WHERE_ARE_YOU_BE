@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
-import org.badminton.domain.common.exception.clubmember.ClubMemberDuplicateException;
 import org.badminton.domain.domain.club.ClubReader;
 import org.badminton.domain.domain.club.entity.Club;
 import org.badminton.domain.domain.club.info.ClubCreateInfo;
@@ -18,7 +17,6 @@ import org.badminton.domain.domain.clubmember.entity.ClubMember;
 import org.badminton.domain.domain.clubmember.info.ClubMemberBanRecordInfo;
 import org.badminton.domain.domain.clubmember.info.ClubMemberDetailInfo;
 import org.badminton.domain.domain.clubmember.info.ClubMemberInfo;
-import org.badminton.domain.domain.clubmember.info.ClubMemberJoinInfo;
 import org.badminton.domain.domain.clubmember.info.ClubMemberMyPageInfo;
 import org.badminton.domain.domain.clubmember.info.ClubMemberWithdrawInfo;
 import org.badminton.domain.domain.member.MemberReader;
@@ -38,23 +36,23 @@ public class ClubMemberServiceImpl implements ClubMemberService {
 	private final ClubMemberReader clubMemberReader;
 	private final ClubMemberStore clubMemberStore;
 
-	@Override
-	public ClubMemberJoinInfo joinClub(String memberToken, String clubToken) {
-
-		Club club = clubReader.readClub(clubToken);
-
-		Member member = memberReader.getMember(memberToken);
-
-		if (clubMemberReader.isExist(memberToken)) {
-			throw new ClubMemberDuplicateException(clubToken, memberToken);
-		}
-
-		ClubMember clubMember = new ClubMember(club, member, ClubMember.ClubMemberRole.ROLE_USER);
-
-		clubMemberStore.store(clubMember);
-
-		return ClubMemberJoinInfo.from(clubMember);
-	}
+	// @Override
+	// public ClubMemberJoinInfo applyClub(String memberToken, String clubToken) {
+	//
+	// 	Club club = clubReader.readClub(clubToken);
+	//
+	// 	Member member = memberReader.getMember(memberToken);
+	//
+	// 	if (clubMemberReader.isExist(memberToken)) {
+	// 		throw new ClubMemberDuplicateException(clubToken, memberToken);
+	// 	}
+	//
+	// 	ClubMember clubMember = new ClubMember(club, member, ClubMember.ClubMemberRole.ROLE_USER);
+	//
+	// 	clubMemberStore.store(clubMember);
+	//
+	// 	return ClubMemberJoinInfo.from(clubMember);
+	// }
 
 	@Override
 	public void clubMemberOwner(String memberToken, ClubCreateInfo clubInfo) {
