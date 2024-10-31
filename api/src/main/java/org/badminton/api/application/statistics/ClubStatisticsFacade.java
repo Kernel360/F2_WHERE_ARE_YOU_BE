@@ -21,7 +21,7 @@ public class ClubStatisticsFacade {
 	private final ClubMemberService clubMemberService;
 	private final LeagueService leagueService;
 
-	@Scheduled(fixedRate = 1000)
+	@Scheduled(fixedRate = 3600000)
 	public void approveClubMemberCount() {
 		Map<Long, Integer> countByClubIdRegisterMemberCount = new HashMap<>();
 		List<Long> clubIds = clubStatisticsService.clubIdByList();
@@ -37,7 +37,7 @@ public class ClubStatisticsFacade {
 		log.info("approve club member checking!");
 	}
 
-	@Scheduled(fixedRate = 1500)
+	@Scheduled(fixedRate = 3600000)
 	public void leagueCount() {
 		Map<Long, Integer> countByClubIdRegisterMemberCount = new HashMap<>();
 		List<Long> clubIds = clubStatisticsService.clubIdByList();
