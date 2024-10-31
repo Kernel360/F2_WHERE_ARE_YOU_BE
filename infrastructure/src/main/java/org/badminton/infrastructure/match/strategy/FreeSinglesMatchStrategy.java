@@ -46,7 +46,7 @@ public class FreeSinglesMatchStrategy implements MatchStrategy {
                         singlesMatch.getSinglesSets().stream()
                                 .map(singlesSet -> SetInfo.fromSinglesSet(
                                         singlesMatch.getId(),
-                                        singlesSet.getSetIndex(), singlesSet))
+                                        singlesSet.getSetNumber(), singlesSet))
                 )
                 .toList();
     }

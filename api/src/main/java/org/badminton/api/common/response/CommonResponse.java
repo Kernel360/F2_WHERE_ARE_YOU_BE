@@ -1,5 +1,6 @@
 package org.badminton.api.common.response;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -10,9 +11,14 @@ import org.badminton.domain.common.error.ErrorCode;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class CommonResponse<T> {
     private Result result;
+
+    // success 일 때 가지는 상태
     private T data;
+
+    // fail 일 때 가지는 상태
     private ErrorCode errorCode;
     private String errorMessageForLog;
     private String errorMessageForClient;
@@ -30,7 +36,6 @@ public class CommonResponse<T> {
                 .errorMessageForClient(errorMessageForClient)
                 .errorMessageForLog(errorMessageForLog)
                 .errorCode(errorCode)
-                .data("비어 있습니다.")
                 .build();
     }
 

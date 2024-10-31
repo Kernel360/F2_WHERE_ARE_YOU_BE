@@ -26,7 +26,7 @@ public record LeagueSetsScoreInProgressInfo(
                 singlesSet.getPlayer1Score(),
                 singlesSet.getPlayer2Score(),
                 singlesMatch.getRoundNumber(),
-                singlesSet.getSetIndex());
+                singlesSet.getSetNumber());
     }
 
     public static LeagueSetsScoreInProgressInfo fromDoublesMatchAndSet(DoublesMatch doublesMatch,

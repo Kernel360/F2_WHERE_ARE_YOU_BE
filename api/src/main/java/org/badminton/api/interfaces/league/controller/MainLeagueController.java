@@ -26,17 +26,15 @@ public class MainLeagueController {
     private final LeagueService leagueService;
     private final MatchFacade matchFacade;
 
-
     @Operation(
             summary = "메인페이지에서 일별로 진행 중, 또는 진행 예정인 경기 일정을 조회한다.",
             description = "메인페이지에서 일별로 진행 중 또는 진행 예정인 경기 일정을 조회합니다. 날짜는 'yyyy-MM-dd' 형식으로 제공되어야 합니다.",
             tags = {"main-league"}
     )
     @GetMapping
-    public CommonResponse getLeaguesByDate(
+    public CommonResponse<List<OngoingAndUpcomingLeagueResponse>> getLeaguesByDate(
             @RequestParam("date")
             @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date) {
-
         List<OngoingAndUpcomingLeagueInfo> ongoingAndUpcomingLeaguesByDate = leagueService.getOngoingAndUpcomingLeaguesByDate(
                 date);
         return CommonResponse.success(ongoingAndUpcomingLeaguesByDate.stream()
@@ -50,10 +48,9 @@ public class MainLeagueController {
             tags = {"main-league"}
     )
     @GetMapping("/{leagueId}")
-    public CommonResponse getLeagueScores(@PathVariable Long leagueId) {
+    public CommonResponse<List<LeagueSetsScoreInProgressResponse>> getLeagueScores(@PathVariable Long leagueId) {
         List<LeagueSetsScoreInProgressInfo> leagueSetsScoreInProgressInfos = matchFacade.retrieveLeagueMatchSetsScoreInProgress(
                 leagueId);
-
         return CommonResponse.success(leagueSetsScoreInProgressInfos.stream()
                 .map(LeagueSetsScoreInProgressResponse::from)
                 .toList());
