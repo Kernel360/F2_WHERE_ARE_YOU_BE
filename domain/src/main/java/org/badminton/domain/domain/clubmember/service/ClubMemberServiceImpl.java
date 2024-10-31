@@ -14,14 +14,12 @@ import org.badminton.domain.domain.clubmember.ClubMemberStore;
 import org.badminton.domain.domain.clubmember.command.ClubMemberBanCommand;
 import org.badminton.domain.domain.clubmember.command.ClubMemberExpelCommand;
 import org.badminton.domain.domain.clubmember.command.ClubMemberRoleUpdateCommand;
-import org.badminton.domain.domain.clubmember.command.ClubMemberStatusCommand;
 import org.badminton.domain.domain.clubmember.entity.ClubMember;
 import org.badminton.domain.domain.clubmember.info.ClubMemberBanRecordInfo;
 import org.badminton.domain.domain.clubmember.info.ClubMemberDetailInfo;
 import org.badminton.domain.domain.clubmember.info.ClubMemberInfo;
 import org.badminton.domain.domain.clubmember.info.ClubMemberJoinInfo;
 import org.badminton.domain.domain.clubmember.info.ClubMemberMyPageInfo;
-import org.badminton.domain.domain.clubmember.info.ClubMemberStatusInfo;
 import org.badminton.domain.domain.clubmember.info.ClubMemberWithdrawInfo;
 import org.badminton.domain.domain.member.MemberReader;
 import org.badminton.domain.domain.member.entity.Member;
@@ -63,7 +61,6 @@ public class ClubMemberServiceImpl implements ClubMemberService {
 		Member member = memberReader.getMember(memberToken);
 		var club = new Club(clubInfo);
 		ClubMember clubMember = new ClubMember(club, member, ClubMember.ClubMemberRole.ROLE_OWNER);
-		clubMember.approvedClubMember();
 		clubMemberStore.store(clubMember);
 	}
 
@@ -94,14 +91,21 @@ public class ClubMemberServiceImpl implements ClubMemberService {
 	}
 
 	@Override
-	public ClubMemberMyPageInfo getClubMember(String memberToken) {
-		ClubMember clubMember = clubMemberReader.getClubMemberByMemberToken(memberToken);
-		return ClubMemberMyPageInfo.from(clubMember);
+	public List<ClubMemberMyPageInfo> getClubMembers(String memberToken) {
+		List<ClubMember> clubMembers = clubMemberReader.getClubMembersByMemberToken(memberToken);
+		return ClubMemberMyPageInfo.from(clubMembers);
 	}
 
 	@Override
-	public ClubMemberDetailInfo getClubMemberDetail(String memberToken) {
-		ClubMember clubMember = clubMemberReader.getClubMemberByMemberToken(memberToken);
+	public ClubMemberInfo getClubMember(String memberToken, String clubToken) {
+		ClubMember clubMember = clubMemberReader.getClubMemberByMemberTokenAndClubToken(clubToken, memberToken);
+
+		return ClubMemberInfo.valueOf(clubMember);
+	}
+
+	@Override
+	public ClubMemberDetailInfo getClubMemberDetail(String memberToken, String clubToken) {
+		ClubMember clubMember = clubMemberReader.getClubMemberByMemberTokenAndClubToken(clubToken, memberToken);
 		return ClubMemberDetailInfo.from(clubMember);
 	}
 
@@ -124,7 +128,6 @@ public class ClubMemberServiceImpl implements ClubMemberService {
 	public ClubMemberWithdrawInfo withDrawClubMember(Long clubMemberId) {
 		ClubMember clubMember = clubMemberReader.getClubMember(clubMemberId);
 		clubMember.withdrawal();
-		clubMember.rejectedClubMember();
 		clubMemberStore.store(clubMember);
 		return new ClubMemberWithdrawInfo(clubMember.getClub().getClubId(), clubMember.getClubMemberId(),
 			clubMember.isDeleted());
@@ -153,22 +156,6 @@ public class ClubMemberServiceImpl implements ClubMemberService {
 	public ClubMemberDetailInfo getClubMemberDetailByClubToken(String clubToken, String memberToken) {
 		ClubMember clubMember = clubMemberReader.getClubMemberByMemberTokenAndClubToken(clubToken, memberToken);
 		return ClubMemberDetailInfo.from(clubMember);
-	}
-
-	@Override
-	public ClubMemberStatusInfo approvedClubMember(ClubMemberStatusCommand clubMemberStatusCommand) {
-		var clubMember = clubMemberReader.getClubMember(clubMemberStatusCommand.clubMemberId());
-		clubMember.approvedClubMember();
-		clubMemberStore.store(clubMember);
-		return ClubMemberStatusInfo.from(clubMember);
-	}
-
-	@Override
-	public ClubMemberStatusInfo rejectClubMember(ClubMemberStatusCommand clubMemberStatusCommand) {
-		var clubMember = clubMemberReader.getClubMember(clubMemberStatusCommand.clubMemberId());
-		clubMember.rejectedClubMember();
-		clubMemberStore.store(clubMember);
-		return ClubMemberStatusInfo.from(clubMember);
 	}
 
 	@Override

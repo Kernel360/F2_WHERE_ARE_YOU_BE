@@ -61,14 +61,14 @@ public class ClubController {
 	@Operation(summary = "동호회 수정",
 		description = """
 			새로운 동호회를 수정합니다. 다음 조건을 만족해야 합니다:
-						
+			
 			1. 동호회 이름:
 			   - 필수 입력
 			   - 2자 이상 20자 이하
-						
+			
 			2. 동호회 소개:
 			   - 2자 이상 1000자 이하
-						
+			
 			3. 동호회 이미지 URL:
 			   - 호스트: badminton-team.s3.ap-northeast-2.amazonaws.com
 			   - 경로: /club-banner/로 시작
@@ -90,10 +90,10 @@ public class ClubController {
 			1. 동호회 이름:
 			   - 필수 입력
 			   - 2자 이상 20자 이하
-						
+			
 			2. 동호회 소개:
 			   - 2자 이상 1000자 이하
-						
+			
 			3. 동호회 이미지 URL:
 			   - 호스트: badminton-team.s3.ap-northeast-2.amazonaws.com
 			   - 경로: /club-banner/로 시작

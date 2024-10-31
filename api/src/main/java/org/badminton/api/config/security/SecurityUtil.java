@@ -10,7 +10,7 @@ public class SecurityUtil {
 			path.startsWith("/v3/api-docs");
 	}
 
-	public static String extractClubIdFromRequest(HttpServletRequest request) {
+	public static String extractClubTokenFromRequest(HttpServletRequest request) {
 		String path = request.getRequestURI();
 		String[] parts = path.split("/");
 		if (parts.length > 2 && parts[1].equals("v1") && parts[2].equals("club")) {

@@ -28,7 +28,7 @@ public class Member extends AbstractBaseTime {
 
 	public static final String MEMBER_PREFIX = "me_";
 	@Id
-	@Column(name = "memeber_id")
+	@Column(name = "memberId")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 

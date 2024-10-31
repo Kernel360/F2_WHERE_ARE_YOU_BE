@@ -1,5 +1,8 @@
 package org.badminton.domain.domain.clubmember.info;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.badminton.domain.domain.clubmember.entity.ClubMember;
 
 public record ClubMemberMyPageInfo(
@@ -18,6 +21,12 @@ public record ClubMemberMyPageInfo(
 		}
 		return new ClubMemberMyPageInfo(clubMember.getClub().getClubId(), clubMember.getClubMemberId(),
 			clubMember.getClub().getClubName(), clubMember.getRole());
+	}
+
+	public static List<ClubMemberMyPageInfo> from(List<ClubMember> clubMembers) {
+		return clubMembers.stream()
+			.map(ClubMemberMyPageInfo::from)
+			.collect(Collectors.toList());
 	}
 
 }

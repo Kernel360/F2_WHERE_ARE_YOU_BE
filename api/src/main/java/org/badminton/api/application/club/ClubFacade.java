@@ -53,7 +53,6 @@ public class ClubFacade {
 	}
 
 	public ClubCreateInfo createClub(ClubCreateCommand createCommand, String memberToken) {
-		clubMemberService.checkMyOwnClub(memberToken);
 		var clubCreateInfo = clubService.createClub(createCommand);
 		clubMemberService.clubMemberOwner(memberToken, clubCreateInfo);
 		clubStatisticsService.createStatistic(clubCreateInfo);

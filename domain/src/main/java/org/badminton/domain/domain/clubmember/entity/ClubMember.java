@@ -29,7 +29,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 public class ClubMember extends AbstractBaseTime {
-
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long clubMemberId;
@@ -37,9 +36,6 @@ public class ClubMember extends AbstractBaseTime {
 	private boolean deleted;
 
 	private boolean banned;
-
-	@Enumerated(EnumType.STRING)
-	private ClubMemberStatus status;
 
 	@Enumerated(EnumType.STRING)
 	private ClubMemberRole role;
@@ -61,7 +57,6 @@ public class ClubMember extends AbstractBaseTime {
 		this.role = role;
 		this.deleted = false;
 		this.banned = false;
-		this.status = ClubMemberStatus.PENDING;
 	}
 
 	public void updateClubMemberRole(ClubMemberRole role) {
@@ -80,14 +75,6 @@ public class ClubMember extends AbstractBaseTime {
 	public void addBanRecord(ClubMemberBanRecord clubMemberBanRecord) {
 		this.banHistory.add(clubMemberBanRecord);
 		this.banned = true;
-	}
-
-	public void rejectedClubMember() {
-		this.status = ClubMemberStatus.REJECTED;
-	}
-
-	public void approvedClubMember() {
-		this.status = ClubMemberStatus.APPROVED;
 	}
 
 	@Getter
@@ -123,16 +110,4 @@ public class ClubMember extends AbstractBaseTime {
 		}
 	}
 
-	@Getter
-	public enum ClubMemberStatus {
-		APPROVED("승인"),
-		PENDING("승인 대기중"),
-		REJECTED("거부");
-
-		private final String description;
-
-		ClubMemberStatus(String description) {
-			this.description = description;
-		}
-	}
 }

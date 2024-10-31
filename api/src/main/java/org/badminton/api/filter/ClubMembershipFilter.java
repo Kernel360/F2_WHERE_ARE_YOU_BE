@@ -31,7 +31,7 @@ public class ClubMembershipFilter extends OncePerRequestFilter {
 	@Override
 	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
 		FilterChain filterChain) throws ServletException, IOException {
-		String clubToken = SecurityUtil.extractClubIdFromRequest(request);
+		String clubToken = SecurityUtil.extractClubTokenFromRequest(request);
 
 		if (clubToken != null && !isClubMember(clubToken)) {
 			response.sendError(HttpServletResponse.SC_FORBIDDEN, "You are not a member of this club");

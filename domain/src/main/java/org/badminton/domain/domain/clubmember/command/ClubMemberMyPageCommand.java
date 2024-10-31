@@ -21,9 +21,8 @@ public record ClubMemberMyPageCommand(
 
 	Member member,
 
-	List<ClubMemberBanRecord> banHistory,
+	List<ClubMemberBanRecord> banHistory
 
-	ClubMember.ClubMemberStatus status
 ) {
 	public static ClubMemberMyPageCommand toCommand(ClubMemberDetailInfo clubMember) {
 		return new ClubMemberMyPageCommand(
@@ -33,8 +32,7 @@ public record ClubMemberMyPageCommand(
 			clubMember.role(),
 			clubMember.club(),
 			clubMember.member(),
-			clubMember.banHistory(),
-			clubMember.status()
+			clubMember.banHistory()
 		);
 	}
 
@@ -43,7 +41,6 @@ public record ClubMemberMyPageCommand(
 			this.clubMemberId,
 			this.deleted,
 			this.banned,
-			this.status,
 			this.role,
 			this.club,
 			this.member,

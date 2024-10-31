@@ -21,9 +21,15 @@ public class ClubMemberReaderImpl implements ClubMemberReader {
 	private final ClubMemberRepository clubMemberRepository;
 
 	@Override
-	public ClubMember getClubMemberByMemberToken(String memberToken) {
-		return clubMemberRepository.findByDeletedFalseAndMemberMemberToken(memberToken).orElse(null);
+	public List<ClubMember> getClubMembersByMemberToken(String memberToken) {
+		return clubMemberRepository.findAllByDeletedFalseAndMemberMemberToken(memberToken);
 	}
+
+	// @Override
+	// public List<ClubMember> getClubMembersByMemberToken(String memberToken) {
+	// 	return clubMemberRepository.findAllByMemberMemberToken(memberToken);
+	//
+	// }
 
 	@Override
 	public ClubMember getClubMember(Long clubMemberId) {
@@ -43,12 +49,6 @@ public class ClubMemberReaderImpl implements ClubMemberReader {
 		if (NOT_OWNER_CLUB != clubMemberRepository.countByMemberIdAndRoleOwner(memberToken)) {
 			throw new ClubMemberAlreadyOwnerException(memberToken);
 		}
-	}
-
-	@Override
-	public List<ClubMember> getClubMembersByMemberToken(String memberToken) {
-		return clubMemberRepository.findAllByMemberMemberToken(memberToken);
-
 	}
 
 	@Override
@@ -73,7 +73,7 @@ public class ClubMemberReaderImpl implements ClubMemberReader {
 
 	@Override
 	public Integer getClubMemberApproveCount(Long clubId) {
-		return clubMemberRepository.countByClubClubIdAndStatus(clubId, ClubMember.ClubMemberStatus.APPROVED);
+		return clubMemberRepository.countByClubClubIdAndDeletedFalse(clubId);
 	}
 
 	@Override
