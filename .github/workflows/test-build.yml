@@ -25,7 +25,7 @@ jobs:
       - name: Determine changed modules
         id: determine_changes
         run: |
-          BASE_BRANCH=deploy-test
+          BASE_BRANCH=test
           
           git fetch --prune --unshallow origin $BASE_BRANCH --tags
 
