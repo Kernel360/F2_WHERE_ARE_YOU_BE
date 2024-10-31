@@ -2,18 +2,18 @@ package org.badminton.api.interfaces.league.dto;
 
 import java.time.LocalDateTime;
 
-import org.badminton.domain.domain.league.entity.LeagueParticipant;
+import org.badminton.domain.domain.league.info.LeagueParticipantInfo;
 
 public record LeagueParticipantResponse(
 	Long leagueId,
-	Long memberId,
+	String memberToken,
 	LocalDateTime createdAt,
 	LocalDateTime modifiedAt
 ) {
 
-	public static LeagueParticipantResponse entityToLeagueParticipantResponse(LeagueParticipant entity) {
-		return new LeagueParticipantResponse(entity.getLeague().getLeagueId(),
-			entity.getMember().getId(),
-			entity.getCreatedAt(), entity.getModifiedAt());
+	public static LeagueParticipantResponse fromLeagueParticipantInfo(LeagueParticipantInfo leagueParticipant) {
+		return new LeagueParticipantResponse(leagueParticipant.leagueId(),
+			leagueParticipant.memberToken(),
+			leagueParticipant.createdAt(), leagueParticipant.modifiedAt());
 	}
 }

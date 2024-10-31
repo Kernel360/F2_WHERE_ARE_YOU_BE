@@ -50,7 +50,7 @@ public interface LeagueDtoMapper {
 
 	LeagueUpdateInfoWithParticipantCountInfo of(LeagueUpdateInfoWithParticipantCountInfo leagueUpdateInfo);
 
-	LeagueParticipantResponse of(LeagueParticipantInfo result);
+	LeagueParticipantResponse of(LeagueParticipantInfo leagueParticipantInfo);
 
 	LeagueParticipationCancelResponse of(LeagueParticipantCancelInfo result);
 }

@@ -2,21 +2,21 @@ package org.badminton.api.interfaces.match.dto;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import org.badminton.domain.domain.match.info.SinglesSetInfo;
 
 public record SinglesSetResponse(
-
-        int setNumber,
-        int score1,
-        int score2
+	int setNumber,
+	int score1,
+	int score2
 ) {
 
-    public static List<SinglesSetResponse> fromSinglesSetInfoList(List<SinglesSetInfo> singlesSetInfoList) {
-        List<SinglesSetResponse> singlesSetResponses = new ArrayList<>();
-        for (SinglesSetInfo singlesSetInfo : singlesSetInfoList) {
-            singlesSetResponses.add(new SinglesSetResponse(singlesSetInfo.setNumber(), singlesSetInfo.score1(),
-                    singlesSetInfo.score2()));
-        }
-        return singlesSetResponses;
-    }
+	public static List<SinglesSetResponse> fromSinglesSetInfoList(List<SinglesSetInfo> singlesSetInfoList) {
+		List<SinglesSetResponse> singlesSetResponses = new ArrayList<>();
+		for (SinglesSetInfo singlesSetInfo : singlesSetInfoList) {
+			singlesSetResponses.add(new SinglesSetResponse(singlesSetInfo.setNumber(), singlesSetInfo.score1(),
+				singlesSetInfo.score2()));
+		}
+		return singlesSetResponses;
+	}
 }

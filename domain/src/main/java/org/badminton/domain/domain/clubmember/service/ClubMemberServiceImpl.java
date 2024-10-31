@@ -35,7 +35,7 @@ public class ClubMemberServiceImpl implements ClubMemberService {
 	private final MemberReader memberReader;
 	private final ClubMemberReader clubMemberReader;
 	private final ClubMemberStore clubMemberStore;
-	
+
 	@Override
 	public void clubMemberOwner(String memberToken, ClubCreateInfo clubInfo) {
 		Member member = memberReader.getMember(memberToken);
@@ -141,6 +141,11 @@ public class ClubMemberServiceImpl implements ClubMemberService {
 	@Override
 	public Integer getClubMemberApproveCount(Long clubId) {
 		return clubMemberReader.getClubMemberApproveCount(clubId);
+	}
+
+	@Override
+	public Integer countByClubClubIdAndDeletedFalse(Long clubId) {
+		return clubMemberReader.getClubMemberCounts(clubId);
 	}
 
 	private ClubMember getClubMember(Long clubMemberId) {

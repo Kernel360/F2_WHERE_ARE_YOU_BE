@@ -45,12 +45,14 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
 				processAuthenticationWithMemberToken(memberToken, registrationId, oAuthAccessToken);
 				filterChain.doFilter(request, response);
+				return;
 			}
 		} catch (ExpiredJwtException expiredJwtException) {
 			String memberToken = expiredJwtException.getClaims().get("memberToken", String.class);
 			processAuthenticationWithMemberToken(memberToken, null, null);
 		}
 		filterChain.doFilter(request, response);
+
 	}
 
 	private void processAuthenticationWithMemberToken(String memberToken, String registrationId,
