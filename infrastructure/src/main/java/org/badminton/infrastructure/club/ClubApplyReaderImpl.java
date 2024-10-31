@@ -1,5 +1,6 @@
 package org.badminton.infrastructure.club;
 
+import org.badminton.domain.common.exception.clubmember.MemberAlreadyApplyClubException;
 import org.badminton.domain.domain.club.ClubApplyReader;
 import org.badminton.domain.domain.club.entity.ClubApply;
 import org.springframework.stereotype.Component;
@@ -19,8 +20,11 @@ public class ClubApplyReaderImpl implements ClubApplyReader {
 	}
 
 	@Override
-	public boolean IsExistClubApply(String clubToken, String memberToken) {
-		return clubApplyRepository.existsByClubClubTokenAndMemberMemberTokenAndStatus(clubToken, memberToken,
-			ClubApply.ApplyStatus.PENDING);
+	public void validateApply(String clubToken, String memberToken) {
+		if (clubApplyRepository.existsByClubClubTokenAndMemberMemberTokenAndStatus(clubToken, memberToken,
+			ClubApply.ApplyStatus.PENDING)) {
+			throw new MemberAlreadyApplyClubException(memberToken, clubToken);
+		}
+		;
 	}
 }

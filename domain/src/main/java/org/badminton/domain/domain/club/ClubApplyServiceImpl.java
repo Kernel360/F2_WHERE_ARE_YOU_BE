@@ -1,6 +1,5 @@
 package org.badminton.domain.domain.club;
 
-import org.badminton.domain.common.exception.clubmember.MemberAlreadyApplyClubException;
 import org.badminton.domain.common.exception.member.MemberAlreadyExistInClubException;
 import org.badminton.domain.domain.club.entity.Club;
 import org.badminton.domain.domain.club.entity.ClubApply;
@@ -69,10 +68,7 @@ public class ClubApplyServiceImpl implements ClubApplyService {
 
 		ClubApply clubApply = new ClubApply(club, member);
 
-		boolean isExistClubApply = clubApplyReader.IsExistClubApply(clubToken, memberToken);
-		if (isExistClubApply) {
-			throw new MemberAlreadyApplyClubException(memberToken, clubToken);
-		}
+		clubApplyReader.validateApply(clubToken, memberToken);
 
 		clubApplyStore.store(clubApply);
 		return ApplyClubInfo.fromClubApply(clubApply);

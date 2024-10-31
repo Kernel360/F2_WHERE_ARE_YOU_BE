@@ -16,8 +16,6 @@ import org.badminton.domain.domain.clubmember.info.ClubMemberWithdrawInfo;
 
 public interface ClubMemberService {
 
-	// ClubMemberJoinInfo applyClub(String memberToken, String clubToken);
-
 	void clubMemberOwner(String memberToken, ClubCreateInfo clubInfo);
 
 	ClubMemberInfo updateClubMemberRole(ClubMemberRoleUpdateCommand command, Long clubMemberId);

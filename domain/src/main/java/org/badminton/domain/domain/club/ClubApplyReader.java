@@ -6,6 +6,6 @@ public interface ClubApplyReader {
 
 	ClubApply getClubApply(Long clubApplyId);
 
-	boolean IsExistClubApply(String clubToken, String memberToken);
+	void validateApply(String clubToken, String memberToken);
 
 }
