@@ -87,7 +87,7 @@ public class MatchController {
 
     @GetMapping("/{matchId}/sets/{setNumber}")
     @Operation(summary = "스코어 보드에서 특정 매치의 세트를 조회합니다.",
-            description = "",
+            description = "스코어 보드에서 세트 점수, 경기 참여자 정보, 이긴 세트 수, 현황 등을 조회할 수 있습니다.",
             tags = {"Match"})
     public CommonResponse<MatchSetResponse> getMatchSet(
             @PathVariable String clubToken,
