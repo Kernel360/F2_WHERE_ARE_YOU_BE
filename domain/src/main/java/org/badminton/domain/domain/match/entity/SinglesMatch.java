@@ -60,17 +60,20 @@ public class SinglesMatch extends AbstractBaseTime {
     @Enumerated(EnumType.STRING)
     private MatchStatus matchStatus = MatchStatus.NOT_STARTED;
 
+    private int roundNumber;
+
     @OneToMany(mappedBy = "singlesMatch", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<SinglesSet> singlesSets;
 
     public SinglesMatch(League league, LeagueParticipant leagueParticipant1,
-                        LeagueParticipant leagueParticipant2) {
+                        LeagueParticipant leagueParticipant2, int roundNumber) {
         this.league = league;
         this.leagueParticipant1 = leagueParticipant1;
         this.leagueParticipant2 = leagueParticipant2;
         this.singlesSets = new ArrayList<>();
         this.player1WinSetCount = INITIAL_WIN_SET_COUNT;
         this.player2WinSetCount = INITIAL_WIN_SET_COUNT;
+        this.roundNumber = roundNumber;
     }
 
     public void addSet(SinglesSet singlesSet) {

@@ -4,7 +4,11 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 import lombok.AllArgsConstructor;
+import org.badminton.domain.common.enums.MatchStatus;
+import org.badminton.domain.common.enums.SetStatus;
 import org.badminton.domain.domain.league.entity.League;
 import org.badminton.domain.domain.league.entity.LeagueParticipant;
 import org.badminton.domain.domain.league.vo.Team;
@@ -12,6 +16,7 @@ import org.badminton.domain.domain.match.command.MatchCommand;
 import org.badminton.domain.domain.match.entity.DoublesMatch;
 import org.badminton.domain.domain.match.entity.DoublesSet;
 import org.badminton.domain.domain.match.info.BracketInfo;
+import org.badminton.domain.domain.match.info.LeagueSetsScoreInProgressInfo;
 import org.badminton.domain.domain.match.info.MatchInfo;
 import org.badminton.domain.domain.match.info.SetInfo;
 import org.badminton.domain.domain.match.reader.DoublesMatchStore;
@@ -36,7 +41,7 @@ public class FreeDoublesMatchStrategy implements MatchStrategy {
                 .flatMap(doublesMatch ->
                         doublesMatch.getDoublesSets().stream()
                                 .map(doublesSet -> SetInfo.fromDoublesSet(doublesMatch.getId(),
-                                        doublesSet.getSetIndex(), doublesSet))
+                                        doublesSet.getSetNumber(), doublesSet))
                 )
                 .toList();
     }
@@ -61,7 +66,7 @@ public class FreeDoublesMatchStrategy implements MatchStrategy {
     public BracketInfo makeInitialBracket(League league,
                                           List<LeagueParticipant> leagueParticipantList) {
         Collections.shuffle(leagueParticipantList);
-        List<DoublesMatch> doublesMatches = makeDoublesMatches(leagueParticipantList, league);
+        List<DoublesMatch> doublesMatches = makeDoublesMatches(leagueParticipantList, league, 1);
         doublesMatches.forEach(this::makeDoublesSetsInMatch);
         return BracketInfo.fromDoubles(1, doublesMatches);
     }
@@ -91,6 +96,23 @@ public class FreeDoublesMatchStrategy implements MatchStrategy {
         return !doublesMatchReader.checkIfBracketEmpty(leagueId);
     }
 
+    @Override
+    public List<LeagueSetsScoreInProgressInfo> retrieveLeagueSetsScoreInProgress(Long leagueId) {
+        List<DoublesMatch> doublesBracket = doublesMatchReader.getDoublesBracket(leagueId);
+        Map<DoublesMatch, DoublesSet> matchSetsInProgress = doublesBracket.stream()
+                .filter(doublesMatch -> doublesMatch.getMatchStatus() == MatchStatus.IN_PROGRESS)
+                .flatMap(doublesMatch -> doublesMatch.getDoublesSets().stream()
+                        .filter(set -> set.getSetStatus() == SetStatus.IN_PROGRESS)
+                        .findFirst()
+                        .map(set -> Map.entry(doublesMatch, set))
+                        .stream())
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+
+        return matchSetsInProgress.entrySet().stream()
+                .map(entry -> LeagueSetsScoreInProgressInfo.fromDoublesMatchAndSet(entry.getKey(), entry.getValue()))
+                .toList();
+    }
+
     private void makeDoublesSetsInMatch(DoublesMatch doublesMatch) {
         // 복식 게임 세트를 3개 생성
         DoublesSet set1 = new DoublesSet(doublesMatch, 1);
@@ -106,13 +128,13 @@ public class FreeDoublesMatchStrategy implements MatchStrategy {
     }
 
     private List<DoublesMatch> makeDoublesMatches(List<LeagueParticipant> leagueParticipantList,
-                                                  League league) {
+                                                  League league, int roundNumber) {
 
         List<DoublesMatch> doublesMatches = new ArrayList<>();
         for (int i = 0; i < leagueParticipantList.size() - 3; i += 4) {
             Team team1 = new Team(leagueParticipantList.get(i), leagueParticipantList.get(i + 1));
             Team team2 = new Team(leagueParticipantList.get(i + 2), leagueParticipantList.get(i + 3));
-            DoublesMatch doublesMatch = new DoublesMatch(league, team1, team2);
+            DoublesMatch doublesMatch = new DoublesMatch(league, team1, team2, roundNumber);
             doublesMatches.add(doublesMatch);
             doublesMatchStore.store(doublesMatch);
         }

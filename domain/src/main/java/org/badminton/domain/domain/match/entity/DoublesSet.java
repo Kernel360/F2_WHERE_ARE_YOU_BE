@@ -28,15 +28,15 @@ public class DoublesSet extends AbstractBaseTime {
     @JoinColumn(name = "doublesMatchId")
     private DoublesMatch doublesMatch;
 
-    private int setIndex;
+    private int setNumber;
     private int team1Score;
     private int team2Score;
 
     private SetStatus setStatus;
 
-    public DoublesSet(DoublesMatch doublesMatch, int setIndex) {
+    public DoublesSet(DoublesMatch doublesMatch, int setNumber) {
         this.doublesMatch = doublesMatch;
-        this.setIndex = setIndex;
+        this.setNumber = setNumber;
         this.team1Score = INITIAL_SET_SCORE;
         this.team2Score = INITIAL_SET_SCORE;
         this.setStatus = SetStatus.NOT_STARTED;

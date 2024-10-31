@@ -41,6 +41,4 @@ public class SetInfo {
                 .matchType(MatchType.DOUBLES)
                 .build();
     }
-
-
 }

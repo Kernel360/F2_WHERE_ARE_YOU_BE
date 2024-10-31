@@ -4,14 +4,19 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.badminton.domain.common.enums.MatchStatus;
+import org.badminton.domain.common.enums.SetStatus;
 import org.badminton.domain.domain.league.entity.League;
 import org.badminton.domain.domain.league.entity.LeagueParticipant;
 import org.badminton.domain.domain.match.command.MatchCommand;
 import org.badminton.domain.domain.match.entity.SinglesMatch;
 import org.badminton.domain.domain.match.entity.SinglesSet;
 import org.badminton.domain.domain.match.info.BracketInfo;
+import org.badminton.domain.domain.match.info.LeagueSetsScoreInProgressInfo;
 import org.badminton.domain.domain.match.info.MatchInfo;
 import org.badminton.domain.domain.match.info.SetInfo;
 import org.badminton.domain.domain.match.reader.SinglesMatchStore;
@@ -66,7 +71,7 @@ public class FreeSinglesMatchStrategy implements MatchStrategy {
     public BracketInfo makeInitialBracket(League league,
                                           List<LeagueParticipant> leagueParticipantList) {
         Collections.shuffle(leagueParticipantList);
-        List<SinglesMatch> singlesMatches = makeSinglesMatches(leagueParticipantList, league);
+        List<SinglesMatch> singlesMatches = makeSinglesMatches(leagueParticipantList, league, 1);
         singlesMatches.forEach(this::makeSetsInMatch);
         return BracketInfo.fromSingles(1, singlesMatches);
     }
@@ -97,6 +102,24 @@ public class FreeSinglesMatchStrategy implements MatchStrategy {
     }
 
     // TODO: 리팩토링
+    @Override
+    public List<LeagueSetsScoreInProgressInfo> retrieveLeagueSetsScoreInProgress(Long leagueId) {
+        List<SinglesMatch> singlesBracket = singlesMatchReader.getSinglesBracket(leagueId);
+        Map<SinglesMatch, SinglesSet> matchSetsInProgress = singlesBracket.stream()
+                .filter(singlesMatch -> singlesMatch.getMatchStatus() == MatchStatus.IN_PROGRESS)
+                .flatMap(singlesMatch -> singlesMatch.getSinglesSets().stream()
+                        .filter(set -> set.getSetStatus() == SetStatus.IN_PROGRESS)
+                        .findFirst()
+                        .map(set -> Map.entry(singlesMatch, set))
+                        .stream())
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+
+        return matchSetsInProgress.entrySet().stream()
+                .map(entry -> LeagueSetsScoreInProgressInfo.fromSinglesMatchAndSet(entry.getKey(), entry.getValue()))
+                .toList();
+    }
+
+    // TODO: 리팩토링
     private void makeSetsInMatch(SinglesMatch singlesMatch) {
         //단식 게임 세트를 3개 생성
         SinglesSet set1 = new SinglesSet(singlesMatch, 1);
@@ -111,12 +134,12 @@ public class FreeSinglesMatchStrategy implements MatchStrategy {
     }
 
     private List<SinglesMatch> makeSinglesMatches(List<LeagueParticipant> leagueParticipantList,
-                                                  League league) {
+                                                  League league, int roundNumber) {
 
         List<SinglesMatch> singlesMatches = new ArrayList<>();
         for (int i = 0; i < leagueParticipantList.size() - 1; i += 2) {
             SinglesMatch singlesMatch = new SinglesMatch(league, leagueParticipantList.get(i),
-                    leagueParticipantList.get(i + 1));
+                    leagueParticipantList.get(i + 1), roundNumber);
             singlesMatches.add(singlesMatch);
             singlesMatchStore.store(singlesMatch);
         }

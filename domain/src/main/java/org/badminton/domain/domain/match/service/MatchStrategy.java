@@ -6,6 +6,7 @@ import org.badminton.domain.domain.league.entity.League;
 import org.badminton.domain.domain.league.entity.LeagueParticipant;
 import org.badminton.domain.domain.match.command.MatchCommand;
 import org.badminton.domain.domain.match.info.BracketInfo;
+import org.badminton.domain.domain.match.info.LeagueSetsScoreInProgressInfo;
 import org.badminton.domain.domain.match.info.MatchInfo.SetScoreDetails;
 import org.badminton.domain.domain.match.info.SetInfo;
 
@@ -31,4 +32,6 @@ public interface MatchStrategy {
     SetInfo.Main registerSetScoreInMatch(Long matchId, int setIndex, MatchCommand.UpdateSetScore updateSetScoreCommand);
 
     boolean isMatchInLeague(Long leagueId);
+
+    List<LeagueSetsScoreInProgressInfo> retrieveLeagueSetsScoreInProgress(Long leagueId);
 }
