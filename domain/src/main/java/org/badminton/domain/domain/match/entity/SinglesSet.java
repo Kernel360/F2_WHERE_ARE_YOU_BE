@@ -30,15 +30,15 @@ public class SinglesSet extends AbstractBaseTime {
     @JoinColumn(name = "singlesMatchId")
     SinglesMatch singlesMatch;
 
-    private int setIndex;
+    private int setNumber;
     private int player1Score;
     private int player2Score;
 
     private SetStatus setStatus;
 
-    public SinglesSet(SinglesMatch singlesMatch, int setIndex) {
+    public SinglesSet(SinglesMatch singlesMatch, int setNumber) {
         this.singlesMatch = singlesMatch;
-        this.setIndex = setIndex;
+        this.setNumber = setNumber;
         this.player1Score = INITIAL_SET_SCORE;
         this.player2Score = INITIAL_SET_SCORE;
         this.setStatus = SetStatus.IN_PROGRESS;
