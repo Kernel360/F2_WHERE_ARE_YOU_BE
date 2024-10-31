@@ -35,25 +35,7 @@ public class ClubMemberServiceImpl implements ClubMemberService {
 	private final MemberReader memberReader;
 	private final ClubMemberReader clubMemberReader;
 	private final ClubMemberStore clubMemberStore;
-
-	// @Override
-	// public ClubMemberJoinInfo applyClub(String memberToken, String clubToken) {
-	//
-	// 	Club club = clubReader.readClub(clubToken);
-	//
-	// 	Member member = memberReader.getMember(memberToken);
-	//
-	// 	if (clubMemberReader.isExist(memberToken)) {
-	// 		throw new ClubMemberDuplicateException(clubToken, memberToken);
-	// 	}
-	//
-	// 	ClubMember clubMember = new ClubMember(club, member, ClubMember.ClubMemberRole.ROLE_USER);
-	//
-	// 	clubMemberStore.store(clubMember);
-	//
-	// 	return ClubMemberJoinInfo.from(clubMember);
-	// }
-
+	
 	@Override
 	public void clubMemberOwner(String memberToken, ClubCreateInfo clubInfo) {
 		Member member = memberReader.getMember(memberToken);
