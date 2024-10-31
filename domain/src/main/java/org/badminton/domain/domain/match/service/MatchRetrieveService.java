@@ -4,6 +4,7 @@ import java.util.List;
 import org.badminton.domain.domain.match.info.BracketInfo;
 import org.badminton.domain.domain.match.info.LeagueSetsScoreInProgressInfo;
 import org.badminton.domain.domain.match.info.MatchInfo;
+import org.badminton.domain.domain.match.info.MatchSetInfo;
 import org.badminton.domain.domain.match.info.SetInfo;
 
 public interface MatchRetrieveService {
@@ -19,4 +20,6 @@ public interface MatchRetrieveService {
     boolean isMatchInLeague(MatchStrategy matchStrategy, Long leagueId);
 
     List<LeagueSetsScoreInProgressInfo> retrieveLeagueMatchInProgress(MatchStrategy matchStrategy, Long leagueId);
+
+    MatchSetInfo retrieveMatchSet(MatchStrategy matchStrategy, Long matchId, int setNumber);
 }

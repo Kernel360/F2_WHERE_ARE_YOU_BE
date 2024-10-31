@@ -18,6 +18,7 @@ import org.badminton.domain.domain.match.entity.SinglesSet;
 import org.badminton.domain.domain.match.info.BracketInfo;
 import org.badminton.domain.domain.match.info.LeagueSetsScoreInProgressInfo;
 import org.badminton.domain.domain.match.info.MatchInfo;
+import org.badminton.domain.domain.match.info.MatchSetInfo;
 import org.badminton.domain.domain.match.info.SetInfo;
 import org.badminton.domain.domain.match.reader.SinglesMatchStore;
 import org.badminton.domain.domain.match.service.MatchStrategy;
@@ -117,6 +118,13 @@ public class FreeSinglesMatchStrategy implements MatchStrategy {
         return matchSetsInProgress.entrySet().stream()
                 .map(entry -> LeagueSetsScoreInProgressInfo.fromSinglesMatchAndSet(entry.getKey(), entry.getValue()))
                 .toList();
+    }
+
+    @Override
+    public MatchSetInfo retrieveMatchSet(Long matchId, int setNumber) {
+        SinglesMatch singlesMatch = singlesMatchReader.getSinglesMatch(matchId);
+        SinglesSet singlesSet = singlesMatch.getSinglesSet(setNumber);
+        return MatchSetInfo.fromSingles(singlesSet);
     }
 
     // TODO: 리팩토링

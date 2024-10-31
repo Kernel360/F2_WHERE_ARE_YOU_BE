@@ -105,4 +105,8 @@ public class DoublesMatch extends AbstractBaseTime {
             this.matchStatus = MatchStatus.FINISHED;
         }
     }
+
+    public DoublesSet getDoublesSet(int setNumber) {
+        return this.doublesSets.get(setNumber - 1);
+    }
 }

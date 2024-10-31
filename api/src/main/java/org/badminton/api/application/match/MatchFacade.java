@@ -7,6 +7,7 @@ import org.badminton.domain.domain.match.command.MatchCommand;
 import org.badminton.domain.domain.match.info.BracketInfo;
 import org.badminton.domain.domain.match.info.LeagueSetsScoreInProgressInfo;
 import org.badminton.domain.domain.match.info.MatchInfo;
+import org.badminton.domain.domain.match.info.MatchSetInfo;
 import org.badminton.domain.domain.match.info.SetInfo;
 import org.badminton.domain.domain.match.service.BracketGenerationService;
 import org.badminton.domain.domain.match.service.MatchProgressService;
@@ -53,5 +54,10 @@ public class MatchFacade {
     public List<LeagueSetsScoreInProgressInfo> retrieveLeagueMatchSetsScoreInProgress(Long leagueId) {
         MatchStrategy matchStrategy = matchRetrieveService.makeSinglesOrDoublesMatchStrategy(leagueId);
         return matchRetrieveService.retrieveLeagueMatchInProgress(matchStrategy, leagueId);
+    }
+
+    public MatchSetInfo retrieveMatchSetInfo(Long matchId, int setNumber) {
+        MatchStrategy matchStrategy = matchRetrieveService.makeSinglesOrDoublesMatchStrategy(matchId);
+        return matchRetrieveService.retrieveMatchSet(matchStrategy, matchId, setNumber);
     }
 }
