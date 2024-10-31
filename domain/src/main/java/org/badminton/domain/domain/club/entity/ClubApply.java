@@ -3,6 +3,8 @@ package org.badminton.domain.domain.club.entity;
 import org.badminton.domain.domain.member.entity.Member;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -17,12 +19,13 @@ import lombok.NoArgsConstructor;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class ClubRegistration {
+public class ClubApply {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long clubRegistrationId;
+	private Long clubApplyId;
 
+	@Enumerated(EnumType.STRING)
 	private ApplyStatus status;
 
 	@ManyToOne
@@ -33,7 +36,11 @@ public class ClubRegistration {
 	@JoinColumn(name = "memberId")
 	private Member member;
 
-	private String contents;
+	public ClubApply(Club club, Member member) {
+		this.club = club;
+		this.member = member;
+		this.status = ApplyStatus.PENDING;
+	}
 
 	public void rejectedClubMember() {
 		this.status = ApplyStatus.REJECTED;

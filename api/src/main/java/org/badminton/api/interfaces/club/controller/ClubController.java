@@ -149,7 +149,7 @@ public class ClubController {
 	}
 
 	@Operation(summary = "인기 top10 동호회 검색",
-		description = "인기 top10 도호회를 검색합니다.",
+		description = "인기 top10 동호회를 검색합니다.",
 		tags = {"Club"})
 	@GetMapping("/popular")
 	public CommonResponse<List<ClubCardResponse>> clubSearchPopular() {

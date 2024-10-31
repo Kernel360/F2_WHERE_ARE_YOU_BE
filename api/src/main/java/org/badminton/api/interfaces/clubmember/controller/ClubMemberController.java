@@ -7,22 +7,25 @@ import org.badminton.api.application.clubMember.ClubMemberFacade;
 import org.badminton.api.common.response.CommonResponse;
 import org.badminton.api.interfaces.auth.dto.CustomOAuth2Member;
 import org.badminton.api.interfaces.clubmember.ClubMemberDtoMapper;
+import org.badminton.api.interfaces.clubmember.dto.ApplyClubResponse;
+import org.badminton.api.interfaces.clubmember.dto.ApproveApplyResponse;
 import org.badminton.api.interfaces.clubmember.dto.ClubMemberBanRecordResponse;
 import org.badminton.api.interfaces.clubmember.dto.ClubMemberBanRequest;
 import org.badminton.api.interfaces.clubmember.dto.ClubMemberExpelRequest;
-import org.badminton.api.interfaces.clubmember.dto.ClubMemberJoinResponse;
 import org.badminton.api.interfaces.clubmember.dto.ClubMemberResponse;
 import org.badminton.api.interfaces.clubmember.dto.ClubMemberRoleUpdateRequest;
-import org.badminton.api.interfaces.clubmember.dto.ClubMemberStatusResponse;
 import org.badminton.api.interfaces.clubmember.dto.ClubMemberWithdrawResponse;
+import org.badminton.api.interfaces.clubmember.dto.RejectApplyResponse;
 import org.badminton.domain.domain.clubmember.command.ClubMemberBanCommand;
 import org.badminton.domain.domain.clubmember.command.ClubMemberExpelCommand;
 import org.badminton.domain.domain.clubmember.command.ClubMemberRoleUpdateCommand;
 import org.badminton.domain.domain.clubmember.entity.ClubMember;
+import org.badminton.domain.domain.clubmember.info.ApplyClubInfo;
+import org.badminton.domain.domain.clubmember.info.ApproveApplyInfo;
 import org.badminton.domain.domain.clubmember.info.ClubMemberBanRecordInfo;
 import org.badminton.domain.domain.clubmember.info.ClubMemberInfo;
-import org.badminton.domain.domain.clubmember.info.ClubMemberJoinInfo;
 import org.badminton.domain.domain.clubmember.info.ClubMemberWithdrawInfo;
+import org.badminton.domain.domain.clubmember.info.RejectApplyInfo;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -35,7 +38,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -68,33 +70,35 @@ public class ClubMemberController {
 		description = "동호회에 가입을 신청합니다.",
 		tags = {"ClubMember"})
 	@PostMapping
-	public CommonResponse<ClubMemberJoinResponse> joinClub(@AuthenticationPrincipal CustomOAuth2Member member,
-		@Parameter(description = "동호회 ID", example = "1") @PathVariable String clubToken) {
-
+	public CommonResponse<ApplyClubResponse> applyClub(@AuthenticationPrincipal CustomOAuth2Member member,
+		@PathVariable String clubToken) {
 		String memberToken = member.getMemberToken();
-		ClubMemberJoinInfo clubMemberJoinInfo = clubMemberFacade.joinClub(memberToken, clubToken);
-		ClubMemberJoinResponse clubMemberJoinResponse = clubMemberDtoMapper.of(clubMemberJoinInfo);
-
-		return CommonResponse.success(clubMemberJoinResponse);
+		ApplyClubInfo applyClubInfo = clubMemberFacade.applyClub(memberToken, clubToken);
+		ApplyClubResponse applyClubResponse = clubMemberDtoMapper.of(applyClubInfo);
+		return CommonResponse.success(applyClubResponse);
 	}
 
 	@Operation(summary = "동호회 가입 승인",
 		description = "동호회에 가입을 승인합니다.",
 		tags = {"ClubMember"})
 	@PostMapping("/approve")
-	public CommonResponse<ClubMemberStatusResponse> approvedClub(@RequestParam Long clubMemberId,
+	public CommonResponse<ApproveApplyResponse> approvedClub(@RequestParam Long clubApplyId,
 		@PathVariable String clubToken) {
+		ApproveApplyInfo approveApplyInfo = clubMemberFacade.approveApplying(clubApplyId);
+		ApproveApplyResponse approveApplyResponse = clubMemberDtoMapper.of(approveApplyInfo);
 
-		return null;
+		return CommonResponse.success(approveApplyResponse);
 	}
 
 	@Operation(summary = "동호회 가입 거부",
 		description = "동호회에 가입을 거부합니다.",
 		tags = {"ClubMember"})
 	@PostMapping("/reject")
-	public CommonResponse<ClubMemberStatusResponse> rejectClub(@RequestParam Long clubMemberId,
+	public CommonResponse<RejectApplyResponse> rejectClub(@RequestParam Long clubApplyId,
 		@PathVariable String clubToken) {
-		return null;
+		RejectApplyInfo rejectApplyInfo = clubMemberFacade.rejectApplying(clubApplyId);
+		RejectApplyResponse rejectApplyResponse = clubMemberDtoMapper.of(rejectApplyInfo);
+		return CommonResponse.success(rejectApplyResponse);
 	}
 
 	@Operation(

@@ -27,10 +27,11 @@ public class AuthFacade {
 		String memberToken = member.getMemberToken();
 		String oauthToken = member.getOAuthAccessToken();
 		String registrationId = member.getRegistrationId();
-		
+
 		MemberDeleteInfo memberDeleteInfo = authService.deleteMember(memberToken, oauthToken, registrationId);
 
 		clearAccessCookie(response);
+		clearOauthCookie(response);
 		response.setHeader("Authorization", "");
 
 		return memberDeleteInfo;
@@ -41,10 +42,24 @@ public class AuthFacade {
 
 		authService.logoutMember(memberToken, response);
 		clearAccessCookie(response);
+		clearOauthCookie(response);
+
 	}
 
 	private void clearAccessCookie(HttpServletResponse response) {
 		ResponseCookie cookie = ResponseCookie.from("access_token", "")
+			.httpOnly(true)
+			.secure(true)
+			.sameSite("None")
+			.domain(domain)
+			.path("/")
+			.maxAge(0)  // 만료 시간을 0으로 설정하여 쿠키 삭제
+			.build();
+		response.addHeader("Set-Cookie", cookie.toString());
+	}
+
+	private void clearOauthCookie(HttpServletResponse response) {
+		ResponseCookie cookie = ResponseCookie.from("oauth_token", "")
 			.httpOnly(true)
 			.secure(true)
 			.sameSite("None")
