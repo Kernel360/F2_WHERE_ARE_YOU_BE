@@ -18,6 +18,7 @@ import org.badminton.domain.domain.match.entity.DoublesSet;
 import org.badminton.domain.domain.match.info.BracketInfo;
 import org.badminton.domain.domain.match.info.LeagueSetsScoreInProgressInfo;
 import org.badminton.domain.domain.match.info.MatchInfo;
+import org.badminton.domain.domain.match.info.MatchSetInfo;
 import org.badminton.domain.domain.match.info.SetInfo;
 import org.badminton.domain.domain.match.reader.DoublesMatchStore;
 import org.badminton.domain.domain.match.service.MatchStrategy;
@@ -111,6 +112,13 @@ public class FreeDoublesMatchStrategy implements MatchStrategy {
         return matchSetsInProgress.entrySet().stream()
                 .map(entry -> LeagueSetsScoreInProgressInfo.fromDoublesMatchAndSet(entry.getKey(), entry.getValue()))
                 .toList();
+    }
+
+    @Override
+    public MatchSetInfo retrieveMatchSet(Long matchId, int setNumber) {
+        DoublesMatch doublesMatch = doublesMatchReader.getDoublesMatch(matchId);
+        DoublesSet doublesSet = doublesMatch.getDoublesSets().get(setNumber - 1);
+        return MatchSetInfo.fromDoubles(doublesSet);
     }
 
     private void makeDoublesSetsInMatch(DoublesMatch doublesMatch) {

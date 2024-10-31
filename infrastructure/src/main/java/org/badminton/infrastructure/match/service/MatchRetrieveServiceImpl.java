@@ -7,6 +7,7 @@ import org.badminton.domain.domain.league.entity.League;
 import org.badminton.domain.domain.match.info.BracketInfo;
 import org.badminton.domain.domain.match.info.LeagueSetsScoreInProgressInfo;
 import org.badminton.domain.domain.match.info.MatchInfo.SetScoreDetails;
+import org.badminton.domain.domain.match.info.MatchSetInfo;
 import org.badminton.domain.domain.match.info.SetInfo;
 import org.badminton.domain.domain.match.reader.DoublesMatchStore;
 import org.badminton.domain.domain.match.reader.SinglesMatchStore;
@@ -62,6 +63,11 @@ public class MatchRetrieveServiceImpl implements MatchRetrieveService {
     public List<LeagueSetsScoreInProgressInfo> retrieveLeagueMatchInProgress(MatchStrategy matchStrategy,
                                                                              Long leagueId) {
         return matchStrategy.retrieveLeagueSetsScoreInProgress(leagueId);
+    }
+
+    @Override
+    public MatchSetInfo retrieveMatchSet(MatchStrategy matchStrategy, Long matchId, int setNumber) {
+        return matchStrategy.retrieveMatchSet(matchId, setNumber);
     }
 
 
