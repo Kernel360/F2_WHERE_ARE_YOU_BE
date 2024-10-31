@@ -117,7 +117,7 @@ public class FreeDoublesMatchStrategy implements MatchStrategy {
     @Override
     public MatchSetInfo retrieveMatchSet(Long matchId, int setNumber) {
         DoublesMatch doublesMatch = doublesMatchReader.getDoublesMatch(matchId);
-        DoublesSet doublesSet = doublesMatch.getDoublesSets().get(setNumber - 1);
+        DoublesSet doublesSet = doublesMatch.getDoublesSet(setNumber);
         return MatchSetInfo.fromDoubles(doublesSet);
     }
 

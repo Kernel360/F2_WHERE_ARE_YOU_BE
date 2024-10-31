@@ -97,4 +97,8 @@ public class SinglesMatch extends AbstractBaseTime {
             this.matchStatus = MatchStatus.FINISHED;
         }
     }
+
+    public SinglesSet getSinglesSet(int setNumber) {
+        return this.singlesSets.get(setNumber - 1);
+    }
 }

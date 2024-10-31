@@ -123,7 +123,7 @@ public class FreeSinglesMatchStrategy implements MatchStrategy {
     @Override
     public MatchSetInfo retrieveMatchSet(Long matchId, int setNumber) {
         SinglesMatch singlesMatch = singlesMatchReader.getSinglesMatch(matchId);
-        SinglesSet singlesSet = singlesMatch.getSinglesSets().get(setNumber - 1);
+        SinglesSet singlesSet = singlesMatch.getSinglesSet(setNumber);
         return MatchSetInfo.fromSingles(singlesSet);
     }
 
