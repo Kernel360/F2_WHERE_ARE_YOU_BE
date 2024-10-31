@@ -21,12 +21,12 @@ public class ClubStatisticsFacade {
 	private final ClubMemberService clubMemberService;
 	private final LeagueService leagueService;
 
-	@Scheduled(fixedRate = 3600000)
+	@Scheduled(fixedRate = 1000)
 	public void approveClubMemberCount() {
 		Map<Long, Integer> countByClubIdRegisterMemberCount = new HashMap<>();
 		List<Long> clubIds = clubStatisticsService.clubIdByList();
 		for (Long clubId : clubIds) {
-			Integer count = clubMemberService.getClubMemberApproveCount(clubId);
+			Integer count = clubMemberService.countByClubClubIdAndDeletedFalse(clubId);
 			countByClubIdRegisterMemberCount.put(clubId, count);
 		}
 		for (Map.Entry<Long, Integer> entry : countByClubIdRegisterMemberCount.entrySet()) {
@@ -37,7 +37,7 @@ public class ClubStatisticsFacade {
 		log.info("approve club member checking!");
 	}
 
-	@Scheduled(fixedRate = 3600000)
+	@Scheduled(fixedRate = 1500)
 	public void leagueCount() {
 		Map<Long, Integer> countByClubIdRegisterMemberCount = new HashMap<>();
 		List<Long> clubIds = clubStatisticsService.clubIdByList();

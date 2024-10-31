@@ -7,7 +7,7 @@ import org.badminton.domain.domain.club.entity.Club;
 import org.badminton.domain.domain.clubmember.entity.ClubMember;
 
 public record ClubDeleteInfo(
-	Long clubId,
+	String clubToken,
 	String clubName,
 	String clubDescription,
 	String clubImage,
@@ -18,7 +18,7 @@ public record ClubDeleteInfo(
 ) {
 	public static ClubDeleteInfo clubDeleteInfo(Club club) {
 		return new ClubDeleteInfo(
-			club.getClubId(),
+			club.getClubToken(),
 			club.getClubName(),
 			club.getClubDescription(),
 			club.getClubImage(),

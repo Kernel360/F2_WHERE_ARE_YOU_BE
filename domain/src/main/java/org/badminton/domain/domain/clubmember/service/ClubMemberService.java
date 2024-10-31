@@ -43,6 +43,8 @@ public interface ClubMemberService {
 	ClubMemberDetailInfo getClubMemberDetailByClubToken(String clubToken, String memberToken);
 
 	Integer getClubMemberApproveCount(Long clubId);
+
+	Integer countByClubClubIdAndDeletedFalse(Long clubId);
 }
 
 

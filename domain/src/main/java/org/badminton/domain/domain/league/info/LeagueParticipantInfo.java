@@ -6,16 +6,16 @@ import org.badminton.domain.domain.league.entity.LeagueParticipant;
 
 public record LeagueParticipantInfo(
 	Long leagueId,
-	Long memberId,
+	String memberToken,
 	LocalDateTime createdAt,
 	LocalDateTime modifiedAt
 ) {
-	public static LeagueParticipantInfo from(LeagueParticipant saved) {
+	public static LeagueParticipantInfo from(LeagueParticipant leagueParticipant) {
 		return new LeagueParticipantInfo(
-			saved.getLeague().getLeagueId(),
-			saved.getMember().getId(),
-			saved.getCreatedAt(),
-			saved.getModifiedAt()
+			leagueParticipant.getLeague().getLeagueId(),
+			leagueParticipant.getMember().getMemberToken(),
+			leagueParticipant.getCreatedAt(),
+			leagueParticipant.getModifiedAt()
 		);
 	}
 }
