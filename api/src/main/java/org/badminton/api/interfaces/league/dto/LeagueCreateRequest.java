@@ -1,9 +1,9 @@
 package org.badminton.api.interfaces.league.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import java.time.LocalDateTime;
-import org.badminton.api.interfaces.league.validation.annotation.LeagueDescriptionValidator;
-import org.badminton.api.interfaces.league.validation.annotation.LeagueNameValidator;
 import org.badminton.domain.common.enums.MatchGenerationType;
 import org.badminton.domain.common.enums.MatchType;
 import org.badminton.domain.domain.league.enums.LeagueStatus;
@@ -11,11 +11,11 @@ import org.badminton.domain.domain.member.entity.Member;
 
 public record LeagueCreateRequest(
 
-        @LeagueNameValidator
+        @NotBlank
+        @Size(min = 2, max = 20)
         @Schema(description = "경기 이름", example = "지역 예선 경기")
         String leagueName,
 
-        @LeagueDescriptionValidator
         @Schema(description = "경기 설명", example = "이 경기는 지역 예선 경기입니다.")
         String description,
 
@@ -45,6 +45,7 @@ public record LeagueCreateRequest(
         MatchGenerationType matchGenerationType
 
 ) {
+
 
 }
 
