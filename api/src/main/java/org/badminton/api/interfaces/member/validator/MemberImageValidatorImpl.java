@@ -5,7 +5,9 @@ import java.util.regex.Pattern;
 
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public class MemberImageValidatorImpl implements ConstraintValidator<MemberImageValidator, String> {
 
 	private static final String S3_DOMAIN = "d36om9pjoifd2y.cloudfront.net";
@@ -28,7 +30,8 @@ public class MemberImageValidatorImpl implements ConstraintValidator<MemberImage
 			return url.getHost().equals(S3_DOMAIN) &&
 				url.getPath().startsWith("/member-profile/") &&
 				IMAGE_PATTERN.matcher(url.getPath()).matches();
-		} catch (Exception e) {
+		} catch (Exception exception) {
+			log.error(String.valueOf(exception));
 			return false;
 		}
 	}

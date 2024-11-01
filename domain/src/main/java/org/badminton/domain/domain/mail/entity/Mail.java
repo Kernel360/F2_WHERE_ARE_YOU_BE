@@ -49,6 +49,10 @@ public class Mail extends AbstractBaseTime {
 		this.mailStatus = MailStatus.PENDING;
 	}
 
+	public void sendComplete() {
+		this.mailStatus = MailStatus.COMPLETED;
+	}
+
 	@Getter
 	public enum MailStatus {
 		PENDING("준비 중"),
