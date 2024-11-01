@@ -26,7 +26,7 @@ public record LeagueCreateResponse(
 	@Schema(description = "최소 티어", example = "GOLD")
 	Member.MemberTier requiredTier,
 
-	@Schema(description = "현재 경기 상태", example = "OPEN")
+	@Schema(description = "현재 경기 상태", example = "RECRUITING")
 	LeagueStatus status,
 
 	@Schema(description = "경기 방식", example = "SINGLE")
