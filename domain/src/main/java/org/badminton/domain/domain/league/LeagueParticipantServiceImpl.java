@@ -34,7 +34,9 @@ public class LeagueParticipantServiceImpl implements LeagueParticipantService {
 	}
 
 	@Override
-	public LeagueParticipantCancelInfo participantLeagueCancel(Long leagueId, Long clubMemberId) {
+	public LeagueParticipantCancelInfo participantLeagueCancel(String memberToken, String clubToken, Long leagueId) {
+		ClubMember clubMember = clubMemberReader.getClubMemberByMemberTokenAndClubToken(clubToken, memberToken);
+		Long clubMemberId = clubMember.getClubMemberId();
 		LeagueParticipant leagueParticipant = leagueParticipantReader.findParticipant(leagueId, clubMemberId);
 		var result = leagueParticipantStore.cancelStore(leagueParticipant);
 		return LeagueParticipantCancelInfo.from(result);

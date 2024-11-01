@@ -21,8 +21,6 @@ public class LeagueParticipationFacade {
 	}
 
 	public LeagueParticipantCancelInfo cancelParticipateInLeague(String clubToken, String memberToken, Long leagueId) {
-		var clubMember = clubMemberService.getClubMemberDetailByClubToken(clubToken, memberToken);
-		Long clubMemberId = clubMember.clubMemberId();
-		return leagueParticipantService.participantLeagueCancel(leagueId, clubMemberId);
+		return leagueParticipantService.participantLeagueCancel(clubToken, memberToken, leagueId);
 	}
 }

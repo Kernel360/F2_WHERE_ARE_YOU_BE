@@ -8,7 +8,7 @@ public interface LeagueParticipantService {
 
 	int countParticipantMember(Long leagueId);
 
-	LeagueParticipantCancelInfo participantLeagueCancel(Long leagueId, Long clubMemberId);
+	LeagueParticipantCancelInfo participantLeagueCancel(String memberToken, String clubToken, Long leagueId);
 
 	LeagueParticipantInfo participantInLeague(String memberToken, String clubToken, Long leagueId);
 }
