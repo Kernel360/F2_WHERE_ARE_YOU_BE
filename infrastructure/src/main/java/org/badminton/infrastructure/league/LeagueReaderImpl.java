@@ -10,7 +10,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.badminton.domain.common.exception.league.LeagueNotExistException;
 import org.badminton.domain.domain.league.LeagueReader;
 import org.badminton.domain.domain.league.entity.League;
+import org.badminton.domain.domain.league.enums.AllowedLeagueStatus;
 import org.badminton.domain.domain.league.enums.LeagueStatus;
+import org.badminton.domain.domain.league.enums.Region;
 import org.springframework.stereotype.Component;
 
 
@@ -47,10 +49,16 @@ public class LeagueReaderImpl implements LeagueReader {
         return leagueRepository.countByClubClubIdAndLeagueStatus(clubId, LeagueStatus.RECRUITING_COMPLETED);
     }
 
+    // TODO: 지역 필터링 기능 구현
     @Override
-    public List<League> readOngoingAndUpcomingLeagueByDate(LocalDate date) {
+    public List<League> readOngoingAndUpcomingLeagueByDate(AllowedLeagueStatus leagueStatus, Region region,
+                                                           LocalDate date) {
         LocalDateTime startOfDay = date.atStartOfDay();
         LocalDateTime endOfDay = date.atTime(LocalTime.MAX);
+        if (leagueStatus.getStatus() == LeagueStatus.PLAYING || leagueStatus.getStatus() == LeagueStatus.RECRUITING) {
+            return leagueRepository.findAllByLeagueAtBetweenAndLeagueStatus(startOfDay, endOfDay,
+                    leagueStatus.getStatus());
+        }
         return leagueRepository.findAllByLeagueAtBetweenAndLeagueStatusNotIn(startOfDay, endOfDay, Arrays.asList(
                 LeagueStatus.CANCELED, LeagueStatus.FINISHED));
     }

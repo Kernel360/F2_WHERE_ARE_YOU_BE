@@ -9,14 +9,18 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface LeagueRepository extends JpaRepository<League, Long> {
 
-	Optional<League> findByClubClubTokenAndLeagueId(String clubToken, Long leagueId);
+    Optional<League> findByClubClubTokenAndLeagueId(String clubToken, Long leagueId);
 
-	List<League> findAllByClubClubTokenAndLeagueAtBetween(String clubToken, LocalDateTime startOfMonth,
-		LocalDateTime endOfMonth);
+    List<League> findAllByClubClubTokenAndLeagueAtBetween(String clubToken, LocalDateTime startOfMonth,
+                                                          LocalDateTime endOfMonth);
 
     void deleteByLeagueId(Long leagueId);
 
     List<League> findAllByLeagueAtBetweenAndLeagueStatusNotIn(LocalDateTime startOfDay, LocalDateTime endOfDay,
                                                               List<LeagueStatus> excludedLeagueStatusList);
-	Integer countByClubClubIdAndLeagueStatus(Long clubId, LeagueStatus leagueStatus);
+
+    Integer countByClubClubIdAndLeagueStatus(Long clubId, LeagueStatus leagueStatus);
+
+    List<League> findAllByLeagueAtBetweenAndLeagueStatus(LocalDateTime startOfDay, LocalDateTime endOfDay,
+                                                         LeagueStatus leagueStatus);
 }
