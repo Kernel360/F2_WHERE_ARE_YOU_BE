@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.badminton.domain.domain.club.command.ClubCreateCommand;
 import org.badminton.domain.domain.club.command.ClubUpdateCommand;
-import org.badminton.domain.domain.club.entity.ClubApply;
+import org.badminton.domain.domain.club.info.ClubApplicantInfo;
 import org.badminton.domain.domain.club.info.ClubCardInfo;
 import org.badminton.domain.domain.club.info.ClubCreateInfo;
 import org.badminton.domain.domain.club.info.ClubDeleteInfo;
@@ -28,5 +28,5 @@ public interface ClubService {
 
 	ClubCardInfo readClubById(Long clubId);
 
-	List<ClubApply> readClubApplicants(String clubToken);
+	List<ClubApplicantInfo> readClubApplicants(String clubToken);
 }

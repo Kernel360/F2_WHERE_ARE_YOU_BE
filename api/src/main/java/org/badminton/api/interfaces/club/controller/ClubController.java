@@ -1,6 +1,7 @@
 package org.badminton.api.interfaces.club.controller;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.badminton.api.application.club.ClubFacade;
 import org.badminton.api.application.club.ClubRankFacade;
@@ -18,7 +19,7 @@ import org.badminton.api.interfaces.club.dto.ClubUpdateRequest;
 import org.badminton.api.interfaces.club.dto.ClubUpdateResponse;
 import org.badminton.api.interfaces.club.dto.CustomPageResponse;
 import org.badminton.domain.domain.club.command.ClubUpdateCommand;
-import org.badminton.domain.domain.club.entity.ClubApply;
+import org.badminton.domain.domain.club.info.ClubApplicantInfo;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -173,12 +174,14 @@ public class ClubController {
 	@Operation(summary = "특정 동호회에 가입 신청한 유저 리스트 조회",
 		description = "특정 동호회에 가입 신청한 유저 리스트 조회",
 		tags = {"Club"})
-	@GetMapping("/{clubToken}/applicant")
-	public List<ClubApplicantResponse> getClubApplicant(@PathVariable String clubToken) {
-		List<ClubApply> clubApplies = clubFacade.readClubApplicants(clubToken);
+	@GetMapping("/{clubToken}/applicants")
+	public CommonResponse<List<ClubApplicantResponse>> getClubApplicant(@PathVariable String clubToken) {
+		List<ClubApplicantInfo> clubApplies = clubFacade.readClubApplicants(clubToken);
 
-		return clubApplies.stream()
-			.map(ClubApplicantResponse::fromClubApply)
-			.toList();
+		List<ClubApplicantResponse> response = clubApplies.stream()
+			.map(ClubApplicantResponse::from)
+			.collect(Collectors.toList());
+
+		return CommonResponse.success(response);
 	}
 }

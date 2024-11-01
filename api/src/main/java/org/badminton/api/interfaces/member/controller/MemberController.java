@@ -22,7 +22,6 @@ import org.badminton.domain.domain.clubmember.info.ClubMemberMyPageInfo;
 import org.badminton.domain.domain.match.info.MatchResultInfo;
 import org.badminton.domain.domain.member.info.MemberMyPageInfo;
 import org.badminton.domain.domain.member.info.MemberUpdateInfo;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -76,10 +75,10 @@ public class MemberController {
 		tags = {"Member"}
 	)
 	@GetMapping("/myPage")
-	public ResponseEntity<MemberMyPageResponse> getMemberInfo(@AuthenticationPrincipal CustomOAuth2Member member) {
+	public CommonResponse<MemberMyPageResponse> getMemberInfo(@AuthenticationPrincipal CustomOAuth2Member member) {
 		MemberMyPageInfo memberMyPageInfo = memberFacade.getMemberMyPageInfo(member.getMemberToken());
 		MemberMyPageResponse memberMyPageResponse = MemberMyPageResponse.toMemberMyPageResponse(memberMyPageInfo);
-		return ResponseEntity.ok(memberMyPageResponse);
+		return CommonResponse.success(memberMyPageResponse);
 	}
 
 	@GetMapping("/matchesRecord")

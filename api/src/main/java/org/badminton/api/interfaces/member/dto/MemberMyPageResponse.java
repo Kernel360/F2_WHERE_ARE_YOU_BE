@@ -1,7 +1,6 @@
 package org.badminton.api.interfaces.member.dto;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.badminton.api.interfaces.clubmember.dto.ClubMemberMyPageResponse;
 import org.badminton.api.interfaces.league.dto.LeagueRecordResponse;
@@ -40,13 +39,11 @@ public record MemberMyPageResponse(
 		if (info.clubMemberMyPageInfos() != null) {
 			clubMemberMyPageResponses = info.clubMemberMyPageInfos().stream()
 				.map(ClubMemberMyPageResponse::toClubMemberMyPageResponse)
-				.collect(Collectors.toList());
+				.toList();
 		}
 
-		LeagueRecordResponse leagueRecordResponse =
-			info.leagueRecordInfo() != null
-				? LeagueRecordResponse.toLeagueRecordResponse(info.leagueRecordInfo())
-				: null;
+		LeagueRecordResponse leagueRecordResponse = LeagueRecordResponse.toLeagueRecordResponse(
+			info.leagueRecordInfo());
 
 		return new MemberMyPageResponse(
 			info.memberToken(),

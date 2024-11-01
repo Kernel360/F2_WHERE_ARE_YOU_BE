@@ -3,6 +3,7 @@ package org.badminton.domain.domain.club;
 import java.util.List;
 
 import org.badminton.domain.domain.club.entity.ClubApply;
+import org.badminton.domain.domain.club.info.ClubApplicantInfo;
 
 public interface ClubApplyReader {
 
@@ -10,6 +11,6 @@ public interface ClubApplyReader {
 
 	void validateApply(String clubToken, String memberToken);
 
-	List<ClubApply> getClubApplyByClubToken(String clubToken, ClubApply.ApplyStatus applyStatus);
+	List<ClubApplicantInfo> getClubApplyByClubToken(String clubToken, ClubApply.ApplyStatus applyStatus);
 
 }

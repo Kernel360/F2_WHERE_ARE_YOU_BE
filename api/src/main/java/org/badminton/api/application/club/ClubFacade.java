@@ -7,7 +7,7 @@ import org.badminton.api.interfaces.auth.dto.CustomOAuth2Member;
 import org.badminton.domain.domain.club.ClubService;
 import org.badminton.domain.domain.club.command.ClubCreateCommand;
 import org.badminton.domain.domain.club.command.ClubUpdateCommand;
-import org.badminton.domain.domain.club.entity.ClubApply;
+import org.badminton.domain.domain.club.info.ClubApplicantInfo;
 import org.badminton.domain.domain.club.info.ClubCardInfo;
 import org.badminton.domain.domain.club.info.ClubCreateInfo;
 import org.badminton.domain.domain.club.info.ClubDeleteInfo;
@@ -70,7 +70,7 @@ public class ClubFacade {
 		return clubService.deleteClub(clubToken);
 	}
 
-	public List<ClubApply> readClubApplicants(String clubToken) {
+	public List<ClubApplicantInfo> readClubApplicants(String clubToken) {
 		return clubService.readClubApplicants(clubToken);
 	}
 

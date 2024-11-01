@@ -47,4 +47,5 @@ public interface ClubDtoMapper {
 	ClubCreateResponse of(ClubCreateInfo created);
 
 	ClubDeleteResponse of(ClubDeleteInfo club);
+
 }

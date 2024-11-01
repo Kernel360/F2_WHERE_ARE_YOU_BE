@@ -114,7 +114,7 @@ public class SecurityConfig {
 				.permitAll()
 				.requestMatchers(HttpMethod.DELETE, "/v1/clubs/{clubToken}")
 				.access(hasClubRole("OWNER"))
-				.requestMatchers(HttpMethod.GET, "/v1/clubs/{clubToken}/applicant")
+				.requestMatchers(HttpMethod.GET, "/v1/clubs/{clubToken}/applicants")
 				.access(hasClubRole("OWNER", "MANAGER"))
 				.requestMatchers(HttpMethod.PATCH, "/v1/clubs/{clubToken}")
 				.access(hasClubRole("OWNER", "MANAGER"))

@@ -6,8 +6,8 @@ import org.badminton.domain.domain.club.entity.ClubApply;
 import org.badminton.domain.domain.clubmember.ClubMemberReader;
 import org.badminton.domain.domain.clubmember.ClubMemberStore;
 import org.badminton.domain.domain.clubmember.entity.ClubMember;
-import org.badminton.domain.domain.clubmember.info.ApplyClubInfo;
 import org.badminton.domain.domain.clubmember.info.ApproveApplyInfo;
+import org.badminton.domain.domain.clubmember.info.ClubApplyInfo;
 import org.badminton.domain.domain.clubmember.info.RejectApplyInfo;
 import org.badminton.domain.domain.member.MemberReader;
 import org.badminton.domain.domain.member.entity.Member;
@@ -61,7 +61,7 @@ public class ClubApplyServiceImpl implements ClubApplyService {
 
 	@Override
 	@Transactional
-	public ApplyClubInfo applyClub(String memberToken, String clubToken, String applyReason) {
+	public ClubApplyInfo applyClub(String memberToken, String clubToken, String applyReason) {
 
 		Club club = clubReader.readClub(clubToken);
 		Member member = memberReader.getMember(memberToken);
@@ -71,6 +71,6 @@ public class ClubApplyServiceImpl implements ClubApplyService {
 		clubApplyReader.validateApply(clubToken, memberToken);
 
 		clubApplyStore.store(clubApply);
-		return ApplyClubInfo.fromClubApply(clubApply);
+		return ClubApplyInfo.fromClubApply(clubApply);
 	}
 }
