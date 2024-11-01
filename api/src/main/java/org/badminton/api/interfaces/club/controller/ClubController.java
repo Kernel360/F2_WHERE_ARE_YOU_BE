@@ -8,6 +8,7 @@ import org.badminton.api.application.club.strategy.ActivityClub;
 import org.badminton.api.application.club.strategy.PopularClub;
 import org.badminton.api.common.response.CommonResponse;
 import org.badminton.api.interfaces.auth.dto.CustomOAuth2Member;
+import org.badminton.api.interfaces.club.dto.ClubApplicantResponse;
 import org.badminton.api.interfaces.club.dto.ClubCardResponse;
 import org.badminton.api.interfaces.club.dto.ClubCreateRequest;
 import org.badminton.api.interfaces.club.dto.ClubCreateResponse;
@@ -17,6 +18,7 @@ import org.badminton.api.interfaces.club.dto.ClubUpdateRequest;
 import org.badminton.api.interfaces.club.dto.ClubUpdateResponse;
 import org.badminton.api.interfaces.club.dto.CustomPageResponse;
 import org.badminton.domain.domain.club.command.ClubUpdateCommand;
+import org.badminton.domain.domain.club.entity.ClubApply;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -166,6 +168,14 @@ public class ClubController {
 	public CommonResponse<List<ClubCardResponse>> clubSearchActivity() {
 		var clubCardList = clubRankFacade.rankClub(new ActivityClub());
 		return CommonResponse.success(clubDtoMapper.of(clubCardList));
+	}
 
+	@GetMapping("/{clubToken}/applicant")
+	public List<ClubApplicantResponse> getClubApplicant(@PathVariable String clubToken) {
+		List<ClubApply> clubApplies = clubFacade.readClubApplicants(clubToken);
+
+		return clubApplies.stream()
+			.map(ClubApplicantResponse::fromClubApply)
+			.toList();
 	}
 }

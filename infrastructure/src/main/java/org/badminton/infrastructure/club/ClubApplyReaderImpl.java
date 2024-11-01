@@ -1,5 +1,7 @@
 package org.badminton.infrastructure.club;
 
+import java.util.List;
+
 import org.badminton.domain.common.exception.clubmember.MemberAlreadyApplyClubException;
 import org.badminton.domain.domain.club.ClubApplyReader;
 import org.badminton.domain.domain.club.entity.ClubApply;
@@ -25,6 +27,10 @@ public class ClubApplyReaderImpl implements ClubApplyReader {
 			ClubApply.ApplyStatus.PENDING)) {
 			throw new MemberAlreadyApplyClubException(memberToken, clubToken);
 		}
-		;
+	}
+
+	@Override
+	public List<ClubApply> getClubApplyByClubToken(String clubToken, ClubApply.ApplyStatus applyStatus) {
+		return clubApplyRepository.findAllByClubClubTokenAndStatus(clubToken, applyStatus);
 	}
 }

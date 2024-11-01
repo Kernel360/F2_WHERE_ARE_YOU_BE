@@ -6,6 +6,7 @@ import java.util.Map;
 import org.badminton.api.application.clubMember.ClubMemberFacade;
 import org.badminton.api.common.response.CommonResponse;
 import org.badminton.api.interfaces.auth.dto.CustomOAuth2Member;
+import org.badminton.api.interfaces.club.dto.ApplyClubRequest;
 import org.badminton.api.interfaces.clubmember.ClubMemberDtoMapper;
 import org.badminton.api.interfaces.clubmember.dto.ApplyClubResponse;
 import org.badminton.api.interfaces.clubmember.dto.ApproveApplyResponse;
@@ -16,6 +17,7 @@ import org.badminton.api.interfaces.clubmember.dto.ClubMemberResponse;
 import org.badminton.api.interfaces.clubmember.dto.ClubMemberRoleUpdateRequest;
 import org.badminton.api.interfaces.clubmember.dto.ClubMemberWithdrawResponse;
 import org.badminton.api.interfaces.clubmember.dto.RejectApplyResponse;
+import org.badminton.domain.domain.club.command.ApplyClubCommand;
 import org.badminton.domain.domain.clubmember.command.ClubMemberBanCommand;
 import org.badminton.domain.domain.clubmember.command.ClubMemberExpelCommand;
 import org.badminton.domain.domain.clubmember.command.ClubMemberRoleUpdateCommand;
@@ -71,9 +73,10 @@ public class ClubMemberController {
 		tags = {"ClubMember"})
 	@PostMapping
 	public CommonResponse<ApplyClubResponse> applyClub(@AuthenticationPrincipal CustomOAuth2Member member,
-		@PathVariable String clubToken) {
+		@PathVariable String clubToken, @RequestBody ApplyClubRequest request) {
 		String memberToken = member.getMemberToken();
-		ApplyClubInfo applyClubInfo = clubMemberFacade.applyClub(memberToken, clubToken);
+		ApplyClubCommand command = request.of();
+		ApplyClubInfo applyClubInfo = clubMemberFacade.applyClub(memberToken, clubToken, command);
 		ApplyClubResponse applyClubResponse = clubMemberDtoMapper.of(applyClubInfo);
 		return CommonResponse.success(applyClubResponse);
 	}

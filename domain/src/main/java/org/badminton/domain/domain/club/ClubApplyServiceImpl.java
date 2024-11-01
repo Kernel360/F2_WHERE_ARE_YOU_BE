@@ -61,12 +61,12 @@ public class ClubApplyServiceImpl implements ClubApplyService {
 
 	@Override
 	@Transactional
-	public ApplyClubInfo applyClub(String memberToken, String clubToken) {
+	public ApplyClubInfo applyClub(String memberToken, String clubToken, String applyReason) {
 
 		Club club = clubReader.readClub(clubToken);
 		Member member = memberReader.getMember(memberToken);
 
-		ClubApply clubApply = new ClubApply(club, member);
+		ClubApply clubApply = new ClubApply(club, member, applyReason);
 
 		clubApplyReader.validateApply(clubToken, memberToken);
 

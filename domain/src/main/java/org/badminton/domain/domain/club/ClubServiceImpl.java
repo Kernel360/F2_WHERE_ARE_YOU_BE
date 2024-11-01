@@ -1,8 +1,11 @@
 package org.badminton.domain.domain.club;
 
+import java.util.List;
+
 import org.badminton.domain.domain.club.command.ClubCreateCommand;
 import org.badminton.domain.domain.club.command.ClubUpdateCommand;
 import org.badminton.domain.domain.club.entity.Club;
+import org.badminton.domain.domain.club.entity.ClubApply;
 import org.badminton.domain.domain.club.info.ClubCardInfo;
 import org.badminton.domain.domain.club.info.ClubCreateInfo;
 import org.badminton.domain.domain.club.info.ClubDeleteInfo;
@@ -22,6 +25,7 @@ public class ClubServiceImpl implements ClubService {
 
 	private final ClubReader clubReader;
 	private final ClubStore clubStore;
+	private final ClubApplyReader clubApplyReader;
 
 	@Override
 	public Page<ClubCardInfo> readAllClubs(Pageable pageable) {
@@ -73,5 +77,10 @@ public class ClubServiceImpl implements ClubService {
 	public ClubCardInfo readClubById(Long clubId) {
 		var club = clubReader.readClubByClubId(clubId);
 		return ClubCardInfo.clubEntityToClubsCardResponse(club, club.getClubMemberCountByTier());
+	}
+
+	@Override
+	public List<ClubApply> readClubApplicants(String clubToken) {
+		return clubApplyReader.getClubApplyByClubToken(clubToken, ClubApply.ApplyStatus.PENDING);
 	}
 }

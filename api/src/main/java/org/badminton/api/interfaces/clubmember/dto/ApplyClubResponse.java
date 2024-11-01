@@ -5,11 +5,13 @@ import org.badminton.domain.domain.clubmember.info.ApplyClubInfo;
 
 public record ApplyClubResponse(
 	Long clubApplyId,
+	String applyReason,
 	ClubApply.ApplyStatus status
 ) {
 	public static ApplyClubResponse fromClubApplyInfo(ApplyClubInfo applyClubInfo) {
 		return new ApplyClubResponse(
 			applyClubInfo.clubApplyId(),
+			applyClubInfo.applyReason(),
 			applyClubInfo.status()
 		);
 	}

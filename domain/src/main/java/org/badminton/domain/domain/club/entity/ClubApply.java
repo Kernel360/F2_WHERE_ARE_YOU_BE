@@ -2,6 +2,7 @@ package org.badminton.domain.domain.club.entity;
 
 import org.badminton.domain.domain.member.entity.Member;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -30,6 +31,9 @@ public class ClubApply {
 	@Enumerated(EnumType.STRING)
 	private ApplyStatus status;
 
+	@Column(columnDefinition = "TEXT")
+	private String applyReason;
+
 	@ManyToOne
 	@JoinColumn(name = "clubId")
 	private Club club;
@@ -38,9 +42,10 @@ public class ClubApply {
 	@JoinColumn(name = "memberId")
 	private Member member;
 
-	public ClubApply(Club club, Member member) {
+	public ClubApply(Club club, Member member, String applyReason) {
 		this.club = club;
 		this.member = member;
+		this.applyReason = applyReason;
 		this.status = ApplyStatus.PENDING;
 	}
 

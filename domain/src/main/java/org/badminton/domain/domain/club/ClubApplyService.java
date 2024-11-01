@@ -9,6 +9,6 @@ public interface ClubApplyService {
 
 	RejectApplyInfo rejectApplying(Long clubApplyId);
 
-	ApplyClubInfo applyClub(String memberToken, String clubToken);
+	ApplyClubInfo applyClub(String memberToken, String clubToken, String applyReason);
 
 }

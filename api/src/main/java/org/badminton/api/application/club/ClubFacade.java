@@ -1,11 +1,13 @@
 package org.badminton.api.application.club;
 
+import java.util.List;
 import java.util.Map;
 
 import org.badminton.api.interfaces.auth.dto.CustomOAuth2Member;
 import org.badminton.domain.domain.club.ClubService;
 import org.badminton.domain.domain.club.command.ClubCreateCommand;
 import org.badminton.domain.domain.club.command.ClubUpdateCommand;
+import org.badminton.domain.domain.club.entity.ClubApply;
 import org.badminton.domain.domain.club.info.ClubCardInfo;
 import org.badminton.domain.domain.club.info.ClubCreateInfo;
 import org.badminton.domain.domain.club.info.ClubDeleteInfo;
@@ -66,6 +68,10 @@ public class ClubFacade {
 	public ClubDeleteInfo deleteClubInfo(String clubToken) {
 		clubMemberService.deleteAllClubMembers(clubToken);
 		return clubService.deleteClub(clubToken);
+	}
+
+	public List<ClubApply> readClubApplicants(String clubToken) {
+		return clubService.readClubApplicants(clubToken);
 	}
 
 }
