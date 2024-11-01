@@ -10,8 +10,6 @@ public interface ClubMemberReader {
 
 	List<ClubMember> getClubMembersByMemberToken(String memberToken);
 
-	boolean isExist(String memberToken);
-
 	boolean existsMemberInClub(String memberToken, String clubToken);
 
 	List<ClubMember> getAllClubMemberByClubId(String clubToken);
@@ -27,4 +25,6 @@ public interface ClubMemberReader {
 	Integer getClubMemberApproveCount(Long clubId);
 
 	Integer getClubMemberCounts(Long clubId);
+
+	ClubMember getClubOwner(String clubToken);
 }
