@@ -170,6 +170,9 @@ public class ClubController {
 		return CommonResponse.success(clubDtoMapper.of(clubCardList));
 	}
 
+	@Operation(summary = "특정 동호회에 가입 신청한 유저 리스트 조회",
+		description = "특정 동호회에 가입 신청한 유저 리스트 조회",
+		tags = {"Club"})
 	@GetMapping("/{clubToken}/applicant")
 	public List<ClubApplicantResponse> getClubApplicant(@PathVariable String clubToken) {
 		List<ClubApply> clubApplies = clubFacade.readClubApplicants(clubToken);
