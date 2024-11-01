@@ -3,6 +3,7 @@ package org.badminton.api.application.clubMember;
 import java.util.List;
 import java.util.Map;
 
+import org.badminton.api.application.mail.MailService;
 import org.badminton.domain.domain.club.ClubApplyService;
 import org.badminton.domain.domain.clubmember.command.ClubMemberBanCommand;
 import org.badminton.domain.domain.clubmember.command.ClubMemberExpelCommand;
@@ -26,16 +27,20 @@ import lombok.extern.slf4j.Slf4j;
 public class ClubMemberFacade {
 	private final ClubMemberService clubMemberService;
 	private final ClubApplyService clubApplyService;
+	private final MailService mailService;
 
 	public ApplyClubInfo applyClub(String memberToken, String clubToken) {
+		mailService.sendClubApplyEmail(clubToken);
 		return clubApplyService.applyClub(memberToken, clubToken);
 	}
 
 	public ApproveApplyInfo approveApplying(Long clubApplyId) {
+		mailService.sendClubApplyResultEmail(clubApplyId, true);
 		return clubApplyService.approveApplying(clubApplyId);
 	}
 
 	public RejectApplyInfo rejectApplying(Long clubApplyId) {
+		mailService.sendClubApplyResultEmail(clubApplyId, false);
 		return clubApplyService.rejectApplying(clubApplyId);
 	}
 

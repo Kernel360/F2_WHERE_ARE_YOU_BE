@@ -26,7 +26,7 @@ public class ClubStatisticsFacade {
 		Map<Long, Integer> countByClubIdRegisterMemberCount = new HashMap<>();
 		List<Long> clubIds = clubStatisticsService.clubIdByList();
 		for (Long clubId : clubIds) {
-			Integer count = clubMemberService.getClubMemberApproveCount(clubId);
+			Integer count = clubMemberService.countByClubClubIdAndDeletedFalse(clubId);
 			countByClubIdRegisterMemberCount.put(clubId, count);
 		}
 		for (Map.Entry<Long, Integer> entry : countByClubIdRegisterMemberCount.entrySet()) {

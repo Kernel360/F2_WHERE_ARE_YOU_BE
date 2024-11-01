@@ -15,8 +15,8 @@ import org.badminton.api.interfaces.club.dto.ClubDeleteResponse;
 import org.badminton.api.interfaces.club.dto.ClubDetailsResponse;
 import org.badminton.api.interfaces.club.dto.ClubUpdateRequest;
 import org.badminton.api.interfaces.club.dto.ClubUpdateResponse;
+import org.badminton.api.interfaces.club.dto.CustomPageResponse;
 import org.badminton.domain.domain.club.command.ClubUpdateCommand;
-import org.springframework.data.domain.Page;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -124,20 +124,21 @@ public class ClubController {
 	@Operation(summary = "전체 동호회 조회",
 		description = "전체 동호회를 조회합니다.",
 		tags = {"Club"})
-	public CommonResponse<Page<ClubCardResponse>> readAllClub(
+	public CommonResponse<CustomPageResponse<ClubCardResponse>> readAllClub(
 		@RequestParam(defaultValue = DEFAULT_PAGE_VALUE) int page,
 		@RequestParam(defaultValue = DEFAULT_SIZE_VALUE) int size,
 		@RequestParam(defaultValue = DEFAULT_SORT_BY_VALUE) String sort) {
 		var clubCard = clubFacade.readAllClubs(page, size, sort);
 		var response = clubDtoMapper.of(clubCard);
-		return CommonResponse.success(response);
+		var pageResponse = new CustomPageResponse<>(response);
+		return CommonResponse.success(pageResponse);
 	}
 
 	@Operation(summary = "검색 조건에 맞는 동호회 조회",
 		description = "검색 조건에 맞는 동호회를 조회합니다.",
 		tags = {"Club"})
 	@GetMapping("/search")
-	public CommonResponse<Page<ClubCardResponse>> clubSearch(
+	public CommonResponse<CustomPageResponse<ClubCardResponse>> clubSearch(
 		@RequestParam(defaultValue = DEFAULT_PAGE_VALUE) int page,
 		@RequestParam(defaultValue = DEFAULT_SIZE_VALUE) int size,
 		@RequestParam(defaultValue = DEFAULT_SORT_BY_VALUE) String sort,
@@ -145,7 +146,8 @@ public class ClubController {
 
 		var clubCard = clubFacade.searchClubs(keyword, page, size, sort);
 		var response = clubDtoMapper.of(clubCard);
-		return CommonResponse.success(response);
+		var pageResponse = new CustomPageResponse<>(response);
+		return CommonResponse.success(pageResponse);
 	}
 
 	@Operation(summary = "인기 top10 동호회 검색",
