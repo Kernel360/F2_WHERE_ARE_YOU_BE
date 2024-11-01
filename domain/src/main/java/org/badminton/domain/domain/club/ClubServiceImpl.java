@@ -41,7 +41,7 @@ public class ClubServiceImpl implements ClubService {
 	@Override
 	public ClubSummaryInfo readClub(String clubToken) {
 		var club = clubReader.readClub(clubToken);
-		return ClubSummaryInfo.toClubSummaryInfo(club);
+		return ClubSummaryInfo.from(club);
 	}
 
 	@Override

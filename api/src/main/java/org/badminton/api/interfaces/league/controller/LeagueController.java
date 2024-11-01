@@ -87,6 +87,7 @@ public class LeagueController {
 	public CommonResponse<LeagueCreateResponse> createLeague(
 		@PathVariable String clubToken,
 		@Valid @RequestBody LeagueCreateRequest leagueCreateRequest) {
+		leagueCreateRequest.validate();
 		var command = leagueDtoMapper.of(leagueCreateRequest, clubToken);
 		var responseInfo = leagueFacade.createLeague(clubToken, command);
 		LeagueCreateResponse response = leagueDtoMapper.of(responseInfo);
@@ -118,6 +119,7 @@ public class LeagueController {
 		@PathVariable String clubToken,
 		@PathVariable Long leagueId,
 		@Valid @RequestBody LeagueUpdateRequest leagueUpdateRequest) {
+		leagueUpdateRequest.validatePlayerLimitCountWhenDoubles();
 		var command = leagueDtoMapper.of(leagueUpdateRequest);
 		var leagueUpdateInfo = leagueFacade.updateLeague(clubToken, leagueId, command);
 		var leagueUpdateResponse = leagueDtoMapper.of(leagueUpdateInfo);
@@ -134,7 +136,7 @@ public class LeagueController {
 		@PathVariable String clubToken,
 		@PathVariable Long leagueId) {
 		LeagueCancelInfo leagueInfo = leagueFacade.cancelLeague(clubToken, leagueId);
-		LeagueCancelResponse LeagueCancel = leagueDtoMapper.of(leagueInfo);
-		return CommonResponse.success(LeagueCancel);
+		LeagueCancelResponse leagueCancelResponse = leagueDtoMapper.of(leagueInfo);
+		return CommonResponse.success(leagueCancelResponse);
 	}
 }

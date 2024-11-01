@@ -15,7 +15,9 @@ public record LeagueUpdateInfo(
 
 	String leagueDescription,
 
-	String leagueLocation,
+	String fullAddress,
+
+	String region,
 
 	Member.MemberTier requiredTier,
 
@@ -35,12 +37,13 @@ public record LeagueUpdateInfo(
 
 	LocalDateTime modifiedAt
 ) {
-	public static LeagueUpdateInfo leagueUpdateInfo(League savedLeague) {
+	public static LeagueUpdateInfo from(League savedLeague) {
 		return new LeagueUpdateInfo(
 			savedLeague.getLeagueId(),
 			savedLeague.getLeagueName(),
 			savedLeague.getDescription(),
-			savedLeague.getLeagueLocation(),
+			savedLeague.getAddress().getFullAddress(),
+			savedLeague.getAddress().getRegion(),
 			savedLeague.getRequiredTier(),
 			savedLeague.getLeagueStatus(),
 			savedLeague.getMatchType(),

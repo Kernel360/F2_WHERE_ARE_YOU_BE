@@ -7,8 +7,8 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.ManyToOne;
 import lombok.Getter;
 
-@Embeddable
 @Getter
+@Embeddable
 public class Team {
 
 	@ManyToOne(fetch = FetchType.LAZY)
