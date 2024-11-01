@@ -14,7 +14,9 @@ public record LeagueDetailsInfo(
 
 	String leagueDescription,
 
-	String leagueLocation,
+	String fullAddress,
+	
+	String region,
 
 	Member.MemberTier requiredTier,
 
@@ -51,7 +53,8 @@ public record LeagueDetailsInfo(
 			leagueSummaryInfo.leagueId(),
 			leagueSummaryInfo.leagueName(),
 			leagueSummaryInfo.leagueDescription(),
-			leagueSummaryInfo.leagueLocation(),
+			leagueSummaryInfo.fullAddress(),
+			leagueSummaryInfo.region(),
 			leagueSummaryInfo.requiredTier(),
 			leagueSummaryInfo.leagueStatus(),
 			leagueSummaryInfo.matchType(),

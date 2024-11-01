@@ -15,7 +15,9 @@ public record LeagueSummaryInfo(
 
 	String leagueDescription,
 
-	String leagueLocation,
+	String fullAddress,
+
+	String region,
 
 	Member.MemberTier requiredTier,
 
@@ -36,12 +38,13 @@ public record LeagueSummaryInfo(
 	LocalDateTime modifiedAt
 
 ) {
-	public static LeagueSummaryInfo toLeagueSummaryInfo(League league) {
+	public static LeagueSummaryInfo from(League league) {
 		return new LeagueSummaryInfo(
 			league.getLeagueId(),
 			league.getLeagueName(),
 			league.getDescription(),
-			league.getLeagueLocation(),
+			league.getAddress().getFullAddress(),
+			league.getAddress().getRegion(),
 			league.getRequiredTier(),
 			league.getLeagueStatus(),
 			league.getMatchType(),

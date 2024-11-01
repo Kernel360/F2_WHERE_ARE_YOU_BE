@@ -25,6 +25,7 @@ public class LeagueParticipantReaderImpl implements LeagueParticipantReader {
 		return leagueParticipantRepository.countByLeagueLeagueIdAndCanceledFalse(leagueId);
 	}
 
+	// TODO: 경기 참여자가 아예 없는 경우 다른 예외 출력
 	@Override
 	public LeagueParticipant findParticipant(Long leagueId, Long clubMemberId) {
 		return leagueParticipantRepository.findByLeagueLeagueIdAndClubMemberClubMemberIdAndCanceledFalse(leagueId,

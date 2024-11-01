@@ -7,7 +7,7 @@ public record LeagueCancelInfo(
 	Long leagueId,
 	LeagueStatus leagueStatus
 ) {
-	public static LeagueCancelInfo leagueCancelInfo(League cancelLeague) {
+	public static LeagueCancelInfo from(League cancelLeague) {
 		return new LeagueCancelInfo(
 			cancelLeague.getLeagueId(),
 			cancelLeague.getLeagueStatus()

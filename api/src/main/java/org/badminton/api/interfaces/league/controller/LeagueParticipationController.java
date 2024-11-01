@@ -58,7 +58,7 @@ public class LeagueParticipationController {
 		CustomOAuth2Member member = (CustomOAuth2Member)authentication.getPrincipal();
 		String memberToken = member.getMemberToken();
 
-		LeagueParticipantCancelInfo result = leagueParticipationFacade.cancelLeagueParticipation(clubToken, memberToken,
+		LeagueParticipantCancelInfo result = leagueParticipationFacade.cancelParticipateInLeague(clubToken, memberToken,
 			leagueId);
 		LeagueParticipationCancelResponse response = leagueDtoMapper.of(result);
 		return CommonResponse.success(response);

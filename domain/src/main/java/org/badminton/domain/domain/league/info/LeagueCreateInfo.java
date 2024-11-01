@@ -11,6 +11,8 @@ import org.badminton.domain.domain.member.entity.Member;
 public record LeagueCreateInfo(
 	String leagueName,
 	String description,
+	String fullAddress,
+	String region,
 	Member.MemberTier requiredTier,
 	LeagueStatus status,
 	MatchType matchType,
@@ -22,10 +24,12 @@ public record LeagueCreateInfo(
 	MatchGenerationType matchGenerationType
 ) {
 
-	public static LeagueCreateInfo leagueCreateInfo(League league) {
+	public static LeagueCreateInfo from(League league) {
 		return new LeagueCreateInfo(
 			league.getLeagueName(),
 			league.getDescription(),
+			league.getAddress().getFullAddress(),
+			league.getAddress().getRegion(),
 			league.getRequiredTier(),
 			league.getLeagueStatus(),
 			league.getMatchType(),

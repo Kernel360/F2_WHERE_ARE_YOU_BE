@@ -4,7 +4,6 @@ import java.time.LocalDateTime;
 
 import org.badminton.domain.common.enums.MatchGenerationType;
 import org.badminton.domain.common.enums.MatchType;
-import org.badminton.domain.domain.league.entity.League;
 import org.badminton.domain.domain.league.enums.LeagueStatus;
 import org.badminton.domain.domain.member.entity.Member;
 
@@ -20,8 +19,11 @@ public record LeagueUpdateResponse(
 	@Schema(description = "경기 설명", example = "이 경기는 지역 예선 경기입니다.")
 	String leagueDescription,
 
-	@Schema(description = "경기 장소", example = "장충동 체육관")
-	String leagueLocation,
+	@Schema(description = "경기 장소", example = "서울시 동대문구 장충동 체육관")
+	String fullAddress,
+
+	@Schema(description = "경기 장소 리전", example = "장충동 체육관")
+	String region,
 
 	@Schema(description = "최소 티어, 예시) GOLD | SILVER | BRONZE", example = "GOLD")
 	Member.MemberTier requiredTier,
@@ -55,25 +57,4 @@ public record LeagueUpdateResponse(
 
 ) {
 
-	public static LeagueUpdateResponse fromLeagueEntityAndRecruitedMemberCountAndIsParticipated(
-		League league,
-		int recruitedMemberCount
-	) {
-		return new LeagueUpdateResponse(
-			league.getLeagueId(),
-			league.getLeagueName(),
-			league.getDescription(),
-			league.getLeagueLocation(),
-			league.getRequiredTier(),
-			league.getLeagueStatus(),
-			league.getMatchType(),
-			league.getLeagueAt(),
-			league.getRecruitingClosedAt(),
-			league.getMatchGenerationType(),
-			league.getPlayerLimitCount(),
-			recruitedMemberCount,
-			league.getCreatedAt(),
-			league.getModifiedAt()
-		);
-	}
 }
