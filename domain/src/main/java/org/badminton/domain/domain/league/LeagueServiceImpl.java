@@ -43,7 +43,8 @@ public class LeagueServiceImpl implements LeagueService {
 		LeagueCreateNoIncludeClubCommand leagueCreateNoIncludeClubCommand) {
 		var club = clubReader.readClub(clubToken);
 		var createdLeague = LeagueCreateCommand.build(leagueCreateNoIncludeClubCommand, club).toEntity();
-		return LeagueCreateInfo.from(leagueStore.store(createdLeague));
+		leagueStore.store(createdLeague);
+		return LeagueCreateInfo.from(createdLeague);
 	}
 
 	@Override

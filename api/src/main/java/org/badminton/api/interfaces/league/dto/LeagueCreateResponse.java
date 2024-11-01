@@ -56,7 +56,7 @@ public record LeagueCreateResponse(
 			entity.getLeagueName(),
 			entity.getDescription(),
 			entity.getAddress().getFullAddress(),
-			entity.getAddress().getFullAddress(),
+			entity.getAddress().getRegion(),
 			entity.getRequiredTier(),
 			entity.getLeagueStatus(),
 			entity.getMatchType(),
