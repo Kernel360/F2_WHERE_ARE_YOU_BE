@@ -5,9 +5,8 @@ import java.util.stream.Collectors;
 
 import org.badminton.api.interfaces.clubmember.dto.ClubMemberMyPageResponse;
 import org.badminton.api.interfaces.league.dto.LeagueRecordResponse;
-import org.badminton.domain.domain.clubmember.info.ClubMemberMyPageInfo;
-import org.badminton.domain.domain.league.info.LeagueRecordInfo;
 import org.badminton.domain.domain.member.entity.Member;
+import org.badminton.domain.domain.member.info.MemberMyPageInfo;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 
@@ -35,36 +34,28 @@ public record MemberMyPageResponse(
 	List<ClubMemberMyPageResponse> clubMemberMyPageResponses
 
 ) {
-	public static MemberMyPageResponse toMemberMyPageResponse(Member member,
-		LeagueRecordInfo leagueRecordInfo,
-		List<ClubMemberMyPageInfo> clubMemberMyPageInfos
-	) {
+	public static MemberMyPageResponse toMemberMyPageResponse(MemberMyPageInfo info) {
+		List<ClubMemberMyPageResponse> clubMemberMyPageResponses = null;
 
-		List<ClubMemberMyPageResponse> clubMemberMyPageResponses = clubMemberMyPageInfos.stream()
-			.map(ClubMemberMyPageResponse::toClubMemberMyPageResponse)
-			.collect(Collectors.toList());
+		if (info.clubMemberMyPageInfos() != null) {
+			clubMemberMyPageResponses = info.clubMemberMyPageInfos().stream()
+				.map(ClubMemberMyPageResponse::toClubMemberMyPageResponse)
+				.collect(Collectors.toList());
+		}
+
+		LeagueRecordResponse leagueRecordResponse =
+			info.leagueRecordInfo() != null
+				? LeagueRecordResponse.toLeagueRecordResponse(info.leagueRecordInfo())
+				: null;
 
 		return new MemberMyPageResponse(
-			member.getMemberToken(),
-			member.getName(),
-			member.getEmail(),
-			member.getProfileImage(),
-			member.getTier(),
-			LeagueRecordResponse.toLeagueRecordResponse(leagueRecordInfo),
+			info.memberToken(),
+			info.name(),
+			info.email(),
+			info.profileImage(),
+			info.tier(),
+			leagueRecordResponse,
 			clubMemberMyPageResponses
-		);
-	}
-
-	public static MemberMyPageResponse toMemberMyPageResponse(Member member,
-		LeagueRecordInfo leagueRecordInfo) {
-		return new MemberMyPageResponse(
-			member.getMemberToken(),
-			member.getName(),
-			member.getEmail(),
-			member.getProfileImage(),
-			member.getTier(),
-			LeagueRecordResponse.toLeagueRecordResponse(leagueRecordInfo),
-			null
 		);
 	}
 }

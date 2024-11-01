@@ -14,7 +14,7 @@ import org.badminton.api.common.exception.member.ImageFileNotFoundException;
 import org.badminton.api.common.response.CommonResponse;
 import org.badminton.api.interfaces.auth.dto.CustomOAuth2Member;
 import org.badminton.api.interfaces.match.dto.MatchResultResponse;
-import org.badminton.api.interfaces.member.MemberDtoMapper;
+import org.badminton.api.interfaces.member.dto.MemberMyPageResponse;
 import org.badminton.api.interfaces.member.dto.MemberUpdateRequest;
 import org.badminton.domain.domain.clubmember.info.ClubMemberMyPageInfo;
 import org.badminton.domain.domain.match.info.MatchResultInfo;
@@ -47,7 +47,6 @@ public class MemberController {
 	private final MemberProfileImageService memberProfileImageService;
 	private final MyMatchFacade myMatchFacade;
 	private final MemberFacade memberFacade;
-	private final MemberDtoMapper memberDtoMapper;
 
 	@Operation(
 		summary = "프로필 사진을 수정합니다",
@@ -74,25 +73,11 @@ public class MemberController {
 		tags = {"Member"}
 	)
 	@GetMapping("/myPage")
-	public ResponseEntity<MemberMyPageInfo> getMemberInfo(@AuthenticationPrincipal CustomOAuth2Member member) {
+	public ResponseEntity<MemberMyPageResponse> getMemberInfo(@AuthenticationPrincipal CustomOAuth2Member member) {
 		MemberMyPageInfo memberMyPageInfo = memberFacade.getMemberMyPageInfo(member.getMemberToken());
-		// MemberMyPageResponse memberMyPageResponse = memberDtoMapper.of(memberMyPageInfo);
-		return ResponseEntity.ok(memberMyPageInfo);
+		MemberMyPageResponse memberMyPageResponse = MemberMyPageResponse.toMemberMyPageResponse(memberMyPageInfo);
+		return ResponseEntity.ok(memberMyPageResponse);
 	}
-
-	// @Operation(
-	//         summary = "회원이 동호회에 가입되어있는지 확인합니다",
-	//         description = "회원이 동호회에 가입되어있는지 확인합니다",
-	//         tags = {"Member"}
-	// )
-	// @GetMapping("/is-club-member")
-	// public CommonResponse<MemberIsClubMemberResponse> getMemberIsClubMember(
-	//         @AuthenticationPrincipal CustomOAuth2Member member) {
-	//     String memberToken = member.getMemberToken();
-	//     MemberIsClubMemberInfo memberIsClubMemberInfo = memberFacade.getMemberIsClubMember(memberToken);
-	//     MemberIsClubMemberResponse memberIsClubMemberResponse = memberDtoMapper.of(memberIsClubMemberInfo);
-	//     return CommonResponse.success(memberIsClubMemberResponse);
-	// }
 
 	@GetMapping("/matchesRecord")
 	@Operation(summary = "회원 경기 기록 조회",

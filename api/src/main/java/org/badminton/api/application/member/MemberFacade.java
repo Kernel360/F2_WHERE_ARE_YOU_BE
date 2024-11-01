@@ -23,13 +23,7 @@ public class MemberFacade {
 	private final MemberService memberService;
 	private final LeagueRecordService leagueRecordService;
 	private final ClubMemberService clubMemberService;
-
-	// public MemberIsClubMemberInfo getMemberIsClubMember(String memberToken) {
-	// 	ClubMemberMyPageInfo clubMemberMyPageInfo = clubMemberService.getClubMember(memberToken);
-	//
-	// 	return memberService.getMemberIsClubMember(memberToken, clubMemberMyPageInfo);
-	// }
-
+	
 	public MemberMyPageInfo getMemberMyPageInfo(String memberToken) {
 		List<ClubMemberMyPageInfo> clubMemberMyPageInfos = clubMemberService.getClubMembers(memberToken);
 		LeagueRecord leagueRecord = leagueRecordService.getLeagueRecord(memberToken);
