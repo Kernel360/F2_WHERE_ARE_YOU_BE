@@ -20,7 +20,7 @@ public class LeagueParticipationFacade {
 		return leagueParticipantService.participantInLeague(memberToken, clubToken, leagueId);
 	}
 
-	public LeagueParticipantCancelInfo cancelLeagueParticipation(String clubToken, String memberToken, Long leagueId) {
+	public LeagueParticipantCancelInfo cancelParticipateInLeague(String clubToken, String memberToken, Long leagueId) {
 		var clubMember = clubMemberService.getClubMemberDetailByClubToken(clubToken, memberToken);
 		Long clubMemberId = clubMember.clubMemberId();
 		return leagueParticipantService.participantLeagueCancel(leagueId, clubMemberId);
