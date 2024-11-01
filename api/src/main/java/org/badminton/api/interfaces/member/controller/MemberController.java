@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.badminton.api.application.match.MyMatchFacade;
 import org.badminton.api.application.member.MemberFacade;
@@ -13,9 +12,12 @@ import org.badminton.api.aws.s3.service.MemberProfileImageService;
 import org.badminton.api.common.exception.member.ImageFileNotFoundException;
 import org.badminton.api.common.response.CommonResponse;
 import org.badminton.api.interfaces.auth.dto.CustomOAuth2Member;
+import org.badminton.api.interfaces.club.dto.ClubCardResponse;
 import org.badminton.api.interfaces.match.dto.MatchResultResponse;
+import org.badminton.api.interfaces.member.MemberDtoMapper;
 import org.badminton.api.interfaces.member.dto.MemberMyPageResponse;
 import org.badminton.api.interfaces.member.dto.MemberUpdateRequest;
+import org.badminton.domain.domain.club.info.ClubCardInfo;
 import org.badminton.domain.domain.clubmember.info.ClubMemberMyPageInfo;
 import org.badminton.domain.domain.match.info.MatchResultInfo;
 import org.badminton.domain.domain.member.info.MemberMyPageInfo;
@@ -45,6 +47,7 @@ import lombok.extern.slf4j.Slf4j;
 public class MemberController {
 
 	private final MemberProfileImageService memberProfileImageService;
+	private final MemberDtoMapper memberDtoMapper;
 	private final MyMatchFacade myMatchFacade;
 	private final MemberFacade memberFacade;
 
@@ -99,7 +102,7 @@ public class MemberController {
 			List<MatchResultInfo> myMatch = myMatchFacade.getMyMatch(clubMemberId);
 			allMatchResults.addAll(myMatch.stream()
 				.map(MatchResultResponse::from)
-				.collect(Collectors.toList()));
+				.toList());
 		}
 		allMatchResults.sort(Comparator.comparing(MatchResultResponse::leagueAt));
 
@@ -128,6 +131,19 @@ public class MemberController {
 		}
 		ImageUploadRequest request = new ImageUploadRequest(multipartFile);
 		return CommonResponse.success(memberProfileImageService.uploadFile(request, member.getMemberToken()));
+	}
+
+	@Operation(
+		summary = "회원이 속한 동호회를 볼 수 있습니다",
+		description = "회원이 속한 동호회를 볼 수 있습니다",
+		tags = {"Member"}
+	)
+	@GetMapping("/myClubs")
+	public CommonResponse<List<ClubCardResponse>> getMyClubs(@AuthenticationPrincipal CustomOAuth2Member member
+	) {
+		List<ClubCardInfo> clubCardInfos = memberFacade.getMyClubs(member.getMemberToken());
+		List<ClubCardResponse> clubCardResponses = memberDtoMapper.of(clubCardInfos);
+		return CommonResponse.success(clubCardResponses);
 	}
 }
 

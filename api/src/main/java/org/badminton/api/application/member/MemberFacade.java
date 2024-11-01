@@ -2,6 +2,7 @@ package org.badminton.api.application.member;
 
 import java.util.List;
 
+import org.badminton.domain.domain.club.info.ClubCardInfo;
 import org.badminton.domain.domain.clubmember.info.ClubMemberMyPageInfo;
 import org.badminton.domain.domain.clubmember.service.ClubMemberService;
 import org.badminton.domain.domain.league.entity.LeagueRecord;
@@ -23,7 +24,7 @@ public class MemberFacade {
 	private final MemberService memberService;
 	private final LeagueRecordService leagueRecordService;
 	private final ClubMemberService clubMemberService;
-	
+
 	public MemberMyPageInfo getMemberMyPageInfo(String memberToken) {
 		List<ClubMemberMyPageInfo> clubMemberMyPageInfos = clubMemberService.getClubMembers(memberToken);
 		LeagueRecord leagueRecord = leagueRecordService.getLeagueRecord(memberToken);
@@ -37,5 +38,9 @@ public class MemberFacade {
 
 	public MemberUpdateInfo updateProfileImage(String memberToken, String imageUrl) {
 		return memberService.updateProfileImage(memberToken, imageUrl);
+	}
+
+	public List<ClubCardInfo> getMyClubs(String memberToken) {
+		return clubMemberService.getClubsByMemberToken(memberToken);
 	}
 }
