@@ -16,21 +16,17 @@ public interface ClubMemberRepository extends JpaRepository<ClubMember, Long> {
 
 	Optional<ClubMember> findByClubClubTokenAndMemberMemberToken(String clubToken, String memberToken);
 
-	boolean existsByMember_MemberTokenAndDeletedFalse(String memberToken);
-
-	List<ClubMember> findAllByMemberMemberToken(String memberToken);
-
 	List<ClubMember> findAllByClubClubTokenAndBannedFalseAndDeletedFalse(String clubToken);
 
 	boolean existsByMemberMemberTokenAndClubClubToken(String memberToken, String clubToken);
 
 	Optional<ClubMember> findByClubMemberId(Long clubMemberId);
 
-	List<ClubMember> findAllByDeletedFalseAndClubClubToken(String clubToken);
-
 	@Query("SELECT COUNT(cm) FROM ClubMember cm WHERE cm.member.memberToken = :memberToken AND cm.role = 'ROLE_OWNER'")
 	long countByMemberIdAndRoleOwner(@Param("memberToken") String memberToken);
 
 	Integer countByClubClubIdAndDeletedFalse(Long clubId);
+
+	ClubMember findByClubClubTokenAndRole(String clubToken, ClubMember.ClubMemberRole role);
 }
 
