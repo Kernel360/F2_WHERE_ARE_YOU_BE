@@ -3,7 +3,6 @@ package org.badminton.infrastructure.clubmember;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.badminton.domain.common.exception.clubmember.ClubMemberAlreadyOwnerException;
 import org.badminton.domain.common.exception.clubmember.ClubMemberNotExistException;
 import org.badminton.domain.domain.clubmember.ClubMemberReader;
 import org.badminton.domain.domain.clubmember.entity.ClubMember;
@@ -14,7 +13,6 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class ClubMemberReaderImpl implements ClubMemberReader {
 
-    public static final int NOT_OWNER_CLUB = 0;
     private final ClubMemberRepository clubMemberRepository;
 
     @Override
@@ -31,13 +29,6 @@ public class ClubMemberReaderImpl implements ClubMemberReader {
     @Override
     public boolean checkIsClubMember(String memberToken, String clubToken) {
         return clubMemberRepository.existsByClubClubTokenAndMemberMemberToken(clubToken, memberToken);
-    }
-
-    @Override
-    public void checkIsClubOwner(String memberToken) {
-        if (NOT_OWNER_CLUB != clubMemberRepository.countByMemberIdAndRoleOwner(memberToken)) {
-            throw new ClubMemberAlreadyOwnerException(memberToken);
-        }
     }
 
     @Override
