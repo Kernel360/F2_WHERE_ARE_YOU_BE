@@ -9,6 +9,8 @@ import org.badminton.api.common.response.CommonResponse;
 import org.badminton.api.interfaces.league.dto.OngoingAndUpcomingLeagueResponse;
 import org.badminton.api.interfaces.match.dto.LeagueSetsScoreInProgressResponse;
 import org.badminton.domain.domain.league.LeagueService;
+import org.badminton.domain.domain.league.enums.AllowedLeagueStatus;
+import org.badminton.domain.domain.league.enums.Region;
 import org.badminton.domain.domain.league.info.OngoingAndUpcomingLeagueInfo;
 import org.badminton.domain.domain.match.info.LeagueSetsScoreInProgressInfo;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -22,7 +24,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping("/v2/leagues")
 public class MainLeagueController {
-
     private final LeagueService leagueService;
     private final MatchFacade matchFacade;
 
@@ -33,10 +34,12 @@ public class MainLeagueController {
     )
     @GetMapping
     public CommonResponse<List<OngoingAndUpcomingLeagueResponse>> getLeaguesByDate(
+            @RequestParam(defaultValue = "ALL") AllowedLeagueStatus leagueStatus,
+            @RequestParam(defaultValue = "ALL") Region region,
             @RequestParam("date")
             @DateTimeFormat(pattern = "yyyy-MM-dd") LocalDate date) {
         List<OngoingAndUpcomingLeagueInfo> ongoingAndUpcomingLeaguesByDate = leagueService.getOngoingAndUpcomingLeaguesByDate(
-                date);
+                leagueStatus, region, date);
         return CommonResponse.success(ongoingAndUpcomingLeaguesByDate.stream()
                 .map(OngoingAndUpcomingLeagueResponse::from)
                 .toList());
@@ -55,4 +58,5 @@ public class MainLeagueController {
                 .map(LeagueSetsScoreInProgressResponse::from)
                 .toList());
     }
+
 }
