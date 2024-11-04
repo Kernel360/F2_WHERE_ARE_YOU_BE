@@ -1,13 +1,17 @@
 package org.badminton.domain.domain.league;
 
 import jakarta.transaction.Transactional;
+import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.badminton.domain.common.exception.league.LeagueCannotBeCanceledWhenIsNotRecruiting;
+import org.badminton.domain.common.exception.league.LeagueOwnerCannotCancelLeagueParticipationException;
 import org.badminton.domain.common.exception.league.LeagueParticipationDuplicateException;
 import org.badminton.domain.domain.clubmember.ClubMemberReader;
 import org.badminton.domain.domain.clubmember.entity.ClubMember;
 import org.badminton.domain.domain.league.entity.League;
 import org.badminton.domain.domain.league.entity.LeagueParticipant;
+import org.badminton.domain.domain.league.enums.LeagueStatus;
 import org.badminton.domain.domain.league.info.LeagueParticipantCancelInfo;
 import org.badminton.domain.domain.league.info.LeagueParticipantInfo;
 import org.springframework.stereotype.Service;
@@ -35,6 +39,13 @@ public class LeagueParticipantServiceImpl implements LeagueParticipantService {
 
     @Override
     public LeagueParticipantCancelInfo participantLeagueCancel(String memberToken, String clubToken, Long leagueId) {
+        League league = leagueReader.readLeagueById(leagueId);
+        if (Objects.equals(league.getLeagueOwnerMemberToken(), memberToken)) {
+            throw new LeagueOwnerCannotCancelLeagueParticipationException(memberToken, leagueId);
+        }
+        if (league.getLeagueStatus() != LeagueStatus.RECRUITING) {
+            throw new LeagueCannotBeCanceledWhenIsNotRecruiting(leagueId, league.getLeagueStatus());
+        }
         ClubMember clubMember = clubMemberReader.getClubMemberByMemberTokenAndClubToken(clubToken, memberToken);
         Long clubMemberId = clubMember.getClubMemberId();
         LeagueParticipant leagueParticipant = leagueParticipantReader.findParticipant(leagueId, clubMemberId);
