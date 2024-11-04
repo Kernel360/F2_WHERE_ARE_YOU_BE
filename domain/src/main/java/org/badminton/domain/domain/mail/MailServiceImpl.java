@@ -1,4 +1,4 @@
-package org.badminton.api.application.mail;
+package org.badminton.domain.domain.mail;
 
 import org.badminton.domain.domain.club.ClubApplyReader;
 import org.badminton.domain.domain.club.ClubReader;
@@ -6,16 +6,14 @@ import org.badminton.domain.domain.club.entity.Club;
 import org.badminton.domain.domain.club.entity.ClubApply;
 import org.badminton.domain.domain.clubmember.ClubMemberReader;
 import org.badminton.domain.domain.clubmember.entity.ClubMember;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.JavaMailSender;
+import org.badminton.domain.domain.mail.entity.Mail;
 import org.springframework.stereotype.Service;
 
-import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 
 @Service
-@AllArgsConstructor
-public class MailService {
+@RequiredArgsConstructor
+public class MailServiceImpl implements MailService {
 
 	public static final String APPLY_CLUB_TITLE = "동호회에 가입 신청이 생겼습니다 ";
 	public static final String APPLY_CLUB_MESSAGE = "동호회 가입신청을 확인해주세요";
@@ -24,26 +22,23 @@ public class MailService {
 	public static final String REJECT_APPLY_CLUB_TITLE = "동호회 가입 신청이 거부되었습니다 ";
 	public static final String REJECT_APPLY_CLUB_MESSAGE = "동호회 가입 신청이 거부되었습니다 ";
 
-	@Value("${custom.spring.mail.username}")
-	private static String fromAddress;
 	private final ClubReader clubReader;
 	private final ClubMemberReader clubMemberReader;
 	private final ClubApplyReader clubApplyReader;
-	private JavaMailSender mailSender;
+	private final MailStore mailStore;
 
-	public void sendClubApplyEmail(String clubToken) {
-
+	@Override
+	public void prepareClubApplyEmail(String clubToken) {
 		Club club = clubReader.readClub(clubToken);
 		ClubMember clubOwner = clubMemberReader.getClubOwner(clubToken);
 		String ownerEmail = clubOwner.getMember().getEmail();
 		String clubName = club.getClubName();
-
 		String title = APPLY_CLUB_TITLE + clubName;
-		String message = APPLY_CLUB_MESSAGE;
-		mailSender.send(createMessage(ownerEmail, title, message));
+		createMessage(ownerEmail, title, APPLY_CLUB_MESSAGE);
 	}
 
-	public void sendClubApplyResultEmail(Long clubApplyId, boolean isApproved) {
+	@Override
+	public void prepareClubApplyResultEmail(Long clubApplyId, boolean isApproved) {
 		String title;
 		String message;
 		ClubApply clubApply = clubApplyReader.getClubApply(clubApplyId);
@@ -57,15 +52,11 @@ public class MailService {
 			title = REJECT_APPLY_CLUB_TITLE;
 			message = REJECT_APPLY_CLUB_MESSAGE + clubName;
 		}
-		mailSender.send(createMessage(email, title, message));
+		createMessage(email, title, message);
 	}
 
-	public SimpleMailMessage createMessage(String to, String title, String text) {
-		SimpleMailMessage message = new SimpleMailMessage();
-		message.setTo(to);
-		message.setFrom(fromAddress);
-		message.setSubject(title);
-		message.setText(text);
-		return message;
+	private void createMessage(String toEmail, String title, String message) {
+		Mail mail = new Mail(title, message, toEmail);
+		mailStore.store(mail);
 	}
 }

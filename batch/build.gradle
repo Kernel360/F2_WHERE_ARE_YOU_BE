@@ -2,17 +2,17 @@ dependencies {
     implementation project(':domain')
     implementation project(':infrastructure')
     implementation 'org.springframework.boot:spring-boot-starter-web'
-    implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
-    implementation 'org.springframework.boot:spring-boot-starter-security'
     implementation group: 'org.springdoc', name: 'springdoc-openapi-starter-webmvc-ui', version: '2.6.0'
     implementation 'io.jsonwebtoken:jjwt-api:0.12.3'
     implementation 'org.springframework.boot:spring-boot-starter-batch'
+    implementation 'org.springframework.boot:spring-boot-starter-mail'
+
+
     testImplementation 'org.springframework.batch:spring-batch-test'
 
     runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.12.3'
     runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.12.3'
-    testImplementation 'org.springframework.security:spring-security-test'
 
 }
 

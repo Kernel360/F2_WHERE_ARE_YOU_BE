@@ -3,7 +3,6 @@ package org.badminton.api.application.clubMember;
 import java.util.List;
 import java.util.Map;
 
-import org.badminton.api.application.mail.MailService;
 import org.badminton.domain.domain.club.ClubApplyService;
 import org.badminton.domain.domain.clubmember.command.ClubMemberBanCommand;
 import org.badminton.domain.domain.clubmember.command.ClubMemberExpelCommand;
@@ -16,6 +15,7 @@ import org.badminton.domain.domain.clubmember.info.ClubMemberInfo;
 import org.badminton.domain.domain.clubmember.info.ClubMemberWithdrawInfo;
 import org.badminton.domain.domain.clubmember.info.RejectApplyInfo;
 import org.badminton.domain.domain.clubmember.service.ClubMemberService;
+import org.badminton.domain.domain.mail.MailService;
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
@@ -30,17 +30,17 @@ public class ClubMemberFacade {
 	private final MailService mailService;
 
 	public ApplyClubInfo applyClub(String memberToken, String clubToken) {
-		mailService.sendClubApplyEmail(clubToken);
+		mailService.prepareClubApplyEmail(clubToken);
 		return clubApplyService.applyClub(memberToken, clubToken);
 	}
 
 	public ApproveApplyInfo approveApplying(Long clubApplyId) {
-		mailService.sendClubApplyResultEmail(clubApplyId, true);
+		mailService.prepareClubApplyResultEmail(clubApplyId, true);
 		return clubApplyService.approveApplying(clubApplyId);
 	}
 
 	public RejectApplyInfo rejectApplying(Long clubApplyId) {
-		mailService.sendClubApplyResultEmail(clubApplyId, false);
+		mailService.prepareClubApplyResultEmail(clubApplyId, false);
 		return clubApplyService.rejectApplying(clubApplyId);
 	}
 
