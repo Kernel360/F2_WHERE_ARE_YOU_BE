@@ -171,6 +171,15 @@ public class ClubController {
 		return CommonResponse.success(clubDtoMapper.of(clubCardList));
 	}
 
+	@Operation(summary = "최근 생성된 top10 동호회 검색",
+		description = "최근 생성된 동호회 top10을 검색합니다.",
+		tags = {"Club"})
+	@GetMapping("/recently")
+	public CommonResponse<List<ClubCardResponse>> clubSearchRecently() {
+		var clubCardList = clubRankFacade.readRecentlyClub();
+		return CommonResponse.success(clubDtoMapper.of(clubCardList));
+	}
+
 	@Operation(summary = "특정 동호회에 가입 신청한 유저 리스트 조회",
 		description = "특정 동호회에 가입 신청한 유저 리스트 조회",
 		tags = {"Club"})

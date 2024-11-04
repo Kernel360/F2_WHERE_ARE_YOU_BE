@@ -34,4 +34,8 @@ public class ClubRankFacade {
 
 		return clubList;
 	}
+
+	public List<ClubCardInfo> readRecentlyClub() {
+		return clubService.readRecentlyClub();
+	}
 }

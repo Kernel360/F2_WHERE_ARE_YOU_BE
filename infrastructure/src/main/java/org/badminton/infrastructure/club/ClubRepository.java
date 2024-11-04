@@ -1,5 +1,6 @@
 package org.badminton.infrastructure.club;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.badminton.domain.domain.club.entity.Club;
@@ -17,6 +18,8 @@ public interface ClubRepository extends JpaRepository<Club, Long> {
 	Page<Club> findAllByIsClubDeletedIsFalse(Pageable pageable);
 
 	Page<Club> findAllByClubNameContainingIgnoreCaseAndIsClubDeletedIsFalse(String keyword, Pageable pageable);
+
+	List<Club> findTop10ByIsClubDeletedIsFalseOrderByCreatedAtDesc();
 
 	Club findByClubId(Long clubId);
 }

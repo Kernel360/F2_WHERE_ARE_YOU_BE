@@ -29,4 +29,6 @@ public interface ClubService {
 	ClubCardInfo readClubById(Long clubId);
 
 	List<ClubApplicantInfo> readClubApplicants(String clubToken);
+
+	List<ClubCardInfo> readRecentlyClub();
 }

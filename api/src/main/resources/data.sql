@@ -33,47 +33,114 @@ VALUES ('provider_1', 'honggildong@example.com', '홍길동', 'AUTHORIZATION_USE
         'https://d36om9pjoifd2y.cloudfront.net/member/zebra.jpg', false, '2024-01-10 10:00:00',
         '2024-01-10 09:00:00', '2024-01-10 09:00:00', 'BRONZE', 'me_token_10');
 
--- Club 데이터 삽입
 INSERT INTO club (clubName, clubDescription, clubImage, isClubDeleted, createdAt, modifiedAt, clubToken)
-VALUES ('Badminton Club 1', 'This is the first badminton club.',
-        'https://d36om9pjoifd2y.cloudfront.net/club-banner/3257bbf2-52dc-41b2-9d1f-a6c66f3c7216.avif',
-        false, '2024-01-01 09:00:00', '2024-01-01 09:00:00', 'club_stf2UjhInO0BhBO'),
-       ('Badminton Club 2', 'This is the second badminton club.',
-        'https://d36om9pjoifd2y.cloudfront.net/club-banner/505adfb7-b355-4721-a622-3ce0f50eef4e.avif',
-        false, '2024-01-02 09:00:00',
-        '2024-01-02 09:00:00', 'club_stflUjhInO0BhqO'),
-       ('Badminton Club 3', 'This is the third badminton club.',
-        'https://d36om9pjoifd2y.cloudfront.net/club-banner/66fd31cd-f112-4796-b823-682016c4f58b.avif',
-        false, '2024-01-03 09:00:00',
-        '2024-01-03 09:00:00', 'club_stflUjh64560BhBO'),
-       ('Super Smashers', 'A club for power players.',
-        'https://d36om9pjoifd2y.cloudfront.net/club-banner/c87e6e09-71ce-43a1-bd5e-b8ce73fcd646.webp',
-        false, '2024-01-04 09:00:00',
-        '2024-01-04 09:00:00', 'club_stflUjhInO0hgBO'),
-       ('Shuttle Masters', 'Top-tier badminton players gather here.',
-        'https://d36om9pjoifd2y.cloudfront.net/club-banner/ca6419f1-021a-4af2-97e3-03b66eb63669.webp',
-        false,
-        '2024-01-05 09:00:00', '2024-01-05 09:00:00', 'club_stnlUjhInO0BhBO'),
-       ('Net Warriors', 'A club focused on defense and strategy.',
-        'https://d36om9pjoifd2y.cloudfront.net/club-banner/ee4a20ec-03ae-4031-94d3-4379af2f0540.webp',
-        true, '2024-01-06 09:00:00',
-        '2024-01-06 09:00:00', 'club_stelUjhInO0BhBO'),
-       ('Birdie', 'Badminton lovers who play competitively.',
-        'https://d36om9pjoifd2y.cloudfront.net/club-banner/ca6419f1-021a-4af2-97e3-03b66eb63669.webp',
-        false, '2024-01-07 09:00:00',
-        '2024-01-07 09:00:00', 'club_stflUjgInO0BhBO'),
-       ('Feather', 'Focusing on technique and skill.',
-        'https://d36om9pjoifd2y.cloudfront.net/club-banner/acc98299-4f71-45bf-8279-815ef597bc63.webp',
-        false, '2024-01-08 09:00:00',
-        '2024-01-08 09:00:00', 'club_stflUjfInO0BhBO'),
-       ('Smash Kings', 'Club for those who love aggressive play.',
-        'https://d36om9pjoifd2y.cloudfront.net/club-banner/45c13288-9d26-46bd-93ec-37e7e83ac700.webp',
-        false, '2024-01-09 09:00:00',
-        '2024-01-09 09:00:00', 'club_stflUjhInO04hBO'),
-       ('Rally Rulers', 'Endurance and long rallies define this club.',
-        'https://d36om9pjoifd2y.cloudfront.net/club-banner/9cd6bb46-53f8-4480-9c91-4eaeed0686a9.webp',
-        false,
-        '2024-01-10 09:00:00', '2024-01-10 09:00:00', 'club_stflUjhI3O0BhBO');
+VALUES
+    ('스매싱 파이터', '강력한 스매싱을 즐기는 분들을 위한 동호회입니다. 초보부터 고수까지 환영합니다!',
+     'https://d36om9pjoifd2y.cloudfront.net/club-banner/3257bbf2-52dc-41b2-9d1f-a6c66f3c7216.avif', false, '2024-01-11 09:00:00', '2024-01-11 09:00:00', 'club_asdq7UjhInO0BhBO'),
+
+    ('클래식 배드민턴', '기본에 충실한 플레이를 중시하는 클럽입니다. 클래식한 스타일을 좋아하는 분들을 환영합니다.',
+     'https://d36om9pjoifd2y.cloudfront.net/club-banner/505adfb7-b355-4721-a622-3ce0f50eef4e.avif', false, '2024-01-12 09:00:00', '2024-01-12 09:00:00', 'club_asfw8UjhInO0BhBO'),
+
+    ('스타 스매셔', '화려한 스매싱과 드라이브로 게임을 지배하는 모임입니다.',
+     'https://d36om9pjoifd2y.cloudfront.net/club-banner/66fd31cd-f112-4796-b823-682016c4f58b.avif', false, '2024-01-13 09:00:00', '2024-01-13 09:00:00', 'club_dgfehUjhInO0BhBO'),
+
+    ('스피드 앤 파워', '빠른 스피드와 강한 파워로 게임을 즐기는 동호회입니다. 열정 있는 분들을 기다립니다.',
+     'https://d36om9pjoifd2y.cloudfront.net/club-banner/c87e6e09-71ce-43a1-bd5e-b8ce73fcd646.webp', false, '2024-01-14 09:00:00', '2024-01-14 09:00:00', 'club_ghjrkUjhInO0BhBO'),
+
+    ('배드민턴 마스터', '기본부터 고급 기술까지 다양한 스킬을 함께 연습합니다. 친절한 멤버들이 기다립니다!',
+     'https://d36om9pjoifd2y.cloudfront.net/club-banner/9cd6bb46-53f8-4480-9c91-4eaeed0686a9.webp', false, '2024-01-15 09:00:00', '2024-01-15 09:00:00', 'club_hgkftUjhInO0BhBO'),
+
+    ('왕초보 배드민턴', '완전 초보도 부담 없이 즐길 수 있는 클럽입니다. 기초부터 차근차근 배워봐요!',
+     'https://d36om9pjoifd2y.cloudfront.net/club-banner/45c13288-9d26-46bd-93ec-37e7e83ac700.webp', false, '2024-01-16 09:00:00', '2024-01-16 09:00:00', 'club_iuytaUjhInO0BhBO'),
+
+    ('즐거운 배드민턴', '친목과 운동을 동시에! 모두가 편안하게 즐길 수 있는 배드민턴 클럽입니다.',
+     'https://d36om9pjoifd2y.cloudfront.net/club-banner/45c13288-9d26-46bd-93ec-37e7e83ac700.webp', false, '2024-01-17 09:00:00', '2024-01-17 09:00:00', 'club_plmqnsUjhInO0BhBO'),
+
+    ('슈퍼 드라이버', '빠른 드라이브와 강한 리턴을 연습하는 클럽입니다. 공격적인 플레이를 좋아하시는 분 환영!',
+     'https://d36om9pjoifd2y.cloudfront.net/club-banner/45c13288-9d26-46bd-93ec-37e7e83ac700.webp', false, '2024-01-18 09:00:00', '2024-01-18 09:00:00', 'club_qweqdrUjhInO0BhBO'),
+
+    ('피닉스', '회복과 성장! 배드민턴을 통해 체력을 기르고 건강한 생활을 함께 추구해요.',
+     'https://d36om9pjoifd2y.cloudfront.net/club-banner/45c13288-9d26-46bd-93ec-37e7e83ac700.webp', false, '2024-01-19 09:00:00', '2024-01-19 09:00:00', 'club_zxrfqtUjhInO0BhBO'),
+
+    ('프로 스매시', '각종 대회 출전을 목표로 하는 분들을 위한 실전 중심의 배드민턴 클럽입니다.',
+     'https://d36om9pjoifd2y.cloudfront.net/club-banner/45c13288-9d26-46bd-93ec-37e7e83ac700.webp', false, '2024-01-20 09:00:00', '2024-01-20 09:00:00', 'club_qwfvqgUjhInO0BhBO'),
+
+    ('정복자', '힘찬 스매시와 지치지 않는 체력을 자랑하는 클럽입니다. 함께 성장해봐요!',
+     'https://d36om9pjoifd2y.cloudfront.net/club-banner/45c13288-9d26-46bd-93ec-37e7e83ac700.webp', false, '2024-01-21 09:00:00', '2024-01-21 09:00:00', 'club_iutqqhUjhInO0BhBO'),
+
+    ('에이스', '배드민턴의 기본부터 실전 플레이까지, 에이스를 목표로 함께 연습해요!',
+     'https://d36om9pjoifd2y.cloudfront.net/club-banner/45c13288-9d26-46bd-93ec-37e7e83ac700.webp', false, '2024-01-22 09:00:00', '2024-01-22 09:00:00', 'club_uiqowpUjhInO0BhBO'),
+
+    ('바운스', '탄력 있는 플레이와 민첩성을 기르는 클럽입니다. 체력 단련에 관심 있는 분 환영!',
+     'https://d36om9pjoifd2y.cloudfront.net/club-banner/45c13288-9d26-46bd-93ec-37e7e83ac700.webp', false, '2024-01-23 09:00:00', '2024-01-23 09:00:00', 'club_rtqyeuUjhInO0BhBO'),
+
+    ('스피드 러너', '순발력과 스피드를 연습하는 클럽입니다. 다이나믹한 게임을 좋아하는 분들 환영!',
+     'https://d36om9pjoifd2y.cloudfront.net/club-banner/45c13288-9d26-46bd-93ec-37e7e83ac700.webp', false, '2024-01-24 09:00:00', '2024-01-24 09:00:00', 'club_vbqnryUjhInO0BhBO'),
+
+    ('패스트 플레이', '빠른 리턴과 드라이브를 중심으로 경기를 풀어나가는 클럽입니다. 열정 넘치는 분들 환영!',
+     'https://d36om9pjoifd2y.cloudfront.net/club-banner/45c13288-9d26-46bd-93ec-37e7e83ac700.webp', false, '2024-01-25 09:00:00', '2024-01-25 09:00:00', 'club_njatujUjhInO0BhBO'),
+
+    ('미라클 배드민턴', '기적 같은 플레이를 목표로 하는 열정 넘치는 클럽입니다!',
+     'https://d36om9pjoifd2y.cloudfront.net/club-banner/45c13288-9d26-46bd-93ec-37e7e83ac700.webp', false, '2024-01-26 09:00:00', '2024-01-26 09:00:00', 'club_jkiylUjhaInO0BhBO'),
+
+    ('파워 샷', '강력한 파워와 에너지를 자랑하는 클럽입니다. 파워 있는 게임을 즐기시는 분들 환영!',
+     'https://d36om9pjoifd2y.cloudfront.net/club-banner/45c13288-9d26-46bd-93ec-37e7e83ac700.webp', false, '2024-01-27 09:00:00', '2024-01-27 09:00:00', 'club_zacavnUjhInO0BhBO'),
+
+    ('레전드 플레이어', '전설이 되고 싶은 분들을 위한 모임입니다. 함께 전설적인 경기를 만들어봐요!',
+     'https://d36om9pjoifd2y.cloudfront.net/club-banner/45c13288-9d26-46bd-93ec-37e7e83ac700.webp', false, '2024-01-28 09:00:00', '2024-01-28 09:00:00', 'club_mlsnkaUjhInO0BhBO'),
+    ('스매싱 파이터', '강력한 스매싱을 즐기는 분들을 위한 동호회입니다. 초보부터 고수까지 환영합니다!',
+     'https://d36om9pjoifd2y.cloudfront.net/club-banner/3257bbf2-52dc-41b2-9d1f-a6c66f3c7216.avif', false, '2024-01-11 09:00:00', '2024-01-11 09:00:00', 'club_asd7aUdjhInO0BhBO'),
+
+    ('클래식 배드민턴', '기본에 충실한 플레이를 중시하는 클럽입니다. 클래식한 스타일을 좋아하는 분들을 환영합니다.',
+     'https://d36om9pjoifd2y.cloudfront.net/club-banner/505adfb7-b355-4721-a622-3ce0f50eef4e.avif', false, '2024-01-12 09:00:00', '2024-01-12 09:00:00', 'club_asffa8UjhInO0BhBO'),
+
+    ('스타 스매셔', '화려한 스매싱과 드라이브로 게임을 지배하는 모임입니다.',
+     'https://d36om9pjoifd2y.cloudfront.net/club-banner/66fd31cd-f112-4796-b823-682016c4f58b.avif', false, '2024-01-13 09:00:00', '2024-01-13 09:00:00', 'club_dggfahUjhInO0BhBO'),
+
+    ('스피드 앤 파워1', '빠른 스피드와 강한 파워로 게임을 즐기는 동호회입니다. 열정 있는 분들을 기다립니다.',
+     'https://d36om9pjoifd2y.cloudfront.net/club-banner/c87e6e09-71ce-43a1-bd5e-b8ce73fcd646.webp', false, '2024-01-14 09:00:00', '2024-01-14 09:00:00', 'club_ghjakasUjhInO0BhBO'),
+
+    ('배드민턴 마스터1', '기본부터 고급 기술까지 다양한 스킬을 함께 연습합니다. 친절한 멤버들이 기다립니다!',
+     'https://d36om9pjoifd2y.cloudfront.net/club-banner/9cd6bb46-53f8-4480-9c91-4eaeed0686a9.webp', false, '2024-01-15 09:00:00', '2024-01-15 09:00:00', 'club_hgkqfsUjhInO0BhBO'),
+
+    ('왕초보 배드민턴1', '완전 초보도 부담 없이 즐길 수 있는 클럽입니다. 기초부터 차근차근 배워봐요!',
+     'https://d36om9pjoifd2y.cloudfront.net/club-banner/45c13288-9d26-46bd-93ec-37e7e83ac700.webp', false, '2024-01-16 09:00:00', '2024-01-16 09:00:00', 'club_iuytsUjhInO0BhBO'),
+
+    ('즐거운 배드민턴1', '친목과 운동을 동시에! 모두가 편안하게 즐길 수 있는 배드민턴 클럽입니다.',
+     'https://d36om9pjoifd2y.cloudfront.net/club-banner/45c13288-9d26-46bd-93ec-37e7e83ac700.webp', false, '2024-01-17 09:00:00', '2024-01-17 09:00:00', 'club_plmwsnUjhInO0BhBO'),
+
+    ('슈퍼 드라이버1', '빠른 드라이브와 강한 리턴을 연습하는 클럽입니다. 공격적인 플레이를 좋아하시는 분 환영!',
+     'https://d36om9pjoifd2y.cloudfront.net/club-banner/45c13288-9d26-46bd-93ec-37e7e83ac700.webp', false, '2024-01-18 09:00:00', '2024-01-18 09:00:00', 'club_qweersUjhInO0BhBO'),
+
+    ('피닉스1', '회복과 성장! 배드민턴을 통해 체력을 기르고 건강한 생활을 함께 추구해요.',
+     'https://d36om9pjoifd2y.cloudfront.net/club-banner/45c13288-9d26-46bd-93ec-37e7e83ac700.webp', false, '2024-01-19 09:00:00', '2024-01-19 09:00:00', 'club_zxrrtUsjhInO0BhBO'),
+
+    ('프로1 스매시', '각종 대회 출전을 목표로 하는 분들을 위한 실전 중심의 배드민턴 클럽입니다.',
+     'https://d36om9pjoifd2y.cloudfront.net/club-banner/45c13288-9d26-46bd-93ec-37e7e83ac700.webp', false, '2024-01-20 09:00:00', '2024-01-20 09:00:00', 'club_qwafvUsjhInO0BhBO'),
+
+    ('정복자1', '힘찬 스매시와 지치지 않는 체력을 자랑하는 클럽입니다. 함께 성장해봐요!',
+     'https://d36om9pjoifd2y.cloudfront.net/club-banner/45c13288-9d26-46bd-93ec-37e7e83ac700.webp', false, '2024-01-21 09:00:00', '2024-01-21 09:00:00', 'club_iutshsUjhInO0BhBO'),
+
+    ('에이스1', '배드민턴의 기본부터 실전 플레이까지, 에이스를 목표로 함께 연습해요!',
+     'https://d36om9pjoifd2y.cloudfront.net/club-banner/45c13288-9d26-46bd-93ec-37e7e83ac700.webp', false, '2024-01-22 09:00:00', '2024-01-22 09:00:00', 'club_uioapsUjhInO0BhBO'),
+
+    ('바운스1', '탄력 있는 플레이와 민첩성을 기르는 클럽입니다. 체력 단련에 관심 있는 분 환영!',
+     'https://d36om9pjoifd2y.cloudfront.net/club-banner/45c13288-9d26-46bd-93ec-37e7e83ac700.webp', false, '2024-01-23 09:00:00', '2024-01-23 09:00:00', 'club_rtydusUjhInO0BhBO'),
+
+    ('스피드1 러너', '순발력과 스피드를 연습하는 클럽입니다. 다이나믹한 게임을 좋아하는 분들 환영!',
+     'https://d36om9pjoifd2y.cloudfront.net/club-banner/45c13288-9d26-46bd-93ec-37e7e83ac700.webp', false, '2024-01-24 09:00:00', '2024-01-24 09:00:00', 'club_vbfnsyUjhInO0BhBO'),
+
+    ('패스트1 플레이', '빠른 리턴과 드라이브를 중심으로 경기를 풀어나가는 클럽입니다. 열정 넘치는 분들 환영!',
+     'https://d36om9pjoifd2y.cloudfront.net/club-banner/45c13288-9d26-46bd-93ec-37e7e83ac700.webp', false, '2024-01-25 09:00:00', '2024-01-25 09:00:00', 'club_njuesjUjhInO0BhBO'),
+
+    ('미라클1 배드민턴', '기적 같은 플레이를 목표로 하는 열정 넘치는 클럽입니다!',
+     'https://d36om9pjoifd2y.cloudfront.net/club-banner/45c13288-9d26-46bd-93ec-37e7e83ac700.webp', false, '2024-01-26 09:00:00', '2024-01-26 09:00:00', 'club_jkslqUjhInO0BhBO'),
+
+    ('파워1 샷', '강력한 파워와 에너지를 자랑하는 클럽입니다. 파워 있는 게임을 즐기시는 분들 환영!',
+     'https://d36om9pjoifd2y.cloudfront.net/club-banner/45c13288-9d26-46bd-93ec-37e7e83ac700.webp', false, '2024-01-27 09:00:00', '2024-01-27 09:00:00', 'club_zcswnUjhInO0BhBO'),
+
+    ('레전드1 플레이어', '전설이 되고 싶은 분들을 위한 모임입니다. 함께 전설적인 경기를 만들어봐요!',
+     'https://d36om9pjoifd2y.cloudfront.net/club-banner/45c13288-9d26-46bd-93ec-37e7e83ac700.webp', false, '2024-01-28 09:00:00', '2024-01-28 09:00:00', 'club_mlensUjhInO0BhBO');
 
 -- ClubMember 데이터 삽입
 INSERT INTO club_member (clubId, memberId, role, deleted, banned, createdAt, modifiedAt)

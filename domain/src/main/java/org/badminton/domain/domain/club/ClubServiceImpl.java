@@ -44,6 +44,14 @@ public class ClubServiceImpl implements ClubService {
 	}
 
 	@Override
+	public List<ClubCardInfo> readRecentlyClub() {
+		List<Club> clubs = clubReader.readRecentlyClubs();
+		return clubs.stream()
+			.map(club -> ClubCardInfo.clubEntityToClubsCardResponse(club, club.getClubMemberCountByTier()))
+			.toList();
+	}
+
+	@Override
 	public ClubSummaryInfo readClub(String clubToken) {
 		var club = clubReader.readClub(clubToken);
 		return ClubSummaryInfo.from(club);
@@ -86,4 +94,5 @@ public class ClubServiceImpl implements ClubService {
 			ClubApply.ApplyStatus.PENDING);
 
 	}
+
 }

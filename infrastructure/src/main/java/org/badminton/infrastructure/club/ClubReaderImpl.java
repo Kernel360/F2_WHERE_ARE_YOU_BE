@@ -1,5 +1,7 @@
 package org.badminton.infrastructure.club;
 
+import java.util.List;
+
 import org.badminton.domain.common.exception.club.ClubNotExistException;
 import org.badminton.domain.domain.club.ClubReader;
 import org.badminton.domain.domain.club.entity.Club;
@@ -24,6 +26,11 @@ public class ClubReaderImpl implements ClubReader {
 	@Override
 	public Page<Club> keywordSearch(String keyword, Pageable pageable) {
 		return clubRepository.findAllByClubNameContainingIgnoreCaseAndIsClubDeletedIsFalse(keyword, pageable);
+	}
+
+	@Override
+	public List<Club> readRecentlyClubs() {
+		return clubRepository.findTop10ByIsClubDeletedIsFalseOrderByCreatedAtDesc();
 	}
 
 	@Override
