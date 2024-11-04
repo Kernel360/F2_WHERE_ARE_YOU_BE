@@ -5,6 +5,29 @@ dependencies {
     runtimeOnly 'com.mysql:mysql-connector-j'
     testImplementation platform('org.junit:junit-bom:5.10.0')
     testImplementation 'org.junit.jupiter:junit-jupiter'
+
+    // Querydsl 의존성 추가
+    implementation "com.querydsl:querydsl-jpa:5.0.0:jakarta"
+    implementation "com.querydsl:querydsl-core:5.0.0"
+}
+
+def generated = 'src/main/generated'
+
+// 자바 소스 세트에 생성 폴더 추가
+sourceSets {
+    main {
+        java {
+            srcDirs += [generated]
+        }
+    }
+}
+
+tasks.withType(JavaCompile) {
+    options.getGeneratedSourceOutputDirectory().set(file(generated))
+}
+
+clean {
+    delete file(generated)
 }
 
 bootJar {
