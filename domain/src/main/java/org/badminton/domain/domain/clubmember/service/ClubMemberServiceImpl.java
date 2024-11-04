@@ -5,8 +5,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
-import org.badminton.domain.domain.club.ClubReader;
 import org.badminton.domain.domain.club.entity.Club;
+import org.badminton.domain.domain.club.info.ClubCardInfo;
 import org.badminton.domain.domain.club.info.ClubCreateInfo;
 import org.badminton.domain.domain.clubmember.ClubMemberReader;
 import org.badminton.domain.domain.clubmember.ClubMemberStore;
@@ -31,7 +31,6 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class ClubMemberServiceImpl implements ClubMemberService {
 
-	private final ClubReader clubReader;
 	private final MemberReader memberReader;
 	private final ClubMemberReader clubMemberReader;
 	private final ClubMemberStore clubMemberStore;
@@ -119,11 +118,6 @@ public class ClubMemberServiceImpl implements ClubMemberService {
 	}
 
 	@Override
-	public void checkMyOwnClub(String memberToken) {
-		clubMemberReader.checkIsClubOwner(memberToken);
-	}
-
-	@Override
 	public void deleteAllClubMembers(String clubToken) {
 		List<ClubMember> clubMembers = clubMemberReader.getAllMember(clubToken);
 		clubMembers.forEach(clubMember -> {
@@ -139,13 +133,25 @@ public class ClubMemberServiceImpl implements ClubMemberService {
 	}
 
 	@Override
-	public Integer getClubMemberApproveCount(Long clubId) {
-		return clubMemberReader.getClubMemberApproveCount(clubId);
+	public Integer countByClubClubIdAndDeletedFalse(Long clubId) {
+		return clubMemberReader.getClubMemberCounts(clubId);
 	}
 
 	@Override
-	public Integer countByClubClubIdAndDeletedFalse(Long clubId) {
-		return clubMemberReader.getClubMemberCounts(clubId);
+	public List<ClubCardInfo> getClubsByMemberToken(String memberToken) {
+		List<ClubMember> clubMembers = clubMemberReader.getClubMembersByMemberToken(memberToken);
+
+		List<Club> clubs = clubMembers.stream()
+			.map(ClubMember::getClub)
+			.distinct()
+			.toList();
+
+		return clubs.stream()
+			.map(club -> {
+				Map<Member.MemberTier, Long> tierCounts = club.getClubMemberCountByTier();
+				return ClubCardInfo.clubEntityToClubsCardResponse(club, tierCounts);
+			})
+			.toList();
 	}
 
 	private ClubMember getClubMember(Long clubMemberId) {

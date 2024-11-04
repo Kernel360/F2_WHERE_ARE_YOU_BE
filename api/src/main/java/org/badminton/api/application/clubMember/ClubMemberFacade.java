@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.badminton.domain.domain.club.ClubApplyService;
+import org.badminton.domain.domain.club.command.ClubApplyCommand;
 import org.badminton.domain.domain.clubmember.command.ClubMemberBanCommand;
 import org.badminton.domain.domain.clubmember.command.ClubMemberExpelCommand;
 import org.badminton.domain.domain.clubmember.command.ClubMemberRoleUpdateCommand;
@@ -29,9 +30,11 @@ public class ClubMemberFacade {
 	private final ClubApplyService clubApplyService;
 	private final MailService mailService;
 
-	public ApplyClubInfo applyClub(String memberToken, String clubToken) {
+
+	public ApplyClubInfo applyClub(String memberToken, String clubToken, ClubApplyCommand command) {
 		mailService.prepareClubApplyEmail(clubToken);
-		return clubApplyService.applyClub(memberToken, clubToken);
+		return clubApplyService.applyClub(memberToken, clubToken, command.applyReason());
+
 	}
 
 	public ApproveApplyInfo approveApplying(Long clubApplyId) {

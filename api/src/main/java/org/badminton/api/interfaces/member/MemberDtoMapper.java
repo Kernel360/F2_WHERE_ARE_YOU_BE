@@ -1,5 +1,9 @@
 package org.badminton.api.interfaces.member;
 
+import java.util.List;
+
+import org.badminton.api.interfaces.club.dto.ClubCardResponse;
+import org.badminton.domain.domain.club.info.ClubCardInfo;
 import org.mapstruct.InjectionStrategy;
 import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;
@@ -11,8 +15,6 @@ import org.mapstruct.ReportingPolicy;
 )
 public interface MemberDtoMapper {
 
-	// @Mapping(source = "leagueRecordInfo", target = "leagueRecordResponse")
-	// @Mapping(source = "clubMemberMyPageInfos", target = "clubMemberMyPageResponses")
-	// MemberMyPageResponse of(MemberMyPageInfo memberMyPageInfo);
+	List<ClubCardResponse> of(List<ClubCardInfo> clubCardInfoList);
 
 }

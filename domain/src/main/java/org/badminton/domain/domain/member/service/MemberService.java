@@ -9,8 +9,6 @@ import org.badminton.domain.domain.member.info.MemberUpdateInfo;
 
 public interface MemberService {
 
-	// MemberIsClubMemberInfo getMemberIsClubMember(String memberToken, List<ClubMemberMyPageInfo> clubMemberMyPageInfos);
-
 	MemberMyPageInfo getMemberInfo(String memberToken, LeagueRecordInfo leagueRecordInfo,
 		List<ClubMemberMyPageInfo> clubMemberMyPageInfos);
 

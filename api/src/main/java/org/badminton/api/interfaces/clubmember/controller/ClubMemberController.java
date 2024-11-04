@@ -6,9 +6,10 @@ import java.util.Map;
 import org.badminton.api.application.clubMember.ClubMemberFacade;
 import org.badminton.api.common.response.CommonResponse;
 import org.badminton.api.interfaces.auth.dto.CustomOAuth2Member;
+import org.badminton.api.interfaces.club.dto.ClubApplyRequest;
 import org.badminton.api.interfaces.clubmember.ClubMemberDtoMapper;
-import org.badminton.api.interfaces.clubmember.dto.ApplyClubResponse;
 import org.badminton.api.interfaces.clubmember.dto.ApproveApplyResponse;
+import org.badminton.api.interfaces.clubmember.dto.ClubApplyResponse;
 import org.badminton.api.interfaces.clubmember.dto.ClubMemberBanRecordResponse;
 import org.badminton.api.interfaces.clubmember.dto.ClubMemberBanRequest;
 import org.badminton.api.interfaces.clubmember.dto.ClubMemberExpelRequest;
@@ -16,6 +17,7 @@ import org.badminton.api.interfaces.clubmember.dto.ClubMemberResponse;
 import org.badminton.api.interfaces.clubmember.dto.ClubMemberRoleUpdateRequest;
 import org.badminton.api.interfaces.clubmember.dto.ClubMemberWithdrawResponse;
 import org.badminton.api.interfaces.clubmember.dto.RejectApplyResponse;
+import org.badminton.domain.domain.club.command.ClubApplyCommand;
 import org.badminton.domain.domain.clubmember.command.ClubMemberBanCommand;
 import org.badminton.domain.domain.clubmember.command.ClubMemberExpelCommand;
 import org.badminton.domain.domain.clubmember.command.ClubMemberRoleUpdateCommand;
@@ -70,12 +72,13 @@ public class ClubMemberController {
 		description = "동호회에 가입을 신청합니다.",
 		tags = {"ClubMember"})
 	@PostMapping
-	public CommonResponse<ApplyClubResponse> applyClub(@AuthenticationPrincipal CustomOAuth2Member member,
-		@PathVariable String clubToken) {
+	public CommonResponse<ClubApplyResponse> applyClub(@AuthenticationPrincipal CustomOAuth2Member member,
+		@PathVariable String clubToken, @RequestBody ClubApplyRequest request) {
 		String memberToken = member.getMemberToken();
-		ApplyClubInfo applyClubInfo = clubMemberFacade.applyClub(memberToken, clubToken);
-		ApplyClubResponse applyClubResponse = clubMemberDtoMapper.of(applyClubInfo);
-		return CommonResponse.success(applyClubResponse);
+		ClubApplyCommand command = request.of();
+		ApplyClubInfo applyClubInfo = clubMemberFacade.applyClub(memberToken, clubToken, command);
+		ClubApplyResponse clubApplyResponse = clubMemberDtoMapper.of(applyClubInfo);
+		return CommonResponse.success(clubApplyResponse);
 	}
 
 	@Operation(summary = "동호회 가입 승인",

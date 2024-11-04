@@ -4,8 +4,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import org.badminton.api.interfaces.clubmember.dto.ApplyClubResponse;
 import org.badminton.api.interfaces.clubmember.dto.ApproveApplyResponse;
+import org.badminton.api.interfaces.clubmember.dto.ClubApplyResponse;
 import org.badminton.api.interfaces.clubmember.dto.ClubMemberBanRecordResponse;
 import org.badminton.api.interfaces.clubmember.dto.ClubMemberJoinResponse;
 import org.badminton.api.interfaces.clubmember.dto.ClubMemberResponse;
@@ -52,10 +52,10 @@ public interface ClubMemberDtoMapper {
 
 	ClubMemberStatusCommand of(String clubToken, Long clubMemberId);
 
-	ApplyClubResponse of(ApplyClubInfo applyClubInfo);
+	ClubApplyResponse of(ApplyClubInfo applyClubInfo);
 
 	ApproveApplyResponse of(ApproveApplyInfo approveApplyInfo);
 
 	RejectApplyResponse of(RejectApplyInfo rejectApplyInfo);
-	
+
 }

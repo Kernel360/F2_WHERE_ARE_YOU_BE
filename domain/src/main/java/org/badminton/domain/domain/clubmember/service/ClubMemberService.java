@@ -3,6 +3,7 @@ package org.badminton.domain.domain.clubmember.service;
 import java.util.List;
 import java.util.Map;
 
+import org.badminton.domain.domain.club.info.ClubCardInfo;
 import org.badminton.domain.domain.club.info.ClubCreateInfo;
 import org.badminton.domain.domain.clubmember.command.ClubMemberBanCommand;
 import org.badminton.domain.domain.clubmember.command.ClubMemberExpelCommand;
@@ -36,15 +37,13 @@ public interface ClubMemberService {
 
 	boolean checkIfMemberBelongsToClub(String memberToken, String clubToken);
 
-	void checkMyOwnClub(String memberToken);
-
 	void deleteAllClubMembers(String clubToken);
 
 	ClubMemberDetailInfo getClubMemberDetailByClubToken(String clubToken, String memberToken);
 
-	Integer getClubMemberApproveCount(Long clubId);
-
 	Integer countByClubClubIdAndDeletedFalse(Long clubId);
+
+	List<ClubCardInfo> getClubsByMemberToken(String memberToken);
 }
 
 

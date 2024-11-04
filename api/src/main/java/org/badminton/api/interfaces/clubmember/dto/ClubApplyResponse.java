@@ -3,13 +3,15 @@ package org.badminton.api.interfaces.clubmember.dto;
 import org.badminton.domain.domain.club.entity.ClubApply;
 import org.badminton.domain.domain.clubmember.info.ApplyClubInfo;
 
-public record ApplyClubResponse(
+public record ClubApplyResponse(
 	Long clubApplyId,
+	String applyReason,
 	ClubApply.ApplyStatus status
 ) {
-	public static ApplyClubResponse fromClubApplyInfo(ApplyClubInfo applyClubInfo) {
-		return new ApplyClubResponse(
+	public static ClubApplyResponse fromClubApplyInfo(ApplyClubInfo applyClubInfo) {
+		return new ClubApplyResponse(
 			applyClubInfo.clubApplyId(),
+			applyClubInfo.applyReason(),
 			applyClubInfo.status()
 		);
 	}
