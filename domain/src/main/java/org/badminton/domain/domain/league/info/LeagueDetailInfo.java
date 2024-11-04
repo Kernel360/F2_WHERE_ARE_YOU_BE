@@ -16,7 +16,9 @@ public record LeagueDetailInfo(
 
 	String description,
 
-	String leagueLocation,
+	String fullAddress,
+	
+	String region,
 
 	Member.MemberTier requiredTier,
 
@@ -39,7 +41,8 @@ public record LeagueDetailInfo(
 			league.getLeagueId(),
 			league.getLeagueName(),
 			league.getDescription(),
-			league.getLeagueLocation(),
+			league.getAddress().getFullAddress(),
+			league.getAddress().getRegion(),
 			league.getRequiredTier(),
 			league.getLeagueStatus(),
 			league.getMatchType(),
@@ -51,7 +54,7 @@ public record LeagueDetailInfo(
 		);
 	}
 
-	public static LeagueDetailInfo toLeagueDetailInfo(League league) {
+	public static LeagueDetailInfo from(League league) {
 		return new LeagueDetailInfo(league);
 	}
 

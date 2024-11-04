@@ -1,8 +1,8 @@
 package org.badminton.infrastructure.league;
 
-import org.badminton.domain.domain.clubmember.command.ClubMemberMyPageCommand;
+import org.badminton.domain.domain.clubmember.entity.ClubMember;
 import org.badminton.domain.domain.league.LeagueParticipantStore;
-import org.badminton.domain.domain.league.command.LeagueDetailCommand;
+import org.badminton.domain.domain.league.entity.League;
 import org.badminton.domain.domain.league.entity.LeagueParticipant;
 import org.springframework.stereotype.Component;
 
@@ -16,10 +16,8 @@ public class LeagueParticipantStoreImpl implements LeagueParticipantStore {
 	private final LeagueParticipantRepository leagueParticipantRepository;
 
 	@Override
-	public LeagueParticipant store(ClubMemberMyPageCommand clubMember, LeagueDetailCommand league) {
-		var clubMemberEntity = clubMember.toEntity();
-		var leagueEntity = league.toEntity();
-		LeagueParticipant leagueParticipant = new LeagueParticipant(clubMemberEntity, leagueEntity);
+	public LeagueParticipant store(ClubMember clubMember, League league) {
+		LeagueParticipant leagueParticipant = new LeagueParticipant(clubMember, league);
 		return leagueParticipantRepository.save(leagueParticipant);
 	}
 

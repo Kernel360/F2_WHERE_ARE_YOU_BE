@@ -22,20 +22,7 @@ public record ClubSummaryInfo(
 	LocalDateTime createdAt
 ) {
 
-	public Club toClub() {
-		Club club = new Club(
-			this.clubId,
-			this.clubToken,
-			this.clubName,
-			this.clubDescription,
-			this.clubImage,
-			this.clubMembers
-		);
-		System.out.println(club.getClubId());
-		return club;
-	}
-
-	public static ClubSummaryInfo toClubSummaryInfo(Club club) {
+	public static ClubSummaryInfo from(Club club) {
 		return new ClubSummaryInfo(
 			club.getClubId(),
 			club.getClubToken(),

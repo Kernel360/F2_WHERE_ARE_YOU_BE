@@ -10,24 +10,24 @@ import org.springframework.scheduling.annotation.Scheduled;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Configuration
 @EnableScheduling
 @RequiredArgsConstructor
-@Slf4j
 public class BatchScheduler {
 
 	private final JobLauncher jobLauncher;
-	private final Job deleteMemberJob;
-	
-	@Scheduled(cron = "0 0 0 * * ?")
+	private final Job sendEmailJob;
+
+	@Scheduled(fixedRate = 300000)
 	public void runDeleteMemberJob() {
-		log.info("Deleting members");
+		log.info("Sending Email");
 		try {
-			jobLauncher.run(deleteMemberJob, new JobParametersBuilder()
+			jobLauncher.run(sendEmailJob, new JobParametersBuilder()
 				.addLong("time", System.currentTimeMillis())
 				.toJobParameters());
-		} catch (Exception e) {
-			e.printStackTrace();
+		} catch (Exception exception) {
+			log.error(exception.getMessage(), exception);
 		}
 	}
 }

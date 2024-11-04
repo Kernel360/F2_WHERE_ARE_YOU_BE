@@ -1,6 +1,6 @@
 package springproject.badmintonbatch.batch.config;
 
-import org.badminton.domain.domain.member.entity.Member;
+import org.badminton.domain.domain.mail.entity.Mail;
 import org.springframework.batch.core.Job;
 import org.springframework.batch.core.Step;
 import org.springframework.batch.core.configuration.annotation.EnableBatchProcessing;
@@ -21,29 +21,29 @@ import jakarta.persistence.EntityManagerFactory;
 @EnableBatchProcessing
 public class BatchConfig {
 
-    @Bean
-    public Job deleteMemberJob(Step deleteMemberStep, JobRepository jobRepository) {
-        return new JobBuilder("deleteMemberJob", jobRepository)
-                .start(deleteMemberStep)
-                .build();
-    }
+	@Bean
+	public Job sendEmailJob(Step sendEmailStep, JobRepository jobRepository) {
+		return new JobBuilder("sendEmailJob", jobRepository)
+			.start(sendEmailStep)
+			.build();
+	}
 
-    @Bean
-    public Step deleteMemberStep(ItemReader<Member> reader, ItemProcessor<Member, Member> processor,
-                                 ItemWriter<Member> writer, JobRepository jobRepository,
-                                 PlatformTransactionManager transactionManager) {
-        return new StepBuilder("deleteMemberStep", jobRepository)
-                .<Member, Member>chunk(10, transactionManager)
-                .reader(reader)
-                .processor(processor)
-                .writer(writer)
-                .build();
-    }
+	@Bean
+	public Step sendEmailStep(ItemReader<Mail> reader, ItemProcessor<Mail, Mail> processor,
+		ItemWriter<Mail> writer, JobRepository jobRepository,
+		PlatformTransactionManager transactionManager) {
+		return new StepBuilder("sendEmailStep", jobRepository)
+			.<Mail, Mail>chunk(10, transactionManager)
+			.reader(reader)
+			.processor(processor)
+			.writer(writer)
+			.build();
+	}
 
-    @Bean
-    public PlatformTransactionManager transactionManager(EntityManagerFactory entityManagerFactory) {
-        return new JpaTransactionManager(entityManagerFactory);
-    }
+	@Bean
+	public PlatformTransactionManager transactionManager(EntityManagerFactory entityManagerFactory) {
+		return new JpaTransactionManager(entityManagerFactory);
+	}
 
 }
 

@@ -4,6 +4,7 @@ import lombok.Getter;
 
 @Getter
 public enum LeagueStatus {
+    ALL("전체"),
     RECRUITING("모집 중"),
     RECRUITING_COMPLETED("모집 완료"),
     PLAYING("경기 중"),

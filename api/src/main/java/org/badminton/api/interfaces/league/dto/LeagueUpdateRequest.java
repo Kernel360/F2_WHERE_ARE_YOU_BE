@@ -1,41 +1,61 @@
 package org.badminton.api.interfaces.league.dto;
 
-import java.time.LocalDateTime;
-
+import org.badminton.domain.common.consts.Constants;
 import org.badminton.domain.common.enums.MatchGenerationType;
 import org.badminton.domain.common.enums.MatchType;
-import org.badminton.domain.domain.member.entity.Member;
+import org.badminton.domain.common.exception.league.PlayerLimitCountMustBeMoreThanFourException;
+import org.badminton.domain.common.exception.league.PlayerLimitCountMustBeMultipleWhenDoublesMatch;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 
 public record LeagueUpdateRequest(
 
+	@NotBlank
+	@Size(min = Constants.NAME_MIN, max = Constants.NAME_MAX)
 	@Schema(description = "경기 이름", example = "배드민턴 경기")
 	String leagueName,
 
+	@NotBlank
+	@Size(min = Constants.DESCRIPTION_MIN, max = Constants.DESCRIPTION_MAX)
 	@Schema(description = "경기 설명", example = "이 경기는 지역 예선 경기입니다.")
 	String description,
 
-	@Schema(description = "경기 장소", example = "성동구 서울숲 체육센터")
-	String leagueLocation,
+	@NotNull
+	@Min(Constants.PLAYER_LIMIT_MIN)
+	@Max(Constants.PLAYER_LIMIT_MAX)
+	@Schema(description = "기존 참가 인원보다 적게 입력할 수 없습니다.", example = "16")
+	Integer playerLimitCount,
 
-	@Schema(description = "최소 티어", example = "GOLD")
-	Member.MemberTier tierLimit,
-
+	@NotNull
 	@Schema(description = "경기 방식", example = "SINGLES")
 	MatchType matchType,
 
-	@Schema(description = "경기 시작 날짜", example = "2024-09-10T15:30:00")
-	LocalDateTime leagueAt,
-
-	@Schema(description = "모집 마감 날짜", example = "2024-09-08T23:59:59")
-	LocalDateTime recruitingClosedAt,
-
-	@Schema(description = "참가 인원", example = "16")
-	int playerLimitCount,
-
-	@Schema(description = "매칭 조건", example = "TIER")
+	@NotNull
+	@Schema(description = "매칭 조건", example = "FREE")
 	MatchGenerationType matchGenerationType
-
 ) {
+
+	public void validatePlayerLimitCountWhenDoubles() {
+		if (this.matchType == MatchType.DOUBLES) {
+			validateMin();
+			validateIsEven();
+		}
+	}
+
+	private void validateIsEven() {
+		if (this.playerLimitCount % 2 == 1) {
+			throw new PlayerLimitCountMustBeMultipleWhenDoublesMatch(this.playerLimitCount, this.matchType);
+		}
+	}
+
+	private void validateMin() {
+		if (this.playerLimitCount < Constants.DOUBLES_PLAYER_LIMIT_MIN) {
+			throw new PlayerLimitCountMustBeMoreThanFourException(this.playerLimitCount);
+		}
+	}
 }

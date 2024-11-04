@@ -9,13 +9,13 @@ import org.badminton.domain.domain.member.entity.Member;
 
 public record LeagueCreateNoIncludeClubCommand(
 	String leagueToken,
-	
+
 	String leagueName,
 
 	String description,
 
-	String leagueLocation,
-
+	String fullAddress,
+	
 	Member.MemberTier tierLimit,
 
 	LeagueStatus leagueStatus,

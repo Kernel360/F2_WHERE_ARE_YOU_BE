@@ -75,7 +75,9 @@ spring:
       enabled: true
       max-file-size: 3MB
       max-request-size: 3MB
-
+  batch:
+    jdbc:
+      initialize-schema: never
     # AWS S3
 cloud:
   aws:
@@ -95,3 +97,15 @@ custom:
     front: ${FRONT_URL}
     local: ${LOCAL_HOST}
     domain: ${DOMAIN}
+  spring:
+    mail:
+      host: smtp.gmail.com
+      port: 587
+      username: ${MAIL_NAME}
+      password: ${MAIL_PASSWORD}
+      properties:
+        mail:
+          smtp:
+            auth: true
+            starttls:
+              enable: true

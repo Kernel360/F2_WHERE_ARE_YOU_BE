@@ -1,12 +1,12 @@
 package org.badminton.domain.domain.league;
 
-import org.badminton.domain.domain.clubmember.command.ClubMemberMyPageCommand;
-import org.badminton.domain.domain.league.command.LeagueDetailCommand;
+import org.badminton.domain.domain.clubmember.entity.ClubMember;
+import org.badminton.domain.domain.league.entity.League;
 import org.badminton.domain.domain.league.entity.LeagueParticipant;
 
 public interface LeagueParticipantStore {
 
-	LeagueParticipant store(ClubMemberMyPageCommand clubMember, LeagueDetailCommand league);
+	LeagueParticipant store(ClubMember clubMember, League league);
 
 	LeagueParticipant cancelStore(LeagueParticipant leagueParticipant);
 }

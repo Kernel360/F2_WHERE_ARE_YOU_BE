@@ -1,4 +1,4 @@
-package org.badminton.api.config.mail;
+package springproject.badmintonbatch.batch.config;
 
 import java.util.Properties;
 
@@ -10,7 +10,6 @@ import org.springframework.mail.javamail.JavaMailSenderImpl;
 
 @Configuration
 public class MailConfig {
-
 	@Value("${custom.spring.mail.host}")
 	private String host;
 
