@@ -27,7 +27,7 @@ public interface LeagueService {
 
     LeagueCancelInfo cancelLeague(String clubToken, Long leagueId);
 
-    LeagueCreateInfo createLeague(String clubToken,
+    LeagueCreateInfo createLeague(String memberToken, String clubToken,
                                   LeagueCreateNoIncludeClubCommand leagueCreateNoIncludeClubCommand);
 
     LeagueSummaryInfo getLeague(String clubToken, Long leagueId);

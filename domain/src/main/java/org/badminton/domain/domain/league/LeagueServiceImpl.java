@@ -39,10 +39,10 @@ public class LeagueServiceImpl implements LeagueService {
 
     @Override
     @Transactional
-    public LeagueCreateInfo createLeague(String clubToken,
+    public LeagueCreateInfo createLeague(String memberToken, String clubToken,
                                          LeagueCreateNoIncludeClubCommand leagueCreateNoIncludeClubCommand) {
         var club = clubReader.readClub(clubToken);
-        var createdLeague = LeagueCreateCommand.build(leagueCreateNoIncludeClubCommand, club).toEntity();
+        var createdLeague = LeagueCreateCommand.build(leagueCreateNoIncludeClubCommand, memberToken, club).toEntity();
         leagueStore.store(createdLeague);
         return LeagueCreateInfo.from(createdLeague);
     }

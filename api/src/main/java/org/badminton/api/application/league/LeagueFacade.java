@@ -2,7 +2,8 @@ package org.badminton.api.application.league;
 
 import java.util.List;
 import java.util.stream.Collectors;
-
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.badminton.domain.domain.league.LeagueParticipantService;
 import org.badminton.domain.domain.league.LeagueService;
 import org.badminton.domain.domain.league.command.LeagueCreateNoIncludeClubCommand;
@@ -20,52 +21,52 @@ import org.badminton.domain.domain.match.service.MatchRetrieveService;
 import org.badminton.domain.domain.match.service.MatchStrategy;
 import org.springframework.stereotype.Service;
 
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class LeagueFacade {
-	private final LeagueService leagueService;
-	private final LeagueParticipantService leagueParticipantService;
-	private final MatchRetrieveService matchRetrieveService;
+    private final LeagueService leagueService;
+    private final LeagueParticipantService leagueParticipantService;
+    private final MatchRetrieveService matchRetrieveService;
 
-	public List<LeagueReadInfo> getLeaguesByMonth(String clubToken, String date) {
-		return leagueService.getLeaguesByMonth(clubToken, date);
-	}
+    public List<LeagueReadInfo> getLeaguesByMonth(String clubToken, String date) {
+        return leagueService.getLeaguesByMonth(clubToken, date);
+    }
 
-	public List<LeagueByDateInfoWithParticipantCountInfo> getLeaguesByDate(String clubToken, String date) {
-		List<LeagueByDateInfo> leagueByDateInfoList = leagueService.getLeaguesByDate(clubToken, date);
-		return leagueByDateInfoList.stream().map((leagueByDateInfo -> {
-			int participantCount = leagueParticipantService.countParticipantMember(leagueByDateInfo.leagueId());
-			return new LeagueByDateInfoWithParticipantCountInfo(leagueByDateInfo, participantCount);
-		})).collect(Collectors.toList());
-	}
+    public List<LeagueByDateInfoWithParticipantCountInfo> getLeaguesByDate(String clubToken, String date) {
+        List<LeagueByDateInfo> leagueByDateInfoList = leagueService.getLeaguesByDate(clubToken, date);
+        return leagueByDateInfoList.stream().map((leagueByDateInfo -> {
+            int participantCount = leagueParticipantService.countParticipantMember(leagueByDateInfo.leagueId());
+            return new LeagueByDateInfoWithParticipantCountInfo(leagueByDateInfo, participantCount);
+        })).collect(Collectors.toList());
+    }
 
-	public LeagueCreateInfo createLeague(String clubToken,
-		LeagueCreateNoIncludeClubCommand leagueCreateNoIncludeClubCommand) {
-		return leagueService.createLeague(clubToken, leagueCreateNoIncludeClubCommand);
-	}
+    public LeagueCreateInfo createLeague(String memberToken, String clubToken,
+                                         LeagueCreateNoIncludeClubCommand leagueCreateNoIncludeClubCommand) {
+        LeagueCreateInfo leagueCreateInfo = leagueService.createLeague(memberToken, clubToken,
+                leagueCreateNoIncludeClubCommand);
+        leagueParticipantService.participantInLeague(memberToken, clubToken, leagueCreateInfo.leagueId());
+        return leagueCreateInfo;
+    }
 
-	public LeagueDetailsInfo getLeague(String clubToken, Long leagueId, String memberToken) {
-		LeagueSummaryInfo leagueSummaryInfo = leagueService.getLeague(clubToken, leagueId);
-		MatchStrategy matchStrategy = matchRetrieveService.makeSinglesOrDoublesMatchStrategy(leagueId);
-		boolean isMatchCreated = matchRetrieveService.isMatchInLeague(matchStrategy, leagueId);
-		boolean isParticipatedInLeague = leagueParticipantService.isParticipant(memberToken, leagueId);
-		int recruitedMemberCount = leagueParticipantService.countParticipantMember(leagueId);
-		return LeagueDetailsInfo.from(leagueSummaryInfo, isMatchCreated, isParticipatedInLeague, recruitedMemberCount);
-	}
+    public LeagueDetailsInfo getLeague(String clubToken, Long leagueId, String memberToken) {
+        LeagueSummaryInfo leagueSummaryInfo = leagueService.getLeague(clubToken, leagueId);
+        MatchStrategy matchStrategy = matchRetrieveService.makeSinglesOrDoublesMatchStrategy(leagueId);
+        boolean isMatchCreated = matchRetrieveService.isMatchInLeague(matchStrategy, leagueId);
+        boolean isParticipatedInLeague = leagueParticipantService.isParticipant(memberToken, leagueId);
+        int recruitedMemberCount = leagueParticipantService.countParticipantMember(leagueId);
+        return LeagueDetailsInfo.from(leagueSummaryInfo, isMatchCreated, isParticipatedInLeague, recruitedMemberCount);
+    }
 
-	public LeagueUpdateInfoWithParticipantCountInfo updateLeague(String clubToken, Long leagueId,
-		LeagueUpdateCommand leagueUpdateCommand) {
-		LeagueUpdateInfo leagueUpdateInfo = leagueService.updateLeague(clubToken, leagueId, leagueUpdateCommand);
-		int recruitedMemberCount = leagueParticipantService.countParticipantMember(leagueId);
-		return LeagueUpdateInfoWithParticipantCountInfo.of(leagueUpdateInfo, recruitedMemberCount);
-	}
+    public LeagueUpdateInfoWithParticipantCountInfo updateLeague(String clubToken, Long leagueId,
+                                                                 LeagueUpdateCommand leagueUpdateCommand) {
+        LeagueUpdateInfo leagueUpdateInfo = leagueService.updateLeague(clubToken, leagueId, leagueUpdateCommand);
+        int recruitedMemberCount = leagueParticipantService.countParticipantMember(leagueId);
+        return LeagueUpdateInfoWithParticipantCountInfo.of(leagueUpdateInfo, recruitedMemberCount);
+    }
 
-	public LeagueCancelInfo cancelLeague(String clubToken, Long leagueId) {
-		return leagueService.cancelLeague(clubToken, leagueId);
-	}
+    public LeagueCancelInfo cancelLeague(String clubToken, Long leagueId) {
+        return leagueService.cancelLeague(clubToken, leagueId);
+    }
 
 }
