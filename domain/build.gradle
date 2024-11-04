@@ -15,18 +15,22 @@ dependencies {
     annotationProcessor "jakarta.annotation:jakarta.annotation-api"
 }
 
-def querydslDir = "$buildDir/generated/querydsl"
+def generated = 'src/main/generated'
 
 sourceSets {
-    main.java.srcDirs += [querydslDir]
+    main {
+        java {
+            srcDirs += [generated]
+        }
+    }
 }
 
 tasks.withType(JavaCompile) {
-    options.annotationProcessorGeneratedSourcesDirectory = file(querydslDir)
+    options.getGeneratedSourceOutputDirectory().set(file(generated))
 }
 
 clean {
-    delete file(querydslDir)
+    delete file(generated)
 }
 
 bootJar {

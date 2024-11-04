@@ -3,7 +3,6 @@ package org.badminton.infrastructure.clubmember;
 import java.util.List;
 import java.util.Objects;
 
-import org.badminton.domain.common.exception.clubmember.ClubMemberAlreadyOwnerException;
 import org.badminton.domain.common.exception.clubmember.ClubMemberNotExistException;
 import org.badminton.domain.domain.clubmember.ClubMemberReader;
 import org.badminton.domain.domain.clubmember.entity.ClubMember;
@@ -17,7 +16,6 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class ClubMemberReaderImpl implements ClubMemberReader {
 
-	public static final int NOT_OWNER_CLUB = 0;
 	private final ClubMemberRepository clubMemberRepository;
 
 	@Override
@@ -39,13 +37,6 @@ public class ClubMemberReaderImpl implements ClubMemberReader {
 	}
 
 	@Override
-	public void checkIsClubOwner(String memberToken) {
-		if (NOT_OWNER_CLUB != clubMemberRepository.countByMemberIdAndRoleOwner(memberToken)) {
-			throw new ClubMemberAlreadyOwnerException(memberToken);
-		}
-	}
-
-	@Override
 	public boolean existsMemberInClub(String memberToken, String clubToken) {
 		return clubMemberRepository.existsByMemberMemberTokenAndClubClubToken(memberToken, clubToken);
 	}
@@ -59,12 +50,7 @@ public class ClubMemberReaderImpl implements ClubMemberReader {
 		return clubMemberRepository.findByClubClubTokenAndMemberMemberToken(clubToken, memberToken)
 			.orElseThrow(() -> new ClubMemberNotExistException(clubToken, memberToken));
 	}
-
-	@Override
-	public Integer getClubMemberApproveCount(Long clubId) {
-		return clubMemberRepository.countByClubClubIdAndDeletedFalse(clubId);
-	}
-
+	
 	@Override
 	public Integer getClubMemberCounts(Long clubId) {
 		return clubMemberRepository.countByClubClubIdAndDeletedFalse(clubId);

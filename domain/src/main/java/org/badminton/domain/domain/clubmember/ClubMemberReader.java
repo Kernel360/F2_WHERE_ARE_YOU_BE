@@ -16,13 +16,9 @@ public interface ClubMemberReader {
 
 	boolean checkIsClubMember(String memberToken, String clubToken);
 
-	void checkIsClubOwner(String memberToken);
-
 	List<ClubMember> getAllMember(String clubToken);
 
 	ClubMember getClubMemberByMemberTokenAndClubToken(String clubToken, String memberToken);
-
-	Integer getClubMemberApproveCount(Long clubId);
 
 	Integer getClubMemberCounts(Long clubId);
 

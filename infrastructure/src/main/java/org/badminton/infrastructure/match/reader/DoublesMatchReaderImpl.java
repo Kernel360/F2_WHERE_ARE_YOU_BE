@@ -6,6 +6,7 @@ import org.badminton.domain.common.enums.MatchType;
 import org.badminton.domain.common.exception.match.BracketNotExistException;
 import org.badminton.domain.common.exception.match.MatchNotExistException;
 import org.badminton.domain.domain.match.entity.DoublesMatch;
+import org.badminton.domain.domain.match.reader.DoublesMatchRepositoryCustom;
 import org.badminton.domain.domain.match.store.DoublesMatchReader;
 import org.badminton.infrastructure.match.repository.DoublesMatchRepository;
 import org.springframework.stereotype.Component;
@@ -17,6 +18,7 @@ import lombok.RequiredArgsConstructor;
 public class DoublesMatchReaderImpl implements DoublesMatchReader {
 
 	private final DoublesMatchRepository doublesMatchRepository;
+	private final DoublesMatchRepositoryCustom doublesMatchRepositoryCustom;
 
 	@Override
 	public List<DoublesMatch> getDoublesBracket(Long leagueId) {
@@ -30,10 +32,7 @@ public class DoublesMatchReaderImpl implements DoublesMatchReader {
 	@Override
 	public boolean checkIfBracketEmpty(Long leagueId) {
 		List<DoublesMatch> bracketInLeague = doublesMatchRepository.findAllByLeague_LeagueId(leagueId);
-		if (bracketInLeague.isEmpty()) {
-			return true;
-		}
-		return false;
+		return bracketInLeague.isEmpty();
 	}
 
 	@Override
@@ -44,6 +43,6 @@ public class DoublesMatchReaderImpl implements DoublesMatchReader {
 
 	@Override
 	public List<DoublesMatch> findAllCompletedByClubMemberId(Long clubMemberId) {
-		return doublesMatchRepository.findAllCompletedByClubMemberId(clubMemberId);
+		return doublesMatchRepositoryCustom.findAllCompletedByClubMemberId(clubMemberId);
 	}
 }

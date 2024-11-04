@@ -5,8 +5,6 @@ import java.util.Optional;
 
 import org.badminton.domain.domain.clubmember.entity.ClubMember;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 
 public interface ClubMemberRepository extends JpaRepository<ClubMember, Long> {
 
@@ -21,9 +19,6 @@ public interface ClubMemberRepository extends JpaRepository<ClubMember, Long> {
 	boolean existsByMemberMemberTokenAndClubClubToken(String memberToken, String clubToken);
 
 	Optional<ClubMember> findByClubMemberId(Long clubMemberId);
-
-	@Query("SELECT COUNT(cm) FROM ClubMember cm WHERE cm.member.memberToken = :memberToken AND cm.role = 'ROLE_OWNER'")
-	long countByMemberIdAndRoleOwner(@Param("memberToken") String memberToken);
 
 	Integer countByClubClubIdAndDeletedFalse(Long clubId);
 
