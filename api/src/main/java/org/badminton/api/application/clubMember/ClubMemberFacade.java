@@ -15,7 +15,7 @@ import org.badminton.domain.domain.clubmember.info.ClubMemberInfo;
 import org.badminton.domain.domain.clubmember.info.ClubMemberWithdrawInfo;
 import org.badminton.domain.domain.clubmember.info.RejectApplyInfo;
 import org.badminton.domain.domain.clubmember.service.ClubMemberService;
-import org.badminton.domain.domain.mail.MailServiceImpl;
+import org.badminton.domain.domain.mail.MailService;
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
@@ -27,7 +27,7 @@ import lombok.extern.slf4j.Slf4j;
 public class ClubMemberFacade {
 	private final ClubMemberService clubMemberService;
 	private final ClubApplyService clubApplyService;
-	private final MailServiceImpl mailService;
+	private final MailService mailService;
 
 	public ApplyClubInfo applyClub(String memberToken, String clubToken) {
 		mailService.prepareClubApplyEmail(clubToken);

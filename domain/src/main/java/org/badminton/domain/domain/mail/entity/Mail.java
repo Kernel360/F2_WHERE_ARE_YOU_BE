@@ -1,9 +1,7 @@
 package org.badminton.domain.domain.mail.entity;
 
 import org.badminton.domain.common.AbstractBaseTime;
-import org.badminton.domain.common.TokenGenerator;
 
-import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -22,14 +20,10 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Mail extends AbstractBaseTime {
-	public static final String MAIL_PREFIX = "mail_";
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long mailId;
-
-	@Column(name = "mailToken")
-	private String mailToken;
 
 	private String title;
 
@@ -42,7 +36,6 @@ public class Mail extends AbstractBaseTime {
 
 	public Mail(String title, String message, String toEmail) {
 		super();
-		this.mailToken = TokenGenerator.randomCharacterWithPrefix(MAIL_PREFIX);
 		this.title = title;
 		this.message = message;
 		this.toEmail = toEmail;
