@@ -10,8 +10,8 @@ import org.badminton.domain.domain.clubmember.command.ClubMemberBanCommand;
 import org.badminton.domain.domain.clubmember.command.ClubMemberExpelCommand;
 import org.badminton.domain.domain.clubmember.command.ClubMemberRoleUpdateCommand;
 import org.badminton.domain.domain.clubmember.entity.ClubMember;
+import org.badminton.domain.domain.clubmember.info.ApplyClubInfo;
 import org.badminton.domain.domain.clubmember.info.ApproveApplyInfo;
-import org.badminton.domain.domain.clubmember.info.ClubApplyInfo;
 import org.badminton.domain.domain.clubmember.info.ClubMemberBanRecordInfo;
 import org.badminton.domain.domain.clubmember.info.ClubMemberInfo;
 import org.badminton.domain.domain.clubmember.info.ClubMemberWithdrawInfo;
@@ -30,7 +30,7 @@ public class ClubMemberFacade {
 	private final ClubApplyService clubApplyService;
 	private final MailService mailService;
 
-	public ClubApplyInfo applyClub(String memberToken, String clubToken, ClubApplyCommand command) {
+	public ApplyClubInfo applyClub(String memberToken, String clubToken, ClubApplyCommand command) {
 		mailService.sendClubApplyEmail(clubToken);
 		return clubApplyService.applyClub(memberToken, clubToken, command.applyReason());
 	}

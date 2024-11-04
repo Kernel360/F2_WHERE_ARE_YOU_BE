@@ -22,8 +22,8 @@ import org.badminton.domain.domain.clubmember.command.ClubMemberBanCommand;
 import org.badminton.domain.domain.clubmember.command.ClubMemberExpelCommand;
 import org.badminton.domain.domain.clubmember.command.ClubMemberRoleUpdateCommand;
 import org.badminton.domain.domain.clubmember.entity.ClubMember;
+import org.badminton.domain.domain.clubmember.info.ApplyClubInfo;
 import org.badminton.domain.domain.clubmember.info.ApproveApplyInfo;
-import org.badminton.domain.domain.clubmember.info.ClubApplyInfo;
 import org.badminton.domain.domain.clubmember.info.ClubMemberBanRecordInfo;
 import org.badminton.domain.domain.clubmember.info.ClubMemberInfo;
 import org.badminton.domain.domain.clubmember.info.ClubMemberWithdrawInfo;
@@ -76,8 +76,8 @@ public class ClubMemberController {
 		@PathVariable String clubToken, @RequestBody ClubApplyRequest request) {
 		String memberToken = member.getMemberToken();
 		ClubApplyCommand command = request.of();
-		ClubApplyInfo clubApplyInfo = clubMemberFacade.applyClub(memberToken, clubToken, command);
-		ClubApplyResponse clubApplyResponse = clubMemberDtoMapper.of(clubApplyInfo);
+		ApplyClubInfo applyClubInfo = clubMemberFacade.applyClub(memberToken, clubToken, command);
+		ClubApplyResponse clubApplyResponse = clubMemberDtoMapper.of(applyClubInfo);
 		return CommonResponse.success(clubApplyResponse);
 	}
 

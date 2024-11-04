@@ -1,7 +1,7 @@
 package org.badminton.domain.domain.club;
 
+import org.badminton.domain.domain.clubmember.info.ApplyClubInfo;
 import org.badminton.domain.domain.clubmember.info.ApproveApplyInfo;
-import org.badminton.domain.domain.clubmember.info.ClubApplyInfo;
 import org.badminton.domain.domain.clubmember.info.RejectApplyInfo;
 
 public interface ClubApplyService {
@@ -9,6 +9,6 @@ public interface ClubApplyService {
 
 	RejectApplyInfo rejectApplying(Long clubApplyId);
 
-	ClubApplyInfo applyClub(String memberToken, String clubToken, String applyReason);
+	ApplyClubInfo applyClub(String memberToken, String clubToken, String applyReason);
 
 }

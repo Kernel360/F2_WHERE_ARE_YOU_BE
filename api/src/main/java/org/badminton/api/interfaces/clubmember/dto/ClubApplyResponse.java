@@ -1,18 +1,18 @@
 package org.badminton.api.interfaces.clubmember.dto;
 
 import org.badminton.domain.domain.club.entity.ClubApply;
-import org.badminton.domain.domain.clubmember.info.ClubApplyInfo;
+import org.badminton.domain.domain.clubmember.info.ApplyClubInfo;
 
 public record ClubApplyResponse(
 	Long clubApplyId,
 	String applyReason,
 	ClubApply.ApplyStatus status
 ) {
-	public static ClubApplyResponse fromClubApplyInfo(ClubApplyInfo clubApplyInfo) {
+	public static ClubApplyResponse fromClubApplyInfo(ApplyClubInfo applyClubInfo) {
 		return new ClubApplyResponse(
-			clubApplyInfo.clubApplyId(),
-			clubApplyInfo.applyReason(),
-			clubApplyInfo.status()
+			applyClubInfo.clubApplyId(),
+			applyClubInfo.applyReason(),
+			applyClubInfo.status()
 		);
 	}
 }

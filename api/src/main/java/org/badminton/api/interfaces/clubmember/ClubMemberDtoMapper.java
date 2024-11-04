@@ -13,8 +13,8 @@ import org.badminton.api.interfaces.clubmember.dto.ClubMemberWithdrawResponse;
 import org.badminton.api.interfaces.clubmember.dto.RejectApplyResponse;
 import org.badminton.domain.domain.clubmember.command.ClubMemberStatusCommand;
 import org.badminton.domain.domain.clubmember.entity.ClubMember;
+import org.badminton.domain.domain.clubmember.info.ApplyClubInfo;
 import org.badminton.domain.domain.clubmember.info.ApproveApplyInfo;
-import org.badminton.domain.domain.clubmember.info.ClubApplyInfo;
 import org.badminton.domain.domain.clubmember.info.ClubMemberBanRecordInfo;
 import org.badminton.domain.domain.clubmember.info.ClubMemberInfo;
 import org.badminton.domain.domain.clubmember.info.ClubMemberJoinInfo;
@@ -52,7 +52,7 @@ public interface ClubMemberDtoMapper {
 
 	ClubMemberStatusCommand of(String clubToken, Long clubMemberId);
 
-	ClubApplyResponse of(ClubApplyInfo clubApplyInfo);
+	ClubApplyResponse of(ApplyClubInfo applyClubInfo);
 
 	ApproveApplyResponse of(ApproveApplyInfo approveApplyInfo);
 
