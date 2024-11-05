@@ -23,13 +23,13 @@ public class BadmintonException extends RuntimeException {
 	}
 
 	public BadmintonException(ErrorCode errorCode) {
-		this(errorCode, errorCode.getDescription());
+		this(errorCode, (Exception)null);
 	}
 
 	public BadmintonException(ErrorCode errorCode, Exception exception) {
+		super(errorCode.getDescription(), exception);
 		this.errorCode = errorCode;
 		this.errorMessage = errorCode.getDescription();
-		log.error(exception.toString(), exception);
 	}
 
 }
