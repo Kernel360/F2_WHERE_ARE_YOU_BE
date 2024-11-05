@@ -1,19 +1,22 @@
 networks:
-
   backend:
     driver: bridge
 
 services:
   badminton-api:
-    build: ./api  # badminton-api 모듈에 있는 Dockerfile을 빌드
+    build:
+      context: ./api
+    platform: linux/amd64  # x86 아키텍처
     ports:
-      - "8080:8080"  # API 서비스의 포트
+      - "8080:8080"
     networks:
       - backend
     image: speech2/badminton:api
 
   badminton-batch:
-    build: ./batch  # badminton-batch 모듈에 있는 Dockerfile을 빌드
+    build:
+      context: ./batch
+    platform: linux/amd64  # x86 아키텍처
     ports:
       - "9090:9090"
     networks:
