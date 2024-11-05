@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.Optional;
 
 import org.badminton.api.application.auth.CustomOAuth2MemberService;
+import org.badminton.api.exceptionhandler.FailedAuthenticationEntryPoint;
 import org.badminton.api.filter.ClubMembershipFilter;
 import org.badminton.api.filter.JwtAuthenticationFilter;
 import org.badminton.api.interfaces.auth.jwt.JwtUtil;
@@ -31,10 +32,10 @@ import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
-@Slf4j
 public class SecurityConfig {
 
 	private final CustomOAuth2MemberService customOAuth2MemberService;
@@ -42,6 +43,8 @@ public class SecurityConfig {
 	private final JwtUtil jwtUtil;
 	private final ClubPermissionEvaluator clubPermissionEvaluator;
 	private final ClubMemberReader clubMemberReader;
+	private final FailedAuthenticationEntryPoint failedAuthenticationEntryPoint;
+
 	@Value("${custom.server.front}")
 	private String frontUrl;
 
@@ -85,6 +88,8 @@ public class SecurityConfig {
 			)
 			.csrf(AbstractHttpConfigurer::disable)
 			.cors(this::corsConfigurer)
+			.exceptionHandling(
+				exception -> exception.authenticationEntryPoint(failedAuthenticationEntryPoint))
 			.addFilterBefore(new JwtAuthenticationFilter(jwtUtil, clubMemberReader),
 				UsernamePasswordAuthenticationFilter.class)
 			.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
