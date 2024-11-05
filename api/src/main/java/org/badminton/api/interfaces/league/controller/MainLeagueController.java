@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/v2/leagues")
+@RequestMapping("/v1/leagues")
 public class MainLeagueController {
     private final LeagueService leagueService;
     private final MatchFacade matchFacade;
