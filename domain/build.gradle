@@ -6,6 +6,31 @@ dependencies {
     implementation 'org.apache.commons:commons-lang3:3.9'
     testImplementation 'org.springframework.security:spring-security-test'
     runtimeOnly 'com.mysql:mysql-connector-j'
+
+    // Querydsl 의존성 추가
+    implementation "com.querydsl:querydsl-jpa:5.0.0:jakarta"
+    implementation "com.querydsl:querydsl-core:5.0.0"
+    annotationProcessor "com.querydsl:querydsl-apt:5.0.0:jakarta"
+    annotationProcessor "jakarta.persistence:jakarta.persistence-api"
+    annotationProcessor "jakarta.annotation:jakarta.annotation-api"
+}
+
+def generated = 'src/main/generated'
+
+sourceSets {
+    main {
+        java {
+            srcDirs += [generated]
+        }
+    }
+}
+
+tasks.withType(JavaCompile) {
+    options.getGeneratedSourceOutputDirectory().set(file(generated))
+}
+
+clean {
+    delete file(generated)
 }
 
 bootJar {

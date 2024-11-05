@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.badminton.domain.domain.statistics.ClubStatistics;
 import org.badminton.domain.domain.statistics.ClubStatisticsReader;
+import org.badminton.domain.domain.statistics.ClubStatisticsRepositoryCustom;
 import org.springframework.stereotype.Component;
 
 import lombok.RequiredArgsConstructor;
@@ -14,6 +15,7 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class ClubStatisticsReaderImpl implements ClubStatisticsReader {
 	private final ClubStatisticsRepository clubStatisticsRepository;
+	private final ClubStatisticsRepositoryCustom clubStatisticsRepositoryCustom;
 
 	@Override
 	public ClubStatistics getClubStaticsWithIncrease(String clubToken) {
@@ -24,7 +26,7 @@ public class ClubStatisticsReaderImpl implements ClubStatisticsReader {
 
 	@Override
 	public List<Long> findAllClubId() {
-		return clubStatisticsRepository.findAllClubId();
+		return clubStatisticsRepositoryCustom.findAllClubId();
 	}
 
 	@Override

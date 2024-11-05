@@ -6,6 +6,7 @@ import org.badminton.domain.common.enums.MatchType;
 import org.badminton.domain.common.exception.match.BracketNotExistException;
 import org.badminton.domain.common.exception.match.MatchNotExistException;
 import org.badminton.domain.domain.match.entity.SinglesMatch;
+import org.badminton.domain.domain.match.reader.SinglesMatchRepositoryCustom;
 import org.badminton.domain.domain.match.store.SinglesMatchReader;
 import org.badminton.infrastructure.match.repository.SinglesMatchRepository;
 import org.springframework.stereotype.Component;
@@ -16,6 +17,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class SinglesMatchReaderImpl implements SinglesMatchReader {
 	private final SinglesMatchRepository singlesMatchRepository;
+	private final SinglesMatchRepositoryCustom singlesMatchRepositoryCustom;
 
 	@Override
 	public List<SinglesMatch> getSinglesBracket(Long leagueId) {
@@ -40,6 +42,6 @@ public class SinglesMatchReaderImpl implements SinglesMatchReader {
 
 	@Override
 	public List<SinglesMatch> getSinglesMatchesByClubMember(Long clubMemberId) {
-		return singlesMatchRepository.findAllCompletedByClubMemberId(clubMemberId);
+		return singlesMatchRepositoryCustom.findAllCompletedByClubMemberId(clubMemberId);
 	}
 }

@@ -1,8 +1,15 @@
+buildscript {
+    ext {
+        queryDslVersion = "5.0.0"
+    }
+}
+
 plugins {
     id 'java'
     id 'org.springframework.boot' version '3.3.3'
     id 'io.spring.dependency-management' version '1.1.6'
     id 'java-library'
+    id 'com.ewerk.gradle.plugins.querydsl' version '1.0.10'
 }
 
 allprojects {
@@ -14,8 +21,15 @@ allprojects {
     dependencies {
         implementation "ca.pjer:logback-awslogs-appender:1.6.0"
         implementation group: 'me.paulschwarz', name: 'spring-dotenv', version: '4.0.0'
-        implementation 'com.amazonaws:aws-java-sdk-logs:1.12.300'  // AWS CloudWatch Logs SDK
+        implementation 'com.amazonaws:aws-java-sdk-logs:1.12.300'
         implementation 'net.logstash.logback:logstash-logback-encoder:7.2'
+
+        // Querydsl 의존성 추가
+        implementation "com.querydsl:querydsl-jpa:5.0.0:jakarta"
+        implementation "com.querydsl:querydsl-core:5.0.0"
+        annotationProcessor "com.querydsl:querydsl-apt:5.0.0:jakarta"
+        annotationProcessor "jakarta.persistence:jakarta.persistence-api"
+        annotationProcessor "jakarta.annotation:jakarta.annotation-api"
 
         compileOnly 'org.projectlombok:lombok'
         annotationProcessor 'org.projectlombok:lombok'
@@ -25,9 +39,11 @@ allprojects {
     repositories {
         mavenCentral()
     }
+
     tasks.named('test') {
         useJUnitPlatform()
     }
+
     java {
         toolchain {
             languageVersion = JavaLanguageVersion.of(17)

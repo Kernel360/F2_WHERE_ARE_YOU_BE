@@ -13,15 +13,17 @@ public interface ClubMemberReader {
 
     List<ClubMember> getAllClubMemberByClubId(String clubToken);
 
-    boolean checkIsClubMember(String memberToken, String clubToken);
 
-    List<ClubMember> getAllMember(String clubToken);
+	List<ClubMember> getAllMember(String clubToken);
+
+    boolean checkIsClubMember(String memberToken, String clubToken);
 
     ClubMember getClubMemberByMemberTokenAndClubToken(String clubToken, String memberToken);
 
     Integer getClubMemberApproveCount(Long clubId);
 
     Integer getClubMemberCounts(Long clubId);
+
 
     ClubMember getClubOwner(String clubToken);
 }
