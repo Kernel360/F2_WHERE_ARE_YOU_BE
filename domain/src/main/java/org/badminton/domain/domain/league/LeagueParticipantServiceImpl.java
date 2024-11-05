@@ -63,10 +63,14 @@ public class LeagueParticipantServiceImpl implements LeagueParticipantService {
 		if (leagueParticipantReader.isParticipant(memberToken, leagueId)) {
 			throw new LeagueParticipationDuplicateException(leagueId, memberToken);
 		}
+		overParticipateCount(league);
+
+		return LeagueParticipantInfo.from(leagueParticipantStore.store(clubMember, league));
+	}
+
+	private void overParticipateCount(League league) {
 		if (!(league.getPlayerLimitCount() > leagueParticipantReader.countParticipantMember(league.getLeagueId()))) {
 			throw new ParticipationLimitReachedException(league.getLeagueId());
 		}
-
-		return LeagueParticipantInfo.from(leagueParticipantStore.store(clubMember, league));
 	}
 }

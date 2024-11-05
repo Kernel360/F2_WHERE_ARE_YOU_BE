@@ -8,7 +8,7 @@ public class ParticipationLimitReachedException extends BadmintonException {
 		super(ErrorCode.LEAGUE_RECRUITING_ALREADY_COMPLETED, "[경기 일정 아이디: " + leagueId + " ]");
 	}
 
-	public ParticipationLimitReachedException(Long leagueId, Exception e) {
-		super(ErrorCode.LEAGUE_RECRUITING_ALREADY_COMPLETED, "[경기 일정 아이디: " + leagueId + " ]", e);
+	public ParticipationLimitReachedException(Long leagueId, Exception exception) {
+		super(ErrorCode.LEAGUE_RECRUITING_ALREADY_COMPLETED, "[경기 일정 아이디: " + leagueId + " ]", exception);
 	}
 }
