@@ -11,6 +11,7 @@ import org.badminton.domain.domain.league.enums.LeagueStatus;
 @Getter
 public class OngoingAndUpcomingLeagueInfo {
 
+    Long leagueId;
     LocalDateTime leagueAt;
     String leagueName;
     String description;
@@ -21,6 +22,7 @@ public class OngoingAndUpcomingLeagueInfo {
 
     public static OngoingAndUpcomingLeagueInfo from(League league, int recruitedMemberCount) {
         return new OngoingAndUpcomingLeagueInfo(
+                league.getLeagueId(),
                 league.getLeagueAt(),
                 league.getLeagueName(),
                 league.getDescription(),
@@ -29,7 +31,5 @@ public class OngoingAndUpcomingLeagueInfo {
                 recruitedMemberCount,
                 league.getLeagueStatus()
         );
-
     }
-
 }

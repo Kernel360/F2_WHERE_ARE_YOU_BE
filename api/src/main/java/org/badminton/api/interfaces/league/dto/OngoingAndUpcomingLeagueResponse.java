@@ -6,6 +6,7 @@ import org.badminton.domain.domain.league.enums.LeagueStatus;
 import org.badminton.domain.domain.league.info.OngoingAndUpcomingLeagueInfo;
 
 public record OngoingAndUpcomingLeagueResponse(
+        Long leagueId,
         LocalDateTime leagueAt,
         String leagueName,
         String description,
@@ -16,7 +17,9 @@ public record OngoingAndUpcomingLeagueResponse(
 ) {
 
     public static OngoingAndUpcomingLeagueResponse from(OngoingAndUpcomingLeagueInfo ongoingAndUpcomingLeagueInfo) {
-        return new OngoingAndUpcomingLeagueResponse(ongoingAndUpcomingLeagueInfo.getLeagueAt(),
+        return new OngoingAndUpcomingLeagueResponse(
+                ongoingAndUpcomingLeagueInfo.getLeagueId(),
+                ongoingAndUpcomingLeagueInfo.getLeagueAt(),
                 ongoingAndUpcomingLeagueInfo.getLeagueName(),
                 ongoingAndUpcomingLeagueInfo.getDescription(),
                 ongoingAndUpcomingLeagueInfo.getMatchType(),
