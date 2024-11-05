@@ -16,4 +16,6 @@ public interface ClubReader {
 	Club readClub(String clubToken);
 
 	Club readClubByClubId(Long clubId);
+
+	boolean UniqueClubName(String clubName);
 }

@@ -2,6 +2,7 @@ package org.badminton.domain.domain.club;
 
 import java.util.List;
 
+import org.badminton.domain.common.exception.club.ClubNameDuplicateException;
 import org.badminton.domain.domain.club.command.ClubCreateCommand;
 import org.badminton.domain.domain.club.command.ClubUpdateCommand;
 import org.badminton.domain.domain.club.entity.Club;
@@ -62,6 +63,10 @@ public class ClubServiceImpl implements ClubService {
 		Club club = new Club(clubCreateCommand.clubName(),
 			clubCreateCommand.clubDescription(),
 			clubCreateCommand.clubImage());
+		String clubName = club.getClubName();
+		if (clubReader.UniqueClubName(clubName)) {
+			throw new ClubNameDuplicateException(clubName);
+		}
 		var createResponse = clubStore.store(club);
 		return ClubCreateInfo.toClubCreateInfo(createResponse);
 	}
