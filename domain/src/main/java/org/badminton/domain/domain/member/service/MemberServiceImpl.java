@@ -9,6 +9,7 @@ import org.badminton.domain.domain.member.MemberStore;
 import org.badminton.domain.domain.member.entity.Member;
 import org.badminton.domain.domain.member.info.MemberMyPageInfo;
 import org.badminton.domain.domain.member.info.MemberUpdateInfo;
+import org.badminton.domain.domain.member.info.SimpleMemberInfo;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,24 +24,17 @@ public class MemberServiceImpl implements MemberService {
 	private final MemberReader memberReader;
 	private final MemberStore memberStore;
 
-	// @Override
-	// public MemberIsClubMemberInfo getMemberIsClubMember(String memberToken,
-	// 	List<ClubMemberMyPageInfo> clubMemberMyPageInfos) {
-	//
-	// 	if (clubMemberMyPageInfos == null) {
-	// 		return new MemberIsClubMemberInfo(false, null, null);
-	// 	} else {
-	// 		ClubMember.ClubMemberRole clubMemberRole = clubMemberMyPageInfo.role();
-	// 		Long clubId = clubMemberMyPageInfo.clubId();
-	// 		return new MemberIsClubMemberInfo(true, clubMemberRole, clubId);
-	// 	}
-	// }
-
 	@Override
 	public MemberMyPageInfo getMemberInfo(String memberToken, LeagueRecordInfo leagueRecordInfo,
 		List<ClubMemberMyPageInfo> clubMemberMyPageInfos) {
 		Member member = memberReader.getMember(memberToken);
 		return createMemberMyPageInfo(member, clubMemberMyPageInfos, leagueRecordInfo);
+	}
+
+	@Override
+	public SimpleMemberInfo getSimpleMember(String memberToken) {
+		Member member = memberReader.getMember(memberToken);
+		return SimpleMemberInfo.from(member);
 	}
 
 	private MemberMyPageInfo createMemberMyPageInfo(Member member, List<ClubMemberMyPageInfo> clubMemberMyPageInfos,
@@ -64,5 +58,4 @@ public class MemberServiceImpl implements MemberService {
 		memberStore.store(member);
 		return MemberUpdateInfo.fromMemberEntity(member);
 	}
-
 }

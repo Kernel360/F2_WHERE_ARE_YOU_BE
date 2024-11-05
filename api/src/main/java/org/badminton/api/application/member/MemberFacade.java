@@ -10,6 +10,7 @@ import org.badminton.domain.domain.league.info.LeagueRecordInfo;
 import org.badminton.domain.domain.league.service.LeagueRecordService;
 import org.badminton.domain.domain.member.info.MemberMyPageInfo;
 import org.badminton.domain.domain.member.info.MemberUpdateInfo;
+import org.badminton.domain.domain.member.info.SimpleMemberInfo;
 import org.badminton.domain.domain.member.service.MemberService;
 import org.springframework.stereotype.Service;
 
@@ -30,6 +31,10 @@ public class MemberFacade {
 		LeagueRecord leagueRecord = leagueRecordService.getLeagueRecord(memberToken);
 		LeagueRecordInfo leagueRecordInfo = LeagueRecordInfo.from(leagueRecord);
 		return memberService.getMemberInfo(memberToken, leagueRecordInfo, clubMemberMyPageInfos);
+	}
+
+	public SimpleMemberInfo getSimpleMember(String memberToken) {
+		return memberService.getSimpleMember(memberToken);
 	}
 
 	public List<ClubMemberMyPageInfo> getClubMembers(String memberToken) {

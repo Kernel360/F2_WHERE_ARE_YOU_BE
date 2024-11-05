@@ -17,11 +17,13 @@ import org.badminton.api.interfaces.match.dto.MatchResultResponse;
 import org.badminton.api.interfaces.member.MemberDtoMapper;
 import org.badminton.api.interfaces.member.dto.MemberMyPageResponse;
 import org.badminton.api.interfaces.member.dto.MemberUpdateRequest;
+import org.badminton.api.interfaces.member.dto.SimpleMemberResponse;
 import org.badminton.domain.domain.club.info.ClubCardInfo;
 import org.badminton.domain.domain.clubmember.info.ClubMemberMyPageInfo;
 import org.badminton.domain.domain.match.info.MatchResultInfo;
 import org.badminton.domain.domain.member.info.MemberMyPageInfo;
 import org.badminton.domain.domain.member.info.MemberUpdateInfo;
+import org.badminton.domain.domain.member.info.SimpleMemberInfo;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -54,7 +56,7 @@ public class MemberController {
 		summary = "프로필 사진을 수정합니다",
 		description = """
 			프로필 사진을 수정합니다. 다음 조건을 만족해야 합니다:
-			
+						
 			1. 프로필 이미지 URL:
 			   - 호스트: badminton-team.s3.ap-northeast-2.amazonaws.com
 			   - 경로: /member-profile/로 시작
@@ -79,6 +81,19 @@ public class MemberController {
 		MemberMyPageInfo memberMyPageInfo = memberFacade.getMemberMyPageInfo(member.getMemberToken());
 		MemberMyPageResponse memberMyPageResponse = MemberMyPageResponse.toMemberMyPageResponse(memberMyPageInfo);
 		return CommonResponse.success(memberMyPageResponse);
+	}
+
+	@Operation(
+		summary = "로그인 세션을 확인합니다.",
+		description = "로그인 세션을 확인하여 로그인 여부를 판단할 때 사용합니다.",
+		tags = {"Member"}
+	)
+	@GetMapping("/session")
+	public CommonResponse<SimpleMemberResponse> getMySummaryInfo(@AuthenticationPrincipal CustomOAuth2Member member
+	) {
+		SimpleMemberInfo simpleMemberInfo = memberFacade.getSimpleMember(member.getMemberToken());
+		SimpleMemberResponse simpleMemberResponse = memberDtoMapper.of(simpleMemberInfo);
+		return CommonResponse.success(simpleMemberResponse);
 	}
 
 	@GetMapping("/matchesRecord")
