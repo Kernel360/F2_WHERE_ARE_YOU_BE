@@ -42,4 +42,9 @@ public class ClubReaderImpl implements ClubReader {
 	public Club readClubByClubId(Long clubId) {
 		return clubRepository.findByClubId(clubId);
 	}
+
+	@Override
+	public boolean UniqueClubName(String clubName) {
+		return clubRepository.existsByClubNameAndIsClubDeletedFalse(clubName);
+	}
 }

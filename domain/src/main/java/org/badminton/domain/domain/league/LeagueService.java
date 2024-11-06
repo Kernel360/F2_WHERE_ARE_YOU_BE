@@ -2,6 +2,7 @@ package org.badminton.domain.domain.league;
 
 import java.time.LocalDate;
 import java.util.List;
+
 import org.badminton.domain.domain.league.command.LeagueCreateNoIncludeClubCommand;
 import org.badminton.domain.domain.league.command.LeagueUpdateCommand;
 import org.badminton.domain.domain.league.enums.AllowedLeagueStatus;
@@ -14,27 +15,29 @@ import org.badminton.domain.domain.league.info.LeagueReadInfo;
 import org.badminton.domain.domain.league.info.LeagueSummaryInfo;
 import org.badminton.domain.domain.league.info.LeagueUpdateInfo;
 import org.badminton.domain.domain.league.info.OngoingAndUpcomingLeagueInfo;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 public interface LeagueService {
 
-    List<LeagueReadInfo> getLeaguesByMonth(String clubToken, String date);
+	List<LeagueReadInfo> getLeaguesByMonth(String clubToken, String date);
 
-    List<LeagueByDateInfo> getLeaguesByDate(String clubToken, String date);
+	List<LeagueByDateInfo> getLeaguesByDate(String clubToken, String date);
 
-    List<OngoingAndUpcomingLeagueInfo> getOngoingAndUpcomingLeaguesByDate(AllowedLeagueStatus leagueStatus,
-                                                                          Region region,
-                                                                          LocalDate localDate);
+	Page<OngoingAndUpcomingLeagueInfo> getOngoingAndUpcomingLeaguesByDate(AllowedLeagueStatus leagueStatus,
+		Region region,
+		LocalDate localDate, Pageable pageable);
 
-    LeagueCancelInfo cancelLeague(String clubToken, Long leagueId);
+	LeagueCancelInfo cancelLeague(String clubToken, Long leagueId);
 
-    LeagueCreateInfo createLeague(String memberToken, String clubToken,
-                                  LeagueCreateNoIncludeClubCommand leagueCreateNoIncludeClubCommand);
+	LeagueCreateInfo createLeague(String memberToken, String clubToken,
+		LeagueCreateNoIncludeClubCommand leagueCreateNoIncludeClubCommand);
 
-    LeagueSummaryInfo getLeague(String clubToken, Long leagueId);
+	LeagueSummaryInfo getLeague(String clubToken, Long leagueId);
 
-    LeagueDetailInfo getLeagueDetail(String clubToken, Long leagueId);
+	LeagueDetailInfo getLeagueDetail(String clubToken, Long leagueId);
 
-    Integer getLeagueCountByClubId(Long clubId);
+	Integer getLeagueCountByClubId(Long clubId);
 
-    LeagueUpdateInfo updateLeague(String clubToken, Long leagueId, LeagueUpdateCommand leagueUpdateCommand);
+	LeagueUpdateInfo updateLeague(String clubToken, Long leagueId, LeagueUpdateCommand leagueUpdateCommand);
 }

@@ -22,5 +22,7 @@ public interface ClubRepository extends JpaRepository<Club, Long> {
 	List<Club> findTop10ByIsClubDeletedIsFalseOrderByCreatedAtDesc();
 
 	Club findByClubId(Long clubId);
+
+	boolean existsByClubNameAndIsClubDeletedFalse(String clubName);
 }
 
