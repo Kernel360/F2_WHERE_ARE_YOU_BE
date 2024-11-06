@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.badminton.domain.domain.club.info.ClubCreateInfo;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,6 +17,7 @@ public class ClubStatisticsServiceImpl implements ClubStatisticsService {
 	private final ClubStatisticsStore clubStatisticsStore;
 
 	@Override
+	@Transactional
 	public void increaseVisitedClubCount(String clubToken) {
 		ClubStatistics increasedResult = clubStatisticsReader.getClubStaticsWithIncrease(clubToken);
 		clubStatisticsStore.increaseVisitCount(increasedResult);
