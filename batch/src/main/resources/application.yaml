@@ -6,13 +6,12 @@ spring:
   application:
     name: batch
   jpa:
+    properties:
+      hibernate:
+        format_sql: true
+        dialect: org.hibernate.dialect.MySQL8Dialect
     hibernate:
       ddl-auto: ${DDL_METHOD_BATCH}
-      show-sql: true
-      properties:
-        hibernate:
-          format_sql: true
-          dialect: org.hibernate.dialect.MySQL8Dialect
       naming:
         physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
     defer-datasource-initialization: true
@@ -109,3 +108,21 @@ custom:
             auth: true
             starttls:
               enable: true
+---
+spring:
+  config:
+    activate:
+      on-profile: production
+  jpa:
+    show-sql: false
+---
+spring:
+  config:
+    activate:
+      on-profile: develop
+  jpa:
+    show-sql: true
+logging:
+  level:
+    org.springframework.orm.jpa: DEBUG
+    org.springframework.transaction: DEBUG
