@@ -3,6 +3,8 @@ package org.badminton.domain.domain.match.entity;
 import static org.badminton.domain.common.consts.Constants.INITIAL_SET_SCORE;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -32,6 +34,7 @@ public class DoublesSet extends AbstractBaseTime {
     private int team1Score;
     private int team2Score;
 
+    @Enumerated(EnumType.STRING)
     private SetStatus setStatus;
 
     public DoublesSet(DoublesMatch doublesMatch, int setNumber) {
