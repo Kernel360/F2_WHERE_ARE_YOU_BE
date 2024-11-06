@@ -118,11 +118,7 @@ public class MemberController {
 	) {
 
 		List<ClubMemberMyPageInfo> clubMembersMyPageInfos = memberFacade.getClubMembers(member.getMemberToken());
-
-		if (clubMembersMyPageInfos.isEmpty()) {
-			return CommonResponse.success(null);
-		}
-
+		
 		List<MatchResultResponse> allMatchResults = new ArrayList<>();
 		Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "leagueAt"));
 
