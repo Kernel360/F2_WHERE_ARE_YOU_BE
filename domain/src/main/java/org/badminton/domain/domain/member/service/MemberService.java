@@ -13,7 +13,7 @@ public interface MemberService {
 	MemberMyPageInfo getMemberInfo(String memberToken, LeagueRecordInfo leagueRecordInfo,
 		List<ClubMemberMyPageInfo> clubMemberMyPageInfos);
 
-	MemberUpdateInfo updateProfileImage(String memberToken, String imageUrl);
+	MemberUpdateInfo updateProfile(String memberToken, String imageUrl, String name);
 
 	SimpleMemberInfo getSimpleMember(String memberToken);
 }

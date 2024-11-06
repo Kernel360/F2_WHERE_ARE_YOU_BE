@@ -71,8 +71,9 @@ public class Member extends AbstractBaseTime {
 		this.refreshToken = refreshToken;
 	}
 
-	public void updateMember(String imageUrl) {
+	public void updateMember(String imageUrl, String newName) {
 		this.profileImage = imageUrl;
+		this.name = newName;
 	}
 
 	// TODO: 회원 탈퇴 시 동호회에서도 탈퇴해야 함

@@ -52,9 +52,9 @@ public class MemberServiceImpl implements MemberService {
 
 	@Override
 	@Transactional
-	public MemberUpdateInfo updateProfileImage(String memberToken, String imageUrl) {
+	public MemberUpdateInfo updateProfile(String memberToken, String imageUrl, String newName) {
 		Member member = memberReader.getMember(memberToken);
-		member.updateMember(imageUrl);
+		member.updateMember(imageUrl, newName);
 		memberStore.store(member);
 		return MemberUpdateInfo.fromMemberEntity(member);
 	}

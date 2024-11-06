@@ -17,6 +17,7 @@ import org.badminton.api.interfaces.match.dto.MatchResultResponse;
 import org.badminton.api.interfaces.member.MemberDtoMapper;
 import org.badminton.api.interfaces.member.dto.MemberMyPageResponse;
 import org.badminton.api.interfaces.member.dto.MemberUpdateRequest;
+import org.badminton.api.interfaces.member.dto.MemberUpdateResponse;
 import org.badminton.api.interfaces.member.dto.SimpleMemberResponse;
 import org.badminton.domain.domain.club.info.ClubCardInfo;
 import org.badminton.domain.domain.clubmember.info.ClubMemberMyPageInfo;
@@ -53,22 +54,24 @@ public class MemberController {
 	private final MemberFacade memberFacade;
 
 	@Operation(
-		summary = "프로필 사진을 수정합니다",
+		summary = "프로필 사진과 이름을 수정합니다",
 		description = """
-			프로필 사진을 수정합니다. 다음 조건을 만족해야 합니다:
-						
+			프로필 사진과 이름을 수정합니다. 다음 조건을 만족해야 합니다:
+			
 			1. 프로필 이미지 URL:
 			   - 호스트: badminton-team.s3.ap-northeast-2.amazonaws.com
 			   - 경로: /member-profile/로 시작
 			   - 파일 확장자: png, jpg, jpeg, gif 중 하나""",
 		tags = {"Member"}
 	)
-	@PutMapping("/profileImage")
-	public CommonResponse<MemberUpdateInfo> updateProfileImage(
+	@PutMapping()
+	public CommonResponse<MemberUpdateResponse> updateProfile(
 		@Valid @RequestBody MemberUpdateRequest request,
 		@AuthenticationPrincipal CustomOAuth2Member member) {
-		return CommonResponse.success(
-			memberFacade.updateProfileImage(member.getMemberToken(), request.profileImageUrl()));
+		MemberUpdateInfo memberUpdateInfo = memberFacade.updateProfile(member.getMemberToken(),
+			request.profileImageUrl(), request.name());
+		MemberUpdateResponse memberUpdateResponse = memberDtoMapper.of(memberUpdateInfo);
+		return CommonResponse.success(memberUpdateResponse);
 	}
 
 	@Operation(

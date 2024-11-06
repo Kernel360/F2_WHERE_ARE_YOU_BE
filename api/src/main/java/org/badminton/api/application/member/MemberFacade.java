@@ -41,8 +41,8 @@ public class MemberFacade {
 		return clubMemberService.getClubMembers(memberToken);
 	}
 
-	public MemberUpdateInfo updateProfileImage(String memberToken, String imageUrl) {
-		return memberService.updateProfileImage(memberToken, imageUrl);
+	public MemberUpdateInfo updateProfile(String memberToken, String imageUrl, String name) {
+		return memberService.updateProfile(memberToken, imageUrl, name);
 	}
 
 	public List<ClubCardInfo> getMyClubs(String memberToken) {
