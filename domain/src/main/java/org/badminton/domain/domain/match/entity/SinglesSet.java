@@ -4,6 +4,8 @@ import static org.badminton.domain.common.consts.Constants.INITIAL_SET_SCORE;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -34,6 +36,7 @@ public class SinglesSet extends AbstractBaseTime {
     private int player1Score;
     private int player2Score;
 
+    @Enumerated(EnumType.STRING)
     private SetStatus setStatus;
 
     public SinglesSet(SinglesMatch singlesMatch, int setNumber) {
