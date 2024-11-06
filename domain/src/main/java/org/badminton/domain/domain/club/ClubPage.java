@@ -21,7 +21,7 @@ public class ClubPage {
 
 			Map<Member.MemberTier, Long> tierCounts = club.getClubMemberCountByTier();
 
-			return ClubCardInfo.clubEntityToClubsCardResponse(club, tierCounts);
+			return ClubCardInfo.from(club, tierCounts);
 
 		});
 

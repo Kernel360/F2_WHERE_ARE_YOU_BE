@@ -3,7 +3,6 @@ package org.badminton.domain.domain.club.info;
 import java.time.LocalDateTime;
 import java.util.Map;
 
-import org.badminton.domain.domain.club.ClubMemberCountByTier;
 import org.badminton.domain.domain.member.entity.Member;
 
 public record ClubDetailsInfo(
@@ -12,13 +11,15 @@ public record ClubDetailsInfo(
 	String clubName,
 	String clubDescription,
 	String clubImage,
-	ClubMemberCountByTier clubMemberCountByTier,
+	Long goldClubMemberCount,
+	Long silverClubMemberCount,
+	Long bronzeClubMemberCount,
 	int clubMemberCount,
 	LocalDateTime createdAt,
 	boolean isClubMember
 ) {
 
-	public static ClubDetailsInfo fromClubEntityAndMemberCountByTier(ClubSummaryInfo clubSummaryInfo,
+	public static ClubDetailsInfo from(ClubSummaryInfo clubSummaryInfo,
 		Map<Member.MemberTier, Long> memberCountByTier,
 		boolean isClubMember, int clubMembersCount) {
 		return new ClubDetailsInfo(
@@ -27,7 +28,9 @@ public record ClubDetailsInfo(
 			clubSummaryInfo.clubName(),
 			clubSummaryInfo.clubDescription(),
 			clubSummaryInfo.clubImage(),
-			ClubMemberCountByTier.ofClubMemberCountResponse(memberCountByTier),
+			memberCountByTier.get(Member.MemberTier.GOLD),
+			memberCountByTier.get(Member.MemberTier.SILVER),
+			memberCountByTier.get(Member.MemberTier.BRONZE),
 			clubMembersCount,
 			clubSummaryInfo.createdAt(),
 			isClubMember

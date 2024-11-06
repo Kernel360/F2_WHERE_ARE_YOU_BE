@@ -42,10 +42,11 @@ public class ClubFacade {
 		String memberToken = clubMember.getMemberToken();
 		var club = clubService.readClub(clubToken);
 		Map<Member.MemberTier, Long> memberCountByTier = club.getClubMemberCountByTier();
+
 		boolean isClubMember = clubMemberService.checkIfMemberBelongsToClub(memberToken, clubToken);
 		int clubMembersCount = club.clubMembers().size();
 		clubStatisticsService.increaseVisitedClubCount(clubToken);
-		return ClubDetailsInfo.fromClubEntityAndMemberCountByTier(club, memberCountByTier, isClubMember,
+		return ClubDetailsInfo.from(club, memberCountByTier, isClubMember,
 			clubMembersCount);
 	}
 

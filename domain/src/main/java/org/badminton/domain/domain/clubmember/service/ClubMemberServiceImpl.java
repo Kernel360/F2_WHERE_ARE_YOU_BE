@@ -149,7 +149,7 @@ public class ClubMemberServiceImpl implements ClubMemberService {
 		return clubs.stream()
 			.map(club -> {
 				Map<Member.MemberTier, Long> tierCounts = club.getClubMemberCountByTier();
-				return ClubCardInfo.clubEntityToClubsCardResponse(club, tierCounts);
+				return ClubCardInfo.from(club, tierCounts);
 			})
 			.toList();
 	}

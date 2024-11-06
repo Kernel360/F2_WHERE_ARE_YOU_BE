@@ -48,7 +48,7 @@ public class ClubServiceImpl implements ClubService {
 	public List<ClubCardInfo> readRecentlyClub() {
 		List<Club> clubs = clubReader.readRecentlyClubs();
 		return clubs.stream()
-			.map(club -> ClubCardInfo.clubEntityToClubsCardResponse(club, club.getClubMemberCountByTier()))
+			.map(club -> ClubCardInfo.from(club, club.getClubMemberCountByTier()))
 			.toList();
 	}
 
@@ -90,7 +90,7 @@ public class ClubServiceImpl implements ClubService {
 	@Override
 	public ClubCardInfo readClubById(Long clubId) {
 		var club = clubReader.readClubByClubId(clubId);
-		return ClubCardInfo.clubEntityToClubsCardResponse(club, club.getClubMemberCountByTier());
+		return ClubCardInfo.from(club, club.getClubMemberCountByTier());
 	}
 
 	@Override
