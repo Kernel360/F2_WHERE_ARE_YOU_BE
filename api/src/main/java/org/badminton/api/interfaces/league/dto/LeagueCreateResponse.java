@@ -11,43 +11,44 @@ import org.badminton.domain.domain.member.entity.Member;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 public record LeagueCreateResponse(
-	@Schema(description = "경기 이름", example = "배드민턴 경기")
+	@Schema(description = "경기 이름", requiredMode = Schema.RequiredMode.REQUIRED)
 	String leagueName,
 
-	@Schema(description = "경기 설명", example = "이 경기는 지역 예선 경기입니다.")
+	@Schema(description = "경기 설명", requiredMode = Schema.RequiredMode.REQUIRED)
 	String description,
 
-	@Schema(description = "경기 장소", example = "서울시 성동구 서울숲 체육센터")
+	@Schema(description = "경기 장소", requiredMode = Schema.RequiredMode.REQUIRED)
 	String fullAddress,
 
-	@Schema(description = "경기 리전", example = "서울시")
+	@Schema(description = "경기 리전", requiredMode = Schema.RequiredMode.REQUIRED)
 	String region,
 
-	@Schema(description = "최소 티어", example = "GOLD")
+	@Schema(description = "최소 티어 (GOLD | SILVER | BRONZE)", requiredMode = Schema.RequiredMode.REQUIRED)
 	Member.MemberTier requiredTier,
 
-	@Schema(description = "현재 경기 상태", example = "RECRUITING")
+	@Schema(description = "현재 경기 상태( ALL | RECRUITING | RECRUITING_COMPLETED | PLAYING | CANCELED | FINISHED)",
+		requiredMode = Schema.RequiredMode.REQUIRED)
 	LeagueStatus status,
 
-	@Schema(description = "경기 방식", example = "SINGLE")
+	@Schema(description = "경기 방식 (SINGLES | DOUBLES)", requiredMode = Schema.RequiredMode.REQUIRED)
 	MatchType matchType,
 
-	@Schema(description = "경기 시작 날짜", example = "2024-12-10T15:30:00")
+	@Schema(description = "경기 시작 날짜", requiredMode = Schema.RequiredMode.REQUIRED)
 	LocalDateTime leagueAt,
 
-	@Schema(description = "모집 마감 날짜", example = "2024-12-08T23:59:59")
+	@Schema(description = "모집 마감 날짜", requiredMode = Schema.RequiredMode.REQUIRED)
 	LocalDateTime recruitingClosedAt,
 
-	@Schema(description = "참가 인원", example = "16")
+	@Schema(description = "참가 인원", requiredMode = Schema.RequiredMode.REQUIRED)
 	int playerLimitCount,
 
-	@Schema(description = "생성 일자", example = "2024-09-10T15:30:00")
+	@Schema(description = "생성 일자", requiredMode = Schema.RequiredMode.REQUIRED)
 	LocalDateTime createdAt,
 
-	@Schema(description = "수정 일자", example = "2024-09-10T15:30:00")
+	@Schema(description = "수정 일자", requiredMode = Schema.RequiredMode.REQUIRED)
 	LocalDateTime modifiedAt,
 
-	@Schema(description = "매칭 조건", example = "TIER")
+	@Schema(description = "매칭 조건 (FREE | TOURNAMENT)", requiredMode = Schema.RequiredMode.REQUIRED)
 	MatchGenerationType matchGenerationType
 ) {
 
