@@ -19,12 +19,12 @@ public record ClubMemberMyPageResponse(
 	ClubMember.ClubMemberRole role
 
 ) {
-	public static ClubMemberMyPageResponse toClubMemberMyPageResponse(ClubMemberMyPageInfo info) {
+
+	public static ClubMemberMyPageResponse from(ClubMemberMyPageInfo clubMemberMyPageInfo) {
 		return new ClubMemberMyPageResponse(
-			info.clubId(),
-			info.clubMemberId(),
-			info.clubName(),
-			info.role()
-		);
+			clubMemberMyPageInfo.clubId(),
+			clubMemberMyPageInfo.clubMemberId(),
+			clubMemberMyPageInfo.clubName(),
+			clubMemberMyPageInfo.role());
 	}
 }

@@ -17,7 +17,13 @@ public record MemberMyPageInfo(
 
 	Member.MemberTier tier,
 
-	LeagueRecordInfo leagueRecordInfo,
+	int winCount,
+
+	int loseCount,
+
+	int drawCount,
+
+	int matchCount,
 
 	List<ClubMemberMyPageInfo> clubMemberMyPageInfos
 ) {
@@ -25,14 +31,15 @@ public record MemberMyPageInfo(
 		List<ClubMemberMyPageInfo> clubMemberMyPageInfos) {
 		return new MemberMyPageInfo(
 			member.getMemberToken(), member.getName(), member.getEmail(), member.getProfileImage(), member.getTier(),
-			leagueRecordInfo, clubMemberMyPageInfos);
+			leagueRecordInfo.winCount(), leagueRecordInfo.loseCount(), leagueRecordInfo.drawCount(),
+			leagueRecordInfo.matchCount(), clubMemberMyPageInfos);
 
 	}
 
 	public static MemberMyPageInfo from(Member member, LeagueRecordInfo leagueRecordInfo) {
 		return new MemberMyPageInfo(
 			member.getMemberToken(), member.getName(), member.getEmail(), member.getProfileImage(), member.getTier(),
-			leagueRecordInfo, null);
-
+			leagueRecordInfo.winCount(), leagueRecordInfo.loseCount(), leagueRecordInfo.drawCount(),
+			leagueRecordInfo.matchCount(), null);
 	}
 }

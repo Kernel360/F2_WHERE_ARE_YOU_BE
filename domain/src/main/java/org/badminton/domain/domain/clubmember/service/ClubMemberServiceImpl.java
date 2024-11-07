@@ -15,7 +15,6 @@ import org.badminton.domain.domain.clubmember.command.ClubMemberExpelCommand;
 import org.badminton.domain.domain.clubmember.command.ClubMemberRoleUpdateCommand;
 import org.badminton.domain.domain.clubmember.entity.ClubMember;
 import org.badminton.domain.domain.clubmember.info.ClubMemberBanRecordInfo;
-import org.badminton.domain.domain.clubmember.info.ClubMemberDetailInfo;
 import org.badminton.domain.domain.clubmember.info.ClubMemberInfo;
 import org.badminton.domain.domain.clubmember.info.ClubMemberMyPageInfo;
 import org.badminton.domain.domain.clubmember.info.ClubMemberWithdrawInfo;
@@ -72,6 +71,7 @@ public class ClubMemberServiceImpl implements ClubMemberService {
 	}
 
 	@Override
+	@Transactional(readOnly = true)
 	public List<ClubMemberMyPageInfo> getClubMembers(String memberToken) {
 		List<ClubMember> clubMembers = clubMemberReader.getClubMembersByMemberToken(memberToken);
 		return ClubMemberMyPageInfo.from(clubMembers);
@@ -82,12 +82,6 @@ public class ClubMemberServiceImpl implements ClubMemberService {
 		ClubMember clubMember = clubMemberReader.getClubMemberByMemberTokenAndClubToken(clubToken, memberToken);
 
 		return ClubMemberInfo.valueOf(clubMember);
-	}
-
-	@Override
-	public ClubMemberDetailInfo getClubMemberDetail(String memberToken, String clubToken) {
-		ClubMember clubMember = clubMemberReader.getClubMemberByMemberTokenAndClubToken(clubToken, memberToken);
-		return ClubMemberDetailInfo.from(clubMember);
 	}
 
 	@Override
@@ -128,12 +122,6 @@ public class ClubMemberServiceImpl implements ClubMemberService {
 			clubMember.withdrawal();
 			clubMemberStore.store(clubMember);
 		});
-	}
-
-	@Override
-	public ClubMemberDetailInfo getClubMemberDetailByClubToken(String clubToken, String memberToken) {
-		ClubMember clubMember = clubMemberReader.getClubMemberByMemberTokenAndClubToken(clubToken, memberToken);
-		return ClubMemberDetailInfo.from(clubMember);
 	}
 
 	@Override
