@@ -21,6 +21,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -33,11 +34,13 @@ public class ClubFacade {
 	private final ClubMemberService clubMemberService;
 	private final ClubStatisticsService clubStatisticsService;
 
+	@Transactional(readOnly = true)
 	public Page<ClubCardInfo> readAllClubs(int page, int size, String sort) {
 		Pageable pageable = PageRequest.of(page, size, Sort.by(sort));
 		return clubService.readAllClubs(pageable);
 	}
 
+	@Transactional
 	public ClubDetailsInfo readClub(String clubToken, CustomOAuth2Member clubMember) {
 		String memberToken = clubMember.getMemberToken();
 		var club = clubService.readClub(clubToken);
@@ -50,11 +53,13 @@ public class ClubFacade {
 			clubMembersCount);
 	}
 
+	@Transactional
 	public Page<ClubCardInfo> searchClubs(String keyword, int page, int size, String sort) {
 		Pageable pageable = PageRequest.of(page, size, Sort.by(sort));
 		return clubService.searchClubs(keyword, pageable);
 	}
 
+	@Transactional
 	public ClubCreateInfo createClub(ClubCreateCommand createCommand, String memberToken) {
 		var clubCreateInfo = clubService.createClub(createCommand);
 		clubMemberService.clubMemberOwner(memberToken, clubCreateInfo);
@@ -62,15 +67,18 @@ public class ClubFacade {
 		return clubCreateInfo;
 	}
 
+	@Transactional
 	public ClubUpdateInfo updateClubInfo(ClubUpdateCommand clubUpdateCommand, String clubToken) {
 		return clubService.updateClub(clubUpdateCommand, clubToken);
 	}
 
+	@Transactional
 	public ClubDeleteInfo deleteClubInfo(String clubToken) {
 		clubMemberService.deleteAllClubMembers(clubToken);
 		return clubService.deleteClub(clubToken);
 	}
 
+	@Transactional
 	public List<ClubApplicantInfo> readClubApplicants(String clubToken) {
 		return clubService.readClubApplicants(clubToken);
 	}

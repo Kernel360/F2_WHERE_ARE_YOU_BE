@@ -8,6 +8,7 @@ import org.badminton.domain.domain.club.ClubService;
 import org.badminton.domain.domain.club.info.ClubCardInfo;
 import org.badminton.domain.domain.statistics.ClubStatisticsService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,6 +20,7 @@ public class ClubRankFacade {
 	private final ClubService clubService;
 	private final ClubStatisticsService clubStatisticsService;
 
+	@Transactional(readOnly = true)
 	public List<ClubCardInfo> rankClub(Rank rank) {
 		var clubStatisticsList = clubStatisticsService.getAll();
 
@@ -35,6 +37,7 @@ public class ClubRankFacade {
 		return clubList;
 	}
 
+	@Transactional(readOnly = true)
 	public List<ClubCardInfo> readRecentlyClub() {
 		return clubService.readRecentlyClub();
 	}
