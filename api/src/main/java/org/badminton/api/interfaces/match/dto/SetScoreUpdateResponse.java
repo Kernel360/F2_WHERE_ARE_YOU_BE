@@ -12,7 +12,7 @@ public record SetScoreUpdateResponse(
 ) {
 
     public static SetScoreUpdateResponse fromUpdateSetScoreInfo(SetInfo.Main setInfo) {
-        return new SetScoreUpdateResponse(setInfo.getMatchId(), setInfo.getSetIndex(), setInfo.getScore1(),
+        return new SetScoreUpdateResponse(setInfo.getMatchId(), setInfo.getSetNumber(), setInfo.getScore1(),
                 setInfo.getScore2(), setInfo.getMatchType());
     }
 
