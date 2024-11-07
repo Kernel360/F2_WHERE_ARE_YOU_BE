@@ -25,6 +25,7 @@ public class MemberServiceImpl implements MemberService {
 	private final MemberStore memberStore;
 
 	@Override
+	@Transactional(readOnly = true)
 	public MemberMyPageInfo getMemberInfo(String memberToken, LeagueRecordInfo leagueRecordInfo,
 		List<ClubMemberMyPageInfo> clubMemberMyPageInfos) {
 		Member member = memberReader.getMember(memberToken);
@@ -32,9 +33,19 @@ public class MemberServiceImpl implements MemberService {
 	}
 
 	@Override
+	@Transactional(readOnly = true)
 	public SimpleMemberInfo getSimpleMember(String memberToken) {
 		Member member = memberReader.getMember(memberToken);
 		return SimpleMemberInfo.from(member);
+	}
+
+	@Override
+	@Transactional
+	public MemberUpdateInfo updateProfile(String memberToken, String imageUrl, String newName) {
+		Member member = memberReader.getMember(memberToken);
+		member.updateMember(imageUrl, newName);
+		memberStore.store(member);
+		return MemberUpdateInfo.fromMemberEntity(member);
 	}
 
 	private MemberMyPageInfo createMemberMyPageInfo(Member member, List<ClubMemberMyPageInfo> clubMemberMyPageInfos,
@@ -50,12 +61,4 @@ public class MemberServiceImpl implements MemberService {
 		return clubMemberMyPageInfos != null;
 	}
 
-	@Override
-	@Transactional
-	public MemberUpdateInfo updateProfile(String memberToken, String imageUrl, String newName) {
-		Member member = memberReader.getMember(memberToken);
-		member.updateMember(imageUrl, newName);
-		memberStore.store(member);
-		return MemberUpdateInfo.fromMemberEntity(member);
-	}
 }
