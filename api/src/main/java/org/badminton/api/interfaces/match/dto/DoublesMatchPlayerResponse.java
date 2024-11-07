@@ -1,18 +1,39 @@
 package org.badminton.api.interfaces.match.dto;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import org.badminton.domain.domain.match.info.DoublesMatchPlayerInfo;
 
 public record DoublesMatchPlayerResponse(
-        TeamResponse team1,
-        TeamResponse team2
+        @Schema(description = "팀 1 경기 참가자 1 이름")
+        String participant1Name,
+        @Schema(description = "팀 1 경기 참가자 1 이미지")
+        String participant1Image,
+        @Schema(description = "팀 1 경기 참가자 2 이름")
+        String participant2Name,
+        @Schema(description = "팀 1 경기 참가자 2 이미지")
+        String participant2Image,
+        @Schema(description = "팀 2 경기 참가자 3 이름")
+        String participant3Name,
+        @Schema(description = "팀 2 경기 참가자 3 이미지")
+        String participant3Image,
+        @Schema(description = "팀 2 경기 참가자 4 이름")
+        String participant4Name,
+        @Schema(description = "팀 2 경기 참가자 4 이미지")
+        String participant4Image
 ) {
     public static DoublesMatchPlayerResponse of(DoublesMatchPlayerInfo doublesMatchPlayerInfo) {
         if (doublesMatchPlayerInfo == null) {
             return null;
         }
         return new DoublesMatchPlayerResponse(
-                TeamResponse.fromTeam(doublesMatchPlayerInfo.team1()),
-                TeamResponse.fromTeam(doublesMatchPlayerInfo.team2())
+                doublesMatchPlayerInfo.team1().participant1Name(),
+                doublesMatchPlayerInfo.team1().participant1Image(),
+                doublesMatchPlayerInfo.team1().participant2Name(),
+                doublesMatchPlayerInfo.team1().participant2Image(),
+                doublesMatchPlayerInfo.team2().participant1Name(),
+                doublesMatchPlayerInfo.team2().participant1Image(),
+                doublesMatchPlayerInfo.team2().participant2Name(),
+                doublesMatchPlayerInfo.team2().participant2Image()
         );
     }
 }
