@@ -8,19 +8,20 @@ import org.badminton.domain.domain.league.enums.LeagueStatus;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 public record LeagueReadResponse(
-	@Schema(description = "경기 아이디", example = "1L")
+	@Schema(description = "경기 아이디", requiredMode = Schema.RequiredMode.REQUIRED)
 	Long leagueId,
 
-	@Schema(description = "경기 이름", example = "배드민턴 경기")
+	@Schema(description = "경기 이름", requiredMode = Schema.RequiredMode.REQUIRED)
 	String leagueName,
 
-	@Schema(description = "현재 경기 상태", example = "RECRUITING")
+	@Schema(description = "현재 경기 상태( ALL | RECRUITING | RECRUITING_COMPLETED | PLAYING | CANCELED | FINISHED)",
+		requiredMode = Schema.RequiredMode.REQUIRED)
 	LeagueStatus status,
 
-	@Schema(description = "경기 시작 날짜", example = "2024-09-10T15:30:00")
+	@Schema(description = "경기 시작 날짜", requiredMode = Schema.RequiredMode.REQUIRED)
 	LocalDateTime leagueAt,
 
-	@Schema(description = "참가 인원", example = "16")
+	@Schema(description = "참가 인원", requiredMode = Schema.RequiredMode.REQUIRED)
 	int playerCount
 ) {
 	public LeagueReadResponse(League entity) {

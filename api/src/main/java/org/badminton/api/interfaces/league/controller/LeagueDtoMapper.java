@@ -11,6 +11,7 @@ import org.badminton.api.interfaces.league.dto.LeagueParticipantResponse;
 import org.badminton.api.interfaces.league.dto.LeagueParticipationCancelResponse;
 import org.badminton.api.interfaces.league.dto.LeagueReadResponse;
 import org.badminton.api.interfaces.league.dto.LeagueUpdateRequest;
+import org.badminton.api.interfaces.league.dto.LeagueUpdateResponse;
 import org.badminton.domain.domain.league.command.LeagueCreateNoIncludeClubCommand;
 import org.badminton.domain.domain.league.command.LeagueUpdateCommand;
 import org.badminton.domain.domain.league.info.LeagueByDateInfoWithParticipantCountInfo;
@@ -48,9 +49,9 @@ public interface LeagueDtoMapper {
 
 	LeagueCancelResponse of(LeagueCancelInfo leagueInfo);
 
-	LeagueUpdateInfoWithParticipantCountInfo of(LeagueUpdateInfoWithParticipantCountInfo leagueUpdateInfo);
-
 	LeagueParticipantResponse of(LeagueParticipantInfo leagueParticipantInfo);
 
 	LeagueParticipationCancelResponse of(LeagueParticipantCancelInfo result);
+
+	LeagueUpdateResponse of(LeagueUpdateInfoWithParticipantCountInfo leagueUpdateInfo);
 }
