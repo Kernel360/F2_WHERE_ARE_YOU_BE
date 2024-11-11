@@ -34,6 +34,11 @@ public class ClubReaderImpl implements ClubReader {
 	}
 
 	@Override
+	public List<Club> readAllClubs() {
+		return clubRepository.findAll();
+	}
+
+	@Override
 	public Club readClub(String clubToken) {
 		return clubRepository.findByClubToken(clubToken).orElseThrow(() -> new ClubNotExistException(clubToken));
 	}

@@ -19,7 +19,7 @@ import jakarta.persistence.EntityManagerFactory;
 
 @Configuration
 @EnableBatchProcessing
-public class BatchConfig {
+public class EmailBatchConfig {
 
 	@Bean
 	public Job sendEmailJob(Step sendEmailStep, JobRepository jobRepository) {
@@ -31,9 +31,9 @@ public class BatchConfig {
 	@Bean
 	public Step sendEmailStep(ItemReader<Mail> reader, ItemProcessor<Mail, Mail> processor,
 		ItemWriter<Mail> writer, JobRepository jobRepository,
-		PlatformTransactionManager transactionManager) {
+		PlatformTransactionManager emailTransactionManager) {
 		return new StepBuilder("sendEmailStep", jobRepository)
-			.<Mail, Mail>chunk(10, transactionManager)
+			.<Mail, Mail>chunk(10, emailTransactionManager)
 			.reader(reader)
 			.processor(processor)
 			.writer(writer)
@@ -41,7 +41,7 @@ public class BatchConfig {
 	}
 
 	@Bean
-	public PlatformTransactionManager transactionManager(EntityManagerFactory entityManagerFactory) {
+	public PlatformTransactionManager emailTransactionManager(EntityManagerFactory entityManagerFactory) {
 		return new JpaTransactionManager(entityManagerFactory);
 	}
 

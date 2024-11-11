@@ -20,8 +20,6 @@ public interface LeagueRepository extends JpaRepository<League, Long> {
 	List<League> findAllByClubClubTokenAndLeagueAtBetween(String clubToken, LocalDateTime startOfMonth,
 		LocalDateTime endOfMonth);
 
-	void deleteByLeagueId(Long leagueId);
-
 	Page<League> findAllByLeagueAtBetweenAndLeagueStatusNotIn(LocalDateTime startOfDay, LocalDateTime endOfDay,
 		List<LeagueStatus> excludedLeagueStatusList, Pageable pageable);
 
@@ -32,4 +30,9 @@ public interface LeagueRepository extends JpaRepository<League, Long> {
 
 	@Query("SELECT l.matchGenerationType FROM League l WHERE l.leagueId = :leagueId")
 	Optional<MatchGenerationType> getMatchGenerationTypeByLeagueId(@Param("leagueId") Long leagueId);
+
+	@Query("SELECT CASE WHEN COUNT(l) > 0 THEN true ELSE false END FROM League l WHERE l.club.clubId = :clubId AND DATE(l.createdAt) = CURRENT_DATE")
+	boolean existsByClubIdAndCreatedAtToday(@Param("clubId") Long clubId);
+
+	List<League> findByLeagueStatus(LeagueStatus leagueStatus);
 }

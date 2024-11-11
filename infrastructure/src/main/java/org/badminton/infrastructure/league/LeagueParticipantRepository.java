@@ -3,6 +3,7 @@ package org.badminton.infrastructure.league;
 import java.util.List;
 import java.util.Optional;
 
+import org.badminton.domain.domain.league.entity.League;
 import org.badminton.domain.domain.league.entity.LeagueParticipant;
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -16,4 +17,8 @@ public interface LeagueParticipantRepository extends JpaRepository<LeaguePartici
 	List<LeagueParticipant> findAllByLeagueLeagueIdAndCanceledFalse(Long leagueId);
 
 	int countByLeagueLeagueIdAndCanceledFalse(Long leagueId);
+
+	int countByLeague(League league);
+
+	boolean existsByMemberIdAndLeagueLeagueId(Long memberId, Long leagueId);
 }
