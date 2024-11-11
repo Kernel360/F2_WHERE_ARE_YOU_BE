@@ -4,11 +4,20 @@ import java.util.List;
 
 import org.badminton.domain.domain.match.entity.SinglesMatch;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 public interface SinglesMatchRepository extends JpaRepository<SinglesMatch, Long> {
 
 	List<SinglesMatch> findAllByLeague_LeagueId(Long leagueId);
 
 	void deleteAllByLeague_LeagueId(Long leagueId);
+
+	List<SinglesMatch> findAllByLeague_LeagueIdAndRoundNumber(Long leagueId, Integer roundNumber);
+
+	@Query("SELECT MAX(sm.roundNumber) FROM SinglesMatch sm WHERE sm.league.leagueId = :leagueId")
+	Integer findTopRoundNumberByLeagueId(@Param("leagueId") Long leagueId);
+
+	SinglesMatch findFirstByLeagueLeagueIdOrderByIdAsc(Long leagueId);
 
 }

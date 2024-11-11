@@ -1,5 +1,16 @@
 package org.badminton.domain.domain.league.entity;
 
+import java.time.LocalDateTime;
+
+import org.badminton.domain.common.AbstractBaseTime;
+import org.badminton.domain.common.enums.MatchGenerationType;
+import org.badminton.domain.common.enums.MatchType;
+import org.badminton.domain.common.exception.league.PlayerLimitCountDecreasedNotAllowedException;
+import org.badminton.domain.domain.club.entity.Club;
+import org.badminton.domain.domain.league.enums.LeagueStatus;
+import org.badminton.domain.domain.league.vo.Address;
+import org.badminton.domain.domain.member.entity.Member;
+
 import jakarta.persistence.AttributeOverride;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
@@ -13,19 +24,10 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import java.time.LocalDateTime;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.badminton.domain.common.AbstractBaseTime;
-import org.badminton.domain.common.enums.MatchGenerationType;
-import org.badminton.domain.common.enums.MatchType;
-import org.badminton.domain.common.exception.league.PlayerLimitCountDecreasedNotAllowedException;
-import org.badminton.domain.domain.club.entity.Club;
-import org.badminton.domain.domain.league.enums.LeagueStatus;
-import org.badminton.domain.domain.league.vo.Address;
-import org.badminton.domain.domain.member.entity.Member;
 
 @Getter
 @AllArgsConstructor
@@ -34,83 +36,90 @@ import org.badminton.domain.domain.member.entity.Member;
 @Table(name = "league")
 public class League extends AbstractBaseTime {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long leagueId;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long leagueId;
 
-    private String leagueOwnerMemberToken;
+	private String leagueOwnerMemberToken;
 
-    private String leagueName;
+	private String leagueName;
 
-    private String description;
+	private String description;
 
-    @Embedded
-    @AttributeOverride(name = "fullAddress", column = @Column(name = "fullAddress"))
-    @AttributeOverride(name = "region", column = @Column(name = "region"))
-    private Address address;
+	@Column(nullable = false, columnDefinition = "INT DEFAULT 1")
+	private int totalRounds = 1;
 
-    @Enumerated(EnumType.STRING)
-    private Member.MemberTier requiredTier;
+	@Embedded
+	@AttributeOverride(name = "fullAddress", column = @Column(name = "fullAddress"))
+	@AttributeOverride(name = "region", column = @Column(name = "region"))
+	private Address address;
 
-    @Enumerated(EnumType.STRING)
-    private LeagueStatus leagueStatus;
+	@Enumerated(EnumType.STRING)
+	private Member.MemberTier requiredTier;
 
-    @Enumerated(EnumType.STRING)
-    private MatchType matchType;
+	@Enumerated(EnumType.STRING)
+	private LeagueStatus leagueStatus;
 
-    private LocalDateTime leagueAt;
+	@Enumerated(EnumType.STRING)
+	private MatchType matchType;
 
-    private LocalDateTime recruitingClosedAt;
+	private LocalDateTime leagueAt;
 
-    private int playerLimitCount;
+	private LocalDateTime recruitingClosedAt;
 
-    @Enumerated(EnumType.STRING)
-    private MatchGenerationType matchGenerationType;  // FREE, TOURNAMENT
+	private int playerLimitCount;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "clubId")
-    private Club club;
+	@Enumerated(EnumType.STRING)
+	private MatchGenerationType matchGenerationType;  // FREE, TOURNAMENT
 
-    public League(String leagueOwnerMemberToken, String leagueName, String description, Address address,
-                  LocalDateTime leagueAt,
-                  Member.MemberTier tierLimit, LocalDateTime recruitingClosedAt, int playerLimitCount,
-                  MatchType matchType,
-                  MatchGenerationType matchGenerationType, Club club) {
-        this.leagueOwnerMemberToken = leagueOwnerMemberToken;
-        this.leagueName = leagueName;
-        this.description = description;
-        this.address = address;
-        this.leagueAt = leagueAt;
-        this.requiredTier = tierLimit;
-        this.recruitingClosedAt = recruitingClosedAt;
-        this.leagueStatus = LeagueStatus.RECRUITING;
-        this.playerLimitCount = playerLimitCount;
-        this.matchType = matchType;
-        this.matchGenerationType = matchGenerationType;
-        this.club = club;
-    }
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "clubId")
+	private Club club;
 
-    public void updateLeague(String leagueName, String leagueDescription,
-                             int playerLimitCount, MatchType matchType, MatchGenerationType matchGenerationType) {
-        this.leagueName = leagueName;
-        this.description = leagueDescription;
-        validatePlayerLimitCountWhenUpdate(playerLimitCount);
-        this.playerLimitCount = playerLimitCount;
-        this.matchType = matchType;
-        this.matchGenerationType = matchGenerationType;
-    }
+	public League(String leagueOwnerMemberToken, String leagueName, String description, Address address,
+		LocalDateTime leagueAt,
+		Member.MemberTier tierLimit, LocalDateTime recruitingClosedAt, int playerLimitCount,
+		MatchType matchType,
+		MatchGenerationType matchGenerationType, Club club) {
+		this.leagueOwnerMemberToken = leagueOwnerMemberToken;
+		this.leagueName = leagueName;
+		this.description = description;
+		this.address = address;
+		this.leagueAt = leagueAt;
+		this.requiredTier = tierLimit;
+		this.recruitingClosedAt = recruitingClosedAt;
+		this.leagueStatus = LeagueStatus.RECRUITING;
+		this.playerLimitCount = playerLimitCount;
+		this.matchType = matchType;
+		this.matchGenerationType = matchGenerationType;
+		this.club = club;
+	}
 
-    private void validatePlayerLimitCountWhenUpdate(int playerLimitCount) {
-        if (this.playerLimitCount > playerLimitCount) {
-            throw new PlayerLimitCountDecreasedNotAllowedException(this.playerLimitCount, playerLimitCount);
-        }
-    }
+	public void defineTotalRounds(int totalRounds) {
+		this.totalRounds = totalRounds;
+	}
 
-    public void completeLeagueRecruiting() {
-        this.leagueStatus = LeagueStatus.RECRUITING_COMPLETED;
-    }
+	public void updateLeague(String leagueName, String leagueDescription,
+		int playerLimitCount, MatchType matchType, MatchGenerationType matchGenerationType) {
+		this.leagueName = leagueName;
+		this.description = leagueDescription;
+		validatePlayerLimitCountWhenUpdate(playerLimitCount);
+		this.playerLimitCount = playerLimitCount;
+		this.matchType = matchType;
+		this.matchGenerationType = matchGenerationType;
+	}
 
-    public void cancelLeague() {
-        this.leagueStatus = LeagueStatus.CANCELED;
-    }
+	private void validatePlayerLimitCountWhenUpdate(int playerLimitCount) {
+		if (this.playerLimitCount > playerLimitCount) {
+			throw new PlayerLimitCountDecreasedNotAllowedException(this.playerLimitCount, playerLimitCount);
+		}
+	}
+
+	public void completeLeagueRecruiting() {
+		this.leagueStatus = LeagueStatus.RECRUITING_COMPLETED;
+	}
+
+	public void cancelLeague() {
+		this.leagueStatus = LeagueStatus.CANCELED;
+	}
 }

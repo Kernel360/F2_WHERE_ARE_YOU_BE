@@ -1,31 +1,35 @@
 package org.badminton.infrastructure.match.service;
 
-import lombok.RequiredArgsConstructor;
-
-import org.badminton.domain.common.exception.league.LeagueNotExistException;
+import org.badminton.domain.domain.league.LeagueReader;
 import org.badminton.domain.domain.league.entity.League;
-import org.badminton.domain.domain.match.command.MatchCommand.UpdateSetScore;
-import org.badminton.domain.domain.match.info.SetInfo.Main;
 import org.badminton.domain.domain.match.reader.DoublesMatchStore;
 import org.badminton.domain.domain.match.reader.SinglesMatchStore;
-import org.badminton.domain.domain.match.service.MatchProgressService;
+import org.badminton.domain.domain.match.service.AbstractMatchRetrieveService;
 import org.badminton.domain.domain.match.service.MatchStrategy;
 import org.badminton.domain.domain.match.store.DoublesMatchReader;
 import org.badminton.domain.domain.match.store.SinglesMatchReader;
-import org.badminton.infrastructure.league.LeagueRepository;
 import org.badminton.infrastructure.match.strategy.FreeDoublesMatchStrategy;
 import org.badminton.infrastructure.match.strategy.FreeSinglesMatchStrategy;
 import org.springframework.stereotype.Service;
 
 @Service
-@RequiredArgsConstructor
-public class MatchProgressServiceImpl implements MatchProgressService {
+public class FreeMatchRetrieveServiceImpl extends AbstractMatchRetrieveService {
 
-	private final LeagueRepository leagueRepository;
+	private final LeagueReader leagueReader;
 	private final SinglesMatchReader singlesMatchReader;
 	private final DoublesMatchReader doublesMatchReader;
 	private final SinglesMatchStore singlesMatchStore;
 	private final DoublesMatchStore doublesMatchStore;
+
+	public FreeMatchRetrieveServiceImpl(LeagueReader leagueReader, SinglesMatchReader singlesMatchReader,
+		DoublesMatchReader doublesMatchReader,
+		SinglesMatchStore singlesMatchStore, DoublesMatchStore doublesMatchStore) {
+		this.singlesMatchReader = singlesMatchReader;
+		this.doublesMatchReader = doublesMatchReader;
+		this.singlesMatchStore = singlesMatchStore;
+		this.doublesMatchStore = doublesMatchStore;
+		this.leagueReader = leagueReader;
+	}
 
 	@Override
 	public MatchStrategy makeSinglesOrDoublesMatchStrategy(Long leagueId) {
@@ -36,14 +40,7 @@ public class MatchProgressServiceImpl implements MatchProgressService {
 		};
 	}
 
-	@Override
-	public Main registerSetScoreInMatch(MatchStrategy matchStrategy, Long leagueId, Long matchId, int setIndex,
-		UpdateSetScore updateSetScoreCommand) {
-		return matchStrategy.registerSetScoreInMatch(matchId, setIndex, updateSetScoreCommand);
-	}
-
 	private League findLeague(Long leagueId) {
-		return leagueRepository.findById(leagueId)
-			.orElseThrow(() -> new LeagueNotExistException(leagueId));
+		return leagueReader.readLeagueById(leagueId);
 	}
 }

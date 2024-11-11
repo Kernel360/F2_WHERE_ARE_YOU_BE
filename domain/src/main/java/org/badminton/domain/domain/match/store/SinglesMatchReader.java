@@ -12,4 +12,10 @@ public interface SinglesMatchReader {
 	SinglesMatch getSinglesMatch(Long matchId);
 
 	List<SinglesMatch> getSinglesMatchesByClubMember(Long clubMemberId);
+
+	List<SinglesMatch> findMatchesByLeagueAndRound(Long leagueId, int currentRoundNumber);
+
+	int findMaxRoundByLeague(Long leagueId);
+
+	SinglesMatch findFirstMatchByLeagueId(Long leagueId);
 }

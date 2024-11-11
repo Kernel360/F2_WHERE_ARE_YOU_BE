@@ -12,4 +12,9 @@ public interface DoublesMatchReader {
 	DoublesMatch getDoublesMatch(Long matchId);
 
 	List<DoublesMatch> findAllCompletedByClubMemberId(Long clubMemberId);
+
+	List<DoublesMatch> findMatchesByLeagueAndRound(Long leagueId, Integer round);
+
+	DoublesMatch findFirstMatchByLeagueId(Long leagueId);
+
 }

@@ -1,5 +1,7 @@
 package org.badminton.infrastructure.league;
 
+import java.util.List;
+
 import org.badminton.domain.common.exception.league.LeagueParticipationAlreadyCanceledException;
 import org.badminton.domain.domain.league.LeagueParticipantReader;
 import org.badminton.domain.domain.league.entity.LeagueParticipant;
@@ -31,4 +33,10 @@ public class LeagueParticipantReaderImpl implements LeagueParticipantReader {
 		return leagueParticipantRepository.findByLeagueLeagueIdAndClubMemberClubMemberIdAndCanceledFalse(leagueId,
 			clubMemberId).orElseThrow(() -> new LeagueParticipationAlreadyCanceledException(leagueId, clubMemberId));
 	}
+
+	@Override
+	public List<LeagueParticipant> findAllByLeagueIdAndCanceledFalse(Long leagueId) {
+		return leagueParticipantRepository.findAllByLeagueLeagueIdAndCanceledFalse(leagueId);
+	}
+
 }

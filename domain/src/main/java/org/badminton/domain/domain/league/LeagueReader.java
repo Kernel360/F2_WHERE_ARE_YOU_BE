@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import org.badminton.domain.common.enums.MatchGenerationType;
 import org.badminton.domain.domain.league.entity.League;
 import org.badminton.domain.domain.league.enums.AllowedLeagueStatus;
 import org.badminton.domain.domain.league.enums.Region;
@@ -23,4 +24,6 @@ public interface LeagueReader {
 		Pageable pageable);
 
 	Integer getCountByClubId(Long clubId);
+
+	MatchGenerationType getMatchGenerationTypeByLeagueId(Long leagueId);
 }
