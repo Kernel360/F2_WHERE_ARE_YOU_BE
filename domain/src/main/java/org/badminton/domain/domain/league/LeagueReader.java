@@ -20,8 +20,29 @@ public interface LeagueReader {
 
 	List<League> readLeagueByDate(String clubToken, LocalDateTime startOfMonth, LocalDateTime endOfMonth);
 
-	Page<League> readOngoingAndUpcomingLeagueByDate(AllowedLeagueStatus leagueStatus, Region region, LocalDate date,
-		Pageable pageable);
+	Page<League> readLeagueStatusIsNotAllAndRegionIsNotAll(
+		AllowedLeagueStatus leagueStatus,
+		Region region,
+		LocalDate date,
+		Pageable pageable
+	);
+
+	Page<League> readLeagueStatusIsAllAndRegionIsNotAll(
+		Region region,
+		LocalDate date,
+		Pageable pageable
+	);
+
+	Page<League> readLeagueStatusIsNotAllAndRegionIsAll(
+		AllowedLeagueStatus leagueStatus,
+		LocalDate date,
+		Pageable pageable
+	);
+
+	Page<League> readLeagueStatusIsAllAndRegionIsAll(
+		LocalDate date,
+		Pageable pageable
+	);
 
 	Integer getCountByClubId(Long clubId);
 

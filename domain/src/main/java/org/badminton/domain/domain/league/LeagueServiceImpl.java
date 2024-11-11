@@ -23,6 +23,7 @@ import org.badminton.domain.domain.league.info.LeagueReadInfo;
 import org.badminton.domain.domain.league.info.LeagueSummaryInfo;
 import org.badminton.domain.domain.league.info.LeagueUpdateInfo;
 import org.badminton.domain.domain.league.info.OngoingAndUpcomingLeagueInfo;
+import org.badminton.domain.domain.league.vo.LeagueSearchStrategy;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -40,6 +41,7 @@ public class LeagueServiceImpl implements LeagueService {
 	private final LeagueStore leagueStore;
 	private final LeagueParticipantReader leagueParticipantReader;
 	private final ClubReader clubReader;
+	private final LeagueSearchStrategy leagueSearchStrategy;
 
 	@Override
 	@Transactional
@@ -106,14 +108,16 @@ public class LeagueServiceImpl implements LeagueService {
 	}
 
 	@Override
-	public Page<OngoingAndUpcomingLeagueInfo> getOngoingAndUpcomingLeaguesByDate(AllowedLeagueStatus leagueStatus,
-		Region region, LocalDate date, Pageable pageable) {
+	public Page<OngoingAndUpcomingLeagueInfo> getOngoingAndUpcomingLeaguesByDate(
+		AllowedLeagueStatus leagueStatus,
+		Region region,
+		LocalDate date,
+		Pageable pageable
+	) {
 		if (date.isBefore(LocalDate.now())) {
 			throw new OngoingAndUpcomingLeagueCanNotBePastException(date, LocalDate.now());
 		}
-
-		Page<League> leagues = leagueReader.readOngoingAndUpcomingLeagueByDate(leagueStatus, region, date, pageable);
-
+		Page<League> leagues = leagueSearchStrategy.getStrategy(leagueStatus, region, date, pageable);
 		return leagues.map(league -> OngoingAndUpcomingLeagueInfo.from(
 			league, leagueParticipantReader.countParticipantMember(league.getLeagueId())));
 	}
