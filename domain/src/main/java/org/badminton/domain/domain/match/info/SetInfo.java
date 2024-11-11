@@ -14,7 +14,7 @@ public class SetInfo {
     @Builder
     public static class Main {
         private final Long matchId;
-        private final int setIndex;
+        private final int setNumber;
         private final int score1;
         private final int score2;
         private final MatchType matchType;
@@ -24,7 +24,7 @@ public class SetInfo {
                                       SinglesSet singlesSet) {
         return Main.builder()
                 .matchId(matchId)
-                .setIndex(setIndex)
+                .setNumber(setIndex)
                 .score1(singlesSet.getPlayer1Score())
                 .score2(singlesSet.getPlayer2Score())
                 .matchType(MatchType.SINGLES)
@@ -35,7 +35,7 @@ public class SetInfo {
                                       DoublesSet doublesSet) {
         return Main.builder()
                 .matchId(matchId)
-                .setIndex(setIndex)
+                .setNumber(setIndex)
                 .score1(doublesSet.getTeam1Score())
                 .score2(doublesSet.getTeam2Score())
                 .matchType(MatchType.DOUBLES)

@@ -10,7 +10,6 @@ import org.badminton.domain.domain.clubmember.command.ClubMemberExpelCommand;
 import org.badminton.domain.domain.clubmember.command.ClubMemberRoleUpdateCommand;
 import org.badminton.domain.domain.clubmember.entity.ClubMember;
 import org.badminton.domain.domain.clubmember.info.ClubMemberBanRecordInfo;
-import org.badminton.domain.domain.clubmember.info.ClubMemberDetailInfo;
 import org.badminton.domain.domain.clubmember.info.ClubMemberInfo;
 import org.badminton.domain.domain.clubmember.info.ClubMemberMyPageInfo;
 import org.badminton.domain.domain.clubmember.info.ClubMemberWithdrawInfo;
@@ -27,8 +26,6 @@ public interface ClubMemberService {
 
 	ClubMemberInfo getClubMember(String memberToken, String clubToken);
 
-	ClubMemberDetailInfo getClubMemberDetail(String memberToken, String clubToken);
-
 	ClubMemberBanRecordInfo expelClubMember(ClubMemberExpelCommand command, Long clubMemberId);
 
 	ClubMemberBanRecordInfo banClubMember(ClubMemberBanCommand command, Long clubMemberId);
@@ -38,8 +35,6 @@ public interface ClubMemberService {
 	boolean checkIfMemberBelongsToClub(String memberToken, String clubToken);
 
 	void deleteAllClubMembers(String clubToken);
-
-	ClubMemberDetailInfo getClubMemberDetailByClubToken(String clubToken, String memberToken);
 
 	Integer countByClubClubIdAndDeletedFalse(Long clubId);
 

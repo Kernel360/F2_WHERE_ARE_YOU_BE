@@ -16,6 +16,7 @@ import org.badminton.domain.domain.club.info.ClubUpdateInfo;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -30,6 +31,7 @@ public class ClubServiceImpl implements ClubService {
 	private final ClubApplyReader clubApplyReader;
 
 	@Override
+	@Transactional(readOnly = true)
 	public Page<ClubCardInfo> readAllClubs(Pageable pageable) {
 		Page<Club> clubsPage = clubReader.readAllClubs(pageable);
 		var response = ClubPage.builder().club(clubsPage).build();
@@ -37,6 +39,7 @@ public class ClubServiceImpl implements ClubService {
 	}
 
 	@Override
+	@Transactional(readOnly = true)
 	public Page<ClubCardInfo> searchClubs(String keyword, Pageable pageable) {
 		var search = ClubSearch.searchResult(keyword, pageable, clubReader);
 		var club = search.getFindClubs();
@@ -45,6 +48,7 @@ public class ClubServiceImpl implements ClubService {
 	}
 
 	@Override
+	@Transactional(readOnly = true)
 	public List<ClubCardInfo> readRecentlyClub() {
 		List<Club> clubs = clubReader.readRecentlyClubs();
 		return clubs.stream()
@@ -53,12 +57,14 @@ public class ClubServiceImpl implements ClubService {
 	}
 
 	@Override
+	@Transactional(readOnly = true)
 	public ClubSummaryInfo readClub(String clubToken) {
 		var club = clubReader.readClub(clubToken);
 		return ClubSummaryInfo.from(club);
 	}
 
 	@Override
+	@Transactional
 	public ClubCreateInfo createClub(ClubCreateCommand clubCreateCommand) {
 		Club club = new Club(clubCreateCommand.clubName(),
 			clubCreateCommand.clubDescription(),
@@ -72,6 +78,7 @@ public class ClubServiceImpl implements ClubService {
 	}
 
 	@Override
+	@Transactional
 	public ClubUpdateInfo updateClub(ClubUpdateCommand clubUpdateCommand, String clubToken) {
 		var club = clubReader.readClub(clubToken);
 		club.updateClub(clubUpdateCommand);
@@ -80,6 +87,7 @@ public class ClubServiceImpl implements ClubService {
 	}
 
 	@Override
+	@Transactional
 	public ClubDeleteInfo deleteClub(String clubToken) {
 		var club = clubReader.readClub(clubToken);
 		club.doWithdrawal();
@@ -88,12 +96,14 @@ public class ClubServiceImpl implements ClubService {
 	}
 
 	@Override
+	@Transactional(readOnly = true)
 	public ClubCardInfo readClubById(Long clubId) {
 		var club = clubReader.readClubByClubId(clubId);
 		return ClubCardInfo.from(club, club.getClubMemberCountByTier());
 	}
 
 	@Override
+	@Transactional(readOnly = true)
 	public List<ClubApplicantInfo> readClubApplicants(String clubToken) {
 		return clubApplyReader.getClubApplyByClubToken(clubToken,
 			ClubApply.ApplyStatus.PENDING);

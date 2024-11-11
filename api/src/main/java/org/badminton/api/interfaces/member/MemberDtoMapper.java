@@ -19,9 +19,10 @@ import org.mapstruct.ReportingPolicy;
 )
 public interface MemberDtoMapper {
 
-	List<ClubCardResponse> of(List<ClubCardInfo> clubCardInfoList);
-
 	SimpleMemberResponse of(SimpleMemberInfo simpleMemberInfo);
 
 	MemberUpdateResponse of(MemberUpdateInfo memberUpdateInfo);
+
+	List<ClubCardResponse> of(List<ClubCardInfo> clubCardInfos);
+
 }

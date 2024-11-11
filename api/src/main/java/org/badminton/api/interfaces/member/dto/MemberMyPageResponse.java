@@ -3,7 +3,6 @@ package org.badminton.api.interfaces.member.dto;
 import java.util.List;
 
 import org.badminton.api.interfaces.clubmember.dto.ClubMemberMyPageResponse;
-import org.badminton.api.interfaces.league.dto.LeagueRecordResponse;
 import org.badminton.domain.domain.member.entity.Member;
 import org.badminton.domain.domain.member.info.MemberMyPageInfo;
 
@@ -26,24 +25,26 @@ public record MemberMyPageResponse(
 	@Schema(description = "Tier", example = "GOLD")
 	Member.MemberTier tier,
 
-	@Schema(description = "League record information")
-	LeagueRecordResponse leagueRecordResponse,
+	int winCount,
+
+	int loseCount,
+
+	int drawCount,
+
+	int matchCount,
 
 	@Schema(description = "ClubMember information")
 	List<ClubMemberMyPageResponse> clubMemberMyPageResponses
 
 ) {
-	public static MemberMyPageResponse toMemberMyPageResponse(MemberMyPageInfo info) {
+	public static MemberMyPageResponse from(MemberMyPageInfo info) {
 		List<ClubMemberMyPageResponse> clubMemberMyPageResponses = null;
 
 		if (info.clubMemberMyPageInfos() != null) {
 			clubMemberMyPageResponses = info.clubMemberMyPageInfos().stream()
-				.map(ClubMemberMyPageResponse::toClubMemberMyPageResponse)
+				.map((ClubMemberMyPageResponse::from))
 				.toList();
 		}
-
-		LeagueRecordResponse leagueRecordResponse = LeagueRecordResponse.toLeagueRecordResponse(
-			info.leagueRecordInfo());
 
 		return new MemberMyPageResponse(
 			info.memberToken(),
@@ -51,7 +52,10 @@ public record MemberMyPageResponse(
 			info.email(),
 			info.profileImage(),
 			info.tier(),
-			leagueRecordResponse,
+			info.winCount(),
+			info.loseCount(),
+			info.drawCount(),
+			info.matchCount(),
 			clubMemberMyPageResponses
 		);
 	}

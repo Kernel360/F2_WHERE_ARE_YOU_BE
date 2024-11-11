@@ -15,13 +15,13 @@ import org.badminton.domain.domain.clubmember.command.ClubMemberExpelCommand;
 import org.badminton.domain.domain.clubmember.command.ClubMemberRoleUpdateCommand;
 import org.badminton.domain.domain.clubmember.entity.ClubMember;
 import org.badminton.domain.domain.clubmember.info.ClubMemberBanRecordInfo;
-import org.badminton.domain.domain.clubmember.info.ClubMemberDetailInfo;
 import org.badminton.domain.domain.clubmember.info.ClubMemberInfo;
 import org.badminton.domain.domain.clubmember.info.ClubMemberMyPageInfo;
 import org.badminton.domain.domain.clubmember.info.ClubMemberWithdrawInfo;
 import org.badminton.domain.domain.member.MemberReader;
 import org.badminton.domain.domain.member.entity.Member;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -36,6 +36,7 @@ public class ClubMemberServiceImpl implements ClubMemberService {
 	private final ClubMemberStore clubMemberStore;
 
 	@Override
+	@Transactional
 	public void clubMemberOwner(String memberToken, ClubCreateInfo clubInfo) {
 		Member member = memberReader.getMember(memberToken);
 		var club = new Club(clubInfo);
@@ -70,6 +71,7 @@ public class ClubMemberServiceImpl implements ClubMemberService {
 	}
 
 	@Override
+	@Transactional(readOnly = true)
 	public List<ClubMemberMyPageInfo> getClubMembers(String memberToken) {
 		List<ClubMember> clubMembers = clubMemberReader.getClubMembersByMemberToken(memberToken);
 		return ClubMemberMyPageInfo.from(clubMembers);
@@ -80,12 +82,6 @@ public class ClubMemberServiceImpl implements ClubMemberService {
 		ClubMember clubMember = clubMemberReader.getClubMemberByMemberTokenAndClubToken(clubToken, memberToken);
 
 		return ClubMemberInfo.valueOf(clubMember);
-	}
-
-	@Override
-	public ClubMemberDetailInfo getClubMemberDetail(String memberToken, String clubToken) {
-		ClubMember clubMember = clubMemberReader.getClubMemberByMemberTokenAndClubToken(clubToken, memberToken);
-		return ClubMemberDetailInfo.from(clubMember);
 	}
 
 	@Override
@@ -113,23 +109,19 @@ public class ClubMemberServiceImpl implements ClubMemberService {
 	}
 
 	@Override
+	@Transactional(readOnly = true)
 	public boolean checkIfMemberBelongsToClub(String memberToken, String clubToken) {
 		return clubMemberReader.checkIsClubMember(memberToken, clubToken);
 	}
 
 	@Override
+	@Transactional
 	public void deleteAllClubMembers(String clubToken) {
 		List<ClubMember> clubMembers = clubMemberReader.getAllMember(clubToken);
 		clubMembers.forEach(clubMember -> {
 			clubMember.withdrawal();
 			clubMemberStore.store(clubMember);
 		});
-	}
-
-	@Override
-	public ClubMemberDetailInfo getClubMemberDetailByClubToken(String clubToken, String memberToken) {
-		ClubMember clubMember = clubMemberReader.getClubMemberByMemberTokenAndClubToken(clubToken, memberToken);
-		return ClubMemberDetailInfo.from(clubMember);
 	}
 
 	@Override

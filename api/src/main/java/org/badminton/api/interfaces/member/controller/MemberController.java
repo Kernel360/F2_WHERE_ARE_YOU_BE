@@ -1,10 +1,7 @@
 package org.badminton.api.interfaces.member.controller;
 
-import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 
-import org.badminton.api.application.match.MyMatchFacade;
 import org.badminton.api.application.member.MemberFacade;
 import org.badminton.api.aws.s3.model.dto.ImageUploadRequest;
 import org.badminton.api.aws.s3.service.MemberProfileImageService;
@@ -20,16 +17,10 @@ import org.badminton.api.interfaces.member.dto.MemberUpdateRequest;
 import org.badminton.api.interfaces.member.dto.MemberUpdateResponse;
 import org.badminton.api.interfaces.member.dto.SimpleMemberResponse;
 import org.badminton.domain.domain.club.info.ClubCardInfo;
-import org.badminton.domain.domain.clubmember.info.ClubMemberMyPageInfo;
-import org.badminton.domain.domain.match.info.MatchResultInfo;
 import org.badminton.domain.domain.member.info.MemberMyPageInfo;
 import org.badminton.domain.domain.member.info.MemberUpdateInfo;
 import org.badminton.domain.domain.member.info.SimpleMemberInfo;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -58,14 +49,13 @@ public class MemberController {
 	private static final String DEFAULT_SIZE_VALUE = "9";
 	private final MemberProfileImageService memberProfileImageService;
 	private final MemberDtoMapper memberDtoMapper;
-	private final MyMatchFacade myMatchFacade;
 	private final MemberFacade memberFacade;
 
 	@Operation(
 		summary = "프로필 사진과 이름을 수정합니다",
 		description = """
 			프로필 사진과 이름을 수정합니다. 다음 조건을 만족해야 합니다:
-			
+						
 			1. 프로필 이미지 URL:
 			   - 호스트: badminton-team.s3.ap-northeast-2.amazonaws.com
 			   - 경로: /member-profile/로 시작
@@ -90,7 +80,7 @@ public class MemberController {
 	@GetMapping("/myPage")
 	public CommonResponse<MemberMyPageResponse> getMemberInfo(@AuthenticationPrincipal CustomOAuth2Member member) {
 		MemberMyPageInfo memberMyPageInfo = memberFacade.getMemberMyPageInfo(member.getMemberToken());
-		MemberMyPageResponse memberMyPageResponse = MemberMyPageResponse.toMemberMyPageResponse(memberMyPageInfo);
+		MemberMyPageResponse memberMyPageResponse = MemberMyPageResponse.from(memberMyPageInfo);
 		return CommonResponse.success(memberMyPageResponse);
 	}
 
@@ -116,31 +106,11 @@ public class MemberController {
 		@RequestParam(defaultValue = DEFAULT_PAGE_VALUE) int page,
 		@RequestParam(defaultValue = DEFAULT_SIZE_VALUE) int size
 	) {
-
-		List<ClubMemberMyPageInfo> clubMembersMyPageInfos = memberFacade.getClubMembers(member.getMemberToken());
-		
-		List<MatchResultResponse> allMatchResults = new ArrayList<>();
-		Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "leagueAt"));
-
-		for (ClubMemberMyPageInfo clubMemberMyPageInfo : clubMembersMyPageInfos) {
-			Long clubMemberId = clubMemberMyPageInfo.clubMemberId();
-			List<MatchResultInfo> myMatch = myMatchFacade.getMyMatch(clubMemberId);
-			allMatchResults.addAll(myMatch.stream()
-				.map(MatchResultResponse::from)
-				.toList());
-		}
-
-		allMatchResults.sort(Comparator.comparing(MatchResultResponse::leagueAt).reversed());
-
-		int start = (int)pageable.getOffset();
-		int end = Math.min((start + pageable.getPageSize()), allMatchResults.size());
-		Page<MatchResultResponse> matchResultPage = new PageImpl<>(allMatchResults.subList(start, end), pageable,
-			allMatchResults.size());
-
-		CustomPageResponse<MatchResultResponse> pageResponse = new CustomPageResponse<>(matchResultPage);
+		Page<MatchResultResponse> matchResults =
+			memberFacade.getMemberMatchResults(member.getMemberToken(), page, size);
+		CustomPageResponse<MatchResultResponse> pageResponse = new CustomPageResponse<>(matchResults);
 
 		return CommonResponse.success(pageResponse);
-
 	}
 
 	@Operation(
