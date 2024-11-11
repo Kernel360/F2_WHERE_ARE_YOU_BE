@@ -62,7 +62,7 @@ public record LeagueCreateRequest(
 	@NotNull
 	@Min(Constants.PLAYER_LIMIT_MIN)
 	@Max(Constants.PLAYER_LIMIT_MAX)
-	@Schema(description = "참가 인원", example = "16")
+	@Schema(description = "참가인원: 토너먼트 싱글이면 2의 제곱, 더블이면 참가자수 /2 가 2의 제곱", example = "16")
 	Integer playerLimitCount,
 
 	@NotNull
