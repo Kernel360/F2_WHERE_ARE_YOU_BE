@@ -20,13 +20,7 @@ public interface LeagueRepository extends JpaRepository<League, Long> {
 	List<League> findAllByClubClubTokenAndLeagueAtBetween(String clubToken, LocalDateTime startOfMonth,
 		LocalDateTime endOfMonth);
 
-	Page<League> findAllByLeagueAtBetweenAndLeagueStatusNotIn(LocalDateTime startOfDay, LocalDateTime endOfDay,
-		List<LeagueStatus> excludedLeagueStatusList, Pageable pageable);
-
 	Integer countByClubClubIdAndLeagueStatus(Long clubId, LeagueStatus leagueStatus);
-
-	Page<League> findAllByLeagueAtBetweenAndLeagueStatus(LocalDateTime startOfDay, LocalDateTime endOfDay,
-		LeagueStatus leagueStatus, Pageable pageable);
 
 	@Query("SELECT l.matchGenerationType FROM League l WHERE l.leagueId = :leagueId")
 	Optional<MatchGenerationType> getMatchGenerationTypeByLeagueId(@Param("leagueId") Long leagueId);
@@ -35,4 +29,32 @@ public interface LeagueRepository extends JpaRepository<League, Long> {
 	boolean existsByClubIdAndCreatedAtToday(@Param("clubId") Long clubId);
 
 	List<League> findByLeagueStatus(LeagueStatus leagueStatus);
+
+	Page<League> findAllByLeagueAtBetweenAndLeagueStatusAndAddressRegion(
+		LocalDateTime leagueAt,
+		LocalDateTime endOfDay,
+		LeagueStatus leagueStatus,
+		String addressRegion,
+		Pageable pageable
+	);
+
+	Page<League> findAllByLeagueAtBetweenAndAddressRegion(
+		LocalDateTime startOfDay,
+		LocalDateTime endOfDay,
+		String nameByCode,
+		Pageable pageable
+	);
+
+	Page<League> findAllByLeagueAtBetweenAndLeagueStatus(
+		LocalDateTime startOfDay,
+		LocalDateTime endOfDay,
+		LeagueStatus status,
+		Pageable pageable
+	);
+
+	Page<League> findAllByLeagueAtBetween(
+		LocalDateTime startOfDay,
+		LocalDateTime endOfDay,
+		Pageable pageable
+	);
 }

@@ -3,7 +3,6 @@ package org.badminton.infrastructure.league;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
-import java.util.Arrays;
 import java.util.List;
 
 import org.badminton.domain.common.enums.MatchGenerationType;
@@ -60,18 +59,54 @@ public class LeagueReaderImpl implements LeagueReader {
 		);
 	}
 
-	// TODO: 지역 필터링 기능 구현
 	@Override
-	public Page<League> readOngoingAndUpcomingLeagueByDate(AllowedLeagueStatus leagueStatus, Region region,
+	public Page<League> readLeagueStatusIsNotAllAndRegionIsNotAll(AllowedLeagueStatus leagueStatus, Region region,
 		LocalDate date, Pageable pageable) {
 		LocalDateTime startOfDay = date.atStartOfDay();
 		LocalDateTime endOfDay = date.atTime(LocalTime.MAX);
 
-		if (leagueStatus.getStatus() == LeagueStatus.PLAYING || leagueStatus.getStatus() == LeagueStatus.RECRUITING) {
-			return leagueRepository.findAllByLeagueAtBetweenAndLeagueStatus(startOfDay, endOfDay,
-				leagueStatus.getStatus(), pageable);
-		}
-		return leagueRepository.findAllByLeagueAtBetweenAndLeagueStatusNotIn(startOfDay, endOfDay, Arrays.asList(
-			LeagueStatus.CANCELED, LeagueStatus.FINISHED), pageable);
+		return leagueRepository.findAllByLeagueAtBetweenAndLeagueStatusAndAddressRegion(
+			startOfDay,
+			endOfDay,
+			leagueStatus.getStatus(),
+			Region.getNameByCode(region.name()),
+			pageable
+		);
+	}
+
+	@Override
+	public Page<League> readLeagueStatusIsAllAndRegionIsNotAll(Region region, LocalDate date, Pageable pageable) {
+		LocalDateTime startOfDay = date.atStartOfDay();
+		LocalDateTime endOfDay = date.atTime(LocalTime.MAX);
+		return leagueRepository.findAllByLeagueAtBetweenAndAddressRegion(
+			startOfDay,
+			endOfDay,
+			Region.getNameByCode(region.name()),
+			pageable
+		);
+	}
+
+	@Override
+	public Page<League> readLeagueStatusIsNotAllAndRegionIsAll(AllowedLeagueStatus leagueStatus, LocalDate date,
+		Pageable pageable) {
+		LocalDateTime startOfDay = date.atStartOfDay();
+		LocalDateTime endOfDay = date.atTime(LocalTime.MAX);
+		return leagueRepository.findAllByLeagueAtBetweenAndLeagueStatus(
+			startOfDay,
+			endOfDay,
+			leagueStatus.getStatus(),
+			pageable
+		);
+	}
+
+	@Override
+	public Page<League> readLeagueStatusIsAllAndRegionIsAll(LocalDate date, Pageable pageable) {
+		LocalDateTime startOfDay = date.atStartOfDay();
+		LocalDateTime endOfDay = date.atTime(LocalTime.MAX);
+		return leagueRepository.findAllByLeagueAtBetween(
+			startOfDay,
+			endOfDay,
+			pageable
+		);
 	}
 }
