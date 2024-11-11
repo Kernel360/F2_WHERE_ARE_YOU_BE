@@ -13,7 +13,7 @@ public record BracketInfo(
 	MatchGenerationType matchGenerationType,
 	MatchType matchType,
 	MatchStatus matchStatus,
-	int roundNumber,
+	int totalRound,
 	List<SinglesMatchInfo> singlesMatchInfoList,
 	List<DoublesMatchInfo> doublesMatchInfoList
 ) {
