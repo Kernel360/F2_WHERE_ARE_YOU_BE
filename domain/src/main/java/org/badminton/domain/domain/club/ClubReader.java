@@ -13,6 +13,8 @@ public interface ClubReader {
 
 	List<Club> readRecentlyClubs();
 
+	List<Club> readAllClubs();
+
 	Club readClub(String clubToken);
 
 	Club readClubByClubId(Long clubId);
