@@ -25,7 +25,6 @@ public class SqlBotConfig {
 	public Job insertSqlJob(
 		Step createLeagueStep,
 		Step participateLeagueStep,
-		// Step doublesSetMatchStep,
 		JobRepository jobRepository) {
 		return new JobBuilder("insertSqlJob", jobRepository) // Job 이름 수정
 			.start(createLeagueStep)
@@ -33,7 +32,6 @@ public class SqlBotConfig {
 			.build();
 	}
 
-	// 오늘 리그 20개 생성
 	@Bean
 	public Step createLeagueStep(
 		ItemReader<League> leagueReader,
@@ -49,7 +47,6 @@ public class SqlBotConfig {
 			.build();
 	}
 
-	// 오늘 리그 참가
 	@Bean
 	public Step participateLeagueStep(
 		ItemReader<LeagueParticipant> leagueParticipantReader,
