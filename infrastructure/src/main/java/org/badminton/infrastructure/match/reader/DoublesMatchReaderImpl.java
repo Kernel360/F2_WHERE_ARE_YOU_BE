@@ -45,4 +45,14 @@ public class DoublesMatchReaderImpl implements DoublesMatchReader {
 	public List<DoublesMatch> findAllCompletedByClubMemberId(Long clubMemberId) {
 		return doublesMatchRepositoryCustom.findAllCompletedByClubMemberId(clubMemberId);
 	}
+
+	@Override
+	public List<DoublesMatch> findMatchesByLeagueAndRound(Long leagueId, Integer currentRoundNumber) {
+		return doublesMatchRepository.findAllByLeague_LeagueIdAndRoundNumber(leagueId, currentRoundNumber);
+	}
+
+	@Override
+	public DoublesMatch findFirstMatchByLeagueId(Long leagueId) {
+		return doublesMatchRepository.findFirstByLeagueLeagueIdOrderByIdAsc(leagueId);
+	}
 }

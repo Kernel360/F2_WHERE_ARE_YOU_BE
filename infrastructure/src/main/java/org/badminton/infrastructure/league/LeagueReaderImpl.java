@@ -6,6 +6,7 @@ import java.time.LocalTime;
 import java.util.Arrays;
 import java.util.List;
 
+import org.badminton.domain.common.enums.MatchGenerationType;
 import org.badminton.domain.common.exception.league.LeagueNotExistException;
 import org.badminton.domain.domain.league.LeagueReader;
 import org.badminton.domain.domain.league.entity.League;
@@ -50,6 +51,13 @@ public class LeagueReaderImpl implements LeagueReader {
 	@Override
 	public Integer getCountByClubId(Long clubId) {
 		return leagueRepository.countByClubClubIdAndLeagueStatus(clubId, LeagueStatus.RECRUITING_COMPLETED);
+	}
+
+	@Override
+	public MatchGenerationType getMatchGenerationTypeByLeagueId(Long leagueId) {
+		return leagueRepository.getMatchGenerationTypeByLeagueId(leagueId).orElseThrow(
+			() -> new LeagueNotExistException(leagueId)
+		);
 	}
 
 	// TODO: 지역 필터링 기능 구현

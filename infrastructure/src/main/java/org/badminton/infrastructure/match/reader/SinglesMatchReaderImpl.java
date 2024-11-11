@@ -44,4 +44,20 @@ public class SinglesMatchReaderImpl implements SinglesMatchReader {
 	public List<SinglesMatch> getSinglesMatchesByClubMember(Long clubMemberId) {
 		return singlesMatchRepositoryCustom.findAllCompletedByClubMemberId(clubMemberId);
 	}
+
+	@Override
+	public List<SinglesMatch> findMatchesByLeagueAndRound(Long leagueId, int currentRoundNumber) {
+		return singlesMatchRepository.findAllByLeague_LeagueIdAndRoundNumber(leagueId, currentRoundNumber);
+	}
+
+	@Override
+	public int findMaxRoundByLeague(Long leagueId) {
+		return singlesMatchRepository.findTopRoundNumberByLeagueId(leagueId);
+	}
+
+	@Override
+	public SinglesMatch findFirstMatchByLeagueId(Long leagueId) {
+		return singlesMatchRepository.findFirstByLeagueLeagueIdOrderByIdAsc(leagueId);
+	}
+	
 }

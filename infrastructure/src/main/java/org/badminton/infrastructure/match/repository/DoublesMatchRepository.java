@@ -10,5 +10,10 @@ public interface DoublesMatchRepository extends JpaRepository<DoublesMatch, Long
 	List<DoublesMatch> findAllByLeague_LeagueId(Long leagueId);
 
 	void deleteAllByLeague_LeagueId(Long leagueId);
+
+	List<DoublesMatch> findAllByLeague_LeagueIdAndRoundNumber(Long leagueId, Integer roundNumber);
+
+	DoublesMatch findFirstByLeagueLeagueIdOrderByIdAsc(Long leagueId);
+
 }
 
