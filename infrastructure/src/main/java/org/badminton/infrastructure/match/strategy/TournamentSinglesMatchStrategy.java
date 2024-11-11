@@ -142,25 +142,26 @@ public class TournamentSinglesMatchStrategy extends AbstractSinglesMatchStrategy
 
 	private void updateNextRoundMatch(SinglesMatch singlesMatch) {
 		LeagueParticipant winner = determineWinner(singlesMatch);
-		if (winner != null) {
-			int totalRounds = singlesMatch.getLeague().getTotalRounds();
-			if (singlesMatch.getRoundNumber() == totalRounds) {
-				return;
-			}
-
-			SinglesMatch startMatch = singlesMatchReader.findFirstMatchByLeagueId(
-				singlesMatch.getLeague().getLeagueId());
-
-			int nextRoundMatchId = MatchUtils.calculateNextRoundMatchId(Math.toIntExact(singlesMatch.getId()),
-				leagueParticipantReader.countParticipantMember(singlesMatch.getLeague().getLeagueId()),
-				Math.toIntExact(startMatch.getId()));
-
-			SinglesMatch nextRoundMatch = singlesMatchReader.getSinglesMatch((long)nextRoundMatchId);
-			if (nextRoundMatch != null) {
-				assignWinnerToNextRoundMatch(nextRoundMatch, winner);
-				singlesMatchStore.store(nextRoundMatch);
-			}
+		if (winner == null)
+			return;
+		int totalRounds = singlesMatch.getLeague().getTotalRounds();
+		if (singlesMatch.getRoundNumber() == totalRounds) {
+			return;
 		}
+
+		SinglesMatch startMatch = singlesMatchReader.findFirstMatchByLeagueId(
+			singlesMatch.getLeague().getLeagueId());
+
+		int nextRoundMatchId = MatchUtils.calculateNextRoundMatchId(Math.toIntExact(singlesMatch.getId()),
+			leagueParticipantReader.countParticipantMember(singlesMatch.getLeague().getLeagueId()),
+			Math.toIntExact(startMatch.getId()));
+
+		SinglesMatch nextRoundMatch = singlesMatchReader.getSinglesMatch((long)nextRoundMatchId);
+		if (nextRoundMatch != null) {
+			assignWinnerToNextRoundMatch(nextRoundMatch, winner);
+			singlesMatchStore.store(nextRoundMatch);
+		}
+
 	}
 
 	private void assignWinnerToNextRoundMatch(SinglesMatch nextRoundMatch, LeagueParticipant winner) {

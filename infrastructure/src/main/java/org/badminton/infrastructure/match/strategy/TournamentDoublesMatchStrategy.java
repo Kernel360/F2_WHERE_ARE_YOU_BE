@@ -144,26 +144,27 @@ public class TournamentDoublesMatchStrategy extends AbstractDoublesMatchStrategy
 
 	private void updateNextRoundMatch(DoublesMatch doublesMatch) {
 		Team winner = determineWinner(doublesMatch);
-		if (winner != null) {
-			int totalRounds = doublesMatch.getLeague().getTotalRounds();
-			if (doublesMatch.getRoundNumber() == totalRounds) {
-				return;
-			}
-
-			DoublesMatch startMatch = doublesMatchReader.findFirstMatchByLeagueId(
-				doublesMatch.getLeague().getLeagueId());
-
-			int nextRoundMatchId = MatchUtils.calculateNextRoundMatchId(Math.toIntExact(doublesMatch.getId()),
-				leagueParticipantReader.countParticipantMember(doublesMatch.getLeague().getLeagueId())
-					/ PARTICIPANTS_PER_TEAM,
-				Math.toIntExact(startMatch.getId()));
-
-			DoublesMatch nextRoundMatch = doublesMatchReader.getDoublesMatch((long)nextRoundMatchId);
-			if (nextRoundMatch != null) {
-				assignWinnerToNextRoundMatch(nextRoundMatch, winner);
-				doublesMatchStore.store(nextRoundMatch);
-			}
+		if (winner == null)
+			return;
+		int totalRounds = doublesMatch.getLeague().getTotalRounds();
+		if (doublesMatch.getRoundNumber() == totalRounds) {
+			return;
 		}
+
+		DoublesMatch startMatch = doublesMatchReader.findFirstMatchByLeagueId(
+			doublesMatch.getLeague().getLeagueId());
+
+		int nextRoundMatchId = MatchUtils.calculateNextRoundMatchId(Math.toIntExact(doublesMatch.getId()),
+			leagueParticipantReader.countParticipantMember(doublesMatch.getLeague().getLeagueId())
+				/ PARTICIPANTS_PER_TEAM,
+			Math.toIntExact(startMatch.getId()));
+
+		DoublesMatch nextRoundMatch = doublesMatchReader.getDoublesMatch((long)nextRoundMatchId);
+		if (nextRoundMatch != null) {
+			assignWinnerToNextRoundMatch(nextRoundMatch, winner);
+			doublesMatchStore.store(nextRoundMatch);
+		}
+
 	}
 
 	private void assignWinnerToNextRoundMatch(DoublesMatch nextRoundMatch, Team winner) {
