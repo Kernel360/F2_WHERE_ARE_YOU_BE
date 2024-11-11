@@ -10,7 +10,8 @@ public record SinglesMatchInfo(
 	int participant1WinSetCount,
 	String participant2Name,
 	String participant2Image,
-	int participant2WinSetCount
+	int participant2WinSetCount,
+	int roundNumber
 ) {
 
 	public static SinglesMatchInfo fromSinglesMatch(SinglesMatch singlesMatch) {
@@ -21,7 +22,8 @@ public record SinglesMatchInfo(
 			singlesMatch.getPlayer1WinSetCount(),
 			getParticipantName(singlesMatch.getLeagueParticipant2()),
 			getParticipantImage(singlesMatch.getLeagueParticipant2()),
-			singlesMatch.getPlayer2WinSetCount()
+			singlesMatch.getPlayer2WinSetCount(),
+			singlesMatch.getRoundNumber()
 		);
 	}
 
