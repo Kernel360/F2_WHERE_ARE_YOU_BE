@@ -69,10 +69,10 @@ public class ClubMemberController {
 			clubMemberInfoMap);
 
 		List<ClubMemberResponse> roleOwner = clubMemberRoleListMap.get("ROLE_OWNER");
-		List<ClubMemberResponse> roleMember = clubMemberRoleListMap.get("ROLE_MEMBER");
 		List<ClubMemberResponse> roleManager = clubMemberRoleListMap.get("ROLE_MANAGER");
+		List<ClubMemberResponse> roleUser = clubMemberRoleListMap.get("ROLE_USER");
 
-		ClubMemberRoleResponse response = new ClubMemberRoleResponse(roleOwner, roleMember, roleManager);
+		ClubMemberRoleResponse response = new ClubMemberRoleResponse(roleOwner, roleManager, roleUser);
 
 		return CommonResponse.success(response);
 	}

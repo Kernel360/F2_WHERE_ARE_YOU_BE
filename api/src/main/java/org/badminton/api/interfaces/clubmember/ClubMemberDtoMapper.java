@@ -40,11 +40,12 @@ public interface ClubMemberDtoMapper {
 
 	default Map<String, List<ClubMemberResponse>> of(Map<ClubMember.ClubMemberRole, List<ClubMemberInfo>> infoMap) {
 		return infoMap.entrySet().stream()
-			.collect(Collectors.toMap(
+			.collect(Collectors.groupingBy(
 				entry -> entry.getKey().name(),
-				entry -> entry.getValue().stream()
-					.map(this::of)
-					.collect(Collectors.toList())
+				Collectors.flatMapping(
+					entry -> entry.getValue().stream().map(this::of),
+					Collectors.toList()
+				)
 			));
 	}
 
