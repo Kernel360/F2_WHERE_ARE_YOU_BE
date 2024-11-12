@@ -34,23 +34,21 @@ import org.mapstruct.ReportingPolicy;
 public interface ClubMemberDtoMapper {
 	ClubMemberJoinResponse of(ClubMemberJoinInfo clubMemberJoinInfo);
 
-	ClubMemberResponse of(ClubMemberInfo clubMemberInfo);
-
 	ClubMemberBanRecordResponse of(ClubMemberBanRecordInfo clubMemberBanRecordInfo);
 
 	ClubMemberWithdrawResponse of(ClubMemberWithdrawInfo clubMemberWithdrawInfo);
 
-	default Map<ClubMember.ClubMemberRole, List<ClubMemberResponse>> of(
-		Map<ClubMember.ClubMemberRole, List<ClubMemberInfo>> infoMap
-	) {
+	default Map<String, List<ClubMemberResponse>> of(Map<ClubMember.ClubMemberRole, List<ClubMemberInfo>> infoMap) {
 		return infoMap.entrySet().stream()
 			.collect(Collectors.toMap(
-				Map.Entry::getKey,
+				entry -> entry.getKey().name(),
 				entry -> entry.getValue().stream()
 					.map(this::of)
 					.collect(Collectors.toList())
 			));
 	}
+
+	ClubMemberResponse of(ClubMemberInfo clubMemberInfo);
 
 	ClubMemberStatusCommand of(String clubToken, Long clubMemberId);
 
