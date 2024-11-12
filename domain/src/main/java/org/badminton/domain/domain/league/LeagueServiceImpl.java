@@ -96,11 +96,11 @@ public class LeagueServiceImpl implements LeagueService {
 
 	@Override
 	public List<LeagueByDateInfo> getLeaguesByDate(String clubToken, String date) {
-		LocalDate parsedDate = parseDateByMonth(date);
-		LocalDateTime startOfMonth = getStartOfMonth(parsedDate);
-		LocalDateTime endOfMonth = getEndOfMonth(parsedDate);
+		LocalDate parsedDate = parseDate(date);
+		LocalDateTime startOfDay = getStartOfDay(parsedDate);
+		LocalDateTime endOfMDay = getEndOfDay(parsedDate);
 		List<League> result =
-			leagueReader.readLeagueByDate(clubToken, startOfMonth, endOfMonth);
+			leagueReader.readLeagueByDate(clubToken, startOfDay, endOfMDay);
 		return result.stream()
 			.map(LeagueByDateInfo::leagueByDateEntityToInfo)
 			.collect(
@@ -145,6 +145,24 @@ public class LeagueServiceImpl implements LeagueService {
 	private LocalDateTime getEndOfMonth(LocalDate date) {
 		return LocalDateTime.of(date.getYear(), date.getMonthValue(),
 			date.lengthOfMonth(), EndDateType.END_HOUR.getDescription(), EndDateType.END_MINUTE.getDescription());
+	}
+
+	private LocalDate parseDate(String date) {
+		String[] parts = date.split("-");
+		int year = Integer.parseInt(parts[0]);
+		int month = Integer.parseInt(parts[1]);
+		int day = Integer.parseInt(parts[2]);
+		return LocalDate.of(year, month, day); // 첫 번째 날로 초기화
+	}
+
+	private LocalDateTime getStartOfDay(LocalDate date) {
+		return LocalDateTime.of(date.getYear(), date.getMonthValue(), date.getDayOfMonth(),
+			StartDateType.START_HOUR.getDescription(), StartDateType.START_MINUTE.getDescription());
+	}
+
+	private LocalDateTime getEndOfDay(LocalDate date) {
+		return LocalDateTime.of(date.getYear(), date.getMonthValue(),
+			date.getDayOfMonth(), EndDateType.END_HOUR.getDescription(), EndDateType.END_MINUTE.getDescription());
 	}
 
 }
