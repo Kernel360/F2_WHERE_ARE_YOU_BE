@@ -10,6 +10,7 @@ import org.badminton.api.interfaces.clubmember.dto.ClubMemberBanRecordResponse;
 import org.badminton.api.interfaces.clubmember.dto.ClubMemberJoinResponse;
 import org.badminton.api.interfaces.clubmember.dto.ClubMemberResponse;
 import org.badminton.api.interfaces.clubmember.dto.ClubMemberWithdrawResponse;
+import org.badminton.api.interfaces.clubmember.dto.MemberIsClubMemberResponse;
 import org.badminton.api.interfaces.clubmember.dto.RejectApplyResponse;
 import org.badminton.domain.domain.clubmember.command.ClubMemberStatusCommand;
 import org.badminton.domain.domain.clubmember.entity.ClubMember;
@@ -19,6 +20,7 @@ import org.badminton.domain.domain.clubmember.info.ClubMemberBanRecordInfo;
 import org.badminton.domain.domain.clubmember.info.ClubMemberInfo;
 import org.badminton.domain.domain.clubmember.info.ClubMemberJoinInfo;
 import org.badminton.domain.domain.clubmember.info.ClubMemberWithdrawInfo;
+import org.badminton.domain.domain.clubmember.info.MemberIsClubMemberInfo;
 import org.badminton.domain.domain.clubmember.info.RejectApplyInfo;
 import org.mapstruct.InjectionStrategy;
 import org.mapstruct.Mapper;
@@ -58,4 +60,5 @@ public interface ClubMemberDtoMapper {
 
 	RejectApplyResponse of(RejectApplyInfo rejectApplyInfo);
 
+	MemberIsClubMemberResponse of(MemberIsClubMemberInfo memberIsClubMemberInfo);
 }

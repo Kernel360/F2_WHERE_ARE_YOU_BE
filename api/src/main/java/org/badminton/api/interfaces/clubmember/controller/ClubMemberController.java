@@ -16,6 +16,7 @@ import org.badminton.api.interfaces.clubmember.dto.ClubMemberExpelRequest;
 import org.badminton.api.interfaces.clubmember.dto.ClubMemberResponse;
 import org.badminton.api.interfaces.clubmember.dto.ClubMemberRoleUpdateRequest;
 import org.badminton.api.interfaces.clubmember.dto.ClubMemberWithdrawResponse;
+import org.badminton.api.interfaces.clubmember.dto.MemberIsClubMemberResponse;
 import org.badminton.api.interfaces.clubmember.dto.RejectApplyResponse;
 import org.badminton.domain.domain.club.command.ClubApplyCommand;
 import org.badminton.domain.domain.clubmember.command.ClubMemberBanCommand;
@@ -27,6 +28,7 @@ import org.badminton.domain.domain.clubmember.info.ApproveApplyInfo;
 import org.badminton.domain.domain.clubmember.info.ClubMemberBanRecordInfo;
 import org.badminton.domain.domain.clubmember.info.ClubMemberInfo;
 import org.badminton.domain.domain.clubmember.info.ClubMemberWithdrawInfo;
+import org.badminton.domain.domain.clubmember.info.MemberIsClubMemberInfo;
 import org.badminton.domain.domain.clubmember.info.RejectApplyInfo;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -202,6 +204,21 @@ public class ClubMemberController {
 		ClubMemberWithdrawResponse clubMemberWithdrawResponse = clubMemberDtoMapper.of(clubMemberWithdrawInfo);
 
 		return CommonResponse.success(clubMemberWithdrawResponse);
+	}
+
+	@Operation(summary = "동호회 회원인지 조회",
+		description = "동호회에 가입한 회원인지 조회.",
+		tags = {"ClubMember"})
+	@GetMapping("/check")
+	public CommonResponse<MemberIsClubMemberResponse> checkIsClubMember(
+		@AuthenticationPrincipal CustomOAuth2Member member,
+		@PathVariable String clubToken) {
+		String memberToken = member.getMemberToken();
+		MemberIsClubMemberInfo memberIsClubMemberInfo = clubMemberFacade.checkClubMember(memberToken, clubToken);
+		MemberIsClubMemberResponse memberIsClubMemberResponse = clubMemberDtoMapper.of(memberIsClubMemberInfo);
+
+		return CommonResponse.success(memberIsClubMemberResponse);
+
 	}
 
 }

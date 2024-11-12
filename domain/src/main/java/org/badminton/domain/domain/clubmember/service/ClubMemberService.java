@@ -13,6 +13,7 @@ import org.badminton.domain.domain.clubmember.info.ClubMemberBanRecordInfo;
 import org.badminton.domain.domain.clubmember.info.ClubMemberInfo;
 import org.badminton.domain.domain.clubmember.info.ClubMemberMyPageInfo;
 import org.badminton.domain.domain.clubmember.info.ClubMemberWithdrawInfo;
+import org.badminton.domain.domain.clubmember.info.MemberIsClubMemberInfo;
 
 public interface ClubMemberService {
 
@@ -39,6 +40,8 @@ public interface ClubMemberService {
 	Integer countByClubClubIdAndDeletedFalse(Long clubId);
 
 	List<ClubCardInfo> getClubsByMemberToken(String memberToken);
+
+	MemberIsClubMemberInfo checkIsClubMember(String memberToken, String clubToken);
 }
 
 
