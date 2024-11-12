@@ -18,6 +18,7 @@ import org.badminton.domain.domain.clubmember.info.ClubMemberBanRecordInfo;
 import org.badminton.domain.domain.clubmember.info.ClubMemberInfo;
 import org.badminton.domain.domain.clubmember.info.ClubMemberMyPageInfo;
 import org.badminton.domain.domain.clubmember.info.ClubMemberWithdrawInfo;
+import org.badminton.domain.domain.clubmember.info.MemberIsClubMemberInfo;
 import org.badminton.domain.domain.member.MemberReader;
 import org.badminton.domain.domain.member.entity.Member;
 import org.springframework.stereotype.Service;
@@ -144,6 +145,18 @@ public class ClubMemberServiceImpl implements ClubMemberService {
 				return ClubCardInfo.from(club, tierCounts);
 			})
 			.toList();
+	}
+
+	@Override
+	public MemberIsClubMemberInfo checkIsClubMember(String memberToken, String clubToken) {
+		boolean isClubMember = clubMemberReader.checkIsClubMember(memberToken, clubToken);
+		if (isClubMember) {
+			ClubMember clubMember = clubMemberReader.getClubMemberByMemberTokenAndClubToken(
+				clubToken, memberToken);
+			return MemberIsClubMemberInfo.fromClubMember(true, clubMember);
+		}
+		return MemberIsClubMemberInfo.fromClubMember(false, null);
+
 	}
 
 	private ClubMember getClubMember(Long clubMemberId) {

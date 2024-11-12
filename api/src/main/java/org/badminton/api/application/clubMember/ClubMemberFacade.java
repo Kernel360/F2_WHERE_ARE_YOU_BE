@@ -14,6 +14,7 @@ import org.badminton.domain.domain.clubmember.info.ApproveApplyInfo;
 import org.badminton.domain.domain.clubmember.info.ClubMemberBanRecordInfo;
 import org.badminton.domain.domain.clubmember.info.ClubMemberInfo;
 import org.badminton.domain.domain.clubmember.info.ClubMemberWithdrawInfo;
+import org.badminton.domain.domain.clubmember.info.MemberIsClubMemberInfo;
 import org.badminton.domain.domain.clubmember.info.RejectApplyInfo;
 import org.badminton.domain.domain.clubmember.service.ClubMemberService;
 import org.badminton.domain.domain.mail.MailService;
@@ -29,7 +30,6 @@ public class ClubMemberFacade {
 	private final ClubMemberService clubMemberService;
 	private final ClubApplyService clubApplyService;
 	private final MailService mailService;
-
 
 	public ApplyClubInfo applyClub(String memberToken, String clubToken, ClubApplyCommand command) {
 		mailService.prepareClubApplyEmail(clubToken);
@@ -69,6 +69,10 @@ public class ClubMemberFacade {
 
 	public ClubMemberInfo getClubMember(String memberToken, String clubToken) {
 		return clubMemberService.getClubMember(memberToken, clubToken);
+	}
+
+	public MemberIsClubMemberInfo checkClubMember(String memberToken, String clubToken) {
+		return clubMemberService.checkIsClubMember(memberToken, clubToken);
 	}
 
 }
