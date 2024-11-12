@@ -5,6 +5,7 @@ import org.badminton.domain.domain.match.info.BracketInfo;
 import org.badminton.domain.domain.match.info.SetInfo;
 import org.badminton.domain.domain.match.service.BracketGenerationService;
 import org.badminton.domain.domain.match.service.MatchProgressService;
+import org.badminton.domain.domain.match.service.MatchRecordService;
 import org.badminton.domain.domain.match.service.MatchStrategy;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -16,21 +17,27 @@ import lombok.extern.slf4j.Slf4j;
 public class FreeMatchFacade implements MatchOperationHandler {
 	private final BracketGenerationService freeBracketGenerationService;
 	private final MatchProgressService matchProgressService;
+	private final MatchRecordService matchRecordService;
 
 	public FreeMatchFacade(
 		@Qualifier("freeBracketGenerationServiceImpl") BracketGenerationService freeBracketGenerationService,
-		@Qualifier("freeMatchProgressServiceImpl") MatchProgressService freematchProgressService) {
+		@Qualifier("freeMatchProgressServiceImpl") MatchProgressService freematchProgressService,
+		MatchRecordService matchRecordService) {
 
 		this.freeBracketGenerationService = freeBracketGenerationService;
 		this.matchProgressService = freematchProgressService;
+		this.matchRecordService = matchRecordService;
 	}
 
 	@Override
 	public SetInfo.Main registerSetScoreInMatch(Long leagueId, Long matchId, int setIndex,
 		MatchCommand.UpdateSetScore updateSetScoreCommand) {
 		MatchStrategy matchStrategy = matchProgressService.makeSinglesOrDoublesMatchStrategy(leagueId);
-		return matchProgressService.registerSetScoreInMatch(matchStrategy, leagueId, matchId, setIndex,
+		SetInfo.Main main = matchProgressService.registerSetScoreInMatch(matchStrategy, leagueId, matchId, setIndex,
 			updateSetScoreCommand);
+		matchRecordService.processMatchResult(main.getMatchType(), matchId);
+
+		return main;
 	}
 
 	@Override
