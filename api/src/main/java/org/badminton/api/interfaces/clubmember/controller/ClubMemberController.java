@@ -14,6 +14,7 @@ import org.badminton.api.interfaces.clubmember.dto.ClubMemberBanRecordResponse;
 import org.badminton.api.interfaces.clubmember.dto.ClubMemberBanRequest;
 import org.badminton.api.interfaces.clubmember.dto.ClubMemberExpelRequest;
 import org.badminton.api.interfaces.clubmember.dto.ClubMemberResponse;
+import org.badminton.api.interfaces.clubmember.dto.ClubMemberRoleResponse;
 import org.badminton.api.interfaces.clubmember.dto.ClubMemberRoleUpdateRequest;
 import org.badminton.api.interfaces.clubmember.dto.ClubMemberWithdrawResponse;
 import org.badminton.api.interfaces.clubmember.dto.MemberIsClubMemberResponse;
@@ -59,15 +60,21 @@ public class ClubMemberController {
 		description = "동호회에 가입한 회원들의 리스트를 조회합니다.",
 		tags = {"ClubMember"})
 	@GetMapping
-	public CommonResponse<Map<ClubMember.ClubMemberRole, List<ClubMemberResponse>>> getClubMembersInClub(
+	public CommonResponse<ClubMemberRoleResponse> getClubMembersInClub(
 		@PathVariable String clubToken
 	) {
 		Map<ClubMember.ClubMemberRole, List<ClubMemberInfo>> clubMemberInfoMap = clubMemberFacade.findAllClubMembers(
 			clubToken);
-		Map<ClubMember.ClubMemberRole, List<ClubMemberResponse>> clubMemberRoleListMap = clubMemberDtoMapper.of(
+		Map<String, List<ClubMemberResponse>> clubMemberRoleListMap = clubMemberDtoMapper.of(
 			clubMemberInfoMap);
 
-		return CommonResponse.success(clubMemberRoleListMap);
+		List<ClubMemberResponse> roleOwner = clubMemberRoleListMap.get("ROLE_OWNER");
+		List<ClubMemberResponse> roleMember = clubMemberRoleListMap.get("ROLE_MEMBER");
+		List<ClubMemberResponse> roleManager = clubMemberRoleListMap.get("ROLE_MANAGER");
+
+		ClubMemberRoleResponse response = new ClubMemberRoleResponse(roleOwner, roleMember, roleManager);
+
+		return CommonResponse.success(response);
 	}
 
 	@Operation(summary = "동호회 가입 신청",
