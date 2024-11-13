@@ -3,6 +3,7 @@ package org.badminton.domain.domain.league.info;
 import java.time.LocalDateTime;
 
 import org.badminton.domain.common.enums.MatchType;
+import org.badminton.domain.domain.league.enums.LeagueStatus;
 import org.badminton.domain.domain.member.entity.Member;
 
 public record LeagueByDateInfoWithParticipantCountInfo(
@@ -13,7 +14,8 @@ public record LeagueByDateInfoWithParticipantCountInfo(
 	Member.MemberTier requiredTier,
 	LocalDateTime recruitingCloseAt,
 	int playerLimitCount,
-	int participantCount
+	int participantCount,
+	LeagueStatus status
 ) {
 	public LeagueByDateInfoWithParticipantCountInfo(LeagueByDateInfo leagueByDateInfo, int participantCount) {
 		this(
@@ -24,7 +26,8 @@ public record LeagueByDateInfoWithParticipantCountInfo(
 			leagueByDateInfo.requiredTier(),
 			leagueByDateInfo.recruitingCloseAt(),
 			leagueByDateInfo.playerLimitCount(),
-			participantCount
+			participantCount,
+			leagueByDateInfo.status()
 		);
 	}
 
