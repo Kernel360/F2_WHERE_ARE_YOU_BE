@@ -1,5 +1,7 @@
 package org.badminton.api.interfaces.clubmember.dto;
 
+import java.time.LocalDateTime;
+
 import org.badminton.api.interfaces.league.dto.LeagueRecordResponse;
 import org.badminton.domain.domain.clubmember.entity.ClubMember;
 import org.badminton.domain.domain.clubmember.info.ClubMemberInfo;
@@ -20,7 +22,11 @@ public record ClubMemberResponse(
 	@Schema(description = "동호회 회원 경기 전적", requiredMode = RequiredMode.REQUIRED)
 	LeagueRecordResponse leagueRecord,
 	@Schema(description = "동호회 회원 티어", requiredMode = RequiredMode.REQUIRED)
-	Member.MemberTier tier
+	Member.MemberTier tier,
+	@Schema(description = "정지 여부")
+	boolean isBanned,
+	@Schema(description = "정지 종료일")
+	LocalDateTime BannedEndDate
 ) {
 
 	public static ClubMemberResponse entityToClubMemberResponse(ClubMemberInfo clubMemberInfo) {
@@ -30,7 +36,9 @@ public record ClubMemberResponse(
 			clubMemberInfo.name(),
 			clubMemberInfo.role(),
 			LeagueRecordResponse.toLeagueRecordResponse(clubMemberInfo.leagueRecord()),
-			clubMemberInfo.tier()
+			clubMemberInfo.tier(),
+			clubMemberInfo.isBanned(),
+			clubMemberInfo.BannedEndDate()
 		);
 	}
 }
