@@ -85,6 +85,7 @@ public class SecurityConfig {
 						.equals("/v1/clubs/images")
 						|| request.getRequestURI().equals("/v1/members/matchesRecord")
 						|| request.getRequestURI().equals("/v1/clubs/{clubToken}/clubMembers")
+						|| request.getRequestURI().equals("/v1/clubs/{clubToken}/clubMembers/check")
 			)
 			.csrf(AbstractHttpConfigurer::disable)
 			.cors(this::corsConfigurer)

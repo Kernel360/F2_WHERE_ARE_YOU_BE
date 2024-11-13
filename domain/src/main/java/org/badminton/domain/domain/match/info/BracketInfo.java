@@ -3,8 +3,8 @@ package org.badminton.domain.domain.match.info;
 import java.util.List;
 
 import org.badminton.domain.common.enums.MatchGenerationType;
-import org.badminton.domain.common.enums.MatchStatus;
 import org.badminton.domain.common.enums.MatchType;
+import org.badminton.domain.domain.league.enums.LeagueStatus;
 import org.badminton.domain.domain.match.entity.DoublesMatch;
 import org.badminton.domain.domain.match.entity.SinglesMatch;
 
@@ -12,7 +12,7 @@ public record BracketInfo(
 	Long leagueId,
 	MatchGenerationType matchGenerationType,
 	MatchType matchType,
-	MatchStatus matchStatus,
+	LeagueStatus leagueStatus,
 	int totalRound,
 	List<SinglesMatchInfo> singlesMatchInfoList,
 	List<DoublesMatchInfo> doublesMatchInfoList
@@ -23,7 +23,7 @@ public record BracketInfo(
 		return new BracketInfo(singlesMatch.getId(),
 			singlesMatch.getLeague().getMatchGenerationType(),
 			singlesMatch.getLeague().getMatchType(),
-			singlesMatch.getMatchStatus(),
+			singlesMatch.getLeague().getLeagueStatus(),
 			roundNumber,
 			singlesMatchList.stream()
 				.map(SinglesMatchInfo::fromSinglesMatch)
@@ -35,7 +35,7 @@ public record BracketInfo(
 		DoublesMatch doublesMatch = doublesMatchList.get(0);
 		return new BracketInfo(doublesMatch.getId(),
 			doublesMatch.getLeague().getMatchGenerationType(),
-			doublesMatch.getLeague().getMatchType(), doublesMatch.getMatchStatus(), roundNumber,
+			doublesMatch.getLeague().getMatchType(), doublesMatch.getLeague().getLeagueStatus(), roundNumber,
 			null,
 			doublesMatchList.stream()
 				.map(DoublesMatchInfo::fromDoublesMatch)
