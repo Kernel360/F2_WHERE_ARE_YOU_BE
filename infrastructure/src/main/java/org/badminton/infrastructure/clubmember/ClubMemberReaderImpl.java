@@ -60,7 +60,7 @@ public class ClubMemberReaderImpl implements ClubMemberReader {
 
 	@Override
 	public List<ClubMember> getAllClubMemberByClubId(String clubToken) {
-		return clubMemberRepository.findAllByClubClubTokenAndBannedFalseAndDeletedFalse(clubToken);
+		return clubMemberRepository.findAllByClubClubTokenAndDeletedFalse(clubToken);
 	}
 
 	@Override
