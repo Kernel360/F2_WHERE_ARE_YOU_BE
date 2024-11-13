@@ -3,8 +3,8 @@ package org.badminton.api.interfaces.match.dto;
 import java.util.List;
 
 import org.badminton.domain.common.enums.MatchGenerationType;
-import org.badminton.domain.common.enums.MatchStatus;
 import org.badminton.domain.common.enums.MatchType;
+import org.badminton.domain.domain.league.enums.LeagueStatus;
 import org.badminton.domain.domain.match.info.BracketInfo;
 
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -16,8 +16,8 @@ public record BracketResponse(
 	MatchGenerationType matchGenerationType,
 	@Schema(description = "매치 타입(SINGLES | DOUBLES)", requiredMode = Schema.RequiredMode.REQUIRED)
 	MatchType matchType,
-	@Schema(description = "매치 상태(NOT_STARTED | IN_PROGRESS | FINISHED)", requiredMode = Schema.RequiredMode.REQUIRED)
-	MatchStatus matchStatus,
+	@Schema(description = "리그 상태(PLAYING | CANCELED | FINISHED)", requiredMode = Schema.RequiredMode.REQUIRED)
+	LeagueStatus leagueStatus,
 	@Schema(description = "전체 라운드 수", requiredMode = Schema.RequiredMode.REQUIRED)
 	int totalRound,
 	@Schema(description = "단식 매치 리스트")
@@ -32,7 +32,7 @@ public record BracketResponse(
 			return new BracketResponse(bracketInfo.leagueId(),
 				bracketInfo.matchGenerationType(),
 				bracketInfo.matchType(),
-				bracketInfo.matchStatus(),
+				bracketInfo.leagueStatus(),
 				bracketInfo.totalRound(),
 				bracketInfo.singlesMatchInfoList().stream()
 					.map(SinglesMatchResponse::fromSinglesMatchInfo)
@@ -42,7 +42,7 @@ public record BracketResponse(
 			return new BracketResponse(bracketInfo.leagueId(),
 				bracketInfo.matchGenerationType(),
 				bracketInfo.matchType(),
-				bracketInfo.matchStatus(),
+				bracketInfo.leagueStatus(),
 				bracketInfo.totalRound(),
 				null,
 				bracketInfo.doublesMatchInfoList().stream()
