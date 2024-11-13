@@ -41,8 +41,6 @@ public interface LeagueDtoMapper {
 
 	List<LeagueReadResponse> mapLeagueReadInfoList(List<LeagueReadInfo> responseInfo);
 
-	List<LeagueByDateResponse> mapLeagueByDateInfoList(List<LeagueByDateInfoWithParticipantCountInfo> responseInfo);
-
 	LeagueDetailsResponse of(LeagueDetailsInfo leagueDetailsInfo);
 
 	LeagueUpdateCommand of(@Valid LeagueUpdateRequest leagueUpdateRequest);
@@ -54,4 +52,6 @@ public interface LeagueDtoMapper {
 	LeagueParticipationCancelResponse of(LeagueParticipantCancelInfo result);
 
 	LeagueUpdateResponse of(LeagueUpdateInfoWithParticipantCountInfo leagueUpdateInfo);
+
+	List<LeagueByDateResponse> of(List<LeagueByDateInfoWithParticipantCountInfo> responseInfo);
 }

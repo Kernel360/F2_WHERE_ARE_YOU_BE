@@ -74,7 +74,7 @@ public class LeagueController {
 		@RequestParam
 		@DateTimeFormat(pattern = "yyyy-MM-dd") String date) {
 		List<LeagueByDateInfoWithParticipantCountInfo> responseInfo = leagueFacade.getLeaguesByDate(clubToken, date);
-		List<LeagueByDateResponse> response = leagueDtoMapper.mapLeagueByDateInfoList(responseInfo);
+		List<LeagueByDateResponse> response = leagueDtoMapper.of(responseInfo);
 		return CommonResponse.success(response);
 	}
 

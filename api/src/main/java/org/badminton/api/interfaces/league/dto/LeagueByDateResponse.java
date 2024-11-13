@@ -4,6 +4,7 @@ import java.time.LocalDateTime;
 
 import org.badminton.domain.common.enums.MatchType;
 import org.badminton.domain.domain.league.entity.League;
+import org.badminton.domain.domain.league.enums.LeagueStatus;
 import org.badminton.domain.domain.member.entity.Member;
 
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -24,14 +25,17 @@ public record LeagueByDateResponse(
 	@Schema(description = "참가 제한 인원", requiredMode = Schema.RequiredMode.REQUIRED)
 	int playerLimitCount,
 	@Schema(description = "현재까지 참여한 인원", requiredMode = Schema.RequiredMode.REQUIRED)
-	int participantCount
+	int participantCount,
+	@Schema(description = "현재 경기 상태( ALL | RECRUITING | RECRUITING_COMPLETED | PLAYING | CANCELED | FINISHED)",
+		requiredMode = Schema.RequiredMode.REQUIRED)
+	LeagueStatus status
 ) {
 
 	public static LeagueByDateResponse fromLeagueEntity(League league, int recruitedMemberCount) {
 		return new LeagueByDateResponse(
 			league.getLeagueId(), league.getLeagueAt(), league.getLeagueName(),
 			league.getMatchType(), league.getRequiredTier(), league.getRecruitingClosedAt(),
-			league.getPlayerLimitCount(), recruitedMemberCount
+			league.getPlayerLimitCount(), recruitedMemberCount, league.getLeagueStatus()
 		);
 	}
 
