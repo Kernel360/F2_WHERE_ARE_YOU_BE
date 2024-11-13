@@ -76,7 +76,7 @@ spring:
       max-request-size: 3MB
   batch:
     jdbc:
-      initialize-schema: never
+      initialize-schema: always
     # AWS S3
 cloud:
   aws:
