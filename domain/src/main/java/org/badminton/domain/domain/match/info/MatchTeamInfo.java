@@ -2,6 +2,7 @@ package org.badminton.domain.domain.match.info;
 
 import org.badminton.domain.domain.league.entity.LeagueParticipant;
 import org.badminton.domain.domain.league.vo.Team;
+import org.badminton.domain.domain.member.entity.Member;
 
 public record MatchTeamInfo(
 	String participant1MemberToken,
@@ -10,7 +11,9 @@ public record MatchTeamInfo(
 	String participant2MemberToken,
 	String participant2Name,
 	String participant2Image,
-	int winSetCounts
+	int winSetCounts,
+	Member.MemberTier participant1Tier,
+	Member.MemberTier participant2Tier
 ) {
 
 	public static MatchTeamInfo fromTeam(Team team, int winSetCounts) {
@@ -24,8 +27,17 @@ public record MatchTeamInfo(
 			getParticipantMemberToken(team.getLeagueParticipant2()),
 			getParticipantName(team.getLeagueParticipant2()),
 			getParticipantImage(team.getLeagueParticipant2()),
-			winSetCounts
+			winSetCounts,
+			getParticipantMemberTier(team.getLeagueParticipant1()),
+			getParticipantMemberTier(team.getLeagueParticipant2())
+
 		);
+	}
+
+	private static Member.MemberTier getParticipantMemberTier(LeagueParticipant participant) {
+		return (participant != null && participant.getMember() != null)
+			? participant.getMember().getTier()
+			: null;
 	}
 
 	private static String getParticipantMemberToken(LeagueParticipant participant) {
