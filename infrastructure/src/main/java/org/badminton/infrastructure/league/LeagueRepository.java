@@ -24,13 +24,8 @@ public interface LeagueRepository extends JpaRepository<League, Long> {
 
 	Integer countByClubClubIdAndLeagueStatus(Long clubId, LeagueStatus leagueStatus);
 
-	@Query("SELECT l.matchGenerationType FROM League l WHERE l.leagueId = :leagueId")
+	@Query("SELECT league.matchGenerationType FROM League league WHERE league.leagueId = :leagueId")
 	Optional<MatchGenerationType> getMatchGenerationTypeByLeagueId(@Param("leagueId") Long leagueId);
-
-	@Query("SELECT CASE WHEN COUNT(l) > 0 THEN true ELSE false END FROM League l WHERE l.club.clubId = :clubId AND DATE(l.createdAt) = CURRENT_DATE")
-	boolean existsByClubIdAndCreatedAtToday(@Param("clubId") Long clubId);
-
-	List<League> findByLeagueStatus(LeagueStatus leagueStatus);
 
 	Page<League> findAllByLeagueAtBetweenAndLeagueStatusAndAddressRegion(
 		LocalDateTime leagueAt,
@@ -60,6 +55,6 @@ public interface LeagueRepository extends JpaRepository<League, Long> {
 		Pageable pageable
 	);
 
-	@Query("SELECT l FROM League l WHERE l.leagueAt < :yesterday")
+	@Query("SELECT league FROM League league WHERE league.leagueAt < :yesterday")
 	List<League> findAllByLeagueAtBefore(@Param("yesterday") LocalDateTime yesterday);
 }

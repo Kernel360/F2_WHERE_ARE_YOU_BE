@@ -6,7 +6,9 @@ import java.util.List;
 import org.badminton.domain.domain.league.entity.League;
 import org.badminton.domain.domain.league.enums.LeagueStatus;
 import org.badminton.domain.domain.match.entity.DoublesMatch;
+import org.badminton.domain.domain.match.entity.DoublesSet;
 import org.badminton.domain.domain.match.entity.SinglesMatch;
+import org.badminton.domain.domain.match.entity.SinglesSet;
 import org.badminton.infrastructure.league.LeagueRepository;
 import org.badminton.infrastructure.match.repository.DoublesMatchRepository;
 import org.badminton.infrastructure.match.repository.SinglesMatchRepository;
@@ -27,7 +29,6 @@ public class LeagueItemReader implements ItemReader<League> {
 
 	@Override
 	public League read() {
-		// 해당 리그의 매치가 없거나 매치가 전부 not start 인지 확인
 		LocalDateTime localDateTime = LocalDateTime.now().minusDays(1);
 		List<League> targetLeague = leagueRepository.findAllByLeagueAtBefore(localDateTime).stream()
 			.filter(league ->
@@ -46,7 +47,6 @@ public class LeagueItemReader implements ItemReader<League> {
 			return null;
 		}
 
-		// 현재 인덱스의 리그 반환 후 인덱스 증가
 		return targetLeague.get(currentIndex++);
 	}
 
@@ -54,12 +54,23 @@ public class LeagueItemReader implements ItemReader<League> {
 		List<DoublesMatch> doublesMatches = doublesMatchRepository.findAllByLeague_LeagueId(league.getLeagueId());
 		List<SinglesMatch> singlesMatches = singlesMatchRepository.findAllByLeague_LeagueId(league.getLeagueId());
 
-		// 매치가 하나도 없는 경우 메서드 종료
 		if (doublesMatches.isEmpty() && singlesMatches.isEmpty()) {
 			return;
 		}
-		doublesMatches.forEach(DoublesMatch::finishedMatch);
-		singlesMatches.forEach(SinglesMatch::finishedMatch);
+
+		doublesMatches.forEach(doublesMatch -> {
+			doublesMatch.finishMatch();
+			for (DoublesSet doublesSet : doublesMatch.getDoublesSets()) {
+				doublesSet.close();
+			}
+		});
+		singlesMatches.forEach(singlesMatch -> {
+			singlesMatch.finishMatch();
+			// 싱글스 매치의 모든 세트 종료
+			for (SinglesSet singlesSet : singlesMatch.getSinglesSets()) {
+				singlesSet.close();
+			}
+		});
 
 		// 상태가 변경된 매치들을 저장
 		doublesMatchRepository.saveAll(doublesMatches);

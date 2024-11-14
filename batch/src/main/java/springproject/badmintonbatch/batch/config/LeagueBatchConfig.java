@@ -22,7 +22,10 @@ import jakarta.persistence.EntityManagerFactory;
 public class LeagueBatchConfig {
 
 	@Bean
-	public Job leagueManagerJob(Step cancelLeague, JobRepository jobRepository) {
+	public Job leagueManagerJob(
+		Step cancelLeague,
+		JobRepository jobRepository
+	) {
 		return new JobBuilder("leagueManagerJob", jobRepository)
 			.start(cancelLeague)
 			.build();
