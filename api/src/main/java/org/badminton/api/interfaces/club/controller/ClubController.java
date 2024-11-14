@@ -53,9 +53,8 @@ public class ClubController {
 	@Operation(summary = "동호회 조회",
 		description = "동호회를 조회합니다.",
 		tags = {"Club"})
-	public CommonResponse<ClubDetailsResponse> readClub(@PathVariable String clubToken,
-		@AuthenticationPrincipal(errorOnInvalidType = false) CustomOAuth2Member member) {
-		var result = clubFacade.readClub(clubToken, member);
+	public CommonResponse<ClubDetailsResponse> readClub(@PathVariable String clubToken) {
+		var result = clubFacade.readClub(clubToken);
 		var response = clubDtoMapper.of(result);
 		return CommonResponse.success(response);
 	}
