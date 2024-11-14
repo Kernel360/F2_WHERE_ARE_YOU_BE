@@ -5,7 +5,6 @@ import org.badminton.domain.common.enums.MatchGenerationType;
 import org.badminton.domain.common.enums.MatchType;
 import org.badminton.domain.domain.club.entity.Club;
 import org.badminton.domain.domain.league.entity.League;
-import org.badminton.domain.domain.league.enums.LeagueStatus;
 import org.badminton.domain.domain.league.vo.Address;
 import org.badminton.domain.domain.member.entity.Member;
 
@@ -17,8 +16,6 @@ public record LeagueCreateCommand(
         String fullAddress,
 
         Member.MemberTier tierLimit,
-
-        LeagueStatus leagueStatus,
 
         MatchType matchType,
 
@@ -40,7 +37,6 @@ public record LeagueCreateCommand(
                 originCommand.description(),
                 originCommand.fullAddress(),
                 originCommand.tierLimit(),
-                originCommand.leagueStatus(),
                 originCommand.matchType(),
                 originCommand.leagueAt(),
                 originCommand.recruitingClosedAt(),
