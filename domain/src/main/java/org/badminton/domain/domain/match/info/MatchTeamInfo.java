@@ -35,26 +35,34 @@ public record MatchTeamInfo(
 	}
 
 	private static Member.MemberTier getParticipantMemberTier(LeagueParticipant participant) {
-		return (participant != null && participant.getMember() != null)
-			? participant.getMember().getTier()
-			: null;
+		if (isLeagueParticipantExist(participant))
+			return participant.getMember().getTier();
+
+		return null;
 	}
 
 	private static String getParticipantMemberToken(LeagueParticipant participant) {
-		return (participant != null && participant.getMember() != null)
-			? participant.getMember().getMemberToken()
-			: null;
+		if (isLeagueParticipantExist(participant))
+			return participant.getMember().getMemberToken();
+
+		return null;
 	}
 
 	private static String getParticipantName(LeagueParticipant participant) {
-		return (participant != null && participant.getMember() != null)
-			? participant.getMember().getName()
-			: null;
+		if (isLeagueParticipantExist(participant))
+			return participant.getMember().getName();
+
+		return null;
 	}
 
 	private static String getParticipantImage(LeagueParticipant participant) {
-		return (participant != null && participant.getMember() != null)
-			? participant.getMember().getProfileImage()
-			: null;
+		if (isLeagueParticipantExist(participant))
+			return participant.getMember().getProfileImage();
+
+		return null;
+	}
+
+	private static boolean isLeagueParticipantExist(LeagueParticipant participant) {
+		return participant != null && participant.getMember() != null;
 	}
 }

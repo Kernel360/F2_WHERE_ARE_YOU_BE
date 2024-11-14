@@ -137,9 +137,9 @@ public class TournamentSinglesMatchStrategy extends AbstractSinglesMatchStrategy
 		singlesMatchStore.store(singlesMatch);
 	}
 
-	private void updateSetScore(SinglesMatch singlesMatch, int setIndex,
+	private void updateSetScore(SinglesMatch singlesMatch, int setNumber,
 		MatchCommand.UpdateSetScore updateSetScoreCommand) {
-		SinglesSet set = singlesMatch.getSinglesSet(setIndex);
+		SinglesSet set = singlesMatch.getSinglesSet(setNumber);
 		set.endSetScore(updateSetScoreCommand.getScore1(), updateSetScoreCommand.getScore2());
 
 		if (updateSetScoreCommand.getScore1() > updateSetScoreCommand.getScore2()) {
