@@ -6,7 +6,9 @@ import java.util.Collections;
 import java.util.List;
 
 import org.badminton.domain.common.enums.MatchResult;
+import org.badminton.domain.common.enums.SetStatus;
 import org.badminton.domain.common.exception.match.LeagueParticipantsNotExistsException;
+import org.badminton.domain.common.exception.match.SetFinishedException;
 import org.badminton.domain.domain.league.LeagueParticipantReader;
 import org.badminton.domain.domain.league.entity.League;
 import org.badminton.domain.domain.league.entity.LeagueParticipant;
@@ -71,15 +73,17 @@ public class TournamentSinglesMatchStrategy extends AbstractSinglesMatchStrategy
 
 	@Override
 	@Transactional
-	public SetInfo.Main registerSetScoreInMatch(Long matchId, int setIndex,
+	public SetInfo.Main registerSetScoreInMatch(Long matchId, int setNumber,
 		MatchCommand.UpdateSetScore updateSetScoreCommand) {
 		SinglesMatch singlesMatch = singlesMatchReader.getSinglesMatch(matchId);
 
-		if (singlesMatch.getLeagueParticipant1() == null || singlesMatch.getLeagueParticipant2() == null
-		) {
+		if (singlesMatch.getSinglesSet(setNumber - 1).getSetStatus() == SetStatus.FINISHED)
+			throw new SetFinishedException(setNumber - 1);
+
+		if (singlesMatch.getLeagueParticipant1() == null || singlesMatch.getLeagueParticipant2() == null)
 			throw new LeagueParticipantsNotExistsException(matchId);
-		}
-		updateSetScore(singlesMatch, setIndex, updateSetScoreCommand);
+		
+		updateSetScore(singlesMatch, setNumber, updateSetScoreCommand);
 		singlesMatchStore.store(singlesMatch);
 
 		// 최종 승자가 정해지면 matchResult 업데이트
@@ -87,7 +91,7 @@ public class TournamentSinglesMatchStrategy extends AbstractSinglesMatchStrategy
 			singlesMatchStore.store(singlesMatch);
 			updateNextRoundMatch(singlesMatch);
 		}
-		return SetInfo.fromSinglesSet(matchId, setIndex, singlesMatch.getSinglesSets().get(setIndex - 1));
+		return SetInfo.fromSinglesSet(matchId, setNumber, singlesMatch.getSinglesSets().get(setNumber - 1));
 	}
 
 	private List<SinglesMatch> createFirstRoundMatches(League league, List<LeagueParticipant> participants) {
