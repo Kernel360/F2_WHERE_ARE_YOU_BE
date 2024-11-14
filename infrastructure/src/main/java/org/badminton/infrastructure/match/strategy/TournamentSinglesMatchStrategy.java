@@ -6,6 +6,7 @@ import java.util.Collections;
 import java.util.List;
 
 import org.badminton.domain.common.enums.MatchResult;
+import org.badminton.domain.common.exception.match.LeagueParticipantsNotExistsException;
 import org.badminton.domain.domain.league.LeagueParticipantReader;
 import org.badminton.domain.domain.league.entity.League;
 import org.badminton.domain.domain.league.entity.LeagueParticipant;
@@ -74,6 +75,10 @@ public class TournamentSinglesMatchStrategy extends AbstractSinglesMatchStrategy
 		MatchCommand.UpdateSetScore updateSetScoreCommand) {
 		SinglesMatch singlesMatch = singlesMatchReader.getSinglesMatch(matchId);
 
+		if (singlesMatch.getLeagueParticipant1() == null || singlesMatch.getLeagueParticipant2() == null
+		) {
+			throw new LeagueParticipantsNotExistsException(matchId);
+		}
 		updateSetScore(singlesMatch, setIndex, updateSetScoreCommand);
 		singlesMatchStore.store(singlesMatch);
 
