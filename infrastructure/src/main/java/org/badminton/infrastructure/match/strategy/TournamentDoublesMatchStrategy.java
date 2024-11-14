@@ -6,7 +6,9 @@ import java.util.Collections;
 import java.util.List;
 
 import org.badminton.domain.common.enums.MatchResult;
+import org.badminton.domain.common.enums.SetStatus;
 import org.badminton.domain.common.exception.match.LeagueParticipantsNotExistsException;
+import org.badminton.domain.common.exception.match.SetFinishedException;
 import org.badminton.domain.domain.league.LeagueParticipantReader;
 import org.badminton.domain.domain.league.entity.League;
 import org.badminton.domain.domain.league.entity.LeagueParticipant;
@@ -72,23 +74,24 @@ public class TournamentDoublesMatchStrategy extends AbstractDoublesMatchStrategy
 
 	@Override
 	@Transactional
-	public SetInfo.Main registerSetScoreInMatch(Long matchId, int setIndex,
+	public SetInfo.Main registerSetScoreInMatch(Long matchId, int setNumber,
 		MatchCommand.UpdateSetScore updateSetScoreCommand) {
 		DoublesMatch doublesMatch = doublesMatchReader.getDoublesMatch(matchId);
 
-		if (doublesMatch.getTeam1() == null
-			|| doublesMatch.getTeam2() == null
-		) {
+		if (doublesMatch.getDoublesSet(setNumber - 1).getSetStatus() == SetStatus.FINISHED)
+			throw new SetFinishedException(setNumber - 1);
+
+		if (doublesMatch.getTeam1() == null || doublesMatch.getTeam2() == null)
 			throw new LeagueParticipantsNotExistsException(matchId);
-		}
-		updateSetScore(doublesMatch, setIndex, updateSetScoreCommand);
+
+		updateSetScore(doublesMatch, setNumber, updateSetScoreCommand);
 		doublesMatchStore.store(doublesMatch);
 
 		if (isMatchWinnerDetermined(doublesMatch)) {
 			doublesMatchStore.store(doublesMatch);
 			updateNextRoundMatch(doublesMatch);
 		}
-		return SetInfo.fromDoublesSet(matchId, setIndex, doublesMatch.getDoublesSets().get(setIndex - 1));
+		return SetInfo.fromDoublesSet(matchId, setNumber, doublesMatch.getDoublesSets().get(setNumber - 1));
 	}
 
 	private List<DoublesMatch> createFirstRoundMatches(League league, List<LeagueParticipant> participants) {
@@ -139,7 +142,7 @@ public class TournamentDoublesMatchStrategy extends AbstractDoublesMatchStrategy
 	private void updateSetScore(DoublesMatch doublesMatch, int setIndex,
 		MatchCommand.UpdateSetScore updateSetScoreCommand) {
 		DoublesSet set = doublesMatch.getDoublesSets().get(setIndex - 1);
-		set.saveSetScore(updateSetScoreCommand.getScore1(), updateSetScoreCommand.getScore2());
+		set.endSetScore(updateSetScoreCommand.getScore1(), updateSetScoreCommand.getScore2());
 
 		if (updateSetScoreCommand.getScore1() > updateSetScoreCommand.getScore2()) {
 			doublesMatch.team1WinSet();

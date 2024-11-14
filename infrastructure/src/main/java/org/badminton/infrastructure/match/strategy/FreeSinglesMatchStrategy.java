@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import org.badminton.domain.common.enums.SetStatus;
+import org.badminton.domain.common.exception.match.SetFinishedException;
 import org.badminton.domain.domain.league.entity.League;
 import org.badminton.domain.domain.league.entity.LeagueParticipant;
 import org.badminton.domain.domain.match.command.MatchCommand;
@@ -42,15 +44,17 @@ public class FreeSinglesMatchStrategy extends AbstractSinglesMatchStrategy {
 	}
 
 	@Override
-	public SetInfo.Main registerSetScoreInMatch(Long matchId, int setIndex,
+	public SetInfo.Main registerSetScoreInMatch(Long matchId, int setNumber,
 		MatchCommand.UpdateSetScore updateSetScoreCommand) {
 		SinglesMatch singlesMatch = singlesMatchReader.getSinglesMatch(matchId);
-		// 세트 스코어를 기록한다.
-		singlesMatch.getSinglesSets()
-			.get(setIndex - 1)
-			.saveSetScore(updateSetScoreCommand.getScore1(), updateSetScoreCommand.getScore2());
 
-		// 승자에 따라 Match에 이긴 세트수를 업데이트해준다. 만약 2번을 모두 이긴 참가자가 있다면 해당 Match는 종료된다.
+		if (singlesMatch.getSinglesSet(setNumber - 1).getSetStatus() == SetStatus.FINISHED)
+			throw new SetFinishedException(setNumber - 1);
+
+		singlesMatch.getSinglesSets()
+			.get(setNumber - 1)
+			.endSetScore(updateSetScoreCommand.getScore1(), updateSetScoreCommand.getScore2());
+
 		if (updateSetScoreCommand.getScore1() > updateSetScoreCommand.getScore2()) {
 			singlesMatch.player1WinSet();
 		} else {
@@ -58,7 +62,7 @@ public class FreeSinglesMatchStrategy extends AbstractSinglesMatchStrategy {
 		}
 
 		singlesMatchStore.store(singlesMatch);
-		return SetInfo.fromSinglesSet(matchId, setIndex, singlesMatch.getSinglesSets().get(setIndex - 1));
+		return SetInfo.fromSinglesSet(matchId, setNumber, singlesMatch.getSinglesSets().get(setNumber - 1));
 	}
 
 	@Override
