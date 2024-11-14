@@ -14,9 +14,9 @@ public record MatchTeamResponse(
 		}
 		return new MatchTeamResponse(
 			new Participant(teamInfo.participant1MemberToken(), teamInfo.participant1Name(),
-				teamInfo.participant1Image(), teamInfo.winSetCounts()),
+				teamInfo.participant1Image(), teamInfo.participant1Tier(), teamInfo.winSetCounts()),
 			new Participant(teamInfo.participant2MemberToken(), teamInfo.participant2Name(),
-				teamInfo.participant2Image(), teamInfo.winSetCounts()),
+				teamInfo.participant2Image(), teamInfo.participant2Tier(), teamInfo.winSetCounts()),
 			teamInfo.winSetCounts()
 		);
 	}

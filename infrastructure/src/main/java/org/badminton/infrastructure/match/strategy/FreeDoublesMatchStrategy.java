@@ -49,11 +49,10 @@ public class FreeDoublesMatchStrategy extends AbstractDoublesMatchStrategy {
 		MatchCommand.UpdateSetScore updateSetScoreCommand) {
 		DoublesMatch doublesMatch = doublesMatchReader.getDoublesMatch(matchId);
 
-		if (doublesMatch.getDoublesSet(setNumber - 1).getSetStatus() == SetStatus.FINISHED)
-			throw new SetFinishedException(setNumber - 1);
+		if (doublesMatch.getDoublesSet(setNumber).getSetStatus() == SetStatus.FINISHED)
+			throw new SetFinishedException(setNumber);
 
-		doublesMatch.getDoublesSets()
-			.get(setNumber - 1)
+		doublesMatch.getDoublesSet(setNumber)
 			.endSetScore(updateSetScoreCommand.getScore1(), updateSetScoreCommand.getScore2());
 
 		if (updateSetScoreCommand.getScore1() > updateSetScoreCommand.getScore2()) {

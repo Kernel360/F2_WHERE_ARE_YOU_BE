@@ -141,7 +141,7 @@ public class TournamentDoublesMatchStrategy extends AbstractDoublesMatchStrategy
 
 	private void updateSetScore(DoublesMatch doublesMatch, int setIndex,
 		MatchCommand.UpdateSetScore updateSetScoreCommand) {
-		DoublesSet set = doublesMatch.getDoublesSets().get(setIndex - 1);
+		DoublesSet set = doublesMatch.getDoublesSet(setIndex);
 		set.endSetScore(updateSetScoreCommand.getScore1(), updateSetScoreCommand.getScore2());
 
 		if (updateSetScoreCommand.getScore1() > updateSetScoreCommand.getScore2()) {

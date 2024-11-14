@@ -4,6 +4,7 @@ import org.badminton.domain.common.enums.MatchResult;
 import org.badminton.domain.common.enums.MatchStatus;
 import org.badminton.domain.domain.league.entity.LeagueParticipant;
 import org.badminton.domain.domain.match.entity.SinglesMatch;
+import org.badminton.domain.domain.member.entity.Member;
 
 public record SinglesMatchInfo(
 	Long matchId,
@@ -17,7 +18,10 @@ public record SinglesMatchInfo(
 	String participant2Image,
 	int participant2WinSetCount,
 	MatchStatus matchStatus,
-	String winnerToken
+	String winnerToken,
+	Member.MemberTier participant1Tier,
+	Member.MemberTier participant2Tier
+
 ) {
 
 	public static SinglesMatchInfo fromSinglesMatch(SinglesMatch singlesMatch) {
@@ -33,8 +37,16 @@ public record SinglesMatchInfo(
 			getParticipantImage(singlesMatch.getLeagueParticipant2()),
 			singlesMatch.getPlayer2WinSetCount(),
 			singlesMatch.getMatchStatus(),
-			getWinnerToken(singlesMatch)
+			getWinnerToken(singlesMatch),
+			getParticipantMemberTier(singlesMatch.getLeagueParticipant1()),
+			getParticipantMemberTier(singlesMatch.getLeagueParticipant2())
 		);
+	}
+
+	private static Member.MemberTier getParticipantMemberTier(LeagueParticipant participant) {
+		return (participant != null && participant.getMember() != null)
+			? participant.getMember().getTier()
+			: null;
 	}
 
 	private static String getWinnerToken(SinglesMatch singlesMatch) {
