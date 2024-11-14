@@ -8,7 +8,9 @@ import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 
 public record ClubApplyRequest(
-	@NotNull @Min(Constants.APPLY_MIN) @Max(Constants.APPLY_MAX)
+	@NotNull
+	@Min(Constants.APPLY_MIN)
+	@Max(Constants.APPLY_MAX)
 	String applyReason
 ) {
 	public ClubApplyCommand of() {
