@@ -32,7 +32,7 @@ public class BatchScheduler {
 		}
 	}
 
-	@Scheduled(fixedRate = 10000)
+	@Scheduled(cron = "0 0 0,6,12,18 * * ?")
 	public void changeLeagueStatusJob() {
 		log.info("change league status");
 		try {
