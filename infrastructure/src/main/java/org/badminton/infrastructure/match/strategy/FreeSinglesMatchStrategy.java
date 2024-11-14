@@ -48,11 +48,10 @@ public class FreeSinglesMatchStrategy extends AbstractSinglesMatchStrategy {
 		MatchCommand.UpdateSetScore updateSetScoreCommand) {
 		SinglesMatch singlesMatch = singlesMatchReader.getSinglesMatch(matchId);
 
-		if (singlesMatch.getSinglesSet(setNumber - 1).getSetStatus() == SetStatus.FINISHED)
-			throw new SetFinishedException(setNumber - 1);
+		if (singlesMatch.getSinglesSet(setNumber).getSetStatus() == SetStatus.FINISHED)
+			throw new SetFinishedException(setNumber);
 
-		singlesMatch.getSinglesSets()
-			.get(setNumber - 1)
+		singlesMatch.getSinglesSet(setNumber)
 			.endSetScore(updateSetScoreCommand.getScore1(), updateSetScoreCommand.getScore2());
 
 		if (updateSetScoreCommand.getScore1() > updateSetScoreCommand.getScore2()) {

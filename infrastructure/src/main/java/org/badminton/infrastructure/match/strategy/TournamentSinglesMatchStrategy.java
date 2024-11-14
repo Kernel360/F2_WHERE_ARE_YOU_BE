@@ -139,7 +139,7 @@ public class TournamentSinglesMatchStrategy extends AbstractSinglesMatchStrategy
 
 	private void updateSetScore(SinglesMatch singlesMatch, int setIndex,
 		MatchCommand.UpdateSetScore updateSetScoreCommand) {
-		SinglesSet set = singlesMatch.getSinglesSets().get(setIndex - 1);
+		SinglesSet set = singlesMatch.getSinglesSet(setIndex);
 		set.endSetScore(updateSetScoreCommand.getScore1(), updateSetScoreCommand.getScore2());
 
 		if (updateSetScoreCommand.getScore1() > updateSetScoreCommand.getScore2()) {
