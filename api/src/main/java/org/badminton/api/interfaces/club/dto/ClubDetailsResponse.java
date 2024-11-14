@@ -22,9 +22,7 @@ public record ClubDetailsResponse(
 	@Schema(description = "동호회에 속한 맴버 수", requiredMode = Schema.RequiredMode.REQUIRED)
 	int clubMemberCount,
 	@Schema(description = "동호회 생성 날짜", requiredMode = Schema.RequiredMode.REQUIRED)
-	LocalDateTime createdAt,
-	@Schema(description = "본인의 동호회 소속 여부", requiredMode = Schema.RequiredMode.REQUIRED)
-	boolean isClubMember
+	LocalDateTime createdAt
 ) {
 
 }
