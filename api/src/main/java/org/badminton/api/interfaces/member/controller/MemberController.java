@@ -55,7 +55,7 @@ public class MemberController {
 		summary = "프로필 사진과 이름을 수정합니다",
 		description = """
 			프로필 사진과 이름을 수정합니다. 다음 조건을 만족해야 합니다:
-						
+			
 			1. 프로필 이미지 URL:
 			   - 호스트: badminton-team.s3.ap-northeast-2.amazonaws.com
 			   - 경로: /member-profile/로 시작

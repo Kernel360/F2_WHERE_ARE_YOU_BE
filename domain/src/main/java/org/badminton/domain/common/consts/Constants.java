@@ -16,4 +16,6 @@ public class Constants {
 	public static final int NAME_MAX = 20;
 	public static final int ADDRESS_MIN = 2;
 	public static final int ADDRESS_MAX = 100;
+	public static final int APPLY_MIN = 2;
+	public static final int APPLY_MAX = 50;
 }

@@ -23,6 +23,7 @@ import org.springframework.security.config.annotation.web.configurers.AbstractHt
 import org.springframework.security.config.annotation.web.configurers.CorsConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.access.intercept.RequestAuthorizationContext;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
@@ -112,6 +113,8 @@ public class SecurityConfig {
 				UsernamePasswordAuthenticationFilter.class)
 			.addFilterAfter(new ClubMembershipFilter(clubMemberReader), JwtAuthenticationFilter.class)
 			.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+			.exceptionHandling(
+				exception -> exception.authenticationEntryPoint(failedAuthenticationEntryPoint))
 			.authorizeHttpRequests(auth -> auth
 				.requestMatchers(HttpMethod.GET, "/v1/clubs", "/v1/clubs/{clubToken}", "/v1/clubs/search",
 					"/v2/**")
@@ -173,7 +176,10 @@ public class SecurityConfig {
 				Has required role: {}
 				""", clubToken, auth.getAuthorities(), Arrays.toString(roles), hasRole
 			);
-
+			if (!hasRole) {
+				throw new AuthenticationException("Insufficient roles to access this resource") {
+				};
+			}
 			return new AuthorizationDecision(hasRole);
 		};
 	}

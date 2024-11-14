@@ -78,11 +78,16 @@ public class ClubMemberController {
 	}
 
 	@Operation(summary = "동호회 가입 신청",
-		description = "동호회에 가입을 신청합니다.",
+		description = """
+			동호회에 가입을 신청합니다.
+			
+			1. 가입 신청 글 2 ~ 20자
+			
+			""",
 		tags = {"ClubMember"})
 	@PostMapping
 	public CommonResponse<ClubApplyResponse> applyClub(@AuthenticationPrincipal CustomOAuth2Member member,
-		@PathVariable String clubToken, @RequestBody ClubApplyRequest request) {
+		@PathVariable String clubToken, @Valid @RequestBody ClubApplyRequest request) {
 		String memberToken = member.getMemberToken();
 		ClubApplyCommand command = request.of();
 		ApplyClubInfo applyClubInfo = clubMemberFacade.applyClub(memberToken, clubToken, command);
