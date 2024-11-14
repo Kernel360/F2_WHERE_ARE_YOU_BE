@@ -49,6 +49,11 @@ public class DoublesSet extends AbstractBaseTime {
 	public void saveSetScore(int team1Score, int team2Score) {
 		this.team1Score = team1Score;
 		this.team2Score = team2Score;
+	}
+
+	public void endSetScore(int team1Score, int team2Score) {
+		this.team1Score = team1Score;
+		this.team2Score = team2Score;
 		close();
 	}
 

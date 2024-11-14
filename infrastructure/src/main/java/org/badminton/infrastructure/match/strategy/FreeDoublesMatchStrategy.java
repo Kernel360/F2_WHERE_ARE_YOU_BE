@@ -54,7 +54,7 @@ public class FreeDoublesMatchStrategy extends AbstractDoublesMatchStrategy {
 
 		doublesMatch.getDoublesSets()
 			.get(setNumber - 1)
-			.saveSetScore(updateSetScoreCommand.getScore1(), updateSetScoreCommand.getScore2());
+			.endSetScore(updateSetScoreCommand.getScore1(), updateSetScoreCommand.getScore2());
 
 		if (updateSetScoreCommand.getScore1() > updateSetScoreCommand.getScore2()) {
 			doublesMatch.team1WinSet();

@@ -82,7 +82,7 @@ public class TournamentSinglesMatchStrategy extends AbstractSinglesMatchStrategy
 
 		if (singlesMatch.getLeagueParticipant1() == null || singlesMatch.getLeagueParticipant2() == null)
 			throw new LeagueParticipantsNotExistsException(matchId);
-		
+
 		updateSetScore(singlesMatch, setNumber, updateSetScoreCommand);
 		singlesMatchStore.store(singlesMatch);
 
@@ -140,7 +140,7 @@ public class TournamentSinglesMatchStrategy extends AbstractSinglesMatchStrategy
 	private void updateSetScore(SinglesMatch singlesMatch, int setIndex,
 		MatchCommand.UpdateSetScore updateSetScoreCommand) {
 		SinglesSet set = singlesMatch.getSinglesSets().get(setIndex - 1);
-		set.saveSetScore(updateSetScoreCommand.getScore1(), updateSetScoreCommand.getScore2());
+		set.endSetScore(updateSetScoreCommand.getScore1(), updateSetScoreCommand.getScore2());
 
 		if (updateSetScoreCommand.getScore1() > updateSetScoreCommand.getScore2()) {
 			singlesMatch.player1WinSet();

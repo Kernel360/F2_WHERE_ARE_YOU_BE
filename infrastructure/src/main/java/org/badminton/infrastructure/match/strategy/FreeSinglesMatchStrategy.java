@@ -53,7 +53,7 @@ public class FreeSinglesMatchStrategy extends AbstractSinglesMatchStrategy {
 
 		singlesMatch.getSinglesSets()
 			.get(setNumber - 1)
-			.saveSetScore(updateSetScoreCommand.getScore1(), updateSetScoreCommand.getScore2());
+			.endSetScore(updateSetScoreCommand.getScore1(), updateSetScoreCommand.getScore2());
 
 		if (updateSetScoreCommand.getScore1() > updateSetScoreCommand.getScore2()) {
 			singlesMatch.player1WinSet();

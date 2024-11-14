@@ -49,6 +49,11 @@ public class SinglesSet extends AbstractBaseTime {
 	public void saveSetScore(int player1Score, int player2Score) {
 		this.player1Score = player1Score;
 		this.player2Score = player2Score;
+	}
+
+	public void endSetScore(int player1Score, int player2Score) {
+		this.player1Score = player1Score;
+		this.player2Score = player2Score;
 		close();
 	}
 
