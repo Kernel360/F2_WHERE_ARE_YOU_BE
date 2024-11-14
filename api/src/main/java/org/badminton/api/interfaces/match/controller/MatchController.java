@@ -105,6 +105,11 @@ public class MatchController {
 
 	@PostMapping("/{matchId}/sets/{setNumber}")
 	@Operation(summary = "세트별 점수 저장",
+		description = """
+			
+			0~30 사이의 숫자만 입력
+			
+			""",
 		tags = {"Match"})
 	public CommonResponse<SetScoreUpdateResponse> updateSetsScore(
 		@PathVariable String clubToken,

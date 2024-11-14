@@ -68,7 +68,6 @@ public class MainLeagueController {
 
 	@Operation(
 		summary = "메인페이지의 각각의 경기를 눌렀을 때, 경기가 진행 중일 경우 점수를 조회한다.",
-		description = "점수는 ",
 		tags = {"main-league"}
 	)
 	@GetMapping("/{leagueId}")
