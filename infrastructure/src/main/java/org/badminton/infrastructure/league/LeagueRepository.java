@@ -57,4 +57,10 @@ public interface LeagueRepository extends JpaRepository<League, Long> {
 
 	@Query("SELECT league FROM League league WHERE league.leagueAt < :yesterday")
 	List<League> findAllByLeagueAtBefore(@Param("yesterday") LocalDateTime yesterday);
+
+	boolean existsByLeagueOwnerMemberTokenAndLeagueAtBetween(
+		String memberToken,
+		LocalDateTime startTime,
+		LocalDateTime endTime
+	);
 }

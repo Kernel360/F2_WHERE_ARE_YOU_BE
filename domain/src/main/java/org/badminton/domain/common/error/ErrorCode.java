@@ -63,6 +63,7 @@ public enum ErrorCode {
 	LEAGUE_PARTICIPATION_ALREADY_CANCELED(409, "이미 참여 신청을 취소한 경기 일정입니다."),
 	CLUB_MEMBER_ALREADY_BANNED(409, "해당 회원은 이미 제제를 받은 상태입니다"),
 	LEAGUE_ALREADY_CANCELED(409, "해당하는 경기는 이미 취소된 경기입니다."),
+	LEAGUE_NOT_ALLOW_CREATE(409, "3시간 이후에 경기를 생성할 수 있습니다."),
 
 	// 410 Errors
 	DELETED(410, "요청한 리소스가 삭제되었습니다."),
