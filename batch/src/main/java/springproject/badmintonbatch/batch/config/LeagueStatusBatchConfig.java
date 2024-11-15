@@ -20,25 +20,21 @@ import jakarta.persistence.EntityManagerFactory;
 
 @Configuration
 @EnableBatchProcessing
-public class LeagueBatchConfig {
+public class LeagueStatusBatchConfig {
 
 	@Bean
-	public Job leagueManagerJob(
-		Step cancelLeague,
-		JobRepository jobRepository
-	) {
-		return new JobBuilder("leagueManagerJob", jobRepository)
-			.start(cancelLeague)
-			.build();
+	public Job leagueStatusUpdateJob(Step updateLeagueStatusStep, JobRepository jobRepository) {
+		return new JobBuilder("leagueStatusUpdateJob", jobRepository)
+			.start(updateLeagueStatusStep).build();
 	}
 
 	@Bean
-	public Step cancelLeague(@Qualifier("leagueItemReader") ItemReader<League> reader,
-		@Qualifier("leagueItemProcessor") ItemProcessor<League, League> processor,
-		@Qualifier("leagueItemWriter") ItemWriter<League> writer, JobRepository jobRepository,
-		PlatformTransactionManager leagueTransactionManager) {
-		return new StepBuilder("cancelLeague", jobRepository)
-			.<League, League>chunk(10, leagueTransactionManager)
+	public Step updateLeagueStatusStep(@Qualifier("leagueStatusItemReader") ItemReader<League> reader,
+		@Qualifier("leagueStatusItemProcessor") ItemProcessor<League, League> processor,
+		@Qualifier("leagueStatusItemWriter") ItemWriter<League> writer, JobRepository jobRepository,
+		PlatformTransactionManager transactionManager) {
+		return new StepBuilder("updateLeagueStatus", jobRepository)
+			.<League, League>chunk(10, transactionManager)
 			.reader(reader)
 			.processor(processor)
 			.writer(writer)
@@ -46,9 +42,8 @@ public class LeagueBatchConfig {
 	}
 
 	@Bean
-	public PlatformTransactionManager leagueTransactionManager(EntityManagerFactory entityManagerFactory) {
+	PlatformTransactionManager leagueStatusTransactionManager(EntityManagerFactory entityManagerFactory) {
 		return new JpaTransactionManager(entityManagerFactory);
 	}
 
 }
-
