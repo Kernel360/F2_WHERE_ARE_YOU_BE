@@ -80,9 +80,9 @@ public class ClubMemberController {
 	@Operation(summary = "동호회 가입 신청",
 		description = """
 			동호회에 가입을 신청합니다.
-			
+						
 			1. 가입 신청 글 2 ~ 20자
-			
+						
 			""",
 		tags = {"ClubMember"})
 	@PostMapping
@@ -122,7 +122,7 @@ public class ClubMemberController {
 		summary = "동호회원 역할 변경시키기",
 		description = """
 			동호회원의 역할을 변경시킵니다. 다음 제약 사항과 정보를 반드시 확인해야 합니다:
-			
+						
 			1. 회원 역할:
 			   - 탈퇴 대상 회원의 현재 역할을 나타냅니다.
 			   - 다음 중 하나여야 합니다:
@@ -149,19 +149,22 @@ public class ClubMemberController {
 		summary = "동호회원 강제 탈퇴시키기",
 		description = """
 			동호회원을 강제로 탈퇴시킵니다. 다음 제약 사항을 반드시 준수해야 합니다:
-			
+						
 			1. 회원 제제 사유:
 			   - 필수 입력 항목입니다.
 			   - 최소 2자 이상이어야 합니다.
 			   - 최대 100자 이하여야 합니다.
-			
+			2. 자기자신은 탈퇴 시킬 수 없습니다.
+						
 			""",
 		tags = {"ClubMember"}
 	)
 	@PatchMapping("/expel")
-	public CommonResponse<ClubMemberBanRecordResponse> expelClubMember(@RequestParam Long clubMemberId,
-		@PathVariable String clubToken, @Valid @RequestBody
-	ClubMemberExpelRequest request) {
+	public CommonResponse<ClubMemberBanRecordResponse> expelClubMember(
+		@RequestParam Long clubMemberId,
+		@PathVariable String clubToken,
+		@Valid @RequestBody ClubMemberExpelRequest request
+	) {
 		ClubMemberExpelCommand clubMemberExpelCommand = request.of();
 
 		ClubMemberBanRecordInfo clubMemberBanRecordInfo = clubMemberFacade.expelClubMember(clubMemberExpelCommand,
@@ -174,7 +177,7 @@ public class ClubMemberController {
 		summary = "동호회원 정지시키기",
 		description = """
 			동호회원을 정지시킵니다. 다음 제약 사항을 반드시 준수해야 합니다:
-			
+						
 			1. 회원 제제 사유:
 			   - 필수 입력 항목입니다.
 			   - 최소 2자 이상이어야 합니다.
@@ -185,7 +188,7 @@ public class ClubMemberController {
 			     THREE_DAYS: 3일 정지
 			     SEVEN_DAYS: 7일 정지
 			     TWO_WEEKS: 14일 정지
-			
+						
 			""",
 		tags = {"ClubMember"}
 	)

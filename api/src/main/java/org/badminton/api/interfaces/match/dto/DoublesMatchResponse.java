@@ -9,18 +9,19 @@ import io.swagger.v3.oas.annotations.media.Schema;
 
 public record DoublesMatchResponse(
 
-	@Schema(description = "매치 아이디")
+	@Schema(description = "매치 아이디", requiredMode = Schema.RequiredMode.REQUIRED)
 	Long matchId,
 	int roundNumber,
-	@Schema(description = "매치 상태(NOT_STARTED | IN_PROGRESS | FINISHED)")
+	@Schema(description = "매치 상태(NOT_STARTED | IN_PROGRESS | FINISHED)", requiredMode = Schema.RequiredMode.REQUIRED)
 	MatchStatus matchStatus,
 
-	@Schema(description = "팀1")
+	@Schema(description = "팀1", requiredMode = Schema.RequiredMode.REQUIRED)
 	MatchTeamResponse team1,
 
-	@Schema(description = "팀2")
+	@Schema(description = "팀2", requiredMode = Schema.RequiredMode.REQUIRED)
 	MatchTeamResponse team2,
 
+	@Schema(description = "승자의 멤버토큰", requiredMode = Schema.RequiredMode.REQUIRED)
 	List<String> winnersToken
 
 ) {

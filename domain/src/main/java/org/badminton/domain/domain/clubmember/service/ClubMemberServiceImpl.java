@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.TreeMap;
 
 import org.badminton.domain.common.exception.clubmember.ClubOwnerCantWithdrawException;
+import org.badminton.domain.common.exception.clubmember.ClubMemberOwnerException;
 import org.badminton.domain.domain.club.entity.Club;
 import org.badminton.domain.domain.club.info.ClubCardInfo;
 import org.badminton.domain.domain.club.info.ClubCreateInfo;
@@ -56,6 +57,7 @@ public class ClubMemberServiceImpl implements ClubMemberService {
 
 		ClubMember clubMember = clubMemberReader.getClubMember(clubMemberId);
 		clubMember.updateClubMemberRole(command.role());
+		clubOwnerProtect(clubMember);
 		clubMemberStore.store(clubMember);
 
 		return ClubMemberInfo.valueOf(clubMember);
@@ -76,7 +78,7 @@ public class ClubMemberServiceImpl implements ClubMemberService {
 			clubMemberReader.getAllClubMemberByClubId(clubToken);
 
 		clubMembers.stream()
-			.map(ClubMemberInfo::valueOf) // 멤버를 응답 객체로 변환
+			.map(ClubMemberInfo::valueOf)
 			.forEach(clubMemberResponse -> {
 				ClubMember.ClubMemberRole role = clubMemberResponse.role();
 				responseMap.computeIfAbsent(role, clubMember -> new ArrayList<>()).add(clubMemberResponse);
@@ -95,15 +97,14 @@ public class ClubMemberServiceImpl implements ClubMemberService {
 	@Override
 	public ClubMemberInfo getClubMember(String memberToken, String clubToken) {
 		ClubMember clubMember = clubMemberReader.getClubMemberByMemberTokenAndClubToken(clubToken, memberToken);
-
 		return ClubMemberInfo.valueOf(clubMember);
 	}
 
 	@Override
 	public ClubMemberBanRecordInfo expelClubMember(ClubMemberExpelCommand command, Long clubMemberId) {
 		ExpelStrategy expelStrategy = new ExpelStrategy(clubMemberStore);
-
 		ClubMember clubMember = getClubMember(clubMemberId);
+		clubOwnerProtect(clubMember);
 		return expelStrategy.execute(clubMember, command);
 	}
 
@@ -111,6 +112,7 @@ public class ClubMemberServiceImpl implements ClubMemberService {
 	public ClubMemberBanRecordInfo banClubMember(ClubMemberBanCommand command, Long clubMemberId) {
 		BanStrategy banStrategy = new BanStrategy(clubMemberStore);
 		ClubMember clubMember = getClubMember(clubMemberId);
+		clubOwnerProtect(clubMember);
 		return banStrategy.execute(clubMember, command);
 	}
 
@@ -183,6 +185,12 @@ public class ClubMemberServiceImpl implements ClubMemberService {
 
 	private ClubMember getClubMember(Long clubMemberId) {
 		return clubMemberReader.getClubMember(clubMemberId);
+	}
+
+	private void clubOwnerProtect(ClubMember clubMember) {
+		if (clubMember.getRole().equals(ClubMember.ClubMemberRole.ROLE_OWNER)) {
+			throw new ClubMemberOwnerException(clubMember.getClub().getClubToken());
+		}
 	}
 
 }
