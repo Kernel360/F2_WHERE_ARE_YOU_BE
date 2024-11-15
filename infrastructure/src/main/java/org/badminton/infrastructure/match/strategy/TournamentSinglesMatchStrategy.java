@@ -7,6 +7,7 @@ import java.util.List;
 
 import org.badminton.domain.common.enums.MatchResult;
 import org.badminton.domain.common.enums.SetStatus;
+import org.badminton.domain.common.exception.match.AlreadyWinnerDeterminedException;
 import org.badminton.domain.common.exception.match.LeagueParticipantsNotExistsException;
 import org.badminton.domain.common.exception.match.SetFinishedException;
 import org.badminton.domain.domain.league.LeagueParticipantReader;
@@ -77,8 +78,11 @@ public class TournamentSinglesMatchStrategy extends AbstractSinglesMatchStrategy
 		MatchCommand.UpdateSetScore updateSetScoreCommand) {
 		SinglesMatch singlesMatch = singlesMatchReader.getSinglesMatch(matchId);
 
-		if (singlesMatch.getSinglesSet(setNumber - 1).getSetStatus() == SetStatus.FINISHED)
-			throw new SetFinishedException(setNumber - 1);
+		if (isMatchWinnerDetermined(singlesMatch))
+			throw new AlreadyWinnerDeterminedException(singlesMatch.getId());
+
+		if (singlesMatch.getSinglesSet(setNumber).getSetStatus() == SetStatus.FINISHED)
+			throw new SetFinishedException(setNumber);
 
 		if (singlesMatch.getLeagueParticipant1() == null || singlesMatch.getLeagueParticipant2() == null)
 			throw new LeagueParticipantsNotExistsException(matchId);

@@ -5,7 +5,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import org.badminton.domain.common.enums.MatchResult;
 import org.badminton.domain.common.enums.SetStatus;
+import org.badminton.domain.common.exception.match.AlreadyWinnerDeterminedException;
 import org.badminton.domain.common.exception.match.SetFinishedException;
 import org.badminton.domain.domain.league.entity.League;
 import org.badminton.domain.domain.league.entity.LeagueParticipant;
@@ -34,6 +36,11 @@ public class FreeSinglesMatchStrategy extends AbstractSinglesMatchStrategy {
 		this.singlesMatchStore = singlesMatchStore;
 	}
 
+	private static boolean isMatchWinnerDetermined(SinglesMatch singlesMatch) {
+		return singlesMatch.getPlayer1MatchResult() == MatchResult.WIN
+			|| singlesMatch.getPlayer2MatchResult() == MatchResult.WIN;
+	}
+
 	@Override
 	public BracketInfo makeBracket(League league,
 		List<LeagueParticipant> leagueParticipantList) {
@@ -47,6 +54,9 @@ public class FreeSinglesMatchStrategy extends AbstractSinglesMatchStrategy {
 	public SetInfo.Main registerSetScoreInMatch(Long matchId, int setNumber,
 		MatchCommand.UpdateSetScore updateSetScoreCommand) {
 		SinglesMatch singlesMatch = singlesMatchReader.getSinglesMatch(matchId);
+
+		if (isMatchWinnerDetermined(singlesMatch))
+			throw new AlreadyWinnerDeterminedException(singlesMatch.getId());
 
 		if (singlesMatch.getSinglesSet(setNumber).getSetStatus() == SetStatus.FINISHED)
 			throw new SetFinishedException(setNumber);
