@@ -17,7 +17,7 @@ import org.springframework.stereotype.Component;
 
 import lombok.RequiredArgsConstructor;
 
-@Component
+@Component("leagueItemReader")
 @RequiredArgsConstructor
 public class LeagueItemReader implements ItemReader<League> {
 
