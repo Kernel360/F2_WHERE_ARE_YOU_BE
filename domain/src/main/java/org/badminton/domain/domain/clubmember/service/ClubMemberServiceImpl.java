@@ -46,11 +46,24 @@ public class ClubMemberServiceImpl implements ClubMemberService {
 	}
 
 	@Override
-	public ClubMemberInfo updateClubMemberRole(ClubMemberRoleUpdateCommand command, Long clubMemberId) {
+	public ClubMemberInfo updateClubMemberRole(ClubMemberRoleUpdateCommand command, Long clubMemberId,
+		String clubToken) {
+		
+		if (command.role() == ClubMember.ClubMemberRole.ROLE_OWNER) {
+			assignNewOwner(clubToken);
+		}
+
 		ClubMember clubMember = clubMemberReader.getClubMember(clubMemberId);
 		clubMember.updateClubMemberRole(command.role());
 		clubMemberStore.store(clubMember);
+
 		return ClubMemberInfo.valueOf(clubMember);
+	}
+
+	private void assignNewOwner(String clubToken) {
+		ClubMember clubOwner = clubMemberReader.getClubOwner(clubToken);
+		clubOwner.updateClubMemberRole(ClubMember.ClubMemberRole.ROLE_USER);
+		clubMemberStore.store(clubOwner);
 	}
 
 	@Override

@@ -47,10 +47,11 @@ public class ClubMemberFacade {
 		return clubApplyService.rejectApplying(clubApplyId);
 	}
 
-	public ClubMemberInfo updateClubMemberRole(ClubMemberRoleUpdateCommand command, Long clubMemberId) {
-		return clubMemberService.updateClubMemberRole(command, clubMemberId);
+	public ClubMemberInfo updateClubMemberRole(ClubMemberRoleUpdateCommand command, Long clubMemberId,
+		String clubToken) {
+		return clubMemberService.updateClubMemberRole(command, clubMemberId, clubToken);
 	}
-
+	
 	public Map<ClubMember.ClubMemberRole, List<ClubMemberInfo>> findAllClubMembers(String clubToken) {
 		return clubMemberService.findAllClubMembers(clubToken);
 	}

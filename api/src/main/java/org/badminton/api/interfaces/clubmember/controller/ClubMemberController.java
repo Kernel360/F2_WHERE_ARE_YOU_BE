@@ -128,8 +128,9 @@ public class ClubMemberController {
 			   - 다음 중 하나여야 합니다:
 			     * ROLE_MANAGER: 동호회 관리자
 			     * ROLE_USER: 일반 회원
+			     * ROLE_OWNER: 동호회 회장
 			주의사항:\s
-			- ROLE_MANAGER(동호회 관리자)를 강제 탈퇴시키려면 ROLE_OWNER 권한이 필요합니다.""",
+			- 동호회 회장으로 역할을 변경시키면 이전의 동호회 회장의 역할은 ROLE_USER 가 됩니다.""",
 		tags = {"ClubMember"}
 	)
 	@PatchMapping("/role")
@@ -139,7 +140,7 @@ public class ClubMemberController {
 
 		ClubMemberRoleUpdateCommand clubMemberRoleUpdateCommand = request.of();
 		ClubMemberInfo clubMemberInfo = clubMemberFacade.updateClubMemberRole(clubMemberRoleUpdateCommand,
-			clubMemberId);
+			clubMemberId, clubToken);
 		ClubMemberResponse response = clubMemberDtoMapper.of(clubMemberInfo);
 		return CommonResponse.success(response);
 	}

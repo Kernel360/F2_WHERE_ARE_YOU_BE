@@ -19,8 +19,8 @@ public interface ClubMemberService {
 
 	void clubMemberOwner(String memberToken, ClubCreateInfo clubInfo);
 
-	ClubMemberInfo updateClubMemberRole(ClubMemberRoleUpdateCommand command, Long clubMemberId);
-
+	ClubMemberInfo updateClubMemberRole(ClubMemberRoleUpdateCommand command, Long clubMemberId, String clubToken);
+	
 	Map<ClubMember.ClubMemberRole, List<ClubMemberInfo>> findAllClubMembers(String clubToken);
 
 	List<ClubMemberMyPageInfo> getClubMembers(String memberToken);
