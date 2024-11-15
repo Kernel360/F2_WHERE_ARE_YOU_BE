@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
+import org.badminton.domain.common.exception.clubmember.ClubOwnerCantWithdrawException;
 import org.badminton.domain.domain.club.entity.Club;
 import org.badminton.domain.domain.club.info.ClubCardInfo;
 import org.badminton.domain.domain.club.info.ClubCreateInfo;
@@ -48,7 +49,7 @@ public class ClubMemberServiceImpl implements ClubMemberService {
 	@Override
 	public ClubMemberInfo updateClubMemberRole(ClubMemberRoleUpdateCommand command, Long clubMemberId,
 		String clubToken) {
-		
+
 		if (command.role() == ClubMember.ClubMemberRole.ROLE_OWNER) {
 			assignNewOwner(clubToken);
 		}
@@ -114,12 +115,20 @@ public class ClubMemberServiceImpl implements ClubMemberService {
 	}
 
 	@Override
-	public ClubMemberWithdrawInfo withDrawClubMember(Long clubMemberId) {
+	public ClubMemberWithdrawInfo withDrawClubMember(Long clubMemberId, String clubToken) {
 		ClubMember clubMember = clubMemberReader.getClubMember(clubMemberId);
+		checkClubOwner(clubMember, clubToken);
 		clubMember.withdrawal();
 		clubMemberStore.store(clubMember);
 		return new ClubMemberWithdrawInfo(clubMember.getClub().getClubId(), clubMember.getClubMemberId(),
 			clubMember.isDeleted());
+	}
+
+	private void checkClubOwner(ClubMember clubMember, String clubToken) {
+		if (clubMember.getRole() == ClubMember.ClubMemberRole.ROLE_OWNER
+			&& clubMemberReader.getClubMemberCountsByClubToken(clubToken) > 1) {
+			throw new ClubOwnerCantWithdrawException(clubMember.getClubMemberId());
+		}
 	}
 
 	@Override

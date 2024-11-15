@@ -83,6 +83,7 @@ public enum ErrorCode {
 	LEAGUE_PARTICIPANTS_NOT_EXISTS(412, "해당 매치의 참여자가 아직 정해지지 않았습니다"),
 	SET_FINISHED(412, "Set 의 상태가 FINISHED 입니다"),
 	ALREADY_WINNER_DETERMINED(412, "매치의 승리자가 정해졌습니다"),
+	CLUB_OWNER_CANT_WITHDRAW(412, "동호회원이 2명 이상인 동호회 회장은 동호회를 탈퇴할 수 없습니다."),
 
 	// 500 Errors
 	INTERNAL_SERVER_ERROR(500, "서버 내부 오류가 발생했습니다."),

@@ -51,7 +51,7 @@ public class ClubMemberFacade {
 		String clubToken) {
 		return clubMemberService.updateClubMemberRole(command, clubMemberId, clubToken);
 	}
-	
+
 	public Map<ClubMember.ClubMemberRole, List<ClubMemberInfo>> findAllClubMembers(String clubToken) {
 		return clubMemberService.findAllClubMembers(clubToken);
 	}
@@ -64,8 +64,8 @@ public class ClubMemberFacade {
 		return clubMemberService.banClubMember(command, clubMemberId);
 	}
 
-	public ClubMemberWithdrawInfo withDrawClubMember(Long clubMemberId) {
-		return clubMemberService.withDrawClubMember(clubMemberId);
+	public ClubMemberWithdrawInfo withDrawClubMember(Long clubMemberId, String clubToken) {
+		return clubMemberService.withDrawClubMember(clubMemberId, clubToken);
 	}
 
 	public ClubMemberInfo getClubMember(String memberToken, String clubToken) {
