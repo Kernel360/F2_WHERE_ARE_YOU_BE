@@ -6,16 +6,17 @@ import org.badminton.domain.domain.match.info.SinglesMatchInfo;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 public record SinglesMatchResponse(
-	@Schema(description = "매치 아이디")
+	@Schema(description = "매치 아이디", requiredMode = Schema.RequiredMode.REQUIRED)
 	Long matchId,
-	@Schema(description = "매치의 라운드 번호")
+	@Schema(description = "매치의 라운드 번호", requiredMode = Schema.RequiredMode.REQUIRED)
 	int roundNumber,
-	@Schema(description = "매치 상태(NOT_STARTED | IN_PROGRESS | FINISHED)")
+	@Schema(description = "매치 상태(NOT_STARTED | IN_PROGRESS | FINISHED)", requiredMode = Schema.RequiredMode.REQUIRED)
 	MatchStatus matchStatus,
-	@Schema(description = "경기 참가자 1")
+	@Schema(description = "경기 참가자 1", requiredMode = Schema.RequiredMode.REQUIRED)
 	Participant participant1,
-	@Schema(description = "경기 참가자 2")
+	@Schema(description = "경기 참가자 2", requiredMode = Schema.RequiredMode.REQUIRED)
 	Participant participant2,
+	@Schema(description = "승자의 맴버 토큰", requiredMode = Schema.RequiredMode.REQUIRED)
 	String winnerToken
 
 ) {
