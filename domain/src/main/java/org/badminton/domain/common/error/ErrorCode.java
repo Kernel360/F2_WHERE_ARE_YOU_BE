@@ -64,6 +64,7 @@ public enum ErrorCode {
 	CLUB_MEMBER_ALREADY_BANNED(409, "해당 회원은 이미 제제를 받은 상태입니다"),
 	LEAGUE_ALREADY_CANCELED(409, "해당하는 경기는 이미 취소된 경기입니다."),
 	LEAGUE_AT_LESS_THAN_THREE_HOUR_INTERVAL(409, "3시간 이후에 경기를 생성할 수 있습니다."),
+	CLUB_MEMBER_OWNER_PROTECT(409, "동호회 회장의 리소스는 보호되어야 합니다."),
 
 	// 410 Errors
 	DELETED(410, "요청한 리소스가 삭제되었습니다."),
