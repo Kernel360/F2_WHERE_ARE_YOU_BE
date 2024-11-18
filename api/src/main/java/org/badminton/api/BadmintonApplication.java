@@ -9,10 +9,8 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @EnableCaching
 @SpringBootApplication
 public class BadmintonApplication {
-
-    public static void main(String[] args) {
-        SpringApplication.run(BadmintonApplication.class, args);
-    }
-
+	public static void main(String[] args) {
+		SpringApplication.run(BadmintonApplication.class, args);
+	}
 }
 
