@@ -1,6 +1,8 @@
 package org.badminton.infrastructure.match.service;
 
 import org.badminton.domain.common.exception.league.LeagueNotExistException;
+import org.badminton.domain.common.exception.league.LeagueParticipationNotExistException;
+import org.badminton.domain.domain.league.LeagueParticipantReader;
 import org.badminton.domain.domain.league.entity.League;
 import org.badminton.domain.domain.match.command.MatchCommand.UpdateSetScore;
 import org.badminton.domain.domain.match.info.SetInfo.Main;
@@ -26,6 +28,7 @@ public class FreeMatchProgressServiceImpl implements MatchProgressService {
 	private final DoublesMatchReader doublesMatchReader;
 	private final SinglesMatchStore singlesMatchStore;
 	private final DoublesMatchStore doublesMatchStore;
+	private final LeagueParticipantReader leagueParticipantReader;
 
 	@Override
 	public MatchStrategy makeSinglesOrDoublesMatchStrategy(Long leagueId) {
@@ -38,7 +41,10 @@ public class FreeMatchProgressServiceImpl implements MatchProgressService {
 
 	@Override
 	public Main registerSetScoreInMatch(MatchStrategy matchStrategy, Long leagueId, Long matchId, int setIndex,
-		UpdateSetScore updateSetScoreCommand) {
+		UpdateSetScore updateSetScoreCommand, String memberToken) {
+		if (leagueParticipantReader.isParticipant(memberToken, leagueId))
+			throw new LeagueParticipationNotExistException(leagueId, memberToken);
+
 		return matchStrategy.registerSetScoreInMatch(matchId, setIndex, updateSetScoreCommand);
 	}
 

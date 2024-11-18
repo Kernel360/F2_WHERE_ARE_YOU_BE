@@ -8,5 +8,5 @@ public interface MatchOperationHandler {
 	BracketInfo generateInitialBracket(Long leagueId);
 
 	SetInfo.Main registerSetScoreInMatch(Long leagueId, Long matchId, int setIndex,
-		MatchCommand.UpdateSetScore updateSetScoreCommand);
+		MatchCommand.UpdateSetScore updateSetScoreCommand, String memberToken);
 }
