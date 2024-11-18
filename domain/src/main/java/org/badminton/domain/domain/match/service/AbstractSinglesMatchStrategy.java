@@ -70,12 +70,6 @@ public abstract class AbstractSinglesMatchStrategy implements MatchStrategy {
     @Override
     public List<LeagueSetsScoreInProgressInfo> retrieveLeagueSetsScoreInProgress(Long leagueId) {
         List<SinglesMatch> singlesBracket = singlesMatchReader.getSinglesBracket(leagueId);
-        List<SinglesSet> singlesSetsInProgress = singlesBracket.stream()
-                .filter(singlesMatch -> singlesMatch.getMatchStatus() == MatchStatus.IN_PROGRESS)
-                .filter(singlesMatch -> singlesMatch.getSetInProgress().isPresent())
-                .map(singlesMatch -> singlesMatch.getSetInProgress().get())
-                .toList();
-
         Map<SinglesMatch, SinglesSet> matchSetsInProgress = singlesBracket.stream()
                 .filter(singlesMatch -> singlesMatch.getMatchStatus() == MatchStatus.IN_PROGRESS)
                 .flatMap(singlesMatch -> singlesMatch.getSinglesSets().stream()
