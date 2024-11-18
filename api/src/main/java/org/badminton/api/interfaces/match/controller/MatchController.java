@@ -7,12 +7,12 @@ import org.badminton.api.application.match.MatchOperationHandler;
 import org.badminton.api.common.response.CommonResponse;
 import org.badminton.api.interfaces.auth.dto.CustomOAuth2Member;
 import org.badminton.api.interfaces.match.dto.BracketResponse;
-import org.badminton.api.interfaces.match.dto.InitFirstSetScoreCommand;
 import org.badminton.api.interfaces.match.dto.MatchDetailsResponse;
 import org.badminton.api.interfaces.match.dto.MatchSetResponse;
 import org.badminton.api.interfaces.match.dto.SetScoreResponse;
 import org.badminton.api.interfaces.match.dto.SetScoreUpdateRequest;
 import org.badminton.api.interfaces.match.dto.SetScoreUpdateResponse;
+import org.badminton.api.interfaces.match.dto.StartFirstSetScoreCommand;
 import org.badminton.domain.domain.match.command.MatchCommand.UpdateSetScore;
 import org.badminton.domain.domain.match.info.BracketInfo;
 import org.badminton.domain.domain.match.info.MatchInfo;
@@ -165,10 +165,10 @@ public class MatchController {
 		@PathVariable Long leagueId,
 		@PathVariable Long matchId
 	) {
-		InitFirstSetScoreCommand initFirstSetScoreCommand =
-			new InitFirstSetScoreCommand(clubToken, leagueId, matchId);
+		StartFirstSetScoreCommand startFirstScoreCommand =
+			new StartFirstSetScoreCommand(clubToken, leagueId, matchId);
 		MatchOperationHandler matchOperationFacade = matchFacade.getMatchOperationHandler(leagueId);
-		matchOperationFacade.registerFirstSetScoreInMatch(initFirstSetScoreCommand);
+		matchOperationFacade.registerFirstSetScoreInMatch(startFirstScoreCommand);
 		return CommonResponse.success("OK");
 	}
 }

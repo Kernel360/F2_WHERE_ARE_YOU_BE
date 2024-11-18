@@ -1,6 +1,6 @@
 package org.badminton.api.interfaces.match.dto;
 
-public record InitFirstSetScoreCommand(
+public record StartFirstSetScoreCommand(
 	String clubToken,
 	Long leagueId,
 	Long matchId

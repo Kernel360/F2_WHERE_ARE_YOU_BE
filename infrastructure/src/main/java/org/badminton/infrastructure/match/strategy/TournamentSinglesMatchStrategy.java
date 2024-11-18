@@ -205,7 +205,7 @@ public class TournamentSinglesMatchStrategy extends AbstractSinglesMatchStrategy
 	@Override
 	public void initMatch(Long matchId) {
 		SinglesMatch singlesMatch = singlesMatchReader.getSinglesMatch(matchId);
-		singlesMatch.initMatch();
+		singlesMatch.startMatch();
 		singlesMatch.getSinglesSet(1).initMatch();
 		singlesMatchStore.store(singlesMatch);
 	}

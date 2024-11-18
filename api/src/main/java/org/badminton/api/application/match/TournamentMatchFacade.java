@@ -1,6 +1,6 @@
 package org.badminton.api.application.match;
 
-import org.badminton.api.interfaces.match.dto.InitFirstSetScoreCommand;
+import org.badminton.api.interfaces.match.dto.StartFirstSetScoreCommand;
 import org.badminton.domain.domain.match.command.MatchCommand;
 import org.badminton.domain.domain.match.info.BracketInfo;
 import org.badminton.domain.domain.match.info.SetInfo;
@@ -48,7 +48,7 @@ public class TournamentMatchFacade implements MatchOperationHandler {
 	}
 
 	@Override
-	public void registerFirstSetScoreInMatch(InitFirstSetScoreCommand initFirstSetScoreCommand) {
+	public void registerFirstSetScoreInMatch(StartFirstSetScoreCommand initFirstSetScoreCommand) {
 		tournamentBracketGenerationService.checkLeagueRecruitingStatus(initFirstSetScoreCommand.leagueId());
 
 	}

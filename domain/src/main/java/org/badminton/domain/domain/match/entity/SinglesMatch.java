@@ -123,7 +123,7 @@ public class SinglesMatch extends AbstractBaseTime {
 		this.matchStatus = MatchStatus.FINISHED;
 	}
 
-	public void initMatch() {
+	public void startMatch() {
 		this.matchStatus = MatchStatus.IN_PROGRESS;
 	}
 }

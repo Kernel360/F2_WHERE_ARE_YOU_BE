@@ -211,7 +211,7 @@ public class TournamentDoublesMatchStrategy extends AbstractDoublesMatchStrategy
 	@Override
 	public void initMatch(Long matchId) {
 		DoublesMatch doublesMatch = doublesMatchReader.getDoublesMatch(matchId);
-		doublesMatch.initMatch();
+		doublesMatch.startMatch();
 		doublesMatch.getDoublesSet(1).initMatch();
 		doublesMatchStore.store(doublesMatch);
 

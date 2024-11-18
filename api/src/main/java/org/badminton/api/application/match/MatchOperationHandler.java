@@ -1,6 +1,6 @@
 package org.badminton.api.application.match;
 
-import org.badminton.api.interfaces.match.dto.InitFirstSetScoreCommand;
+import org.badminton.api.interfaces.match.dto.StartFirstSetScoreCommand;
 import org.badminton.domain.domain.match.command.MatchCommand;
 import org.badminton.domain.domain.match.info.BracketInfo;
 import org.badminton.domain.domain.match.info.SetInfo;
@@ -11,6 +11,6 @@ public interface MatchOperationHandler {
 	SetInfo.Main registerSetScoreInMatch(Long leagueId, Long matchId, int setIndex,
 		MatchCommand.UpdateSetScore updateSetScoreCommand, String memberToken);
 
-	void registerFirstSetScoreInMatch(InitFirstSetScoreCommand initFirstSetScoreCommand);
+	void registerFirstSetScoreInMatch(StartFirstSetScoreCommand initFirstSetScoreCommand);
 
 }
