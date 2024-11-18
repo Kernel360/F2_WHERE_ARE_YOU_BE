@@ -38,10 +38,10 @@ public class TournamentMatchFacade implements MatchOperationHandler {
 
 	@Override
 	public SetInfo.Main registerSetScoreInMatch(Long leagueId, Long matchId, int setIndex,
-		MatchCommand.UpdateSetScore updateSetScoreCommand) {
+		MatchCommand.UpdateSetScore updateSetScoreCommand, String memberToken) {
 		MatchStrategy matchStrategy = tournamentMatchProgressService.makeSinglesOrDoublesMatchStrategy(leagueId);
 		SetInfo.Main main = tournamentMatchProgressService.registerSetScoreInMatch(matchStrategy, leagueId, matchId,
-			setIndex, updateSetScoreCommand);
+			setIndex, updateSetScoreCommand, memberToken);
 		matchRecordService.processMatchResult(main.getMatchType(), matchId);
 		return main;
 	}
