@@ -9,11 +9,13 @@ import org.badminton.api.common.response.CommonResponse;
 import org.badminton.api.interfaces.club.dto.CustomPageResponse;
 import org.badminton.api.interfaces.league.dto.OngoingAndUpcomingLeagueResponse;
 import org.badminton.api.interfaces.match.dto.LeagueSetsScoreInProgressResponse;
+import org.badminton.api.interfaces.match.dto.SetScoreResponse;
 import org.badminton.domain.domain.league.LeagueService;
 import org.badminton.domain.domain.league.enums.AllowedLeagueStatus;
 import org.badminton.domain.domain.league.enums.Region;
 import org.badminton.domain.domain.league.info.OngoingAndUpcomingLeagueInfo;
 import org.badminton.domain.domain.match.info.LeagueSetsScoreInProgressInfo;
+import org.badminton.domain.domain.match.info.SetInfo;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -75,5 +77,20 @@ public class MainLeagueController {
         return CommonResponse.success(leagueSetsScoreInProgressInfos.stream()
                 .map(LeagueSetsScoreInProgressResponse::from)
                 .toList());
+    }
+
+    @Operation(
+            summary = "메인페이지에서 진행 중인 경기의 세트 점수를 조회한다.",
+            description = "실시간성 보장을 위해 폴링 방식으로 요청하는 API 입니다.",
+            tags = {"main-league"}
+    )
+    @GetMapping("/{leagueId}/matches/{matchId}/sets/{setNumber}")
+    public CommonResponse<SetScoreResponse> getMatchSetScores(
+            @PathVariable Long leagueId,
+            @PathVariable Long matchId,
+            @PathVariable int setNumber
+    ) {
+        SetInfo.Main setInfo = matchFacade.retrieveSetInfo(leagueId, matchId, setNumber);
+        return CommonResponse.success(SetScoreResponse.fromSetInfo(setInfo));
     }
 }

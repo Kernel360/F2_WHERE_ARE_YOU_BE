@@ -17,7 +17,7 @@ public class RedisCacheConfig {
     public RedisCacheManager cacheManager(RedisConnectionFactory connectionFactory) {
         RedisCacheConfiguration configuration = RedisCacheConfiguration.defaultCacheConfig()
                 .disableCachingNullValues()
-                .entryTtl(Duration.ofMinutes(10))   // 기본 TTL
+                .entryTtl(Duration.ofMinutes(30))
                 .computePrefixWith(CacheKeyPrefix.simple())
                 .serializeKeysWith(
                         RedisSerializationContext.SerializationPair.fromSerializer(new StringRedisSerializer())
@@ -25,7 +25,7 @@ public class RedisCacheConfig {
 
         HashMap<String, RedisCacheConfiguration> configMap = new HashMap<>();
         configMap.put("userAgeCache", RedisCacheConfiguration.defaultCacheConfig()
-                .entryTtl(Duration.ofMinutes(10)));  // 특정 캐시에 대한 TTL
+                .entryTtl(Duration.ofMinutes(30)));
 
         return RedisCacheManager
                 .RedisCacheManagerBuilder

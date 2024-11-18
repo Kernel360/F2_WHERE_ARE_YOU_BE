@@ -54,13 +54,13 @@ public class FreeSinglesMatchStrategy extends AbstractSinglesMatchStrategy {
                                                 MatchCommand.UpdateSetScore updateSetScoreCommand) {
         SinglesMatch singlesMatch = singlesMatchReader.getSinglesMatch(matchId);
 
-		if (isMatchWinnerDetermined(singlesMatch)) {
-			throw new AlreadyWinnerDeterminedException(singlesMatch.getId());
-		}
+        if (isMatchWinnerDetermined(singlesMatch)) {
+            throw new AlreadyWinnerDeterminedException(singlesMatch.getId());
+        }
 
-		if (singlesMatch.getSinglesSet(setNumber).getSetStatus() == SetStatus.FINISHED) {
-			throw new SetFinishedException(setNumber);
-		}
+        if (singlesMatch.getSinglesSet(setNumber).getSetStatus() == SetStatus.FINISHED) {
+            throw new SetFinishedException(setNumber);
+        }
 
         singlesMatch.getSinglesSet(setNumber)
                 .endSetScore(updateSetScoreCommand.getScore1(), updateSetScoreCommand.getScore2());
@@ -92,17 +92,10 @@ public class FreeSinglesMatchStrategy extends AbstractSinglesMatchStrategy {
         }
     }
 
-    // TODO: 리팩토링
     private void makeSetsInMatch(SinglesMatch singlesMatch) {
-        //단식 게임 세트를 3개 생성
-        SinglesSet set1 = new SinglesSet(singlesMatch, 1);
-        SinglesSet set2 = new SinglesSet(singlesMatch, 2);
-        SinglesSet set3 = new SinglesSet(singlesMatch, 3);
-
-        singlesMatch.addSet(set1);
-        singlesMatch.addSet(set2);
-        singlesMatch.addSet(set3);
-
+        for (int i = 1; i <= 3; i++) {
+            singlesMatch.addSet(new SinglesSet(singlesMatch, i));
+        }
         singlesMatchStore.store(singlesMatch);
     }
 

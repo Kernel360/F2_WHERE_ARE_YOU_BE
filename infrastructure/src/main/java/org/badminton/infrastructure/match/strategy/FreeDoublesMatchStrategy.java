@@ -93,16 +93,9 @@ public class FreeDoublesMatchStrategy extends AbstractDoublesMatchStrategy {
     }
 
     private void makeDoublesSetsInMatch(DoublesMatch doublesMatch) {
-        // 복식 게임 세트를 3개 생성
-        DoublesSet set1 = new DoublesSet(doublesMatch, 1);
-        DoublesSet set2 = new DoublesSet(doublesMatch, 2);
-        DoublesSet set3 = new DoublesSet(doublesMatch, 3);
-
-        // 복식 게임 결과를 생성
-        doublesMatch.addSet(set1);
-        doublesMatch.addSet(set2);
-        doublesMatch.addSet(set3);
-
+        for (int i = 1; i <= 3; i++) {
+            doublesMatch.addSet(new DoublesSet(doublesMatch, i));
+        }
         doublesMatchStore.store(doublesMatch);
     }
 
