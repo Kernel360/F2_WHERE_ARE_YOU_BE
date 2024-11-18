@@ -69,6 +69,11 @@ public class FreeBracketGenerationServiceImpl implements BracketGenerationServic
 		return matchStrategy.makeBracket(findLeague(leagueId), leagueParticipantList);
 	}
 
+	@Override
+	public void initMatch(MatchStrategy matchStrategy, Long matchId) {
+		matchStrategy.initMatch(matchId);
+	}
+
 	private League findLeague(Long leagueId) {
 		return leagueRepository.findById(leagueId)
 			.orElseThrow(() -> new LeagueNotExistException(leagueId));

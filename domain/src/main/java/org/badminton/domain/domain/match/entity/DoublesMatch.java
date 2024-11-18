@@ -114,4 +114,8 @@ public class DoublesMatch extends AbstractBaseTime {
 	public void finishMatch() {
 		this.matchStatus = MatchStatus.FINISHED;
 	}
+
+	public void initMatch() {
+		this.matchStatus = MatchStatus.IN_PROGRESS;
+	}
 }
