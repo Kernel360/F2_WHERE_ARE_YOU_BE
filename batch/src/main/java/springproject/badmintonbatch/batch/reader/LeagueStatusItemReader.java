@@ -24,10 +24,9 @@ public class LeagueStatusItemReader implements ItemReader<League> {
 	public League read() {
 		if (leaguesToProcess == null) {
 			LocalDateTime currentTime = LocalDateTime.now();
-			leaguesToProcess = leagueRepository.findAllByRecruitingClosedAtAfter(currentTime).stream()
-				.filter(league ->
-					league.getLeagueStatus().equals(LeagueStatus.RECRUITING)
-				).toList();
+			List<LeagueStatus> excludedStatus = List.of(LeagueStatus.CANCELED, LeagueStatus.FINISHED);
+			leaguesToProcess = leagueRepository.findAllByRecruitingClosedAtAfter(currentTime, excludedStatus).stream()
+				.toList();
 		}
 		if (currentIndex >= leaguesToProcess.size()) {
 			leaguesToProcess = null;

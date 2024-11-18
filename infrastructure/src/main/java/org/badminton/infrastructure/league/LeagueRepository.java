@@ -58,9 +58,11 @@ public interface LeagueRepository extends JpaRepository<League, Long> {
 	@Query("SELECT league FROM League league WHERE league.leagueAt < :yesterday")
 	List<League> findAllByLeagueAtBefore(@Param("yesterday") LocalDateTime yesterday);
 
-
-	@Query("SELECT league FROM League league WHERE league.recruitingClosedAt < :currentTime")
-	List<League> findAllByRecruitingClosedAtAfter(@Param("currentTime") LocalDateTime endOfDay);
+	@Query("SELECT league FROM League league WHERE league.recruitingClosedAt < :currentTime AND league.leagueStatus NOT IN (:excludedStatuses)")
+	List<League> findAllByRecruitingClosedAtAfter(
+		@Param("currentTime") LocalDateTime currentTime,
+		@Param("excludedStatuses") List<LeagueStatus> excludedStatuses
+	);
 
 	boolean existsByLeagueOwnerMemberTokenAndLeagueAtBetween(
 		String memberToken,

@@ -59,5 +59,10 @@ public class SinglesMatchReaderImpl implements SinglesMatchReader {
 	public SinglesMatch findFirstMatchByLeagueId(Long leagueId) {
 		return singlesMatchRepository.findFirstByLeagueLeagueIdOrderByIdAsc(leagueId);
 	}
-	
+
+	@Override
+	public boolean allMatchesFinishedForLeague(Long leagueId) {
+		return singlesMatchRepository.allMatchesFinishedForLeague(leagueId);
+	}
+
 }

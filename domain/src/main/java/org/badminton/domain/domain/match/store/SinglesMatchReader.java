@@ -18,4 +18,6 @@ public interface SinglesMatchReader {
 	int findMaxRoundByLeague(Long leagueId);
 
 	SinglesMatch findFirstMatchByLeagueId(Long leagueId);
+
+	boolean allMatchesFinishedForLeague(Long leagueId);
 }
