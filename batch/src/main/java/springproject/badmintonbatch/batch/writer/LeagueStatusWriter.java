@@ -8,15 +8,16 @@ import org.springframework.stereotype.Component;
 
 import lombok.RequiredArgsConstructor;
 
-@Component("leagueItemWriter")
+@Component("leagueStatusItemWriter")
 @RequiredArgsConstructor
-public class LeagueItemWriter implements ItemWriter<League> {
+public class LeagueStatusWriter implements ItemWriter<League> {
 
 	private final LeagueRepository leagueRepository;
 
 	@Override
-	public void write(Chunk<? extends League> chunk) throws Exception {
-		//상태를 변경하고 저장한다.
+	public void write(Chunk<? extends League> chunk) {
+
 		leagueRepository.saveAll(chunk);
+
 	}
 }

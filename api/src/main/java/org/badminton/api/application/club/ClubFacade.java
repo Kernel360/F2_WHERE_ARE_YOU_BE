@@ -3,7 +3,6 @@ package org.badminton.api.application.club;
 import java.util.List;
 import java.util.Map;
 
-import org.badminton.api.interfaces.auth.dto.CustomOAuth2Member;
 import org.badminton.domain.domain.club.ClubService;
 import org.badminton.domain.domain.club.command.ClubCreateCommand;
 import org.badminton.domain.domain.club.command.ClubUpdateCommand;
@@ -41,15 +40,13 @@ public class ClubFacade {
 	}
 
 	@Transactional
-	public ClubDetailsInfo readClub(String clubToken, CustomOAuth2Member clubMember) {
-		String memberToken = clubMember.getMemberToken();
+	public ClubDetailsInfo readClub(String clubToken) {
 		var club = clubService.readClub(clubToken);
 		Map<Member.MemberTier, Long> memberCountByTier = club.getClubMemberCountByTier();
 
-		boolean isClubMember = clubMemberService.checkIfMemberBelongsToClub(memberToken, clubToken);
 		int clubMembersCount = club.clubMembers().size();
 		clubStatisticsService.increaseVisitedClubCount(clubToken);
-		return ClubDetailsInfo.from(club, memberCountByTier, isClubMember,
+		return ClubDetailsInfo.from(club, memberCountByTier,
 			clubMembersCount);
 	}
 

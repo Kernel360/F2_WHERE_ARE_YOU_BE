@@ -18,12 +18,38 @@ public class BatchScheduler {
 
 	private final JobLauncher jobLauncher;
 	private final Job sendEmailJob;
+	private final Job leagueManagerJob;
+	private final Job leagueStatusUpdateJob;
+
+	@Scheduled(fixedRate = 60000)
+	public void updateLeagueStatus() {
+		log.info("Updating league status");
+		try {
+			jobLauncher.run(leagueStatusUpdateJob, new JobParametersBuilder()
+				.addLong("time", System.currentTimeMillis())
+				.toJobParameters());
+		} catch (Exception exception) {
+			log.error(exception.getMessage(), exception);
+		}
+	}
 
 	@Scheduled(fixedRate = 300000)
 	public void runDeleteMemberJob() {
 		log.info("Sending Email");
 		try {
 			jobLauncher.run(sendEmailJob, new JobParametersBuilder()
+				.addLong("time", System.currentTimeMillis())
+				.toJobParameters());
+		} catch (Exception exception) {
+			log.error(exception.getMessage(), exception);
+		}
+	}
+
+	@Scheduled(cron = "0 0 0,6,12,18 * * ?")
+	public void changeLeagueStatusJob() {
+		log.info("change league status");
+		try {
+			jobLauncher.run(leagueManagerJob, new JobParametersBuilder()
 				.addLong("time", System.currentTimeMillis())
 				.toJobParameters());
 		} catch (Exception exception) {

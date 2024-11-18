@@ -2,9 +2,14 @@ package org.badminton.api.interfaces.match.dto;
 
 import org.badminton.domain.domain.match.info.MatchTeamInfo;
 
+import io.swagger.v3.oas.annotations.media.Schema;
+
 public record MatchTeamResponse(
+	@Schema(description = "참가자1", requiredMode = Schema.RequiredMode.REQUIRED)
 	Participant participant1,
+	@Schema(description = "참가자2", requiredMode = Schema.RequiredMode.REQUIRED)
 	Participant participant2,
+	@Schema(description = "이긴 세트 수", requiredMode = Schema.RequiredMode.REQUIRED)
 	int team1WinSetCount
 ) {
 

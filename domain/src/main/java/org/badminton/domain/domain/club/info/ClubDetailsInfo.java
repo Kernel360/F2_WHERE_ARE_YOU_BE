@@ -15,13 +15,11 @@ public record ClubDetailsInfo(
 	Long silverClubMemberCount,
 	Long bronzeClubMemberCount,
 	int clubMemberCount,
-	LocalDateTime createdAt,
-	boolean isClubMember
+	LocalDateTime createdAt
 ) {
 
 	public static ClubDetailsInfo from(ClubSummaryInfo clubSummaryInfo,
-		Map<Member.MemberTier, Long> memberCountByTier,
-		boolean isClubMember, int clubMembersCount) {
+		Map<Member.MemberTier, Long> memberCountByTier, int clubMembersCount) {
 		return new ClubDetailsInfo(
 			clubSummaryInfo.clubId(),
 			clubSummaryInfo.clubToken(),
@@ -32,8 +30,7 @@ public record ClubDetailsInfo(
 			memberCountByTier.get(Member.MemberTier.SILVER),
 			memberCountByTier.get(Member.MemberTier.BRONZE),
 			clubMembersCount,
-			clubSummaryInfo.createdAt(),
-			isClubMember
+			clubSummaryInfo.createdAt()
 		);
 	}
 }
