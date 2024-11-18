@@ -47,8 +47,9 @@ public class ClubMemberFacade {
 		return clubApplyService.rejectApplying(clubApplyId);
 	}
 
-	public ClubMemberInfo updateClubMemberRole(ClubMemberRoleUpdateCommand command, Long clubMemberId) {
-		return clubMemberService.updateClubMemberRole(command, clubMemberId);
+	public ClubMemberInfo updateClubMemberRole(ClubMemberRoleUpdateCommand command, Long clubMemberId,
+		String clubToken) {
+		return clubMemberService.updateClubMemberRole(command, clubMemberId, clubToken);
 	}
 
 	public Map<ClubMember.ClubMemberRole, List<ClubMemberInfo>> findAllClubMembers(String clubToken) {
@@ -63,8 +64,8 @@ public class ClubMemberFacade {
 		return clubMemberService.banClubMember(command, clubMemberId);
 	}
 
-	public ClubMemberWithdrawInfo withDrawClubMember(Long clubMemberId) {
-		return clubMemberService.withDrawClubMember(clubMemberId);
+	public ClubMemberWithdrawInfo withdrawClubMember(Long clubMemberId, String clubToken) {
+		return clubMemberService.withdrawClubMember(clubMemberId, clubToken);
 	}
 
 	public ClubMemberInfo getClubMember(String memberToken, String clubToken) {

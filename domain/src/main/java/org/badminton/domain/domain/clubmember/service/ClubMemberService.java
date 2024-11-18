@@ -19,7 +19,7 @@ public interface ClubMemberService {
 
 	void clubMemberOwner(String memberToken, ClubCreateInfo clubInfo);
 
-	ClubMemberInfo updateClubMemberRole(ClubMemberRoleUpdateCommand command, Long clubMemberId);
+	ClubMemberInfo updateClubMemberRole(ClubMemberRoleUpdateCommand command, Long clubMemberId, String clubToken);
 
 	Map<ClubMember.ClubMemberRole, List<ClubMemberInfo>> findAllClubMembers(String clubToken);
 
@@ -31,7 +31,7 @@ public interface ClubMemberService {
 
 	ClubMemberBanRecordInfo banClubMember(ClubMemberBanCommand command, Long clubMemberId);
 
-	ClubMemberWithdrawInfo withDrawClubMember(Long clubMemberId);
+	ClubMemberWithdrawInfo withdrawClubMember(Long clubMemberId, String clubToken);
 
 	boolean checkIfMemberBelongsToClub(String memberToken, String clubToken);
 
