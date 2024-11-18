@@ -55,4 +55,9 @@ public class DoublesMatchReaderImpl implements DoublesMatchReader {
 	public DoublesMatch findFirstMatchByLeagueId(Long leagueId) {
 		return doublesMatchRepository.findFirstByLeagueLeagueIdOrderByIdAsc(leagueId);
 	}
+
+	@Override
+	public boolean allMatchesFinishedForLeague(Long leagueId) {
+		return doublesMatchRepository.allMatchesFinishedForLeague(leagueId);
+	}
 }
