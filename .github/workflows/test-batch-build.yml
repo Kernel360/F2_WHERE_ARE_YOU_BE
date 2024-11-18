@@ -1,13 +1,11 @@
-name: Build and Deploy API
+name: Build and Deploy Batch
 
 on:
   push:
     branches:
       - test
     paths:
-      - 'api/**'
-      - 'domain/**'
-      - 'infrastructure/**'
+      - 'batch/**'
 
 jobs:
   build:
@@ -23,42 +21,42 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
-      - name: Set environment values for API
+      - name: Set environment values for Batch
         run: |
-          cd ./api/src/main/resources
+          cd ./batch/src/main/resources
           touch ./.env
           echo "${{ secrets.ENV_TEST }}" > ./.env
 
-      - name: Generate logback.xml for API
+      - name: Generate logback.xml for Batch
         run: |
-          cd ./api/src/main/resources
+          cd ./batch/src/main/resources
           cat <<EOF > logback.xml
-          ${{ secrets.LOGBACK_API_TEST }}
+          ${{ secrets.LOGBACK_BATCH_TEST }}
           EOF
 
       - name: Set Gradle Wrapper Permissions
         run: chmod +x ./gradlew
 
-      - name: Build API
-        run: ./gradlew :api:assemble
+      - name: Build Batch
+        run: ./gradlew :batch:assemble
 
       - name: Install Docker Compose
         run: |
           sudo apt-get update
           sudo apt-get install -y docker-compose
 
-      - name: Build and push Docker image for API
+      - name: Build and push Docker image for Batch
         run: |
           echo "${{ secrets.DOCKERHUB_PASSWORD }}" | docker login -u ${{ secrets.DOCKERHUB_USERNAME }} --password-stdin
-          docker-compose build badminton-api
-          docker-compose push badminton-api
+          docker-compose build badminton-batch
+          docker-compose push badminton-batch
 
   deploy:
     runs-on: ubuntu-latest
     needs: build
 
     steps:
-      - name: Deploy API on server
+      - name: Deploy Batch on server
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.PUBLIC_DNS_TEST }}
@@ -68,8 +66,8 @@ jobs:
           script: |
             echo "Docker Hub에 로그인"
             echo "${{ secrets.DOCKERHUB_PASSWORD }}" | sudo docker login -u ${{ secrets.DOCKERHUB_USERNAME }} --password-stdin
-            echo "badminton-api 서비스 업데이트"
-            sudo docker-compose pull badminton-api
-            sudo docker-compose up -d badminton-api
+            echo "badminton-batch 서비스 업데이트"
+            sudo docker-compose pull badminton-batch
+            sudo docker-compose up -d badminton-batch
             echo "오래된 Docker 이미지 정리"
             sudo docker image prune -f
