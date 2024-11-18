@@ -1,6 +1,5 @@
 package org.badminton.infrastructure.match.strategy;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -9,6 +8,7 @@ import org.badminton.domain.common.enums.MatchResult;
 import org.badminton.domain.common.enums.SetStatus;
 import org.badminton.domain.common.exception.match.AlreadyWinnerDeterminedException;
 import org.badminton.domain.common.exception.match.LeagueParticipantsNotExistsException;
+import org.badminton.domain.common.exception.match.MatchDuplicateException;
 import org.badminton.domain.common.exception.match.SetFinishedException;
 import org.badminton.domain.domain.league.LeagueParticipantReader;
 import org.badminton.domain.domain.league.entity.League;
@@ -68,10 +68,13 @@ public class TournamentDoublesMatchStrategy extends AbstractDoublesMatchStrategy
 	}
 
 	@Override
-	public void checkDuplicateInitialBracket(LocalDateTime leagueAt, Long leagueId) {
+	public void checkDuplicateInitialBracket(Long leagueId) {
 		boolean isBracketEmpty = doublesMatchReader.checkIfBracketEmpty(leagueId);
-		if (!isBracketEmpty && LocalDateTime.now().isBefore(leagueAt)) {
+
+		if (!isBracketEmpty && doublesMatchReader.allMatchesNotStartedForLeague(leagueId)) {
 			doublesMatchStore.deleteDoublesBracket(leagueId);
+		} else if (!isBracketEmpty && !doublesMatchReader.allMatchesNotStartedForLeague(leagueId)) {
+			throw new MatchDuplicateException(leagueId);
 		}
 	}
 

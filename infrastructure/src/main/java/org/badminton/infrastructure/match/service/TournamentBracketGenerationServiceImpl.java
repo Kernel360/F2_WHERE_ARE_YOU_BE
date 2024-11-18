@@ -63,8 +63,7 @@ public class TournamentBracketGenerationServiceImpl implements BracketGeneration
 	@Override
 	@Transactional
 	public BracketInfo makeBracket(MatchStrategy matchStrategy, Long leagueId) {
-		League league = findLeague(leagueId);
-		matchStrategy.checkDuplicateInitialBracket(league.getLeagueAt(), leagueId);
+		matchStrategy.checkDuplicateInitialBracket(leagueId);
 
 		List<LeagueParticipant> leagueParticipantList = findLeagueParticipantList(leagueId);
 

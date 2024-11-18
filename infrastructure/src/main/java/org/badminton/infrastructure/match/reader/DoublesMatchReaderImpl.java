@@ -60,4 +60,9 @@ public class DoublesMatchReaderImpl implements DoublesMatchReader {
 	public boolean allMatchesFinishedForLeague(Long leagueId) {
 		return doublesMatchRepository.allMatchesFinishedForLeague(leagueId);
 	}
+
+	@Override
+	public boolean allMatchesNotStartedForLeague(Long leagueId) {
+		return doublesMatchRepository.allMatchesNotStartedForLeague(leagueId);
+	}
 }

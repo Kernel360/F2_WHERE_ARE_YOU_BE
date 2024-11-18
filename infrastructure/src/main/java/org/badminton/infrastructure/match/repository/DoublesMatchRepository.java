@@ -20,5 +20,8 @@ public interface DoublesMatchRepository extends JpaRepository<DoublesMatch, Long
 	@Query("SELECT COUNT(m) = 0 FROM DoublesMatch m WHERE m.league.leagueId = :leagueId AND m.matchStatus != 'FINISHED'")
 	boolean allMatchesFinishedForLeague(@Param("leagueId") Long leagueId);
 
+	@Query("SELECT COUNT(m) = 0 FROM DoublesMatch m WHERE m.league.leagueId = :leagueId AND m.matchStatus != 'NOT_STARTED'")
+	boolean allMatchesNotStartedForLeague(@Param("leagueId") Long leagueId);
+
 }
 

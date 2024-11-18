@@ -65,4 +65,9 @@ public class SinglesMatchReaderImpl implements SinglesMatchReader {
 		return singlesMatchRepository.allMatchesFinishedForLeague(leagueId);
 	}
 
+	@Override
+	public boolean allMatchesNotStartedForLeague(Long leagueId) {
+		return singlesMatchRepository.allMatchesNotStartedForLeague(leagueId);
+	}
+
 }

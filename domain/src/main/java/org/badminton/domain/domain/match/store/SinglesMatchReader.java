@@ -20,4 +20,6 @@ public interface SinglesMatchReader {
 	SinglesMatch findFirstMatchByLeagueId(Long leagueId);
 
 	boolean allMatchesFinishedForLeague(Long leagueId);
+
+	boolean allMatchesNotStartedForLeague(Long leagueId);
 }
