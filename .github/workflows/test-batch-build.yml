@@ -39,12 +39,11 @@ jobs:
 
       - name: Build Batch
         run: ./gradlew :batch:assemble
-
+        
       - name: Install Docker Compose
         run: |
           sudo apt-get update
           sudo apt-get install -y docker-compose
-
       - name: Build and push Docker image for Batch
         run: |
           echo "${{ secrets.DOCKERHUB_PASSWORD }}" | docker login -u ${{ secrets.DOCKERHUB_USERNAME }} --password-stdin
