@@ -2,6 +2,8 @@ name: Build and Deploy API
 
 on:
   push:
+    branches:
+      - test
     paths:
       - 'api/**'
       - 'domain/**'
