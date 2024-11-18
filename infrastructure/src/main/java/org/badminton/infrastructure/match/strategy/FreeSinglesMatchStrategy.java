@@ -1,6 +1,5 @@
 package org.badminton.infrastructure.match.strategy;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -8,6 +7,7 @@ import java.util.List;
 import org.badminton.domain.common.enums.MatchResult;
 import org.badminton.domain.common.enums.SetStatus;
 import org.badminton.domain.common.exception.match.AlreadyWinnerDeterminedException;
+import org.badminton.domain.common.exception.match.MatchDuplicateException;
 import org.badminton.domain.common.exception.match.SetFinishedException;
 import org.badminton.domain.domain.league.entity.League;
 import org.badminton.domain.domain.league.entity.LeagueParticipant;
@@ -85,12 +85,13 @@ public class FreeSinglesMatchStrategy extends AbstractSinglesMatchStrategy {
 	}
 
 	@Override
-	public void checkDuplicateInitialBracket(LocalDateTime leagueAt, Long leagueId) {
+	public void checkDuplicateInitialBracket(Long leagueId) {
 		boolean isBracketEmpty = singlesMatchReader.checkIfBracketEmpty(leagueId);
-		if (!isBracketEmpty && LocalDateTime.now().isBefore(leagueAt)) {
+
+		if (!isBracketEmpty && singlesMatchReader.allMatchesNotStartedForLeague(leagueId)) {
 			singlesMatchStore.deleteSinglesBracket(leagueId);
-		} else if (!isBracketEmpty && LocalDateTime.now().isAfter(leagueAt)) {
-			// TODO: 경기 시작 시간이 지났는데, 이미 대진표가 있는데 또 생성하고 싶다면? -> 막을지, 안막을지
+		} else if (!isBracketEmpty && !singlesMatchReader.allMatchesNotStartedForLeague(leagueId)) {
+			throw new MatchDuplicateException(leagueId);
 		}
 	}
 

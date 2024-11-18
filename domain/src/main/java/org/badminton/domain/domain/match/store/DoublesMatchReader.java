@@ -19,4 +19,6 @@ public interface DoublesMatchReader {
 
 	boolean allMatchesFinishedForLeague(Long leagueId);
 
+	boolean allMatchesNotStartedForLeague(Long leagueId);
+
 }
