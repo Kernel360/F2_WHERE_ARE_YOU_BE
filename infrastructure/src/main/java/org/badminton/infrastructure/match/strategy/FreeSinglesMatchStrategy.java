@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
+import org.badminton.domain.common.enums.MatchResult;
 import org.badminton.domain.common.enums.SetStatus;
 import org.badminton.domain.common.exception.match.AlreadyWinnerDeterminedException;
 import org.badminton.domain.common.exception.match.SetFinishedException;
@@ -25,52 +26,54 @@ import org.springframework.stereotype.Component;
 @Component
 public class FreeSinglesMatchStrategy extends AbstractSinglesMatchStrategy {
 
-	private final SinglesMatchReader singlesMatchReader;
-	private final SinglesMatchStore singlesMatchStore;
+    private final SinglesMatchReader singlesMatchReader;
+    private final SinglesMatchStore singlesMatchStore;
 
-	public FreeSinglesMatchStrategy(SinglesMatchReader singlesMatchReader, SinglesMatchStore singlesMatchStore) {
-		super(singlesMatchReader);
-		this.singlesMatchReader = singlesMatchReader;
-		this.singlesMatchStore = singlesMatchStore;
-	}
+    public FreeSinglesMatchStrategy(SinglesMatchReader singlesMatchReader, SinglesMatchStore singlesMatchStore) {
+        super(singlesMatchReader);
+        this.singlesMatchReader = singlesMatchReader;
+        this.singlesMatchStore = singlesMatchStore;
+    }
 
-	private static boolean isMatchWinnerDetermined(SinglesMatch singlesMatch) {
-		return singlesMatch.getPlayer1MatchResult() == MatchResult.WIN
-			|| singlesMatch.getPlayer2MatchResult() == MatchResult.WIN;
-	}
+    private static boolean isMatchWinnerDetermined(SinglesMatch singlesMatch) {
+        return singlesMatch.getPlayer1MatchResult() == MatchResult.WIN
+                || singlesMatch.getPlayer2MatchResult() == MatchResult.WIN;
+    }
 
-	@Override
-	public BracketInfo makeBracket(League league,
-		List<LeagueParticipant> leagueParticipantList) {
-		Collections.shuffle(leagueParticipantList);
-		List<SinglesMatch> singlesMatches = makeSinglesMatches(leagueParticipantList, league, 1);
-		singlesMatches.forEach(this::makeSetsInMatch);
-		return BracketInfo.fromSingles(1, singlesMatches);
-	}
+    @Override
+    public BracketInfo makeBracket(League league,
+                                   List<LeagueParticipant> leagueParticipantList) {
+        Collections.shuffle(leagueParticipantList);
+        List<SinglesMatch> singlesMatches = makeSinglesMatches(leagueParticipantList, league, 1);
+        singlesMatches.forEach(this::makeSetsInMatch);
+        return BracketInfo.fromSingles(1, singlesMatches);
+    }
 
     @Override
     public SetInfo.Main registerSetScoreInMatch(Long matchId, int setNumber,
                                                 MatchCommand.UpdateSetScore updateSetScoreCommand) {
         SinglesMatch singlesMatch = singlesMatchReader.getSinglesMatch(matchId);
 
-		if (isMatchWinnerDetermined(singlesMatch))
+		if (isMatchWinnerDetermined(singlesMatch)) {
 			throw new AlreadyWinnerDeterminedException(singlesMatch.getId());
-
-		if (singlesMatch.getSinglesSet(setNumber).getSetStatus() == SetStatus.FINISHED)
-			throw new SetFinishedException(setNumber);
-
-		singlesMatch.getSinglesSet(setNumber)
-			.endSetScore(updateSetScoreCommand.getScore1(), updateSetScoreCommand.getScore2());
-
-		if (updateSetScoreCommand.getScore1() > updateSetScoreCommand.getScore2()) {
-			singlesMatch.player1WinSet();
-		} else {
-			singlesMatch.player2WinSet();
 		}
 
-		singlesMatchStore.store(singlesMatch);
-		return SetInfo.fromSinglesSet(matchId, setNumber, singlesMatch.getSinglesSets().get(setNumber - 1));
-	}
+		if (singlesMatch.getSinglesSet(setNumber).getSetStatus() == SetStatus.FINISHED) {
+			throw new SetFinishedException(setNumber);
+		}
+
+        singlesMatch.getSinglesSet(setNumber)
+                .endSetScore(updateSetScoreCommand.getScore1(), updateSetScoreCommand.getScore2());
+
+        if (updateSetScoreCommand.getScore1() > updateSetScoreCommand.getScore2()) {
+            singlesMatch.player1WinSet();
+        } else {
+            singlesMatch.player2WinSet();
+        }
+
+        singlesMatchStore.store(singlesMatch);
+        return SetInfo.fromSinglesSet(matchId, setNumber, singlesMatch.getSinglesSets().get(setNumber - 1));
+    }
 
     @Override
     public Main retrieveSet(Long matchId, int setNumber) {
@@ -89,31 +92,31 @@ public class FreeSinglesMatchStrategy extends AbstractSinglesMatchStrategy {
         }
     }
 
-	// TODO: 리팩토링
-	private void makeSetsInMatch(SinglesMatch singlesMatch) {
-		//단식 게임 세트를 3개 생성
-		SinglesSet set1 = new SinglesSet(singlesMatch, 1);
-		SinglesSet set2 = new SinglesSet(singlesMatch, 2);
-		SinglesSet set3 = new SinglesSet(singlesMatch, 3);
+    // TODO: 리팩토링
+    private void makeSetsInMatch(SinglesMatch singlesMatch) {
+        //단식 게임 세트를 3개 생성
+        SinglesSet set1 = new SinglesSet(singlesMatch, 1);
+        SinglesSet set2 = new SinglesSet(singlesMatch, 2);
+        SinglesSet set3 = new SinglesSet(singlesMatch, 3);
 
-		singlesMatch.addSet(set1);
-		singlesMatch.addSet(set2);
-		singlesMatch.addSet(set3);
+        singlesMatch.addSet(set1);
+        singlesMatch.addSet(set2);
+        singlesMatch.addSet(set3);
 
-		singlesMatchStore.store(singlesMatch);
-	}
+        singlesMatchStore.store(singlesMatch);
+    }
 
-	private List<SinglesMatch> makeSinglesMatches(List<LeagueParticipant> leagueParticipantList,
-		League league, int roundNumber) {
+    private List<SinglesMatch> makeSinglesMatches(List<LeagueParticipant> leagueParticipantList,
+                                                  League league, int roundNumber) {
 
-		List<SinglesMatch> singlesMatches = new ArrayList<>();
-		for (int i = 0; i < leagueParticipantList.size() - 1; i += 2) {
-			SinglesMatch singlesMatch = new SinglesMatch(league, leagueParticipantList.get(i),
-				leagueParticipantList.get(i + 1), roundNumber);
-			singlesMatches.add(singlesMatch);
-			singlesMatchStore.store(singlesMatch);
-		}
-		return singlesMatches;
-	}
+        List<SinglesMatch> singlesMatches = new ArrayList<>();
+        for (int i = 0; i < leagueParticipantList.size() - 1; i += 2) {
+            SinglesMatch singlesMatch = new SinglesMatch(league, leagueParticipantList.get(i),
+                    leagueParticipantList.get(i + 1), roundNumber);
+            singlesMatches.add(singlesMatch);
+            singlesMatchStore.store(singlesMatch);
+        }
+        return singlesMatches;
+    }
 }
 
