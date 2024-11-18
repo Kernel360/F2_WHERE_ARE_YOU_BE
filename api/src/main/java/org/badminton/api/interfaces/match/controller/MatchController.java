@@ -12,6 +12,7 @@ import org.badminton.api.interfaces.match.dto.MatchSetResponse;
 import org.badminton.api.interfaces.match.dto.SetScoreResponse;
 import org.badminton.api.interfaces.match.dto.SetScoreUpdateRequest;
 import org.badminton.api.interfaces.match.dto.SetScoreUpdateResponse;
+import org.badminton.api.interfaces.match.dto.StartFirstSetScoreCommand;
 import org.badminton.domain.domain.match.command.MatchCommand.UpdateSetScore;
 import org.badminton.domain.domain.match.info.BracketInfo;
 import org.badminton.domain.domain.match.info.MatchInfo;
@@ -149,5 +150,25 @@ public class MatchController {
 		SetInfo.Main updateSetScoreInfo = matchOperationFacade.registerSetScoreInMatch(leagueId, matchId, setNumber,
 			updateSetScoreCommand, memberToken);
 		return CommonResponse.success(SetScoreUpdateResponse.fromUpdateSetScoreInfo(updateSetScoreInfo));
+	}
+
+	@Operation(summary = "매치 시작  - 첫 세트가 IN_PROGRESS 가 됨",
+		description = """
+						
+			첫 세트가 IN_PROGRESS 로 변경됩니다.
+						
+			""",
+		tags = {"Match"})
+	@PostMapping("/{matchId}/sets/init")
+	public CommonResponse<String> startFirstSet(
+		@PathVariable String clubToken,
+		@PathVariable Long leagueId,
+		@PathVariable Long matchId
+	) {
+		StartFirstSetScoreCommand startFirstScoreCommand =
+			new StartFirstSetScoreCommand(clubToken, leagueId, matchId);
+		MatchOperationHandler matchOperationFacade = matchFacade.getMatchOperationHandler(leagueId);
+		matchOperationFacade.registerFirstSetScoreInMatch(startFirstScoreCommand);
+		return CommonResponse.success("OK");
 	}
 }

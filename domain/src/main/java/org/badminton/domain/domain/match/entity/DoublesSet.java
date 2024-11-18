@@ -65,4 +65,7 @@ public class DoublesSet extends AbstractBaseTime {
 		this.setStatus = SetStatus.FINISHED;
 	}
 
+	public void initMatch() {
+		this.setStatus = SetStatus.IN_PROGRESS;
+	}
 }
