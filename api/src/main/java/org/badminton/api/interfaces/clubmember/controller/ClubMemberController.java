@@ -212,7 +212,7 @@ public class ClubMemberController {
 		@PathVariable String clubToken) {
 		String memberToken = member.getMemberToken();
 		ClubMemberInfo clubMemberInfo = clubMemberFacade.getClubMember(memberToken, clubToken);
-		ClubMemberWithdrawInfo clubMemberWithdrawInfo = clubMemberFacade.withDrawClubMember(
+		ClubMemberWithdrawInfo clubMemberWithdrawInfo = clubMemberFacade.withdrawClubMember(
 			clubMemberInfo.clubMemberId(), clubToken);
 		ClubMemberWithdrawResponse clubMemberWithdrawResponse = clubMemberDtoMapper.of(clubMemberWithdrawInfo);
 

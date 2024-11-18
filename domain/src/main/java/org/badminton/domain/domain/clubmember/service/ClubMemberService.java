@@ -31,7 +31,7 @@ public interface ClubMemberService {
 
 	ClubMemberBanRecordInfo banClubMember(ClubMemberBanCommand command, Long clubMemberId);
 
-	ClubMemberWithdrawInfo withDrawClubMember(Long clubMemberId, String clubToken);
+	ClubMemberWithdrawInfo withdrawClubMember(Long clubMemberId, String clubToken);
 
 	boolean checkIfMemberBelongsToClub(String memberToken, String clubToken);
 

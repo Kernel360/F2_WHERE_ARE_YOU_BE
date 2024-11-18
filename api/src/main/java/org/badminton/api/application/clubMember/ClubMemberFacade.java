@@ -64,8 +64,8 @@ public class ClubMemberFacade {
 		return clubMemberService.banClubMember(command, clubMemberId);
 	}
 
-	public ClubMemberWithdrawInfo withDrawClubMember(Long clubMemberId, String clubToken) {
-		return clubMemberService.withDrawClubMember(clubMemberId, clubToken);
+	public ClubMemberWithdrawInfo withdrawClubMember(Long clubMemberId, String clubToken) {
+		return clubMemberService.withdrawClubMember(clubMemberId, clubToken);
 	}
 
 	public ClubMemberInfo getClubMember(String memberToken, String clubToken) {
