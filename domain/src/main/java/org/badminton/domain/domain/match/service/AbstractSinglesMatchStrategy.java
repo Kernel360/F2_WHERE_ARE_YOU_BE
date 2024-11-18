@@ -25,6 +25,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public abstract class AbstractSinglesMatchStrategy implements MatchStrategy {
 
+	public static final int FIRST_ROUND_NUMBER = 1;
 	private final SinglesMatchReader singlesMatchReader;
 
 	@Override
@@ -33,7 +34,7 @@ public abstract class AbstractSinglesMatchStrategy implements MatchStrategy {
 	@Override
 	public BracketInfo retrieveBracketInLeague(Long leagueId) {
 		List<SinglesMatch> bracketInLeague = singlesMatchReader.getSinglesBracket(leagueId);
-		return BracketInfo.fromSingles(1, bracketInLeague);
+		return BracketInfo.fromSingles(FIRST_ROUND_NUMBER, bracketInLeague);
 	}
 
 	@Override
