@@ -20,22 +20,22 @@ public class SetInfo {
         private final MatchType matchType;
     }
 
-    public static Main fromSinglesSet(Long matchId, int setIndex,
+    public static Main fromSinglesSet(Long matchId, int setNumber,
                                       SinglesSet singlesSet) {
         return Main.builder()
                 .matchId(matchId)
-                .setNumber(setIndex)
+                .setNumber(setNumber)
                 .score1(singlesSet.getPlayer1Score())
                 .score2(singlesSet.getPlayer2Score())
                 .matchType(MatchType.SINGLES)
                 .build();
     }
 
-    public static Main fromDoublesSet(Long matchId, int setIndex,
+    public static Main fromDoublesSet(Long matchId, int setNumber,
                                       DoublesSet doublesSet) {
         return Main.builder()
                 .matchId(matchId)
-                .setNumber(setIndex)
+                .setNumber(setNumber)
                 .score1(doublesSet.getTeam1Score())
                 .score2(doublesSet.getTeam2Score())
                 .matchType(MatchType.DOUBLES)

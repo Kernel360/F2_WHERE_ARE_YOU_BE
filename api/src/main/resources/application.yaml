@@ -1,4 +1,12 @@
 spring:
+  session:
+    store-type: redis
+  cache:
+    type: redis
+  data:
+    redis:
+      host: localhost
+      port: 6379
   profiles:
     active: ${ACTIVE_PROFILE}
   application:
@@ -122,3 +130,4 @@ logging:
   level:
     org.springframework.orm.jpa: DEBUG
     org.springframework.transaction: DEBUG
+    org.springframework.data.redis: DEBUG
