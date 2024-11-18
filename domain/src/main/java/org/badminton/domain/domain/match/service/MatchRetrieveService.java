@@ -1,7 +1,6 @@
 package org.badminton.domain.domain.match.service;
 
 import java.util.List;
-
 import org.badminton.domain.domain.match.info.BracketInfo;
 import org.badminton.domain.domain.match.info.LeagueSetsScoreInProgressInfo;
 import org.badminton.domain.domain.match.info.MatchInfo;
@@ -10,17 +9,19 @@ import org.badminton.domain.domain.match.info.SetInfo;
 
 public interface MatchRetrieveService {
 
-	MatchStrategy makeSinglesOrDoublesMatchStrategy(Long leagueId);
+    MatchStrategy makeSinglesOrDoublesMatchStrategy(Long leagueId);
 
-	BracketInfo retrieveBracket(MatchStrategy matchStrategy, Long leagueId);
+    BracketInfo retrieveBracket(MatchStrategy matchStrategy, Long leagueId);
 
-	List<SetInfo.Main> retrieveAllSetsScoreInBracket(MatchStrategy matchStrategy, Long leagueId);
+    SetInfo.Main retrieveSet(MatchStrategy matchStrategy, Long matchId, int setNumber);
 
-	MatchInfo.SetScoreDetails retrieveAllSetsScoreInMatch(MatchStrategy matchStrategy, Long matchId);
+    List<SetInfo.Main> retrieveAllSetsScoreInBracket(MatchStrategy matchStrategy, Long leagueId);
 
-	boolean isMatchInLeague(MatchStrategy matchStrategy, Long leagueId);
+    MatchInfo.SetScoreDetails retrieveAllSetsScoreInMatch(MatchStrategy matchStrategy, Long matchId);
 
-	List<LeagueSetsScoreInProgressInfo> retrieveLeagueMatchInProgress(MatchStrategy matchStrategy, Long leagueId);
+    boolean isMatchInLeague(MatchStrategy matchStrategy, Long leagueId);
 
-	MatchSetInfo retrieveMatchSet(MatchStrategy matchStrategy, Long matchId, int setNumber);
+    List<LeagueSetsScoreInProgressInfo> retrieveLeagueMatchInProgress(MatchStrategy matchStrategy, Long leagueId);
+
+    MatchSetInfo retrieveMatchSet(MatchStrategy matchStrategy, Long matchId, int setNumber);
 }
