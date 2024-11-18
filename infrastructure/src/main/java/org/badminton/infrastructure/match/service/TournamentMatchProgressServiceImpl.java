@@ -43,7 +43,7 @@ public class TournamentMatchProgressServiceImpl implements MatchProgressService 
 	@Override
 	public Main registerSetScoreInMatch(MatchStrategy matchStrategy, Long leagueId, Long matchId, int setIndex,
 		UpdateSetScore updateSetScoreCommand, String memberToken) {
-		if (leagueParticipantReader.isParticipant(memberToken, leagueId))
+		if (!leagueParticipantReader.isParticipant(memberToken, leagueId))
 			throw new LeagueParticipationNotExistException(leagueId, memberToken);
 
 		return matchStrategy.registerSetScoreInMatch(matchId, setIndex, updateSetScoreCommand);
