@@ -2,6 +2,8 @@ name: Build and Deploy Batch
 
 on:
   push:
+    branches:
+      - release
     paths:
       - 'batch/**'
 
