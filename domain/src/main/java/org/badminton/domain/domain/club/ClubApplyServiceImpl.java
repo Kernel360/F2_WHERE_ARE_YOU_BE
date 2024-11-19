@@ -33,8 +33,6 @@ public class ClubApplyServiceImpl implements ClubApplyService {
 	public ApproveApplyInfo approveApplying(Long clubApplyId) {
 
 		ClubApply clubApply = clubApplyReader.getClubApply(clubApplyId);
-		clubApply.approvedClubMember();
-		clubApplyStore.store(clubApply);
 
 		Club club = clubApply.getClub();
 		Member member = clubApply.getMember();
@@ -44,6 +42,8 @@ public class ClubApplyServiceImpl implements ClubApplyService {
 		if (isClubMember) {
 			throw new MemberAlreadyExistInClubException(member.getMemberToken(), club.getClubToken());
 		}
+		clubApply.approveClubMember();
+		clubApplyStore.store(clubApply);
 
 		clubMemberStore.store(clubMember);
 
@@ -53,7 +53,7 @@ public class ClubApplyServiceImpl implements ClubApplyService {
 	@Override
 	public RejectApplyInfo rejectApplying(Long clubApplyId) {
 		ClubApply clubApply = clubApplyReader.getClubApply(clubApplyId);
-		clubApply.rejectedClubMember();
+		clubApply.rejectClubMember();
 		clubApplyStore.store(clubApply);
 
 		return RejectApplyInfo.fromClubApply(clubApply);
