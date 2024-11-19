@@ -11,6 +11,7 @@ import org.badminton.domain.common.exception.match.LeagueParticipantsNotExistsEx
 import org.badminton.domain.common.exception.match.MatchDuplicateException;
 import org.badminton.domain.common.exception.match.SetFinishedException;
 import org.badminton.domain.domain.league.LeagueParticipantReader;
+import org.badminton.domain.domain.league.LeagueReader;
 import org.badminton.domain.domain.league.entity.League;
 import org.badminton.domain.domain.league.entity.LeagueParticipant;
 import org.badminton.domain.domain.league.vo.Team;
@@ -38,13 +39,15 @@ public class TournamentDoublesMatchStrategy extends AbstractDoublesMatchStrategy
 	private final DoublesMatchReader doublesMatchReader;
 	private final DoublesMatchStore doublesMatchStore;
 	private final LeagueParticipantReader leagueParticipantReader;
+	private final LeagueReader leagueReader;
 
 	public TournamentDoublesMatchStrategy(DoublesMatchReader doublesMatchReader, DoublesMatchStore doublesMatchStore,
-		LeagueParticipantReader leagueParticipantReader) {
+		LeagueParticipantReader leagueParticipantReader, LeagueReader leagueReader) {
 		super(doublesMatchReader);
 		this.doublesMatchReader = doublesMatchReader;
 		this.doublesMatchStore = doublesMatchStore;
 		this.leagueParticipantReader = leagueParticipantReader;
+		this.leagueReader = leagueReader;
 	}
 
 	private static boolean isMatchWinnerDetermined(DoublesMatch doublesMatch) {
@@ -100,7 +103,15 @@ public class TournamentDoublesMatchStrategy extends AbstractDoublesMatchStrategy
 			doublesMatchStore.store(doublesMatch);
 			updateNextRoundMatch(doublesMatch);
 		}
+		if (isAllMatchFinished(doublesMatch))
+			leagueReader.readLeagueById(doublesMatch.getLeague().getLeagueId()).finishLeague();
+
 		return SetInfo.fromDoublesSet(matchId, setNumber, doublesMatch.getDoublesSets().get(setNumber - 1));
+	}
+
+	private boolean isAllMatchFinished(DoublesMatch doublesMatch) {
+		return doublesMatchReader.allMatchesFinishedForLeague(
+			doublesMatch.getLeague().getLeagueId());
 	}
 
 	@Override

@@ -3,9 +3,9 @@ package org.badminton.infrastructure.match.service;
 import java.util.List;
 
 import org.badminton.domain.common.exception.league.InvalidPlayerCountException;
-import org.badminton.domain.common.exception.league.LeagueNotExistException;
 import org.badminton.domain.common.exception.match.LeagueRecruitingMustBeCompletedWhenBracketGenerationException;
 import org.badminton.domain.domain.league.LeagueParticipantReader;
+import org.badminton.domain.domain.league.LeagueReader;
 import org.badminton.domain.domain.league.entity.League;
 import org.badminton.domain.domain.league.entity.LeagueParticipant;
 import org.badminton.domain.domain.league.enums.LeagueStatus;
@@ -16,7 +16,6 @@ import org.badminton.domain.domain.match.service.BracketGenerationService;
 import org.badminton.domain.domain.match.service.MatchStrategy;
 import org.badminton.domain.domain.match.store.DoublesMatchReader;
 import org.badminton.domain.domain.match.store.SinglesMatchReader;
-import org.badminton.infrastructure.league.LeagueRepository;
 import org.badminton.infrastructure.match.strategy.TournamentDoublesMatchStrategy;
 import org.badminton.infrastructure.match.strategy.TournamentSinglesMatchStrategy;
 import org.springframework.stereotype.Service;
@@ -28,7 +27,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class TournamentBracketGenerationServiceImpl implements BracketGenerationService {
 
-	private final LeagueRepository leagueRepository;
+	private final LeagueReader leagueReader;
 	private final SinglesMatchReader singlesMatchReader;
 	private final DoublesMatchReader doublesMatchReader;
 	private final SinglesMatchStore singlesMatchStore;
@@ -54,9 +53,11 @@ public class TournamentBracketGenerationServiceImpl implements BracketGeneration
 		League league = findLeague(leagueId);
 		return switch (league.getMatchType()) {
 			case SINGLES ->
-				new TournamentSinglesMatchStrategy(singlesMatchReader, singlesMatchStore, leagueParticipantReader);
+				new TournamentSinglesMatchStrategy(singlesMatchReader, singlesMatchStore, leagueParticipantReader,
+					leagueReader);
 			case DOUBLES ->
-				new TournamentDoublesMatchStrategy(doublesMatchReader, doublesMatchStore, leagueParticipantReader);
+				new TournamentDoublesMatchStrategy(doublesMatchReader, doublesMatchStore, leagueParticipantReader,
+					leagueReader);
 		};
 	}
 
@@ -76,8 +77,7 @@ public class TournamentBracketGenerationServiceImpl implements BracketGeneration
 	}
 
 	private League findLeague(Long leagueId) {
-		return leagueRepository.findById(leagueId)
-			.orElseThrow(() -> new LeagueNotExistException(leagueId));
+		return leagueReader.readLeagueById(leagueId);
 	}
 
 	private List<LeagueParticipant> findLeagueParticipantList(Long leagueId) {

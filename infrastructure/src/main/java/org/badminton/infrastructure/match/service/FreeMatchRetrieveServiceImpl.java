@@ -16,37 +16,37 @@ import org.springframework.stereotype.Service;
 @Service
 public class FreeMatchRetrieveServiceImpl extends AbstractMatchRetrieveService {
 
-    private final LeagueReader leagueReader;
-    private final SinglesMatchReader singlesMatchReader;
-    private final DoublesMatchReader doublesMatchReader;
-    private final SinglesMatchStore singlesMatchStore;
-    private final DoublesMatchStore doublesMatchStore;
+	private final LeagueReader leagueReader;
+	private final SinglesMatchReader singlesMatchReader;
+	private final DoublesMatchReader doublesMatchReader;
+	private final SinglesMatchStore singlesMatchStore;
+	private final DoublesMatchStore doublesMatchStore;
 
-    public FreeMatchRetrieveServiceImpl(LeagueReader leagueReader, SinglesMatchReader singlesMatchReader,
-                                        DoublesMatchReader doublesMatchReader,
-                                        SinglesMatchStore singlesMatchStore, DoublesMatchStore doublesMatchStore) {
-        this.singlesMatchReader = singlesMatchReader;
-        this.doublesMatchReader = doublesMatchReader;
-        this.singlesMatchStore = singlesMatchStore;
-        this.doublesMatchStore = doublesMatchStore;
-        this.leagueReader = leagueReader;
-    }
+	public FreeMatchRetrieveServiceImpl(LeagueReader leagueReader, SinglesMatchReader singlesMatchReader,
+		DoublesMatchReader doublesMatchReader,
+		SinglesMatchStore singlesMatchStore, DoublesMatchStore doublesMatchStore) {
+		this.singlesMatchReader = singlesMatchReader;
+		this.doublesMatchReader = doublesMatchReader;
+		this.singlesMatchStore = singlesMatchStore;
+		this.doublesMatchStore = doublesMatchStore;
+		this.leagueReader = leagueReader;
+	}
 
-    @Override
-    public MatchStrategy makeSinglesOrDoublesMatchStrategy(Long leagueId) {
-        League league = findLeague(leagueId);
-        return switch (league.getMatchType()) {
-            case SINGLES -> new FreeSinglesMatchStrategy(singlesMatchReader, singlesMatchStore);
-            case DOUBLES -> new FreeDoublesMatchStrategy(doublesMatchReader, doublesMatchStore);
-        };
-    }
+	@Override
+	public MatchStrategy makeSinglesOrDoublesMatchStrategy(Long leagueId) {
+		League league = findLeague(leagueId);
+		return switch (league.getMatchType()) {
+			case SINGLES -> new FreeSinglesMatchStrategy(singlesMatchReader, singlesMatchStore, leagueReader);
+			case DOUBLES -> new FreeDoublesMatchStrategy(doublesMatchReader, doublesMatchStore, leagueReader);
+		};
+	}
 
-    @Override
-    public Main retrieveSet(MatchStrategy matchStrategy, Long matchId, int setNumber) {
-        return matchStrategy.retrieveSet(matchId, setNumber);
-    }
+	@Override
+	public Main retrieveSet(MatchStrategy matchStrategy, Long matchId, int setNumber) {
+		return matchStrategy.retrieveSet(matchId, setNumber);
+	}
 
-    private League findLeague(Long leagueId) {
-        return leagueReader.readLeagueById(leagueId);
-    }
+	private League findLeague(Long leagueId) {
+		return leagueReader.readLeagueById(leagueId);
+	}
 }

@@ -5,10 +5,12 @@ import java.util.Collections;
 import java.util.List;
 
 import org.badminton.domain.common.enums.MatchResult;
+import org.badminton.domain.common.enums.MatchStatus;
 import org.badminton.domain.common.enums.SetStatus;
 import org.badminton.domain.common.exception.match.AlreadyWinnerDeterminedException;
 import org.badminton.domain.common.exception.match.MatchDuplicateException;
 import org.badminton.domain.common.exception.match.SetFinishedException;
+import org.badminton.domain.domain.league.LeagueReader;
 import org.badminton.domain.domain.league.entity.League;
 import org.badminton.domain.domain.league.entity.LeagueParticipant;
 import org.badminton.domain.domain.match.command.MatchCommand;
@@ -31,16 +33,23 @@ public class FreeSinglesMatchStrategy extends AbstractSinglesMatchStrategy {
 
 	private final SinglesMatchReader singlesMatchReader;
 	private final SinglesMatchStore singlesMatchStore;
+	private final LeagueReader leagueReader;
 
-	public FreeSinglesMatchStrategy(SinglesMatchReader singlesMatchReader, SinglesMatchStore singlesMatchStore) {
+	public FreeSinglesMatchStrategy(SinglesMatchReader singlesMatchReader, SinglesMatchStore singlesMatchStore,
+		LeagueReader leagueReader) {
 		super(singlesMatchReader);
 		this.singlesMatchReader = singlesMatchReader;
 		this.singlesMatchStore = singlesMatchStore;
+		this.leagueReader = leagueReader;
 	}
 
 	private static boolean isMatchWinnerDetermined(SinglesMatch singlesMatch) {
 		return singlesMatch.getPlayer1MatchResult() == MatchResult.WIN
 			|| singlesMatch.getPlayer2MatchResult() == MatchResult.WIN;
+	}
+
+	private static boolean isMatchFinished(SinglesMatch singlesMatch) {
+		return singlesMatch.getMatchStatus() == MatchStatus.FINISHED;
 	}
 
 	@Override
@@ -74,11 +83,19 @@ public class FreeSinglesMatchStrategy extends AbstractSinglesMatchStrategy {
 			singlesMatch.player2WinSet();
 		}
 
+		if (isAllMatchFinished(singlesMatch))
+			leagueReader.readLeagueById(singlesMatch.getLeague().getLeagueId()).finishLeague();
+
 		//다음 세트가 있으면 다음 세트를 open 해준다.
 		nextSetOpen(singlesMatch, setNumber);
 
 		singlesMatchStore.store(singlesMatch);
 		return SetInfo.fromSinglesSet(matchId, setNumber, singlesMatch.getSinglesSets().get(setNumber - 1));
+	}
+
+	private boolean isAllMatchFinished(SinglesMatch singlesMatch) {
+		return singlesMatchReader.allMatchesFinishedForLeague(
+			singlesMatch.getLeague().getLeagueId());
 	}
 
 	@Override
