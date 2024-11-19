@@ -9,9 +9,9 @@ import org.badminton.api.interfaces.auth.dto.CustomOAuth2Member;
 import org.badminton.api.interfaces.match.dto.BracketResponse;
 import org.badminton.api.interfaces.match.dto.MatchDetailsResponse;
 import org.badminton.api.interfaces.match.dto.MatchSetResponse;
+import org.badminton.api.interfaces.match.dto.SetScoreFinishResponse;
 import org.badminton.api.interfaces.match.dto.SetScoreResponse;
 import org.badminton.api.interfaces.match.dto.SetScoreUpdateRequest;
-import org.badminton.api.interfaces.match.dto.SetScoreUpdateResponse;
 import org.badminton.api.interfaces.match.dto.StartFirstSetScoreCommand;
 import org.badminton.domain.domain.match.command.MatchCommand.UpdateSetScore;
 import org.badminton.domain.domain.match.info.BracketInfo;
@@ -101,7 +101,7 @@ public class MatchController {
 		@PathVariable String clubToken,
 		@PathVariable Long leagueId,
 		@PathVariable Long matchId,
-		@PathVariable int setNumber
+		@PathVariable Integer setNumber
 	) {
 		MatchSetInfo matchSetInfo = matchFacade.retrieveMatchSetInfo(leagueId, matchId, setNumber);
 		return CommonResponse.success(MatchSetResponse.from(matchSetInfo));
@@ -115,7 +115,7 @@ public class MatchController {
 		@PathVariable String clubToken,
 		@PathVariable Long leagueId,
 		@PathVariable Long matchId,
-		@PathVariable int setNumber,
+		@PathVariable Integer setNumber,
 		@Valid @RequestBody SetScoreUpdateRequest setScoreUpdateRequest,
 		@AuthenticationPrincipal CustomOAuth2Member member
 	) {
@@ -126,30 +126,30 @@ public class MatchController {
 	}
 
 	@PostMapping("/{matchId}/sets/{setNumber}")
-	@Operation(summary = "세트 종료 버튼",
+	@Operation(summary = "세트 종료 버튼, 누르면 다음 세트가 시작합니다.",
 		description = """
 			0~30 사이의 숫자만 입력할 수 있습니다.
 			현재 세트 종료 버튼을 누를 때 실행되는 API
 			""",
 		tags = {"Match"})
-	public CommonResponse<SetScoreUpdateResponse> updateSetsScore(
+	public CommonResponse<SetScoreFinishResponse> finishSetsScore(
 		@PathVariable String clubToken,
 		@PathVariable Long leagueId,
 		@PathVariable Long matchId,
-		@PathVariable int setNumber,
-		@Valid @RequestBody SetScoreUpdateRequest setScoreUpdateRequest,
+		@PathVariable Integer setNumber,
+		@Valid @RequestBody SetScoreUpdateRequest setScoreRequest,
 		@AuthenticationPrincipal CustomOAuth2Member member
 	) {
 		String memberToken = member.getMemberToken();
 		MatchOperationHandler matchOperationFacade = matchFacade.getMatchOperationHandler(leagueId);
 		UpdateSetScore updateSetScoreCommand = UpdateSetScore.builder()
-			.score1(setScoreUpdateRequest.score1())
-			.score2(setScoreUpdateRequest.score2())
+			.score1(setScoreRequest.score1())
+			.score2(setScoreRequest.score2())
 			.build();
 
 		SetInfo.Main updateSetScoreInfo = matchOperationFacade.registerSetScoreInMatch(leagueId, matchId, setNumber,
 			updateSetScoreCommand, memberToken);
-		return CommonResponse.success(SetScoreUpdateResponse.fromUpdateSetScoreInfo(updateSetScoreInfo));
+		return CommonResponse.success(SetScoreFinishResponse.fromUpdateSetScoreInfo(updateSetScoreInfo));
 	}
 
 	@Operation(summary = "매치 시작  - 첫 세트가 IN_PROGRESS 가 됨",

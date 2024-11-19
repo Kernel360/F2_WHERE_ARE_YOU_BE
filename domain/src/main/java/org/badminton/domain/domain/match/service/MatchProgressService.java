@@ -7,6 +7,6 @@ public interface MatchProgressService {
 
 	MatchStrategy makeSinglesOrDoublesMatchStrategy(Long leagueId);
 
-	SetInfo.Main registerSetScoreInMatch(MatchStrategy matchStrategy, Long leagueId, Long matchId, int setIndex,
+	SetInfo.Main registerSetScoreInMatch(MatchStrategy matchStrategy, Long leagueId, Long matchId, Integer setIndex,
 		MatchCommand.UpdateSetScore updateSetScoreCommand, String memberToken);
 }

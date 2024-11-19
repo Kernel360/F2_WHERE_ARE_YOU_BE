@@ -8,7 +8,7 @@ import org.badminton.domain.domain.match.info.SetInfo;
 public interface MatchOperationHandler {
 	BracketInfo generateInitialBracket(Long leagueId);
 
-	SetInfo.Main registerSetScoreInMatch(Long leagueId, Long matchId, int setIndex,
+	SetInfo.Main registerSetScoreInMatch(Long leagueId, Long matchId, Integer setIndex,
 		MatchCommand.UpdateSetScore updateSetScoreCommand, String memberToken);
 
 	void registerFirstSetScoreInMatch(StartFirstSetScoreCommand initFirstSetScoreCommand);

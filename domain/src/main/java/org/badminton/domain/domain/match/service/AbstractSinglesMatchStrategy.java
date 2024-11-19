@@ -60,7 +60,7 @@ public abstract class AbstractSinglesMatchStrategy implements MatchStrategy {
 	public abstract BracketInfo makeBracket(League league, List<LeagueParticipant> leagueParticipantList);
 
 	@Override
-	public abstract SetInfo.Main registerSetScoreInMatch(Long matchId, int setIndex,
+	public abstract SetInfo.Main registerSetScoreInMatch(Long matchId, Integer setIndex,
 		MatchCommand.UpdateSetScore updateSetScoreCommand);
 
 	@Override
