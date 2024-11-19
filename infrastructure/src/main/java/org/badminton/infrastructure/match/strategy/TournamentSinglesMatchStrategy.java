@@ -1,5 +1,6 @@
 package org.badminton.infrastructure.match.strategy;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -91,34 +92,34 @@ public class TournamentSinglesMatchStrategy extends AbstractSinglesMatchStrategy
 		if (singlesMatch.getLeagueParticipant1() == null || singlesMatch.getLeagueParticipant2() == null)
 			throw new LeagueParticipantsNotExistsException(matchId);
 
-		updateSetScore(singlesMatch, setNumber, updateSetScoreCommand);
-		singlesMatchStore.store(singlesMatch);
+        updateSetScore(singlesMatch, setNumber, updateSetScoreCommand);
+        singlesMatchStore.store(singlesMatch);
 
-		// 최종 승자가 정해지면 matchResult 업데이트
-		if (isMatchWinnerDetermined(singlesMatch)) {
-			singlesMatchStore.store(singlesMatch);
-			updateNextRoundMatch(singlesMatch);
-		}
-		return SetInfo.fromSinglesSet(matchId, setNumber, singlesMatch.getSinglesSets().get(setNumber - 1));
-	}
+        // 최종 승자가 정해지면 matchResult 업데이트
+        if (isMatchWinnerDetermined(singlesMatch)) {
+            singlesMatchStore.store(singlesMatch);
+            updateNextRoundMatch(singlesMatch);
+        }
+        return SetInfo.fromSinglesSet(matchId, setNumber, singlesMatch.getSinglesSets().get(setNumber - 1));
+    }
 
-	@Override
-	public SetInfo.Main retrieveSet(Long matchId, int setNumber) {
-		SinglesMatch singlesMatch = singlesMatchReader.getSinglesMatch(matchId);
-		SinglesSet singlesSet = singlesMatch.getSinglesSet(1);
-		return SetInfo.fromSinglesSet(matchId, setNumber, singlesSet);
-	}
+    @Override
+    public SetInfo.Main retrieveSet(Long matchId, int setNumber) {
+        SinglesMatch singlesMatch = singlesMatchReader.getSinglesMatch(matchId);
+        SinglesSet singlesSet = singlesMatch.getSinglesSet(1);
+        return SetInfo.fromSinglesSet(matchId, setNumber, singlesSet);
+    }
 
-	private List<SinglesMatch> createFirstRoundMatches(League league, List<LeagueParticipant> participants) {
-		List<SinglesMatch> matches = new ArrayList<>();
-		for (int i = 0; i < participants.size(); i += PARTICIPANTS_PER_MATCH) {
-			SinglesMatch match = new SinglesMatch(league, participants.get(i), participants.get(i + 1), 1);
-			makeSetsInMatch(match);
-			singlesMatchStore.store(match);
-			matches.add(match);
-		}
-		return matches;
-	}
+    private List<SinglesMatch> createFirstRoundMatches(League league, List<LeagueParticipant> participants) {
+        List<SinglesMatch> matches = new ArrayList<>();
+        for (int i = 0; i < participants.size(); i += PARTICIPANTS_PER_MATCH) {
+            SinglesMatch match = new SinglesMatch(league, participants.get(i), participants.get(i + 1), 1);
+            makeSetsInMatch(match);
+            singlesMatchStore.store(match);
+            matches.add(match);
+        }
+        return matches;
+    }
 
 	private List<SinglesMatch> createRoundMatches(League league, List<SinglesMatch> previousMatches, int roundNumber) {
 		List<SinglesMatch> currentRoundMatches = new ArrayList<>();

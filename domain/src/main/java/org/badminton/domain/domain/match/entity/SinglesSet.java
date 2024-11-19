@@ -1,9 +1,6 @@
 package org.badminton.domain.domain.match.entity;
 
-import static org.badminton.domain.common.consts.Constants.*;
-
-import org.badminton.domain.common.AbstractBaseTime;
-import org.badminton.domain.common.enums.SetStatus;
+import static org.badminton.domain.common.consts.Constants.INITIAL_SET_SCORE;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
@@ -19,6 +16,8 @@ import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.badminton.domain.common.AbstractBaseTime;
+import org.badminton.domain.common.enums.SetStatus;
 
 @Entity
 @Table(name = "singles_set")

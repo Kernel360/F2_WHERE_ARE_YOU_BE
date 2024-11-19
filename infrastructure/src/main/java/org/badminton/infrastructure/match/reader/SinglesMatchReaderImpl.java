@@ -1,7 +1,7 @@
 package org.badminton.infrastructure.match.reader;
 
 import java.util.List;
-
+import lombok.RequiredArgsConstructor;
 import org.badminton.domain.common.enums.MatchType;
 import org.badminton.domain.common.exception.match.BracketNotExistException;
 import org.badminton.domain.common.exception.match.MatchNotExistException;
