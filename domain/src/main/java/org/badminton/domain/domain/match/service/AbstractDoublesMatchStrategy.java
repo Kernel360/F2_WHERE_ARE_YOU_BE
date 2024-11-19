@@ -71,6 +71,7 @@ public abstract class AbstractDoublesMatchStrategy implements MatchStrategy {
     public List<LeagueSetsScoreInProgressInfo> retrieveLeagueSetsScoreInProgress(Long leagueId) {
         List<DoublesMatch> doublesMatchInProgress = doublesMatchReader.getDoublesBracket(leagueId).stream()
                 .filter(doublesMatch -> doublesMatch.getMatchStatus() == MatchStatus.IN_PROGRESS)
+                .filter(doublesMatch -> doublesMatch.getSetInProgress().isPresent())
                 .sorted(Comparator.comparing(DoublesMatch::getId))
                 .toList();
 
