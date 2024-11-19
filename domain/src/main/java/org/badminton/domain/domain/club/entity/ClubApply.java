@@ -49,11 +49,11 @@ public class ClubApply {
 		this.status = ApplyStatus.PENDING;
 	}
 
-	public void rejectedClubMember() {
+	public void rejectClubMember() {
 		this.status = ApplyStatus.REJECTED;
 	}
 
-	public void approvedClubMember() {
+	public void approveClubMember() {
 		this.status = ApplyStatus.APPROVED;
 	}
 
