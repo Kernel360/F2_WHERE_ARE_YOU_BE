@@ -1,6 +1,5 @@
 package org.badminton.infrastructure.match.strategy;
 
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -26,6 +25,7 @@ import org.badminton.domain.domain.match.service.AbstractDoublesMatchStrategy;
 import org.badminton.domain.domain.match.store.DoublesMatchReader;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
+
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -78,50 +78,50 @@ public class TournamentDoublesMatchStrategy extends AbstractDoublesMatchStrategy
 		}
 	}
 
-    @Override
-    @Transactional
-    public SetInfo.Main registerSetScoreInMatch(Long matchId, int setNumber,
-                                                MatchCommand.UpdateSetScore updateSetScoreCommand) {
-        DoublesMatch doublesMatch = doublesMatchReader.getDoublesMatch(matchId);
+	@Override
+	@Transactional
+	public SetInfo.Main registerSetScoreInMatch(Long matchId, Integer setNumber,
+		MatchCommand.UpdateSetScore updateSetScoreCommand) {
+		DoublesMatch doublesMatch = doublesMatchReader.getDoublesMatch(matchId);
 
-        if (isMatchWinnerDetermined(doublesMatch))
-            throw new AlreadyWinnerDeterminedException(doublesMatch.getId());
+		if (isMatchWinnerDetermined(doublesMatch))
+			throw new AlreadyWinnerDeterminedException(doublesMatch.getId());
 
-        if (doublesMatch.getDoublesSet(setNumber).getSetStatus() == SetStatus.FINISHED)
-            throw new SetFinishedException(setNumber);
+		if (doublesMatch.getDoublesSet(setNumber).getSetStatus() == SetStatus.FINISHED)
+			throw new SetFinishedException(setNumber);
 
-        if (doublesMatch.getTeam1() == null || doublesMatch.getTeam2() == null)
-            throw new LeagueParticipantsNotExistsException(matchId);
+		if (doublesMatch.getTeam1() == null || doublesMatch.getTeam2() == null)
+			throw new LeagueParticipantsNotExistsException(matchId);
 
-        updateSetScore(doublesMatch, setNumber, updateSetScoreCommand);
-        doublesMatchStore.store(doublesMatch);
+		updateSetScore(doublesMatch, setNumber, updateSetScoreCommand);
+		doublesMatchStore.store(doublesMatch);
 
-        if (isMatchWinnerDetermined(doublesMatch)) {
-            doublesMatchStore.store(doublesMatch);
-            updateNextRoundMatch(doublesMatch);
-        }
-        return SetInfo.fromDoublesSet(matchId, setNumber, doublesMatch.getDoublesSets().get(setNumber - 1));
-    }
+		if (isMatchWinnerDetermined(doublesMatch)) {
+			doublesMatchStore.store(doublesMatch);
+			updateNextRoundMatch(doublesMatch);
+		}
+		return SetInfo.fromDoublesSet(matchId, setNumber, doublesMatch.getDoublesSets().get(setNumber - 1));
+	}
 
-    @Override
-    public Main retrieveSet(Long matchId, int setNumber) {
-        DoublesMatch doublesMatch = doublesMatchReader.getDoublesMatch(matchId);
-        DoublesSet doublesSet = doublesMatch.getDoublesSet(setNumber);
-        return SetInfo.fromDoublesSet(matchId, setNumber, doublesSet);
-    }
+	@Override
+	public Main retrieveSet(Long matchId, int setNumber) {
+		DoublesMatch doublesMatch = doublesMatchReader.getDoublesMatch(matchId);
+		DoublesSet doublesSet = doublesMatch.getDoublesSet(setNumber);
+		return SetInfo.fromDoublesSet(matchId, setNumber, doublesSet);
+	}
 
-    private List<DoublesMatch> createFirstRoundMatches(League league, List<LeagueParticipant> participants) {
-        List<DoublesMatch> matches = new ArrayList<>();
-        for (int i = 0; i < participants.size(); i += PARTICIPANTS_PER_TEAM * TEAMS_PER_MATCH) {
-            Team team1 = new Team(participants.get(i), participants.get(i + 1));
-            Team team2 = new Team(participants.get(i + 2), participants.get(i + 3));
-            DoublesMatch match = new DoublesMatch(league, team1, team2, 1);
-            makeSetsInMatch(match);
-            doublesMatchStore.store(match);
-            matches.add(match);
-        }
-        return matches;
-    }
+	private List<DoublesMatch> createFirstRoundMatches(League league, List<LeagueParticipant> participants) {
+		List<DoublesMatch> matches = new ArrayList<>();
+		for (int i = 0; i < participants.size(); i += PARTICIPANTS_PER_TEAM * TEAMS_PER_MATCH) {
+			Team team1 = new Team(participants.get(i), participants.get(i + 1));
+			Team team2 = new Team(participants.get(i + 2), participants.get(i + 3));
+			DoublesMatch match = new DoublesMatch(league, team1, team2, 1);
+			makeSetsInMatch(match);
+			doublesMatchStore.store(match);
+			matches.add(match);
+		}
+		return matches;
+	}
 
 	private List<DoublesMatch> createRoundMatches(League league, List<DoublesMatch> previousMatches, int roundNumber) {
 		List<DoublesMatch> currentRoundMatches = new ArrayList<>();

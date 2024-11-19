@@ -27,6 +27,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Component
 public class FreeDoublesMatchStrategy extends AbstractDoublesMatchStrategy {
+	static final Integer LIMIT_SET_GAME = 3;
 
 	private final DoublesMatchReader doublesMatchReader;
 	private final DoublesMatchStore doublesMatchStore;
@@ -52,7 +53,7 @@ public class FreeDoublesMatchStrategy extends AbstractDoublesMatchStrategy {
 	}
 
 	@Override
-	public SetInfo.Main registerSetScoreInMatch(Long matchId, int setNumber,
+	public SetInfo.Main registerSetScoreInMatch(Long matchId, Integer setNumber,
 		MatchCommand.UpdateSetScore updateSetScoreCommand) {
 		DoublesMatch doublesMatch = doublesMatchReader.getDoublesMatch(matchId);
 
@@ -73,6 +74,9 @@ public class FreeDoublesMatchStrategy extends AbstractDoublesMatchStrategy {
 			doublesMatch.team2WinSet();
 		}
 
+		//다음 세트가 있으면 다음 세트를 open 해준다.
+		nextSetOpen(doublesMatch, setNumber);
+		
 		doublesMatchStore.store(doublesMatch);
 		return SetInfo.fromDoublesSet(matchId, setNumber, doublesMatch.getDoublesSets().get(setNumber - 1));
 	}
@@ -122,5 +126,12 @@ public class FreeDoublesMatchStrategy extends AbstractDoublesMatchStrategy {
 		doublesMatch.startMatch();
 		doublesMatch.getDoublesSet(1).initMatch();
 		doublesMatchStore.store(doublesMatch);
+	}
+
+	private void nextSetOpen(DoublesMatch doublesMatch, Integer setNumber) {
+		if (LIMIT_SET_GAME > doublesMatch.getDoublesSet(setNumber).getSetNumber()) {
+			setNumber++;
+			doublesMatch.getDoublesSet(setNumber).open();
+		}
 	}
 }

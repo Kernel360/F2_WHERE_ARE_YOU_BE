@@ -31,7 +31,7 @@ public class FreeMatchFacade implements MatchOperationHandler {
 	}
 
 	@Override
-	public SetInfo.Main registerSetScoreInMatch(Long leagueId, Long matchId, int setIndex,
+	public SetInfo.Main registerSetScoreInMatch(Long leagueId, Long matchId, Integer setIndex,
 		MatchCommand.UpdateSetScore updateSetScoreCommand, String memberToken) {
 		MatchStrategy matchStrategy = matchProgressService.makeSinglesOrDoublesMatchStrategy(leagueId);
 		SetInfo.Main main = matchProgressService.registerSetScoreInMatch(matchStrategy, leagueId, matchId, setIndex,

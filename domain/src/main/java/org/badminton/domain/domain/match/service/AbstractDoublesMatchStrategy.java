@@ -59,7 +59,7 @@ public abstract class AbstractDoublesMatchStrategy implements MatchStrategy {
 	public abstract BracketInfo makeBracket(League league, List<LeagueParticipant> leagueParticipantList);
 
 	@Override
-	public SetInfo.Main registerSetScoreInMatch(Long matchId, int setIndex,
+	public SetInfo.Main registerSetScoreInMatch(Long matchId, Integer setIndex,
 		MatchCommand.UpdateSetScore updateSetScoreCommand) {
 		return null;
 	}
