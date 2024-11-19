@@ -17,43 +17,45 @@ import org.springframework.stereotype.Service;
 @Service
 public class TournamentMatchRetrieveServiceImpl extends AbstractMatchRetrieveService {
 
-    private final LeagueReader leagueReader;
-    private final SinglesMatchReader singlesMatchReader;
-    private final DoublesMatchReader doublesMatchReader;
-    private final SinglesMatchStore singlesMatchStore;
-    private final DoublesMatchStore doublesMatchStore;
-    private final LeagueParticipantReader leagueParticipantReader;
+	private final LeagueReader leagueReader;
+	private final SinglesMatchReader singlesMatchReader;
+	private final DoublesMatchReader doublesMatchReader;
+	private final SinglesMatchStore singlesMatchStore;
+	private final DoublesMatchStore doublesMatchStore;
+	private final LeagueParticipantReader leagueParticipantReader;
 
-    public TournamentMatchRetrieveServiceImpl(LeagueReader leagueReader, SinglesMatchReader singlesMatchReader,
-                                              DoublesMatchReader doublesMatchReader,
-                                              SinglesMatchStore singlesMatchStore, DoublesMatchStore doublesMatchStore,
-                                              LeagueParticipantReader leagueParticipantReader) {
-        this.singlesMatchReader = singlesMatchReader;
-        this.doublesMatchReader = doublesMatchReader;
-        this.singlesMatchStore = singlesMatchStore;
-        this.doublesMatchStore = doublesMatchStore;
-        this.leagueReader = leagueReader;
-        this.leagueParticipantReader = leagueParticipantReader;
-    }
+	public TournamentMatchRetrieveServiceImpl(LeagueReader leagueReader, SinglesMatchReader singlesMatchReader,
+		DoublesMatchReader doublesMatchReader,
+		SinglesMatchStore singlesMatchStore, DoublesMatchStore doublesMatchStore,
+		LeagueParticipantReader leagueParticipantReader) {
+		this.singlesMatchReader = singlesMatchReader;
+		this.doublesMatchReader = doublesMatchReader;
+		this.singlesMatchStore = singlesMatchStore;
+		this.doublesMatchStore = doublesMatchStore;
+		this.leagueReader = leagueReader;
+		this.leagueParticipantReader = leagueParticipantReader;
+	}
 
-    @Override
-    public MatchStrategy makeSinglesOrDoublesMatchStrategy(Long leagueId) {
-        League league = findLeague(leagueId);
-        return switch (league.getMatchType()) {
-            case SINGLES ->
-                    new TournamentSinglesMatchStrategy(singlesMatchReader, singlesMatchStore, leagueParticipantReader);
-            case DOUBLES ->
-                    new TournamentDoublesMatchStrategy(doublesMatchReader, doublesMatchStore, leagueParticipantReader);
-        };
-    }
+	@Override
+	public MatchStrategy makeSinglesOrDoublesMatchStrategy(Long leagueId) {
+		League league = findLeague(leagueId);
+		return switch (league.getMatchType()) {
+			case SINGLES ->
+				new TournamentSinglesMatchStrategy(singlesMatchReader, singlesMatchStore, leagueParticipantReader,
+					leagueReader);
+			case DOUBLES ->
+				new TournamentDoublesMatchStrategy(doublesMatchReader, doublesMatchStore, leagueParticipantReader,
+					leagueReader);
+		};
+	}
 
-    @Override
-    public SetInfo.Main retrieveSet(MatchStrategy matchStrategy, Long matchId, int setNumber) {
-        return matchStrategy.retrieveSet(matchId, setNumber);
-    }
+	@Override
+	public SetInfo.Main retrieveSet(MatchStrategy matchStrategy, Long matchId, int setNumber) {
+		return matchStrategy.retrieveSet(matchId, setNumber);
+	}
 
-    private League findLeague(Long leagueId) {
-        return leagueReader.readLeagueById(leagueId);
-    }
+	private League findLeague(Long leagueId) {
+		return leagueReader.readLeagueById(leagueId);
+	}
 
 }

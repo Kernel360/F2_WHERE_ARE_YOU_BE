@@ -34,9 +34,11 @@ public class TournamentMatchProgressServiceImpl implements MatchProgressService 
 		League league = findLeague(leagueId);
 		return switch (league.getMatchType()) {
 			case SINGLES ->
-				new TournamentSinglesMatchStrategy(singlesMatchReader, singlesMatchStore, leagueParticipantReader);
+				new TournamentSinglesMatchStrategy(singlesMatchReader, singlesMatchStore, leagueParticipantReader,
+					leagueReader);
 			case DOUBLES ->
-				new TournamentDoublesMatchStrategy(doublesMatchReader, doublesMatchStore, leagueParticipantReader);
+				new TournamentDoublesMatchStrategy(doublesMatchReader, doublesMatchStore, leagueParticipantReader,
+					leagueReader);
 		};
 	}
 

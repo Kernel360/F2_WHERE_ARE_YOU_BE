@@ -3,8 +3,8 @@ package org.badminton.infrastructure.match.service;
 import java.util.List;
 
 import org.badminton.domain.common.exception.league.InvalidPlayerCountException;
-import org.badminton.domain.common.exception.league.LeagueNotExistException;
 import org.badminton.domain.common.exception.match.LeagueRecruitingMustBeCompletedWhenBracketGenerationException;
+import org.badminton.domain.domain.league.LeagueReader;
 import org.badminton.domain.domain.league.entity.League;
 import org.badminton.domain.domain.league.entity.LeagueParticipant;
 import org.badminton.domain.domain.league.enums.LeagueStatus;
@@ -16,7 +16,6 @@ import org.badminton.domain.domain.match.service.MatchStrategy;
 import org.badminton.domain.domain.match.store.DoublesMatchReader;
 import org.badminton.domain.domain.match.store.SinglesMatchReader;
 import org.badminton.infrastructure.league.LeagueParticipantRepository;
-import org.badminton.infrastructure.league.LeagueRepository;
 import org.badminton.infrastructure.match.strategy.FreeDoublesMatchStrategy;
 import org.badminton.infrastructure.match.strategy.FreeSinglesMatchStrategy;
 import org.springframework.stereotype.Service;
@@ -28,7 +27,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class FreeBracketGenerationServiceImpl implements BracketGenerationService {
 
-	private final LeagueRepository leagueRepository;
+	private final LeagueReader leagueReader;
 	private final LeagueParticipantRepository leagueParticipantRepository;
 	private final SinglesMatchReader singlesMatchReader;
 	private final DoublesMatchReader doublesMatchReader;
@@ -53,8 +52,8 @@ public class FreeBracketGenerationServiceImpl implements BracketGenerationServic
 	public MatchStrategy makeSinglesOrDoublesMatchStrategy(Long leagueId) {
 		League league = findLeague(leagueId);
 		return switch (league.getMatchType()) {
-			case SINGLES -> new FreeSinglesMatchStrategy(singlesMatchReader, singlesMatchStore);
-			case DOUBLES -> new FreeDoublesMatchStrategy(doublesMatchReader, doublesMatchStore);
+			case SINGLES -> new FreeSinglesMatchStrategy(singlesMatchReader, singlesMatchStore, leagueReader);
+			case DOUBLES -> new FreeDoublesMatchStrategy(doublesMatchReader, doublesMatchStore, leagueReader);
 		};
 	}
 
@@ -74,8 +73,7 @@ public class FreeBracketGenerationServiceImpl implements BracketGenerationServic
 	}
 
 	private League findLeague(Long leagueId) {
-		return leagueRepository.findById(leagueId)
-			.orElseThrow(() -> new LeagueNotExistException(leagueId));
+		return leagueReader.readLeagueById(leagueId);
 	}
 
 	private List<LeagueParticipant> findLeagueParticipantList(Long leagueId) {
