@@ -80,7 +80,7 @@ public class TournamentDoublesMatchStrategy extends AbstractDoublesMatchStrategy
 
 	@Override
 	@Transactional
-	public SetInfo.Main registerSetScoreInMatch(Long matchId, int setNumber,
+	public SetInfo.Main registerSetScoreInMatch(Long matchId, Integer setNumber,
 		MatchCommand.UpdateSetScore updateSetScoreCommand) {
 		DoublesMatch doublesMatch = doublesMatchReader.getDoublesMatch(matchId);
 

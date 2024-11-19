@@ -15,6 +15,7 @@ import org.badminton.domain.domain.league.vo.Team;
 import org.badminton.domain.domain.match.command.MatchCommand;
 import org.badminton.domain.domain.match.entity.DoublesMatch;
 import org.badminton.domain.domain.match.entity.DoublesSet;
+import org.badminton.domain.domain.match.entity.SinglesMatch;
 import org.badminton.domain.domain.match.info.BracketInfo;
 import org.badminton.domain.domain.match.info.SetInfo;
 import org.badminton.domain.domain.match.reader.DoublesMatchStore;
@@ -27,6 +28,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Component
 public class FreeDoublesMatchStrategy extends AbstractDoublesMatchStrategy {
+	static final Integer LIMIT_SET_GAME = 3;
 
 	private final DoublesMatchReader doublesMatchReader;
 	private final DoublesMatchStore doublesMatchStore;
@@ -52,7 +54,7 @@ public class FreeDoublesMatchStrategy extends AbstractDoublesMatchStrategy {
 	}
 
 	@Override
-	public SetInfo.Main registerSetScoreInMatch(Long matchId, int setNumber,
+	public SetInfo.Main registerSetScoreInMatch(Long matchId, Integer setNumber,
 		MatchCommand.UpdateSetScore updateSetScoreCommand) {
 		DoublesMatch doublesMatch = doublesMatchReader.getDoublesMatch(matchId);
 
@@ -122,5 +124,12 @@ public class FreeDoublesMatchStrategy extends AbstractDoublesMatchStrategy {
 		doublesMatch.startMatch();
 		doublesMatch.getDoublesSet(1).initMatch();
 		doublesMatchStore.store(doublesMatch);
+	}
+
+	private void nextSetOpen(SinglesMatch singlesMatch, Integer setNumber) {
+		if (LIMIT_SET_GAME > singlesMatch.getSinglesSet(setNumber).getSetNumber()) {
+			setNumber++;
+			singlesMatch.getSinglesSet(setNumber).open();
+		}
 	}
 }

@@ -78,7 +78,7 @@ public class TournamentSinglesMatchStrategy extends AbstractSinglesMatchStrategy
 
 	@Override
 	@Transactional
-	public SetInfo.Main registerSetScoreInMatch(Long matchId, int setNumber,
+	public SetInfo.Main registerSetScoreInMatch(Long matchId, Integer setNumber,
 		MatchCommand.UpdateSetScore updateSetScoreCommand) {
 		SinglesMatch singlesMatch = singlesMatchReader.getSinglesMatch(matchId);
 
