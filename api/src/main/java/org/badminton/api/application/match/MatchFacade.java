@@ -1,11 +1,11 @@
 package org.badminton.api.application.match;
 
-import java.util.Arrays;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;
 import org.badminton.api.interfaces.match.dto.SetScoreUpdateRequest;
 import org.badminton.domain.common.enums.MatchGenerationType;
 import org.badminton.domain.common.enums.MatchType;
+import org.badminton.domain.common.exception.match.SetScoreNotInCacheException;
 import org.badminton.domain.domain.league.LeagueReader;
 import org.badminton.domain.domain.match.info.BracketInfo;
 import org.badminton.domain.domain.match.info.LeagueSetsScoreInProgressInfo;
@@ -14,6 +14,7 @@ import org.badminton.domain.domain.match.info.MatchSetInfo;
 import org.badminton.domain.domain.match.info.SetInfo;
 import org.badminton.domain.domain.match.service.MatchRetrieveService;
 import org.badminton.domain.domain.match.service.MatchStrategy;
+import org.badminton.domain.domain.match.vo.Score;
 import org.badminton.infrastructure.match.repository.SetRepository;
 import org.badminton.infrastructure.match.service.RetrieveMatchSet;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -83,27 +84,27 @@ public class MatchFacade {
 
     public SetInfo.Main registerSetScore(Long leagueId, Long matchId, int setNumber,
                                          SetScoreUpdateRequest setScoreUpdateRequest) {
-        List<Integer> setScoreUpdateCommand = Arrays.asList(setScoreUpdateRequest.score1(),
-                setScoreUpdateRequest.score2());
-        retrieveMatchSet.setMatchSetScore(leagueId, matchId, setNumber, setScoreUpdateCommand);
+        retrieveMatchSet.setMatchSetScore(leagueId, matchId, setNumber,
+                new Score(setScoreUpdateRequest.score1(), setScoreUpdateRequest.score2()));
         return retrieveSetInfo(leagueId, matchId, setNumber);
     }
 
     public SetInfo.Main retrieveSetInfo(Long leagueId, Long matchId, int setNumber) {
-        List<Integer> matchSetScore = retrieveMatchSet.getMatchSetScore(leagueId, matchId, setNumber);
-        MatchType matchType = retrieveMatchSet.getMatchType(leagueId);
-        if (matchSetScore != null) {
+        try {
+            Score score = retrieveMatchSet.getMatchSetScore(leagueId, matchId, setNumber);
+            MatchType matchType = retrieveMatchSet.getMatchType(leagueId);
             return SetInfo.Main.builder()
                     .matchId(matchId)
-                    .score1(matchSetScore.get(0))
-                    .score2(matchSetScore.get(1))
+                    .score1(score.getLeft())
+                    .score2(score.getRight())
                     .matchType(matchType)
                     .setNumber(setNumber)
                     .build();
+        } catch (SetScoreNotInCacheException e) {
+            MatchRetrieveService matchRetrieveService = getMatchRetrieveService(leagueId);
+            MatchStrategy matchStrategy = matchRetrieveService.makeSinglesOrDoublesMatchStrategy(matchId);
+            return matchRetrieveService.retrieveSet(matchStrategy, matchId, setNumber);
         }
-        MatchRetrieveService matchRetrieveService = getMatchRetrieveService(leagueId);
-        MatchStrategy matchStrategy = matchRetrieveService.makeSinglesOrDoublesMatchStrategy(matchId);
-        return matchRetrieveService.retrieveSet(matchStrategy, matchId, setNumber);
     }
 
     public MatchSetInfo retrieveMatchSetInfo(Long leagueId, Long matchId, int setNumber) {

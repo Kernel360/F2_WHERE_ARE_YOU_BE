@@ -26,46 +26,44 @@ import org.badminton.domain.domain.match.store.DoublesMatchReader;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
-import lombok.extern.slf4j.Slf4j;
-
 @Slf4j
 @Component
 public class TournamentDoublesMatchStrategy extends AbstractDoublesMatchStrategy {
 
-	public static final int SET_COUNT = 3;
-	public static final int PARTICIPANTS_PER_TEAM = 2;
-	public static final int TEAMS_PER_MATCH = 2;
-	private final DoublesMatchReader doublesMatchReader;
-	private final DoublesMatchStore doublesMatchStore;
-	private final LeagueParticipantReader leagueParticipantReader;
+    public static final int SET_COUNT = 3;
+    public static final int PARTICIPANTS_PER_TEAM = 2;
+    public static final int TEAMS_PER_MATCH = 2;
+    private final DoublesMatchReader doublesMatchReader;
+    private final DoublesMatchStore doublesMatchStore;
+    private final LeagueParticipantReader leagueParticipantReader;
 
-	public TournamentDoublesMatchStrategy(DoublesMatchReader doublesMatchReader, DoublesMatchStore doublesMatchStore,
-		LeagueParticipantReader leagueParticipantReader) {
-		super(doublesMatchReader);
-		this.doublesMatchReader = doublesMatchReader;
-		this.doublesMatchStore = doublesMatchStore;
-		this.leagueParticipantReader = leagueParticipantReader;
-	}
+    public TournamentDoublesMatchStrategy(DoublesMatchReader doublesMatchReader, DoublesMatchStore doublesMatchStore,
+                                          LeagueParticipantReader leagueParticipantReader) {
+        super(doublesMatchReader);
+        this.doublesMatchReader = doublesMatchReader;
+        this.doublesMatchStore = doublesMatchStore;
+        this.leagueParticipantReader = leagueParticipantReader;
+    }
 
-	private static boolean isMatchWinnerDetermined(DoublesMatch doublesMatch) {
-		return doublesMatch.getTeam1MatchResult() == MatchResult.WIN
-			|| doublesMatch.getTeam2MatchResult() == MatchResult.WIN;
-	}
+    private static boolean isMatchWinnerDetermined(DoublesMatch doublesMatch) {
+        return doublesMatch.getTeam1MatchResult() == MatchResult.WIN
+                || doublesMatch.getTeam2MatchResult() == MatchResult.WIN;
+    }
 
-	@Override
-	public BracketInfo makeBracket(League league, List<LeagueParticipant> leagueParticipantList) {
-		List<DoublesMatch> allMatches = new ArrayList<>();
-		List<LeagueParticipant> currentParticipants = new ArrayList<>(leagueParticipantList);
-		Collections.shuffle(currentParticipants);
+    @Override
+    public BracketInfo makeBracket(League league, List<LeagueParticipant> leagueParticipantList) {
+        List<DoublesMatch> allMatches = new ArrayList<>();
+        List<LeagueParticipant> currentParticipants = new ArrayList<>(leagueParticipantList);
+        Collections.shuffle(currentParticipants);
 
-		int totalRounds = MatchUtils.calculateTotalRounds(currentParticipants.size() / PARTICIPANTS_PER_TEAM);
-		league.defineTotalRounds(totalRounds);
+        int totalRounds = MatchUtils.calculateTotalRounds(currentParticipants.size() / PARTICIPANTS_PER_TEAM);
+        league.defineTotalRounds(totalRounds);
 
-		allMatches.addAll(createFirstRoundMatches(league, currentParticipants));
-		allMatches.addAll(createSubsequentRoundsMatches(league, totalRounds));
+        allMatches.addAll(createFirstRoundMatches(league, currentParticipants));
+        allMatches.addAll(createSubsequentRoundsMatches(league, totalRounds));
 
-		return BracketInfo.fromDoubles(totalRounds, allMatches);
-	}
+        return BracketInfo.fromDoubles(totalRounds, allMatches);
+    }
 
     @Override
     public void checkDuplicateInitialBracket(LocalDateTime leagueAt, Long leagueId) {
@@ -81,14 +79,17 @@ public class TournamentDoublesMatchStrategy extends AbstractDoublesMatchStrategy
                                                 MatchCommand.UpdateSetScore updateSetScoreCommand) {
         DoublesMatch doublesMatch = doublesMatchReader.getDoublesMatch(matchId);
 
-        if (isMatchWinnerDetermined(doublesMatch))
+        if (isMatchWinnerDetermined(doublesMatch)) {
             throw new AlreadyWinnerDeterminedException(doublesMatch.getId());
+        }
 
-        if (doublesMatch.getDoublesSet(setNumber).getSetStatus() == SetStatus.FINISHED)
+        if (doublesMatch.getDoublesSet(setNumber).getSetStatus() == SetStatus.FINISHED) {
             throw new SetFinishedException(setNumber);
+        }
 
-        if (doublesMatch.getTeam1() == null || doublesMatch.getTeam2() == null)
+        if (doublesMatch.getTeam1() == null || doublesMatch.getTeam2() == null) {
             throw new LeagueParticipantsNotExistsException(matchId);
+        }
 
         updateSetScore(doublesMatch, setNumber, updateSetScoreCommand);
         doublesMatchStore.store(doublesMatch);
@@ -120,16 +121,16 @@ public class TournamentDoublesMatchStrategy extends AbstractDoublesMatchStrategy
         return matches;
     }
 
-	private List<DoublesMatch> createRoundMatches(League league, List<DoublesMatch> previousMatches, int roundNumber) {
-		List<DoublesMatch> currentRoundMatches = new ArrayList<>();
-		for (int i = 0; i < previousMatches.size(); i += TEAMS_PER_MATCH) {
-			DoublesMatch match = new DoublesMatch(league, null, null, roundNumber);
-			makeSetsInMatch(match);
-			doublesMatchStore.store(match);
-			currentRoundMatches.add(match);
-		}
-		return currentRoundMatches;
-	}
+    private List<DoublesMatch> createRoundMatches(League league, List<DoublesMatch> previousMatches, int roundNumber) {
+        List<DoublesMatch> currentRoundMatches = new ArrayList<>();
+        for (int i = 0; i < previousMatches.size(); i += TEAMS_PER_MATCH) {
+            DoublesMatch match = new DoublesMatch(league, null, null, roundNumber);
+            makeSetsInMatch(match);
+            doublesMatchStore.store(match);
+            currentRoundMatches.add(match);
+        }
+        return currentRoundMatches;
+    }
 
     private List<DoublesMatch> createSubsequentRoundsMatches(League league, int totalRounds) {
         List<DoublesMatch> matches = new ArrayList<>();
