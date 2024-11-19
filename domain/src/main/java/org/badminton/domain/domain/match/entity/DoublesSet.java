@@ -31,14 +31,14 @@ public class DoublesSet extends AbstractBaseTime {
 	@JoinColumn(name = "doublesMatchId")
 	private DoublesMatch doublesMatch;
 
-	private Integer setNumber;
+	private int setNumber;
 	private int team1Score;
 	private int team2Score;
 
 	@Enumerated(EnumType.STRING)
 	private SetStatus setStatus;
 
-	public DoublesSet(DoublesMatch doublesMatch, Integer setNumber) {
+	public DoublesSet(DoublesMatch doublesMatch, int setNumber) {
 		this.doublesMatch = doublesMatch;
 		this.setNumber = setNumber;
 		this.team1Score = INITIAL_SET_SCORE;

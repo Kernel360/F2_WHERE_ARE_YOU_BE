@@ -137,14 +137,14 @@ public class MatchController {
 		@PathVariable Long leagueId,
 		@PathVariable Long matchId,
 		@PathVariable Integer setNumber,
-		@Valid @RequestBody SetScoreUpdateRequest setScoreFinishRequest,
+		@Valid @RequestBody SetScoreUpdateRequest setScoreRequest,
 		@AuthenticationPrincipal CustomOAuth2Member member
 	) {
 		String memberToken = member.getMemberToken();
 		MatchOperationHandler matchOperationFacade = matchFacade.getMatchOperationHandler(leagueId);
 		UpdateSetScore updateSetScoreCommand = UpdateSetScore.builder()
-			.score1(setScoreFinishRequest.score1())
-			.score2(setScoreFinishRequest.score2())
+			.score1(setScoreRequest.score1())
+			.score2(setScoreRequest.score2())
 			.build();
 
 		SetInfo.Main updateSetScoreInfo = matchOperationFacade.registerSetScoreInMatch(leagueId, matchId, setNumber,

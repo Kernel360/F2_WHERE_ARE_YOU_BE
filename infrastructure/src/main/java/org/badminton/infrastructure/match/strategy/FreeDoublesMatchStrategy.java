@@ -15,7 +15,6 @@ import org.badminton.domain.domain.league.vo.Team;
 import org.badminton.domain.domain.match.command.MatchCommand;
 import org.badminton.domain.domain.match.entity.DoublesMatch;
 import org.badminton.domain.domain.match.entity.DoublesSet;
-import org.badminton.domain.domain.match.entity.SinglesMatch;
 import org.badminton.domain.domain.match.info.BracketInfo;
 import org.badminton.domain.domain.match.info.SetInfo;
 import org.badminton.domain.domain.match.reader.DoublesMatchStore;
@@ -75,6 +74,9 @@ public class FreeDoublesMatchStrategy extends AbstractDoublesMatchStrategy {
 			doublesMatch.team2WinSet();
 		}
 
+		//다음 세트가 있으면 다음 세트를 open 해준다.
+		nextSetOpen(doublesMatch, setNumber);
+		
 		doublesMatchStore.store(doublesMatch);
 		return SetInfo.fromDoublesSet(matchId, setNumber, doublesMatch.getDoublesSets().get(setNumber - 1));
 	}
@@ -126,10 +128,10 @@ public class FreeDoublesMatchStrategy extends AbstractDoublesMatchStrategy {
 		doublesMatchStore.store(doublesMatch);
 	}
 
-	private void nextSetOpen(SinglesMatch singlesMatch, Integer setNumber) {
-		if (LIMIT_SET_GAME > singlesMatch.getSinglesSet(setNumber).getSetNumber()) {
+	private void nextSetOpen(DoublesMatch doublesMatch, Integer setNumber) {
+		if (LIMIT_SET_GAME > doublesMatch.getDoublesSet(setNumber).getSetNumber()) {
 			setNumber++;
-			singlesMatch.getSinglesSet(setNumber).open();
+			doublesMatch.getDoublesSet(setNumber).open();
 		}
 	}
 }

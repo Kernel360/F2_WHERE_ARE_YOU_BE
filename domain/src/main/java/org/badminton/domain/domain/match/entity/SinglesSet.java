@@ -31,14 +31,14 @@ public class SinglesSet extends AbstractBaseTime {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	private Integer setNumber;
+	private int setNumber;
 	private int player1Score;
 	private int player2Score;
 
 	@Enumerated(EnumType.STRING)
 	private SetStatus setStatus;
 
-	public SinglesSet(SinglesMatch singlesMatch, Integer setNumber) {
+	public SinglesSet(SinglesMatch singlesMatch, int setNumber) {
 		this.singlesMatch = singlesMatch;
 		this.setNumber = setNumber;
 		this.player1Score = INITIAL_SET_SCORE;
