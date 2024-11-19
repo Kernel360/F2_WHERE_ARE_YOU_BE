@@ -1,5 +1,6 @@
 package org.badminton.api.application.match;
 
+import org.badminton.api.interfaces.match.dto.StartFirstSetScoreCommand;
 import org.badminton.domain.domain.match.command.MatchCommand;
 import org.badminton.domain.domain.match.info.BracketInfo;
 import org.badminton.domain.domain.match.info.SetInfo;
@@ -31,13 +32,20 @@ public class FreeMatchFacade implements MatchOperationHandler {
 
 	@Override
 	public SetInfo.Main registerSetScoreInMatch(Long leagueId, Long matchId, int setIndex,
-		MatchCommand.UpdateSetScore updateSetScoreCommand) {
+		MatchCommand.UpdateSetScore updateSetScoreCommand, String memberToken) {
 		MatchStrategy matchStrategy = matchProgressService.makeSinglesOrDoublesMatchStrategy(leagueId);
 		SetInfo.Main main = matchProgressService.registerSetScoreInMatch(matchStrategy, leagueId, matchId, setIndex,
-			updateSetScoreCommand);
+			updateSetScoreCommand, memberToken);
 		matchRecordService.processMatchResult(main.getMatchType(), matchId);
 
 		return main;
+	}
+
+	@Override
+	public void registerFirstSetScoreInMatch(StartFirstSetScoreCommand initFirstSetScoreCommand) {
+		MatchStrategy matchStrategy = freeBracketGenerationService.makeSinglesOrDoublesMatchStrategy(
+			initFirstSetScoreCommand.leagueId());
+		freeBracketGenerationService.initMatch(matchStrategy, initFirstSetScoreCommand.matchId());
 	}
 
 	@Override

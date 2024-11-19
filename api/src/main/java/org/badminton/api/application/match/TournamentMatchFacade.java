@@ -1,5 +1,6 @@
 package org.badminton.api.application.match;
 
+import org.badminton.api.interfaces.match.dto.StartFirstSetScoreCommand;
 import org.badminton.domain.domain.match.command.MatchCommand;
 import org.badminton.domain.domain.match.info.BracketInfo;
 import org.badminton.domain.domain.match.info.SetInfo;
@@ -38,11 +39,17 @@ public class TournamentMatchFacade implements MatchOperationHandler {
 
 	@Override
 	public SetInfo.Main registerSetScoreInMatch(Long leagueId, Long matchId, int setIndex,
-		MatchCommand.UpdateSetScore updateSetScoreCommand) {
+		MatchCommand.UpdateSetScore updateSetScoreCommand, String memberToken) {
 		MatchStrategy matchStrategy = tournamentMatchProgressService.makeSinglesOrDoublesMatchStrategy(leagueId);
 		SetInfo.Main main = tournamentMatchProgressService.registerSetScoreInMatch(matchStrategy, leagueId, matchId,
-			setIndex, updateSetScoreCommand);
+			setIndex, updateSetScoreCommand, memberToken);
 		matchRecordService.processMatchResult(main.getMatchType(), matchId);
 		return main;
+	}
+
+	@Override
+	public void registerFirstSetScoreInMatch(StartFirstSetScoreCommand initFirstSetScoreCommand) {
+		tournamentBracketGenerationService.checkLeagueRecruitingStatus(initFirstSetScoreCommand.leagueId());
+
 	}
 }

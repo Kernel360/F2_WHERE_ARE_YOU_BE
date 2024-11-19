@@ -24,43 +24,47 @@ import org.badminton.domain.common.enums.SetStatus;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 public class SinglesSet extends AbstractBaseTime {
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "singlesMatchId")
-    SinglesMatch singlesMatch;
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-    private int setNumber;
-    private int player1Score;
-    private int player2Score;
+	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@JoinColumn(name = "singlesMatchId")
+	SinglesMatch singlesMatch;
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
+	private int setNumber;
+	private int player1Score;
+	private int player2Score;
 
-    @Enumerated(EnumType.STRING)
-    private SetStatus setStatus;
+	@Enumerated(EnumType.STRING)
+	private SetStatus setStatus;
 
-    public SinglesSet(SinglesMatch singlesMatch, int setNumber) {
-        this.singlesMatch = singlesMatch;
-        this.setNumber = setNumber;
-        this.player1Score = INITIAL_SET_SCORE;
-        this.player2Score = INITIAL_SET_SCORE;
-        this.setStatus = SetStatus.IN_PROGRESS;
-    }
+	public SinglesSet(SinglesMatch singlesMatch, int setNumber) {
+		this.singlesMatch = singlesMatch;
+		this.setNumber = setNumber;
+		this.player1Score = INITIAL_SET_SCORE;
+		this.player2Score = INITIAL_SET_SCORE;
+		this.setStatus = SetStatus.IN_PROGRESS;
+	}
 
-    public void saveSetScore(int player1Score, int player2Score) {
-        this.player1Score = player1Score;
-        this.player2Score = player2Score;
-    }
+	public void saveSetScore(int player1Score, int player2Score) {
+		this.player1Score = player1Score;
+		this.player2Score = player2Score;
+	}
 
-    public void endSetScore(int player1Score, int player2Score) {
-        this.player1Score = player1Score;
-        this.player2Score = player2Score;
-        close();
-    }
+	public void endSetScore(int player1Score, int player2Score) {
+		this.player1Score = player1Score;
+		this.player2Score = player2Score;
+		close();
+	}
 
-    public void open() {
-        this.setStatus = SetStatus.IN_PROGRESS;
-    }
+	public void open() {
+		this.setStatus = SetStatus.IN_PROGRESS;
+	}
 
-    public void close() {
-        this.setStatus = SetStatus.FINISHED;
-    }
+	public void close() {
+		this.setStatus = SetStatus.FINISHED;
+	}
+
+	public void initMatch() {
+		this.setStatus = SetStatus.IN_PROGRESS;
+	}
 }

@@ -83,9 +83,9 @@ public class MatchFacade {
     }
 
     public SetInfo.Main registerSetScore(Long leagueId, Long matchId, int setNumber,
-                                         SetScoreUpdateRequest setScoreUpdateRequest) {
+                                         SetScoreUpdateRequest setScoreUpdateRequest, String memberToken) {
         retrieveMatchSet.setMatchSetScore(leagueId, matchId, setNumber,
-                new Score(setScoreUpdateRequest.score1(), setScoreUpdateRequest.score2()));
+                new Score(setScoreUpdateRequest.score1(), setScoreUpdateRequest.score2()), memberToken);
         return retrieveSetInfo(leagueId, matchId, setNumber);
     }
 

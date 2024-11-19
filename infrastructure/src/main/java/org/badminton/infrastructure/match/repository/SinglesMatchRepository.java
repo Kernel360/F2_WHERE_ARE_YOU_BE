@@ -19,4 +19,10 @@ public interface SinglesMatchRepository extends JpaRepository<SinglesMatch, Long
 
     SinglesMatch findFirstByLeagueLeagueIdOrderByIdAsc(Long leagueId);
 
+	@Query("SELECT COUNT(m) = 0 FROM SinglesMatch m WHERE m.league.leagueId = :leagueId AND m.matchStatus != 'FINISHED'")
+	boolean allMatchesFinishedForLeague(@Param("leagueId") Long leagueId);
+
+	@Query("SELECT COUNT(m) = 0 FROM SinglesMatch m WHERE m.league.leagueId = :leagueId AND m.matchStatus != 'NOT_STARTED'")
+	boolean allMatchesNotStartedForLeague(@Param("leagueId") Long leagueId);
+
 }

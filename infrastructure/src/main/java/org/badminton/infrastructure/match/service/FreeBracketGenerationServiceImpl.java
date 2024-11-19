@@ -61,12 +61,16 @@ public class FreeBracketGenerationServiceImpl implements BracketGenerationServic
 	@Override
 	@Transactional
 	public BracketInfo makeBracket(MatchStrategy matchStrategy, Long leagueId) {
-		League league = findLeague(leagueId);
-		matchStrategy.checkDuplicateInitialBracket(league.getLeagueAt(), leagueId);
+		matchStrategy.checkDuplicateInitialBracket(leagueId);
 
 		List<LeagueParticipant> leagueParticipantList = findLeagueParticipantList(leagueId);
 
 		return matchStrategy.makeBracket(findLeague(leagueId), leagueParticipantList);
+	}
+
+	@Override
+	public void initMatch(MatchStrategy matchStrategy, Long matchId) {
+		matchStrategy.initMatch(matchId);
 	}
 
 	private League findLeague(Long leagueId) {

@@ -26,5 +26,7 @@ public interface ClubMemberRepository extends JpaRepository<ClubMember, Long> {
 	Integer countByClubClubIdAndDeletedFalse(Long clubId);
 
 	ClubMember findByClubClubTokenAndRole(String clubToken, ClubMember.ClubMemberRole role);
+
+	Integer countByClubClubTokenAndDeletedFalse(String clubToken);
 }
 

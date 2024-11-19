@@ -5,8 +5,8 @@ import org.badminton.domain.domain.match.info.SetInfo;
 
 public interface MatchProgressService {
 
-    MatchStrategy makeSinglesOrDoublesMatchStrategy(Long leagueId);
+	MatchStrategy makeSinglesOrDoublesMatchStrategy(Long leagueId);
 
-    SetInfo.Main registerSetScoreInMatch(MatchStrategy matchStrategy, Long leagueId, Long matchId, int setIndex,
-                                         MatchCommand.UpdateSetScore updateSetScoreCommand);
+	SetInfo.Main registerSetScoreInMatch(MatchStrategy matchStrategy, Long leagueId, Long matchId, int setIndex,
+		MatchCommand.UpdateSetScore updateSetScoreCommand, String memberToken);
 }
