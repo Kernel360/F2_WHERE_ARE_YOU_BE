@@ -73,9 +73,9 @@ public abstract class AbstractSinglesMatchStrategy implements MatchStrategy {
         List<SinglesMatch> singlesMatchInProgress = singlesMatchReader.getSinglesBracket(leagueId)
                 .stream()
                 .filter(singlesMatch -> singlesMatch.getMatchStatus() == MatchStatus.IN_PROGRESS)
+                .filter(singlesMatch -> singlesMatch.getSetInProgress().isPresent())
                 .sorted(Comparator.comparing(SinglesMatch::getId))
                 .toList();
-        singlesMatchInProgress.forEach(match -> System.out.println("Sorted Match ID: " + match.getId()));
 
         List<SinglesSet> singlesSetInProgress = singlesMatchInProgress.stream()
                 .filter(singlesMatch -> singlesMatch.getSetInProgress().isPresent())
@@ -85,6 +85,7 @@ public abstract class AbstractSinglesMatchStrategy implements MatchStrategy {
         if (singlesMatchInProgress.size() != singlesSetInProgress.size()) {
             throw new BadmintonException(ErrorCode.INVALID_PARAMETER);
         }
+
         List<LeagueSetsScoreInProgressInfo> leagueSetsScoreInProgressInfo = new ArrayList<>();
 
         for (int i = 0; i < singlesSetInProgress.size(); i++) {
