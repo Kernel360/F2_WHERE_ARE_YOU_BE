@@ -7,7 +7,7 @@ import org.badminton.domain.domain.club.command.ClubApplyCommand;
 
 public record ClubApplyRequest(
         @NotNull
-        @Size(min = Constants.APPLY_MIN, max = Constants.APPLY_MAX)
+        @Size(miㄴn = Constants.APPLY_MIN, max = Constants.APPLY_MAX)
         String applyReason
 ) {
     public ClubApplyCommand of() {
