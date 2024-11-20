@@ -39,15 +39,15 @@ jobs:
       - name: Set Gradle Wrapper Permissions
         run: chmod +x ./gradlew
 
-      - name: Build batch
-        run: ./gradlew :batch:assemble
+      - name: Build API
+        run: ./gradlew :api:assemble
 
       - name: Install Docker Compose
         run: |
           sudo apt-get update
           sudo apt-get install -y docker-compose
 
-      - name: Build and push Docker image for badminton-batch
+      - name: Build and push Docker image for API
         run: |
           echo "${{ secrets.DOCKERHUB_PASSWORD }}" | docker login -u ${{ secrets.DOCKERHUB_USERNAME }} --password-stdin
           docker compose build badminton-batch
@@ -58,15 +58,17 @@ jobs:
     needs: build
 
     steps:
-      - name: Deploy badminton-batch
+      - name: Deploy API on server
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.PUBLIC_DNS }}
           username: ${{ secrets.EC2_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
+            echo "Docker Hub에 로그인"
             echo "${{ secrets.DOCKERHUB_PASSWORD }}" | sudo docker login -u ${{ secrets.DOCKERHUB_USERNAME }} --password-stdin
-            echo "Deploying badminton-batch..."
+            echo "badminton-api 서비스 업데이트"
             sudo docker compose pull badminton-batch
             sudo docker compose up -d badminton-batch
+            echo "오래된 Docker 이미지 정리"
             sudo docker image prune -f
