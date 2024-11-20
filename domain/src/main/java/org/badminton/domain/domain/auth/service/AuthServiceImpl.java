@@ -39,7 +39,6 @@ public class AuthServiceImpl implements AuthService {
 
 	@Override
 	public MemberDeleteInfo deleteMember(String memberToken, String oauthToken, String registrationId) {
-
 		MemberDeleteInfo memberDeleteInfo = changeIsDeleted(memberToken);
 		unLinkOAuth(registrationId, oauthToken);
 		return memberDeleteInfo;
