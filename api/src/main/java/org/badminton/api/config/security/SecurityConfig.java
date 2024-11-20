@@ -116,8 +116,7 @@ public class SecurityConfig {
                         exception -> exception.authenticationEntryPoint(failedAuthenticationEntryPoint))
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(HttpMethod.GET, "/v1/clubs", "/v1/clubs/{clubToken}", "/v1/clubs/search",
-                                "/v2/**")
-                        .permitAll()
+                                "/v2/**").permitAll()
                         .requestMatchers(HttpMethod.POST, "/v1/clubs")
                         .permitAll()
                         .requestMatchers(HttpMethod.DELETE, "/v1/clubs/{clubToken}")
