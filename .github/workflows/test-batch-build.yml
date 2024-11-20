@@ -1,4 +1,4 @@
-name: Build and Deploy Batch
+name: Build and Deploy Batch - test
 
 on:
   push:
