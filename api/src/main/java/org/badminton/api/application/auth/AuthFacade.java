@@ -17,6 +17,7 @@ import lombok.extern.slf4j.Slf4j;
 public class AuthFacade {
 
 	private final AuthService authService;
+	
 	@Value("${custom.server.domain}")
 	private String domain;
 

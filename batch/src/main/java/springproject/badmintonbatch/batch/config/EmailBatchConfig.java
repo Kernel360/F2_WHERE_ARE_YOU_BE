@@ -44,6 +44,5 @@ public class EmailBatchConfig {
 	public PlatformTransactionManager emailTransactionManager(EntityManagerFactory entityManagerFactory) {
 		return new JpaTransactionManager(entityManagerFactory);
 	}
-
 }
 

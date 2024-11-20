@@ -42,7 +42,6 @@ public class AuthServiceImpl implements AuthService {
 
 		MemberDeleteInfo memberDeleteInfo = changeIsDeleted(memberToken);
 		unLinkOAuth(registrationId, oauthToken);
-
 		return memberDeleteInfo;
 	}
 
