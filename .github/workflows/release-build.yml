@@ -1,4 +1,4 @@
-name: Build and Deploy Batch
+name: Build and Deploy API
 
 on:
   push:
@@ -33,7 +33,7 @@ jobs:
         run: |
           cd ./api/src/main/resources
           cat <<EOF > logback.xml
-          ${{ secrets.LOGBACK_BATCH }}
+          ${{ secrets.LOGBACK_API }}
           EOF
 
       - name: Set Gradle Wrapper Permissions
