@@ -119,6 +119,9 @@ spring:
       on-profile: production
   jpa:
     show-sql: false
+springdoc:
+  swagger-ui:
+    enabled: false
 ---
 spring:
   config:
