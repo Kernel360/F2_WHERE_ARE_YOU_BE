@@ -23,6 +23,7 @@ public class OngoingAndUpcomingLeagueInfo {
 	int recruitedMemberCount;
 	LeagueStatus leagueStatus;
 	Member.MemberTier requiredTier;
+	String clubToken;
 
 	public static OngoingAndUpcomingLeagueInfo from(League league, int recruitedMemberCount) {
 		return new OngoingAndUpcomingLeagueInfo(
@@ -34,7 +35,10 @@ public class OngoingAndUpcomingLeagueInfo {
 			league.getPlayerLimitCount(),
 			recruitedMemberCount,
 			league.getLeagueStatus(),
-			league.getRequiredTier()
+			league.getRequiredTier(),
+			league.getClub().getClubToken()
+
 		);
 	}
+
 }

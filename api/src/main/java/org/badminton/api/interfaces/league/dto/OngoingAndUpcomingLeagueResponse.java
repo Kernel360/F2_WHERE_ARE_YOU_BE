@@ -36,7 +36,10 @@ public record OngoingAndUpcomingLeagueResponse(
 	LeagueStatus leagueStatus,
 
 	@Schema(description = "경기 티어", requiredMode = Schema.RequiredMode.REQUIRED)
-	Member.MemberTier requiredTier
+	Member.MemberTier requiredTier,
+
+	@Schema(description = "동호회 토큰", requiredMode = Schema.RequiredMode.REQUIRED)
+	String clubToken
 ) {
 
 	public static OngoingAndUpcomingLeagueResponse from(OngoingAndUpcomingLeagueInfo ongoingAndUpcomingLeagueInfo) {
@@ -49,7 +52,8 @@ public record OngoingAndUpcomingLeagueResponse(
 			ongoingAndUpcomingLeagueInfo.getPlayerLimitCount(),
 			ongoingAndUpcomingLeagueInfo.getRecruitedMemberCount(),
 			ongoingAndUpcomingLeagueInfo.getLeagueStatus(),
-			ongoingAndUpcomingLeagueInfo.getRequiredTier()
+			ongoingAndUpcomingLeagueInfo.getRequiredTier(),
+			ongoingAndUpcomingLeagueInfo.getClubToken()
 		);
 	}
 }
