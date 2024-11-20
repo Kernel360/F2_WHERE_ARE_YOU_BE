@@ -33,6 +33,7 @@ public class TournamentSinglesMatchStrategy extends AbstractSinglesMatchStrategy
 
 	public static final int SET_COUNT = 3;
 	public static final int PARTICIPANTS_PER_MATCH = 2;
+	static final Integer LIMIT_SET_GAME = 3;
 	private final SinglesMatchStore singlesMatchStore;
 	private final LeagueParticipantReader leagueParticipantReader;
 	private final SinglesMatchReader singlesMatchReader;
@@ -97,6 +98,10 @@ public class TournamentSinglesMatchStrategy extends AbstractSinglesMatchStrategy
 		updateSetScore(singlesMatch, setNumber, updateSetScoreCommand);
 		singlesMatchStore.store(singlesMatch);
 
+		if (LIMIT_SET_GAME > setNumber) {
+			changeNextSetStatus(singlesMatch, setNumber);
+		}
+
 		// 최종 승자가 정해지면 matchResult 업데이트
 		if (isMatchWinnerDetermined(singlesMatch)) {
 			singlesMatchStore.store(singlesMatch);
@@ -107,6 +112,14 @@ public class TournamentSinglesMatchStrategy extends AbstractSinglesMatchStrategy
 			leagueReader.readLeagueById(singlesMatch.getLeague().getLeagueId()).finishLeague();
 
 		return SetInfo.fromSinglesSet(matchId, setNumber, singlesMatch.getSinglesSets().get(setNumber - 1));
+	}
+
+	private void changeNextSetStatus(SinglesMatch singlesMatch, Integer setNumber) {
+		setNumber++;
+		if (singlesMatch.getPlayer1MatchResult().equals(MatchResult.NONE))
+			singlesMatch.getSinglesSet(setNumber).open();
+		if (!singlesMatch.getPlayer1MatchResult().equals(MatchResult.NONE))
+			singlesMatch.getSinglesSet(setNumber).close();
 	}
 
 	private boolean isAllMatchFinished(SinglesMatch singlesMatch) {

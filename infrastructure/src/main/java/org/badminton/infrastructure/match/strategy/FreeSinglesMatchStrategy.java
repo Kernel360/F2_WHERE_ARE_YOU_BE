@@ -83,14 +83,23 @@ public class FreeSinglesMatchStrategy extends AbstractSinglesMatchStrategy {
 			singlesMatch.player2WinSet();
 		}
 
+		if (LIMIT_SET_GAME > setNumber) {
+			changeNextSetStatus(singlesMatch, setNumber);
+		}
+
 		if (isAllMatchFinished(singlesMatch))
 			leagueReader.readLeagueById(singlesMatch.getLeague().getLeagueId()).finishLeague();
 
-		//다음 세트가 있으면 다음 세트를 open 해준다.
-		nextSetOpen(singlesMatch, setNumber);
-
 		singlesMatchStore.store(singlesMatch);
 		return SetInfo.fromSinglesSet(matchId, setNumber, singlesMatch.getSinglesSets().get(setNumber - 1));
+	}
+
+	private void changeNextSetStatus(SinglesMatch singlesMatch, Integer setNumber) {
+		setNumber++;
+		if (singlesMatch.getPlayer1MatchResult().equals(MatchResult.NONE))
+			singlesMatch.getSinglesSet(setNumber).open();
+		if (!singlesMatch.getPlayer1MatchResult().equals(MatchResult.NONE))
+			singlesMatch.getSinglesSet(setNumber).close();
 	}
 
 	private boolean isAllMatchFinished(SinglesMatch singlesMatch) {
@@ -143,11 +152,5 @@ public class FreeSinglesMatchStrategy extends AbstractSinglesMatchStrategy {
 		singlesMatchStore.store(singlesMatch);
 	}
 
-	private void nextSetOpen(SinglesMatch singlesMatch, Integer setNumber) {
-		if (LIMIT_SET_GAME > singlesMatch.getSinglesSet(setNumber).getSetNumber()) {
-			setNumber++;
-			singlesMatch.getSinglesSet(setNumber).open();
-		}
-	}
 }
 

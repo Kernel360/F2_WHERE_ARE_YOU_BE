@@ -5,7 +5,7 @@ spring:
     type: redis
   data:
     redis:
-      host: redis.kangmin.online
+      host: ${REDIS_HOST}
       port: 6379
   profiles:
     active: ${ACTIVE_PROFILE}
