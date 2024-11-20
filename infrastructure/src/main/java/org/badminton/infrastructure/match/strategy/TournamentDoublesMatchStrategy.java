@@ -36,6 +36,7 @@ public class TournamentDoublesMatchStrategy extends AbstractDoublesMatchStrategy
 	public static final int SET_COUNT = 3;
 	public static final int PARTICIPANTS_PER_TEAM = 2;
 	public static final int TEAMS_PER_MATCH = 2;
+	static final Integer LIMIT_SET_GAME = 3;
 	private final DoublesMatchReader doublesMatchReader;
 	private final DoublesMatchStore doublesMatchStore;
 	private final LeagueParticipantReader leagueParticipantReader;
@@ -99,6 +100,10 @@ public class TournamentDoublesMatchStrategy extends AbstractDoublesMatchStrategy
 		updateSetScore(doublesMatch, setNumber, updateSetScoreCommand);
 		doublesMatchStore.store(doublesMatch);
 
+		if (LIMIT_SET_GAME > setNumber) {
+			changeNextSetStatus(doublesMatch, setNumber);
+		}
+
 		if (isMatchWinnerDetermined(doublesMatch)) {
 			doublesMatchStore.store(doublesMatch);
 			updateNextRoundMatch(doublesMatch);
@@ -107,6 +112,14 @@ public class TournamentDoublesMatchStrategy extends AbstractDoublesMatchStrategy
 			leagueReader.readLeagueById(doublesMatch.getLeague().getLeagueId()).finishLeague();
 
 		return SetInfo.fromDoublesSet(matchId, setNumber, doublesMatch.getDoublesSets().get(setNumber - 1));
+	}
+
+	private void changeNextSetStatus(DoublesMatch doublesMatch, Integer setNumber) {
+		setNumber++;
+		if (doublesMatch.getTeam1MatchResult().equals(MatchResult.NONE))
+			doublesMatch.getDoublesSet(setNumber).open();
+		if (!doublesMatch.getTeam1MatchResult().equals(MatchResult.NONE))
+			doublesMatch.getDoublesSet(setNumber).close();
 	}
 
 	private boolean isAllMatchFinished(DoublesMatch doublesMatch) {

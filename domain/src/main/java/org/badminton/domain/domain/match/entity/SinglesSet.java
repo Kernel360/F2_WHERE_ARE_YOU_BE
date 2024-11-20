@@ -1,6 +1,9 @@
 package org.badminton.domain.domain.match.entity;
 
-import static org.badminton.domain.common.consts.Constants.INITIAL_SET_SCORE;
+import static org.badminton.domain.common.consts.Constants.*;
+
+import org.badminton.domain.common.AbstractBaseTime;
+import org.badminton.domain.common.enums.SetStatus;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
@@ -16,17 +19,17 @@ import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.badminton.domain.common.AbstractBaseTime;
-import org.badminton.domain.common.enums.SetStatus;
 
 @Entity
 @Table(name = "singles_set")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 public class SinglesSet extends AbstractBaseTime {
+
 	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinColumn(name = "singlesMatchId")
 	SinglesMatch singlesMatch;
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
@@ -42,7 +45,7 @@ public class SinglesSet extends AbstractBaseTime {
 		this.setNumber = setNumber;
 		this.player1Score = INITIAL_SET_SCORE;
 		this.player2Score = INITIAL_SET_SCORE;
-		this.setStatus = SetStatus.IN_PROGRESS;
+		this.setStatus = SetStatus.NOT_STARTED;
 	}
 
 	public void saveSetScore(int player1Score, int player2Score) {
