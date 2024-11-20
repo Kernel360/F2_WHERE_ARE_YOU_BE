@@ -2,7 +2,7 @@ package org.badminton.api.aws.s3.controller;
 
 import org.badminton.api.aws.s3.model.dto.ImageUploadRequest;
 import org.badminton.api.aws.s3.service.ClubImageService;
-import org.springframework.http.ResponseEntity;
+import org.badminton.api.common.response.CommonResponse;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestPart;
@@ -46,9 +46,9 @@ public class ClubImageController {
 			)
 		}
 	)
-	public ResponseEntity<String> saveImage(@RequestPart("multipartFile") MultipartFile multipartFile) {
+	public CommonResponse<String> saveImage(@RequestPart("multipartFile") MultipartFile multipartFile) {
 		ImageUploadRequest request = new ImageUploadRequest(multipartFile);
-		return ResponseEntity.ok(clubImageService.uploadFile(request));
+		return CommonResponse.success(clubImageService.uploadFile(request));
 	}
 }
 
