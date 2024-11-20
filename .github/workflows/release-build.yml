@@ -50,8 +50,8 @@ jobs:
       - name: Build and push Docker image for API
         run: |
           echo "${{ secrets.DOCKERHUB_PASSWORD }}" | docker login -u ${{ secrets.DOCKERHUB_USERNAME }} --password-stdin
-          docker compose build badminton-batch
-          docker compose push badminton-batch
+          docker compose build badminton-api
+          docker compose push badminton-api
 
   deploy:
     runs-on: ubuntu-latest
@@ -68,7 +68,7 @@ jobs:
             echo "Docker Hub에 로그인"
             echo "${{ secrets.DOCKERHUB_PASSWORD }}" | sudo docker login -u ${{ secrets.DOCKERHUB_USERNAME }} --password-stdin
             echo "badminton-api 서비스 업데이트"
-            sudo docker compose pull badminton-batch
-            sudo docker compose up -d badminton-batch
+            sudo docker compose pull badminton-api
+            sudo docker compose up -d badminton-api
             echo "오래된 Docker 이미지 정리"
             sudo docker image prune -f
