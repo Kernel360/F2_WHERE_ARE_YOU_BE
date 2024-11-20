@@ -34,6 +34,7 @@ public class ClubApplyReaderImpl implements ClubApplyReader {
 	public List<ClubApplicantInfo> getClubApplyByClubToken(String clubToken, ClubApply.ApplyStatus applyStatus) {
 		List<ClubApply> clubApplicants = clubApplyRepository.findAllByClubClubTokenAndStatus(clubToken,
 			applyStatus);
+		
 		return clubApplicants.stream()
 			.map(ClubApplicantInfo::from)
 			.toList();
