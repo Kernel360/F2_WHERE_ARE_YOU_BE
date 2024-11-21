@@ -7,6 +7,7 @@ import org.badminton.domain.domain.league.LeagueParticipantService;
 import org.badminton.domain.domain.league.LeagueService;
 import org.badminton.domain.domain.league.command.LeagueCreateNoIncludeClubCommand;
 import org.badminton.domain.domain.league.command.LeagueUpdateCommand;
+import org.badminton.domain.domain.league.info.IsLeagueParticipantInfo;
 import org.badminton.domain.domain.league.info.LeagueByDateInfo;
 import org.badminton.domain.domain.league.info.LeagueByDateInfoWithParticipantCountInfo;
 import org.badminton.domain.domain.league.info.LeagueCancelInfo;
@@ -57,13 +58,16 @@ public class LeagueFacade {
 		return leagueCreateInfo;
 	}
 
-	public LeagueDetailsInfo getLeague(String clubToken, Long leagueId, String memberToken) {
+	public LeagueDetailsInfo getLeague(String clubToken, Long leagueId) {
 		LeagueSummaryInfo leagueSummaryInfo = leagueService.getLeague(clubToken, leagueId);
 		MatchStrategy matchStrategy = matchRetrieveService.makeSinglesOrDoublesMatchStrategy(leagueId);
 		boolean isMatchCreated = matchRetrieveService.isMatchInLeague(matchStrategy, leagueId);
-		boolean isParticipatedInLeague = leagueParticipantService.isParticipant(memberToken, leagueId);
 		int recruitedMemberCount = leagueParticipantService.countParticipantMember(leagueId);
-		return LeagueDetailsInfo.from(leagueSummaryInfo, isMatchCreated, isParticipatedInLeague, recruitedMemberCount);
+		return LeagueDetailsInfo.from(leagueSummaryInfo, isMatchCreated, recruitedMemberCount);
+	}
+
+	public IsLeagueParticipantInfo isLeagueParticipant(String memberToken, Long leagueId) {
+		return leagueParticipantService.isParticipant(memberToken, leagueId);
 	}
 
 	public LeagueUpdateInfoWithParticipantCountInfo updateLeague(String clubToken, Long leagueId,

@@ -11,6 +11,7 @@ import org.badminton.domain.domain.clubmember.entity.ClubMember;
 import org.badminton.domain.domain.league.entity.League;
 import org.badminton.domain.domain.league.entity.LeagueParticipant;
 import org.badminton.domain.domain.league.enums.LeagueStatus;
+import org.badminton.domain.domain.league.info.IsLeagueParticipantInfo;
 import org.badminton.domain.domain.league.info.LeagueParticipantCancelInfo;
 import org.badminton.domain.domain.league.info.LeagueParticipantInfo;
 import org.springframework.stereotype.Service;
@@ -30,8 +31,9 @@ public class LeagueParticipantServiceImpl implements LeagueParticipantService {
 
 	@Override
 	@Transactional
-	public boolean isParticipant(String memberToken, Long leagueId) {
-		return leagueParticipantReader.isParticipant(memberToken, leagueId);
+	public IsLeagueParticipantInfo isParticipant(String memberToken, Long leagueId) {
+		boolean isParticipant = leagueParticipantReader.isParticipant(memberToken, leagueId);
+		return IsLeagueParticipantInfo.from(isParticipant);
 	}
 
 	@Override
