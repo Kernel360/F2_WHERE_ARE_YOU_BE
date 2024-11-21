@@ -32,7 +32,7 @@ public class ClubMemberFacade {
 	private final MailService mailService;
 
 	public ApplyClubInfo applyClub(String memberToken, String clubToken, ClubApplyCommand command) {
-		mailService.prepareClubApplyEmail(clubToken);
+		mailService.prepareClubApplyEmail(clubToken, memberToken);
 		return clubApplyService.applyClub(memberToken, clubToken, command.applyReason());
 
 	}
