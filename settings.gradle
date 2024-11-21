@@ -3,4 +3,6 @@ include 'domain'
 include 'api'
 include 'batch'
 include 'infrastructure'
+include 'admin'
+include 'admin'
 

@@ -57,5 +57,3 @@ logs/api
 /logback-api-test.xml
 
 domain/src/main/generated
-
-admin
