@@ -22,3 +22,13 @@ services:
     networks:
       - backend
     image: speech2/badminton:batch
+
+  badminton-admin:
+    build:
+      context: ./admin
+    platform: linux/amd64  # x86 아키텍처
+    ports:
+      - "8090:8090"
+    networks:
+      - backend
+    image: speech2/badminton:admin
