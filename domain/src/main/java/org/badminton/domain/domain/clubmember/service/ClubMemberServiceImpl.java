@@ -5,9 +5,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
-import org.badminton.domain.domain.club.entity.Club;
-import org.badminton.domain.common.exception.clubmember.ClubOwnerCannotWithdraw;
 import org.badminton.domain.common.exception.clubmember.ClubMemberOwnerException;
+import org.badminton.domain.common.exception.clubmember.ClubOwnerCannotWithdraw;
+import org.badminton.domain.domain.club.entity.Club;
 import org.badminton.domain.domain.club.info.ClubCardInfo;
 import org.badminton.domain.domain.club.info.ClubCreateInfo;
 import org.badminton.domain.domain.clubmember.ClubMemberReader;
@@ -57,7 +57,6 @@ public class ClubMemberServiceImpl implements ClubMemberService {
 
 		ClubMember clubMember = clubMemberReader.getClubMember(clubMemberId);
 		clubMember.updateClubMemberRole(command.role());
-		clubOwnerProtect(clubMember);
 		clubMemberStore.store(clubMember);
 
 		return ClubMemberInfo.valueOf(clubMember);
