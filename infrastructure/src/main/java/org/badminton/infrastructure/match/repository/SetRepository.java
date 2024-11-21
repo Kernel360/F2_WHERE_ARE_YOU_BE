@@ -1,6 +1,9 @@
 package org.badminton.infrastructure.match.repository;
 
 import jakarta.annotation.PostConstruct;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
 import org.badminton.domain.common.enums.MatchType;
 import org.badminton.domain.common.exception.match.SetScoreNotInCacheException;
 import org.badminton.domain.domain.match.vo.Score;
@@ -33,5 +36,17 @@ public class SetRepository {
             throw new SetScoreNotInCacheException(matchType, matchId, setNumber);
         }
         return new Score(score);
+    }
+
+    public Map<String, Score> getAllScores() {
+        Map<String, Score> allScores = new HashMap<>();
+        for (String key : Objects.requireNonNull(redisTemplate.keys("*"))) {
+            Map<String, String> scoresMap = hashOps.entries(key);
+            for (Map.Entry<String, String> entry : scoresMap.entrySet()) {
+                String mapKey = key + ":" + entry.getKey(); // Redis key + set number
+                allScores.put(mapKey, new Score(entry.getValue()));
+            }
+        }
+        return allScores;
     }
 }
