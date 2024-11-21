@@ -27,7 +27,6 @@ public class RetrieveMatchSet {
     private final SetRepository setRepository;
     private final LeagueReader leagueReader;
     private final LeagueParticipantReader leagueParticipantReader;
-    // TODO: db에 저장
     private final SinglesMatchReader singlesMatchReader;
     private final DoublesMatchReader doublesMatchReader;
     private final SinglesMatchStore singlesMatchStore;
