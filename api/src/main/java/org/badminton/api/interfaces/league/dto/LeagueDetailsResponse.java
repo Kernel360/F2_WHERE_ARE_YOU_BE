@@ -49,10 +49,7 @@ public record LeagueDetailsResponse(
 
 	@Schema(description = "현재까지 참여한 인원", requiredMode = Schema.RequiredMode.REQUIRED)
 	int recruitedMemberCount,
-
-	@Schema(description = "해당하는 경기에 참여 신청을 했는지 여부", requiredMode = Schema.RequiredMode.REQUIRED)
-	boolean isParticipatedInLeague,
-
+	
 	@Schema(description = "생성 일자", requiredMode = Schema.RequiredMode.REQUIRED)
 	LocalDateTime createdAt,
 
