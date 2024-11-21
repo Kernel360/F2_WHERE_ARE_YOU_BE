@@ -16,7 +16,10 @@ public record ClubApplicantResponse(
 	@Schema(description = "가입 사유", requiredMode = Schema.RequiredMode.REQUIRED)
 	String applyReason,
 	@Schema(description = "동호회 가입 상태 (APPROVED | PENDING | REJECTED", requiredMode = Schema.RequiredMode.REQUIRED)
-	ClubApply.ApplyStatus status
+	ClubApply.ApplyStatus status,
+	@Schema(description = "프로필 이미지", requiredMode = Schema.RequiredMode.REQUIRED)
+	String profileImage
+
 ) {
 	public static ClubApplicantResponse from(ClubApplicantInfo clubApply) {
 		return new ClubApplicantResponse(
@@ -24,7 +27,8 @@ public record ClubApplicantResponse(
 			clubApply.name(),
 			clubApply.tier(),
 			clubApply.applyReason(),
-			clubApply.status()
+			clubApply.status(),
+			clubApply.profileImage()
 		);
 	}
 }
