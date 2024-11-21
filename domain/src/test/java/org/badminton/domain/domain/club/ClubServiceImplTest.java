@@ -171,7 +171,7 @@ class ClubServiceImplTest {
 		String clubToken = "club123";
 		List<ClubApplicantInfo> mockApplicants = List.of(
 			new ClubApplicantInfo(1L, "name", Member.MemberTier.BRONZE, "applyReason",
-				ClubApply.ApplyStatus.PENDING));
+				ClubApply.ApplyStatus.PENDING, "profileImage"));
 		when(clubApplyReader.getClubApplyByClubToken(clubToken, ClubApply.ApplyStatus.PENDING))
 			.thenReturn(mockApplicants);
 
