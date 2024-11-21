@@ -51,6 +51,9 @@ public class LeagueParticipantServiceImpl implements LeagueParticipantService {
         Long clubMemberId = clubMember.getClubMemberId();
         LeagueParticipant leagueParticipant = leagueParticipantReader.findParticipant(leagueId, clubMemberId);
         var result = leagueParticipantStore.cancelStore(leagueParticipant);
+        if (league.getPlayerLimitCount() < leagueParticipantReader.countParticipantMember(league.getLeagueId())) {
+            league.reopenLeagueRecruiting();
+        }
         return LeagueParticipantCancelInfo.from(result);
     }
 
