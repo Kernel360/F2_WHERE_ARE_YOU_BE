@@ -28,7 +28,8 @@ public class MailServiceImpl implements MailService {
 	private final MailStore mailStore;
 
 	@Override
-	public void prepareClubApplyEmail(String clubToken) {
+	public void prepareClubApplyEmail(String clubToken, String memberToken) {
+		clubApplyReader.validateApply(clubToken, memberToken);
 		Club club = clubReader.readClub(clubToken);
 		ClubMember clubOwner = clubMemberReader.getClubOwner(clubToken);
 		String ownerEmail = clubOwner.getMember().getEmail();
