@@ -1,7 +1,6 @@
 package org.badminton.domain.domain.league.info;
 
 import java.time.LocalDateTime;
-
 import org.badminton.domain.common.enums.MatchGenerationType;
 import org.badminton.domain.common.enums.MatchType;
 import org.badminton.domain.domain.league.entity.League;
@@ -9,51 +8,54 @@ import org.badminton.domain.domain.league.enums.LeagueStatus;
 import org.badminton.domain.domain.member.entity.Member;
 
 public record LeagueSummaryInfo(
-	Long leagueId,
+        Long leagueId,
 
-	String leagueName,
+        String leagueOwnerToken,
 
-	String leagueDescription,
+        String leagueName,
 
-	String fullAddress,
+        String leagueDescription,
 
-	String region,
+        String fullAddress,
 
-	Member.MemberTier requiredTier,
+        String region,
 
-	LeagueStatus leagueStatus,
+        Member.MemberTier requiredTier,
 
-	MatchType matchType,
+        LeagueStatus leagueStatus,
 
-	LocalDateTime leagueAt,
+        MatchType matchType,
 
-	LocalDateTime recruitingClosedAt,
+        LocalDateTime leagueAt,
 
-	int playerLimitCount,
+        LocalDateTime recruitingClosedAt,
 
-	MatchGenerationType matchGenerationType,
+        int playerLimitCount,
 
-	LocalDateTime createdAt,
+        MatchGenerationType matchGenerationType,
 
-	LocalDateTime modifiedAt
+        LocalDateTime createdAt,
+
+        LocalDateTime modifiedAt
 
 ) {
-	public static LeagueSummaryInfo from(League league) {
-		return new LeagueSummaryInfo(
-			league.getLeagueId(),
-			league.getLeagueName(),
-			league.getDescription(),
-			league.getAddress().getFullAddress(),
-			league.getAddress().getRegion(),
-			league.getRequiredTier(),
-			league.getLeagueStatus(),
-			league.getMatchType(),
-			league.getLeagueAt(),
-			league.getRecruitingClosedAt(),
-			league.getPlayerLimitCount(),
-			league.getMatchGenerationType(),
-			league.getCreatedAt(),
-			league.getModifiedAt()
-		);
-	}
+    public static LeagueSummaryInfo from(League league) {
+        return new LeagueSummaryInfo(
+                league.getLeagueId(),
+                league.getLeagueOwnerMemberToken(),
+                league.getLeagueName(),
+                league.getDescription(),
+                league.getAddress().getFullAddress(),
+                league.getAddress().getRegion(),
+                league.getRequiredTier(),
+                league.getLeagueStatus(),
+                league.getMatchType(),
+                league.getLeagueAt(),
+                league.getRecruitingClosedAt(),
+                league.getPlayerLimitCount(),
+                league.getMatchGenerationType(),
+                league.getCreatedAt(),
+                league.getModifiedAt()
+        );
+    }
 }
