@@ -127,7 +127,7 @@ public class ClubMemberServiceImpl implements ClubMemberService {
 
 	private void checkClubOwner(ClubMember clubMember, String clubToken) {
 		if (clubMember.getRole() == ClubMember.ClubMemberRole.ROLE_OWNER
-			&& clubMemberReader.getClubMemberCountsByClubToken(clubToken) > 1) {
+			&& clubMemberReader.getClubMemberCountByClubToken(clubToken) > 1) {
 			throw new ClubOwnerCannotWithdraw(clubMember.getClubMemberId());
 		}
 	}
@@ -149,12 +149,12 @@ public class ClubMemberServiceImpl implements ClubMemberService {
 	}
 
 	@Override
-	public Integer countByClubClubTokenAndDeletedFalse(String clubToken) {
-		return clubMemberReader.getClubMemberCountsByClubToken(clubToken);
+	public Integer countExistingClub(String clubToken) {
+		return clubMemberReader.getClubMemberCountByClubToken(clubToken);
 	}
 
 	@Override
-	public Integer countByClubClubIdAndDeletedFalse(Long clubId) {
+	public Integer countExistingClub(Long clubId) {
 		return clubMemberReader.getClubMemberCounts(clubId);
 	}
 
