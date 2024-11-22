@@ -44,7 +44,7 @@ public class ClubFacade {
 		var club = clubService.readClub(clubToken);
 		Map<Member.MemberTier, Long> memberCountByTier = club.getClubMemberCountByTier();
 
-		int clubMembersCount = club.clubMembers().size();
+		int clubMembersCount = clubMemberService.countByClubClubTokenAndDeletedFalse(clubToken);
 		clubStatisticsService.increaseVisitedClubCount(clubToken);
 		return ClubDetailsInfo.from(club, memberCountByTier,
 			clubMembersCount);

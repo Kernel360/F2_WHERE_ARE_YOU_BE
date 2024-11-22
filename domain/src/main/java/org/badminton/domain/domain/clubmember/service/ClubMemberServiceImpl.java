@@ -149,6 +149,11 @@ public class ClubMemberServiceImpl implements ClubMemberService {
 	}
 
 	@Override
+	public Integer countByClubClubTokenAndDeletedFalse(String clubToken) {
+		return clubMemberReader.getClubMemberCountsByClubToken(clubToken);
+	}
+
+	@Override
 	public Integer countByClubClubIdAndDeletedFalse(Long clubId) {
 		return clubMemberReader.getClubMemberCounts(clubId);
 	}
