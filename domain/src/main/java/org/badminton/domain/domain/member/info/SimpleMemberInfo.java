@@ -4,19 +4,21 @@ import org.badminton.domain.domain.member.entity.Member;
 
 public record SimpleMemberInfo(
 
-	String authorization,
+        String authorization,
 
-	String name,
+        String memberToken,
 
-	String email,
+        String name,
 
-	Member.MemberTier memberTier,
+        String email,
 
-	String profileImage
+        Member.MemberTier memberTier,
+
+        String profileImage
 ) {
-	public static SimpleMemberInfo from(Member member) {
-		return new SimpleMemberInfo(member.getAuthorization(), member.getName(),
-			member.getEmail(), member.getTier(), member.getProfileImage());
-	}
+    public static SimpleMemberInfo from(Member member) {
+        return new SimpleMemberInfo(member.getAuthorization(), member.getMemberToken(), member.getName(),
+                member.getEmail(), member.getTier(), member.getProfileImage());
+    }
 
 }
