@@ -1,6 +1,7 @@
 package org.badminton.api.application.match;
 
 import java.util.List;
+import java.util.Map;
 import lombok.extern.slf4j.Slf4j;
 import org.badminton.api.interfaces.match.dto.SetScoreUpdateRequest;
 import org.badminton.domain.common.enums.MatchGenerationType;
@@ -14,10 +15,12 @@ import org.badminton.domain.domain.match.info.MatchSetInfo;
 import org.badminton.domain.domain.match.info.SetInfo;
 import org.badminton.domain.domain.match.service.MatchRetrieveService;
 import org.badminton.domain.domain.match.service.MatchStrategy;
+import org.badminton.domain.domain.match.vo.RedisKey;
 import org.badminton.domain.domain.match.vo.Score;
 import org.badminton.infrastructure.match.repository.SetRepository;
 import org.badminton.infrastructure.match.service.RetrieveMatchSet;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 @Slf4j
@@ -45,6 +48,14 @@ public class MatchFacade {
         this.leagueReader = leagueReader;
         this.retrieveMatchSet = retrieveMatchSet;
         this.setRepository = setRepository;
+    }
+
+    @Scheduled(fixedRate = 100000)
+    public void saveInDb() {
+        Map<RedisKey, Score> allScores = setRepository.getAllScores();
+        for (RedisKey key : allScores.keySet()) {
+            retrieveMatchSet.registerMatchSetScoreInDb(key, allScores.get(key));
+        }
     }
 
     public MatchOperationHandler getMatchOperationHandler(Long leagueId) {

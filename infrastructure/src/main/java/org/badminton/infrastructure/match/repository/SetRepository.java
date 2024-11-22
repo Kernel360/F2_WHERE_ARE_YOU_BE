@@ -3,9 +3,11 @@ package org.badminton.infrastructure.match.repository;
 import jakarta.annotation.PostConstruct;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
+import java.util.Set;
+import lombok.extern.slf4j.Slf4j;
 import org.badminton.domain.common.enums.MatchType;
 import org.badminton.domain.common.exception.match.SetScoreNotInCacheException;
+import org.badminton.domain.domain.match.vo.RedisKey;
 import org.badminton.domain.domain.match.vo.Score;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.HashOperations;
@@ -13,6 +15,7 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Repository;
 
 @Repository
+@Slf4j
 public class SetRepository {
 
     @Autowired
@@ -38,15 +41,21 @@ public class SetRepository {
         return new Score(score);
     }
 
-    public Map<String, Score> getAllScores() {
-        Map<String, Score> allScores = new HashMap<>();
-        for (String key : Objects.requireNonNull(redisTemplate.keys("*"))) {
-            Map<String, String> scoresMap = hashOps.entries(key);
-            for (Map.Entry<String, String> entry : scoresMap.entrySet()) {
-                String mapKey = key + ":" + entry.getKey(); // Redis key + set number
-                allScores.put(mapKey, new Score(entry.getValue()));
-            }
+    public Map<RedisKey, Score> getAllScores() {
+        Set<String> keys = redisTemplate.keys("*게임*");
+
+        Map<RedisKey, Score> scores = new HashMap<>();
+        if (keys == null) {
+            return null;
         }
-        return allScores;
+        for (String key : keys) {
+            log.info("*****key: {}", key);
+            Map<String, String> setNumberAndScore = hashOps.entries(key);
+            setNumberAndScore.forEach((field, value) -> {
+                log.info("*****field: {}, value: {}", field, value);
+                scores.put(new RedisKey(key, field), new Score(value));
+            });
+        }
+        return scores;
     }
 }
