@@ -671,56 +671,56 @@ INSERT INTO league (leagueOwnerMemberToken, clubId, leagueAt, leagueName, descri
 VALUES
     --- 클럽 1 ---
     --- 과거 경기 ---
-    ('me_club_owner_token_1', 1, '2024-11-11 10:00:00', '은평구 단식 경기', '은평구 단식 경기 모집합니다.', '서울 은평구 진관1로 52', '서울', 'BRONZE',
+    ('me_club_owner_token_1', 1, '2024-11-20 10:00:00', '은평구 단식 경기', '은평구 단식 경기 모집합니다.', '서울 은평구 진관1로 52', '서울', 'BRONZE',
      'FINISHED', 'SINGLES', '2024-11-10 22:00:00',
      10, 'FREE', '2024-01-02 09:00:00', '2024-01-02 09:00:00'),
 
-    ('me_club_owner_token_1', 1, '2024-11-11 10:00:00', '금천구 복식 경기', '금천구 문화체육센터 복식 경기.','서울 금천구 독산로54길 188 금천구민문화체육센터', '서울', 'BRONZE',
+    ('me_club_owner_token_1', 1, '2024-11-20 10:00:00', '금천구 복식 경기', '금천구 문화체육센터 복식 경기.','서울 금천구 독산로54길 188 금천구민문화체육센터', '서울', 'BRONZE',
      'FINISHED', 'DOUBLES', '2024-11-10 22:00:00',
      16, 'FREE', '2024-01-02 09:00:00', '2024-01-02 09:00:00'),
 
     --- 오늘 경기 --- (3~5)
-    ('me_club_owner_token_1', 1, '2024-11-13 10:00:00', 'League 1', 'first league description', '서울 중구 동호로 241', '서울',
+    ('me_club_owner_token_1', 1, '2024-11-22 10:00:00', 'League 1', 'first league description', '서울 중구 동호로 241', '서울',
      'BRONZE',
      'PLAYING', 'DOUBLES', '2024-11-12 22:00:00',
      16, 'FREE', '2024-01-02 09:00:00', '2024-01-02 09:00:00'),
 
-    ('me_club_owner_token_1', 1, '2024-11-13 15:00:00', 'League 2', 'Second league description', '대구 달성군 다사읍 다사로 750','대구', 'SILVER',
+    ('me_club_owner_token_1', 1, '2024-11-22 15:00:00', 'League 2', 'Second league description', '대구 달성군 다사읍 다사로 750','대구', 'SILVER',
      'PLAYING', 'SINGLES', '2024-11-12 22:00:00',
      10, 'FREE', '2024-01-02 09:00:00', '2024-01-02 09:00:00'),
 
-    ('me_club_owner_token_1', 1, '2024-11-13 18:00:00', 'League 3', 'Third league description',
+    ('me_club_owner_token_1', 1, '2024-11-22 18:00:00', 'League 3', 'Third league description',
      '서울 송파구 올림픽로 25 서울종합운동장', '서울', 'BRONZE',
      'RECRUITING_COMPLETED', 'SINGLES', '2024-11-12 22:00:00',
      10, 'FREE', '2024-01-03 09:00:00', '2024-01-03 09:00:00'),
 
     --- 내일 경기 ---
-    ('me_club_owner_token_1', 1, '2024-11-14 10:00:00', 'League 4', 'Fourth league description', '서울시 동대문구 동대문구민 체육센터',
+    ('me_club_owner_token_1', 1, '2024-11-23 10:00:00', 'League 4', 'Fourth league description', '서울시 동대문구 동대문구민 체육센터',
      '서울', 'BRONZE',
      'RECRUITING_COMPLETED', 'DOUBLES', '2024-11-12 22:00:00',
      12, 'FREE', '2024-01-04 09:00:00', '2024-01-04 09:00:00'),
 
-    ('me_club_owner_token_1', 1, '2024-11-14 15:00:00', 'League 5', 'Fifth league description',
+    ('me_club_owner_token_1', 1, '2024-11-23 15:00:00', 'League 5', 'Fifth league description',
      '전북 전주시 덕진구 백제대로 567 전북대학교', '서울', 'SILVER',
      'RECRUITING_COMPLETED', 'SINGLES', '2024-11-12 22:00:00',
      18, 'FREE', '2024-11-12 10:00:00', '2024-01-05 09:00:00'),
 
-    ('me_club_owner_token_1', 1, '2024-11-14 17:00:00', 'League 6', 'Sixth league description', '서울 마포구 월드컵로25길 190',
+    ('me_club_owner_token_1', 1, '2024-11-23 17:00:00', 'League 6', 'Sixth league description', '서울 마포구 월드컵로25길 190',
      '서울', 'BRONZE',
      'RECRUITING_COMPLETED', 'DOUBLES', '2024-11-12 22:00:00',
      16, 'FREE', '2024-11-12 10:00:00', '2024-01-06 09:00:00'),
 
     -- 미래 경기 , club id 1 --
-    ('me_club_owner_token_1', 1, '2024-11-20 11:00:00', 'League 6', 'seventh league description', '서울 노원구 덕릉로 748',
+    ('me_club_owner_token_1', 1, '2024-11-25 11:00:00', 'League 6', 'seventh league description', '서울 노원구 덕릉로 748',
      '서울', 'BRONZE',
      'RECRUITING', 'SINGLES', '2024-11-19 22:00:00',
      10, 'FREE', '2024-11-12 10:00:00', '2024-11-12 10:00:00'),
 
-    ('me_club_owner_token_1', 1, '2024-11-20 14:00:00', 'League 6', '광진구 멋진 경기', '서울 광진구 구천면로 2 광진청소년수련관', '서울', 'BRONZE',
+    ('me_club_owner_token_1', 1, '2024-11-25 14:00:00', 'League 6', '광진구 멋진 경기', '서울 광진구 구천면로 2 광진청소년수련관', '서울', 'BRONZE',
      'RECRUITING', 'SINGLES', '2024-11-19 22:00:00',
      10, 'FREE', '2024-11-12 10:00:00', '2024-11-12 10:00:00'),
 
-    ('me_club_owner_token_1', 1, '2024-11-20 16:00:00', 'League 6', 'Sixth league description', '서울 성동구 왕십리로 89', '서울',
+    ('me_club_owner_token_1', 1, '2024-11-25 16:00:00', 'League 6', 'Sixth league description', '서울 성동구 왕십리로 89', '서울',
      'BRONZE',
      'RECRUITING', 'DOUBLES', '2024-11-19 22:00:00',
      24, 'FREE', '2024-11-12 10:00:00', '2024-11-12 10:00:00'),
