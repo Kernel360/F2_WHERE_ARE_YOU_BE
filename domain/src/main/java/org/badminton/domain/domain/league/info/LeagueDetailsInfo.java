@@ -35,8 +35,6 @@ public record LeagueDetailsInfo(
 
         int recruitedMemberCount,
 
-        boolean isParticipatedInLeague,
-
         LocalDateTime createdAt,
 
         LocalDateTime modifiedAt,
@@ -47,7 +45,6 @@ public record LeagueDetailsInfo(
     public static LeagueDetailsInfo from(
             LeagueSummaryInfo leagueSummaryInfo,
             boolean isMatchCreated,
-            boolean isParticipatedInLeague,
             int recruitedMemberCount
     ) {
         return new LeagueDetailsInfo(
@@ -65,7 +62,6 @@ public record LeagueDetailsInfo(
                 leagueSummaryInfo.matchGenerationType(),
                 leagueSummaryInfo.playerLimitCount(),
                 recruitedMemberCount,
-                isParticipatedInLeague,
                 leagueSummaryInfo.createdAt(),
                 leagueSummaryInfo.modifiedAt(),
                 isMatchCreated
