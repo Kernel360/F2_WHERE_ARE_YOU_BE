@@ -162,10 +162,12 @@ public class LeagueController {
 	public CommonResponse<LeagueUpdateResponse> updateLeague(
 		@PathVariable String clubToken,
 		@PathVariable Long leagueId,
-		@Valid @RequestBody LeagueUpdateRequest leagueUpdateRequest) {
+		@Valid @RequestBody LeagueUpdateRequest leagueUpdateRequest,
+		@AuthenticationPrincipal CustomOAuth2Member member
+	) {
 		leagueUpdateRequest.validatePlayerLimitCountWhenDoubles();
 		var command = leagueDtoMapper.of(leagueUpdateRequest);
-		var leagueUpdateInfo = leagueFacade.updateLeague(clubToken, leagueId, command);
+		var leagueUpdateInfo = leagueFacade.updateLeague(clubToken, leagueId, command, member.getMemberToken());
 		LeagueUpdateResponse leagueUpdateResponse = leagueDtoMapper.of(leagueUpdateInfo);
 		return CommonResponse.success(leagueUpdateResponse);
 	}
@@ -178,8 +180,9 @@ public class LeagueController {
 	@DeleteMapping("/{leagueId}")
 	public CommonResponse<LeagueCancelResponse> cancelLeague(
 		@PathVariable String clubToken,
-		@PathVariable Long leagueId) {
-		LeagueCancelInfo leagueInfo = leagueFacade.cancelLeague(clubToken, leagueId);
+		@PathVariable Long leagueId,
+		@AuthenticationPrincipal CustomOAuth2Member member) {
+		LeagueCancelInfo leagueInfo = leagueFacade.cancelLeague(clubToken, leagueId, member.getMemberToken());
 		LeagueCancelResponse leagueCancelResponse = leagueDtoMapper.of(leagueInfo);
 		return CommonResponse.success(leagueCancelResponse);
 	}

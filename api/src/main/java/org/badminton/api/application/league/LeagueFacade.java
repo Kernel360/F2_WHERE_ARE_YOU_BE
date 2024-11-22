@@ -71,14 +71,15 @@ public class LeagueFacade {
 	}
 
 	public LeagueUpdateInfoWithParticipantCountInfo updateLeague(String clubToken, Long leagueId,
-		LeagueUpdateCommand leagueUpdateCommand) {
-		LeagueUpdateInfo leagueUpdateInfo = leagueService.updateLeague(clubToken, leagueId, leagueUpdateCommand);
+		LeagueUpdateCommand leagueUpdateCommand, String memberToken) {
+		LeagueUpdateInfo leagueUpdateInfo = leagueService.updateLeague(clubToken, leagueId, leagueUpdateCommand,
+			memberToken);
 		int recruitedMemberCount = leagueParticipantService.countParticipantMember(leagueId);
 		return LeagueUpdateInfoWithParticipantCountInfo.of(leagueUpdateInfo, recruitedMemberCount);
 	}
 
-	public LeagueCancelInfo cancelLeague(String clubToken, Long leagueId) {
-		return leagueService.cancelLeague(clubToken, leagueId);
+	public LeagueCancelInfo cancelLeague(String clubToken, Long leagueId, String memberToken) {
+		return leagueService.cancelLeague(clubToken, leagueId, memberToken);
 	}
 
 }
