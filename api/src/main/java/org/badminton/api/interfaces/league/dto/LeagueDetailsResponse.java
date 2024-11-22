@@ -12,7 +12,7 @@ public record LeagueDetailsResponse(
         @Schema(description = "경기 아이디", requiredMode = Schema.RequiredMode.REQUIRED)
         Long leagueId,
 
-        @Schema(description = "경기 주인 토큰", requiredMode = RequiredMode.REQUIRED)
+        @Schema(description = "경기 오너 토큰", requiredMode = RequiredMode.REQUIRED)
         String leagueOwnerToken,
 
         @Schema(description = "경기 이름", requiredMode = Schema.RequiredMode.REQUIRED)
