@@ -54,7 +54,7 @@ public class ClubMemberReaderImpl implements ClubMemberReader {
 	}
 
 	@Override
-	public Integer getClubMemberCountsByClubToken(String clubToken) {
+	public Integer getClubMemberCountByClubToken(String clubToken) {
 		return clubMemberRepository.countByClubClubTokenAndDeletedFalse(clubToken);
 	}
 

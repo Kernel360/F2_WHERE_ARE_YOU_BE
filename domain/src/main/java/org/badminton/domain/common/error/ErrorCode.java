@@ -30,19 +30,19 @@ public enum ErrorCode {
 	NOT_FOUND(404, "요청한 리소스를 찾을 수 없습니다."),
 	JWT_COOKIE_NOT_FOUND(404, "JWT 쿠키를 찾을 수 없습니다."),
 
-    // RESOURCE_NOT_EXIST
-    RESOURCE_NOT_EXIST(404, "특정 리소스를 찾을 수 없습니다."),
-    MEMBER_NOT_EXIST(404, "해당하는 회원이 존재하지 않습니다."),
-    CLUB_NOT_EXIST(404, "해당하는 동호회가 존재하지 않습니다."),
-    LEAGUE_NOT_EXIST(404, "해당하는 경기 일정이 존재하지 않습니다."),
-    BRACKET_NOT_EXIST(404, "해당하는 경기게 아직 대진표가 만들어지지 않았습니다."),
-    MATCH_NOT_EXIST(404, "해당하는 대진이 존재하지 않습니다."),
-    SET_NOT_EXIST(404, "해당하는 세트는 존재하지 않습니다."),
-    MEMBER_NOT_JOINED_CLUB(404, "해당하는 회원은 동호회에 가입하지 않았습니다."),
-    CLUB_MEMBER_NOT_EXIST(404, "해당하는 회원은 해당 동호회에 아직 가입하지 않았습니다."),
-    MATCH_DETAILS_NOT_EXIST(404, "해당하는 게임의 상세 정보가 아직 초기화되지 않았습니다."),
-    IMAGE_FILE_NOT_FOUND(404, "파일의 형식이 잘못되었습니다."),
-    SET_NOT_EXIST_IN_CACHE(404, "캐시에 해당하는 세트 점수가 존재하지 않습니다."),
+	// RESOURCE_NOT_EXIST
+	RESOURCE_NOT_EXIST(404, "특정 리소스를 찾을 수 없습니다."),
+	MEMBER_NOT_EXIST(404, "해당하는 회원이 존재하지 않습니다."),
+	CLUB_NOT_EXIST(404, "해당하는 동호회가 존재하지 않습니다."),
+	LEAGUE_NOT_EXIST(404, "해당하는 경기 일정이 존재하지 않습니다."),
+	BRACKET_NOT_EXIST(404, "해당하는 경기게 아직 대진표가 만들어지지 않았습니다."),
+	MATCH_NOT_EXIST(404, "해당하는 대진이 존재하지 않습니다."),
+	SET_NOT_EXIST(404, "해당하는 세트는 존재하지 않습니다."),
+	MEMBER_NOT_JOINED_CLUB(404, "해당하는 회원은 동호회에 가입하지 않았습니다."),
+	CLUB_MEMBER_NOT_EXIST(404, "해당하는 회원은 해당 동호회에 아직 가입하지 않았습니다."),
+	MATCH_DETAILS_NOT_EXIST(404, "해당하는 게임의 상세 정보가 아직 초기화되지 않았습니다."),
+	IMAGE_FILE_NOT_FOUND(404, "파일의 형식이 잘못되었습니다."),
+	SET_NOT_EXIST_IN_CACHE(404, "캐시에 해당하는 세트 점수가 존재하지 않습니다."),
 
 	// 409 Errors
 	CONFLICT(409, "리소스 충돌이 발생했습니다."),
@@ -86,6 +86,7 @@ public enum ErrorCode {
 	SET_FINISHED(412, "Set 의 상태가 FINISHED 입니다"),
 	ALREADY_WINNER_DETERMINED(412, "매치의 승리자가 정해졌습니다"),
 	CLUB_OWNER_CANT_WITHDRAW(412, "동호회원이 2명 이상인 동호회 회장은 동호회를 탈퇴할 수 없습니다."),
+	NOT_LEAGUE_OWNER(412, "경기를 만든 사용자만 수정 및 삭제를 할 수 있습니다"),
 
 	// 500 Errors
 	INTERNAL_SERVER_ERROR(500, "서버 내부 오류가 발생했습니다."),

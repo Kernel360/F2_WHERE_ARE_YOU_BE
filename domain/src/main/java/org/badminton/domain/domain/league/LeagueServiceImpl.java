@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.badminton.domain.common.exception.league.LeagueAlreadyCanceledException;
+import org.badminton.domain.common.exception.league.NotLeagueOwnerException;
 import org.badminton.domain.common.exception.league.OngoingAndUpcomingLeagueCanNotBePastException;
 import org.badminton.domain.domain.club.ClubReader;
 import org.badminton.domain.domain.league.command.LeagueCreateCommand;
@@ -76,8 +77,14 @@ public class LeagueServiceImpl implements LeagueService {
 	}
 
 	@Override
-	public LeagueUpdateInfo updateLeague(String clubToken, Long leagueId, LeagueUpdateCommand leagueUpdateCommand) {
+	public LeagueUpdateInfo updateLeague(String clubToken, Long leagueId, LeagueUpdateCommand leagueUpdateCommand,
+		String memberToken) {
 		League league = leagueReader.readLeague(clubToken, leagueId);
+
+		if (!league.getLeagueOwnerMemberToken().equals(memberToken)) {
+			throw new NotLeagueOwnerException(memberToken);
+		}
+
 		if (league.getLeagueStatus() == LeagueStatus.CANCELED) {
 			throw new LeagueAlreadyCanceledException(leagueId);
 		}
@@ -129,8 +136,11 @@ public class LeagueServiceImpl implements LeagueService {
 	}
 
 	@Override
-	public LeagueCancelInfo cancelLeague(String clubToken, Long leagueId) {
+	public LeagueCancelInfo cancelLeague(String clubToken, Long leagueId, String memberToken) {
 		var league = leagueReader.readLeague(clubToken, leagueId);
+		if (!league.getLeagueOwnerMemberToken().equals(memberToken)) {
+			throw new NotLeagueOwnerException(memberToken);
+		}
 		league.cancelLeague();
 		leagueStore.store(league);
 		return LeagueCancelInfo.from(league);

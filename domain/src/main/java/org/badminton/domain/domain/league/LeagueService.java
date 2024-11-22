@@ -28,7 +28,7 @@ public interface LeagueService {
 		Region region,
 		LocalDate localDate, Pageable pageable);
 
-	LeagueCancelInfo cancelLeague(String clubToken, Long leagueId);
+	LeagueCancelInfo cancelLeague(String clubToken, Long leagueId, String memberToken);
 
 	LeagueCreateInfo createLeague(String memberToken, String clubToken,
 		LeagueCreateNoIncludeClubCommand leagueCreateNoIncludeClubCommand);
@@ -39,5 +39,6 @@ public interface LeagueService {
 
 	Integer getLeagueCountByClubId(Long clubId);
 
-	LeagueUpdateInfo updateLeague(String clubToken, Long leagueId, LeagueUpdateCommand leagueUpdateCommand);
+	LeagueUpdateInfo updateLeague(String clubToken, Long leagueId, LeagueUpdateCommand leagueUpdateCommand,
+		String memberToken);
 }
