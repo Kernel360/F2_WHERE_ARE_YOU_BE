@@ -167,6 +167,7 @@ public class SecurityConfig {
 
 	private AuthorizationManager<RequestAuthorizationContext> hasClubRole(String... roles) {
 		return (authentication, context) -> {
+
 			Authentication auth = authentication.get();
 			if (auth == null || !auth.isAuthenticated()) {
 				return new AuthorizationDecision(false);
@@ -186,6 +187,7 @@ public class SecurityConfig {
 				Has required role: {}
 				""", clubToken, auth.getAuthorities(), Arrays.toString(roles), hasRole
 			);
+			
 			if (!hasRole) {
 				throw new AuthenticationException("Insufficient roles to access this resource") {
 				};
