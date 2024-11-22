@@ -37,7 +37,9 @@ public interface ClubMemberService {
 
 	void deleteAllClubMembers(String clubToken);
 
-	Integer countByClubClubIdAndDeletedFalse(Long clubId);
+	Integer countExistingClub(String clubToken);
+
+	Integer countExistingClub(Long clubId);
 
 	List<ClubCardInfo> getClubsByMemberToken(String memberToken);
 

@@ -24,7 +24,7 @@ public interface ClubMemberReader {
 
 	Integer getClubMemberCounts(Long clubId);
 
-	Integer getClubMemberCountsByClubToken(String clubToken);
+	Integer getClubMemberCountByClubToken(String clubToken);
 
 	ClubMember getClubOwner(String clubToken);
 }
