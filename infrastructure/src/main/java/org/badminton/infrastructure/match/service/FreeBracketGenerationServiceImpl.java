@@ -3,6 +3,7 @@ package org.badminton.infrastructure.match.service;
 import java.util.List;
 
 import org.badminton.domain.common.exception.league.InvalidPlayerCountException;
+import org.badminton.domain.common.exception.league.NotLeagueOwnerException;
 import org.badminton.domain.common.exception.match.LeagueRecruitingMustBeCompletedWhenBracketGenerationException;
 import org.badminton.domain.domain.league.LeagueReader;
 import org.badminton.domain.domain.league.entity.League;
@@ -59,7 +60,11 @@ public class FreeBracketGenerationServiceImpl implements BracketGenerationServic
 
 	@Override
 	@Transactional
-	public BracketInfo makeBracket(MatchStrategy matchStrategy, Long leagueId) {
+	public BracketInfo makeBracket(MatchStrategy matchStrategy, Long leagueId, String memberToken) {
+		League league = findLeague(leagueId);
+		if (!league.getLeagueOwnerMemberToken().equals(memberToken)) {
+			throw new NotLeagueOwnerException(memberToken);
+		}
 		matchStrategy.checkDuplicateInitialBracket(leagueId);
 
 		List<LeagueParticipant> leagueParticipantList = findLeagueParticipantList(leagueId);
