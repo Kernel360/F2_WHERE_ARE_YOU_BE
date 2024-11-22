@@ -11,6 +11,8 @@ public interface ClubApplyReader {
 
 	void validateApply(String clubToken, String memberToken);
 
+	void validateEmailApply(String clubToken, String memberToken);
+
 	List<ClubApplicantInfo> getClubApplyByClubToken(String clubToken, ClubApply.ApplyStatus applyStatus);
 
 }
