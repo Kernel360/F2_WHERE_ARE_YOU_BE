@@ -10,6 +10,7 @@ import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.stereotype.Component;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -18,7 +19,12 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @Component
 public class FailedAuthenticationEntryPoint implements AuthenticationEntryPoint {
-	private final ObjectMapper objectMapper = new ObjectMapper();
+	private final ObjectMapper objectMapper;
+
+	public FailedAuthenticationEntryPoint(ObjectMapper objectMapper) {
+		this.objectMapper = objectMapper;
+		this.objectMapper.setPropertyNamingStrategy(new PropertyNamingStrategies.SnakeCaseStrategy());
+	}
 
 	@Override
 	public void commence(HttpServletRequest request, HttpServletResponse response,

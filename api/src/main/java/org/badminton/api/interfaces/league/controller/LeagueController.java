@@ -5,6 +5,7 @@ import java.util.List;
 import org.badminton.api.application.league.LeagueFacade;
 import org.badminton.api.common.response.CommonResponse;
 import org.badminton.api.interfaces.auth.dto.CustomOAuth2Member;
+import org.badminton.api.interfaces.league.dto.IsLeagueParticipantResponse;
 import org.badminton.api.interfaces.league.dto.LeagueByDateResponse;
 import org.badminton.api.interfaces.league.dto.LeagueCancelResponse;
 import org.badminton.api.interfaces.league.dto.LeagueCreateRequest;
@@ -13,6 +14,7 @@ import org.badminton.api.interfaces.league.dto.LeagueDetailsResponse;
 import org.badminton.api.interfaces.league.dto.LeagueReadResponse;
 import org.badminton.api.interfaces.league.dto.LeagueUpdateRequest;
 import org.badminton.api.interfaces.league.dto.LeagueUpdateResponse;
+import org.badminton.domain.domain.league.info.IsLeagueParticipantInfo;
 import org.badminton.domain.domain.league.info.LeagueByDateInfoWithParticipantCountInfo;
 import org.badminton.domain.domain.league.info.LeagueCancelInfo;
 import org.badminton.domain.domain.league.info.LeagueDetailsInfo;
@@ -82,7 +84,7 @@ public class LeagueController {
 		summary = "경기를 생성합니다.",
 		description = """
 			경기 생성하고를 데이터베이스에 저장합니다.
-						
+			
 			1. 경기 이름 2 ~ 20 글자
 			2. 경기 설명 2 ~ 1000 글자
 			3. 경기 장소 2 ~ 100 글자
@@ -93,7 +95,7 @@ public class LeagueController {
 				토너먼트 더블: 참가자 수/2 가 2의 제곱
 				프리 싱글: 2의 배수
 				프리 더블: 4의 배수
-						
+			
 			""",
 		tags = {"league"}
 	)
@@ -117,19 +119,34 @@ public class LeagueController {
 	)
 	@GetMapping("/{leagueId}")
 	public CommonResponse<LeagueDetailsResponse> leagueRead(@PathVariable String clubToken,
-		@PathVariable Long leagueId,
-		@AuthenticationPrincipal CustomOAuth2Member member) {
+		@PathVariable Long leagueId) {
 		LeagueDetailsInfo leagueDetailsInfo =
-			leagueFacade.getLeague(clubToken, leagueId, member.getMemberToken());
+			leagueFacade.getLeague(clubToken, leagueId);
 		LeagueDetailsResponse leagueDetailsResponse = leagueDtoMapper.of(leagueDetailsInfo);
 		return CommonResponse.success(leagueDetailsResponse);
+	}
+
+	@Operation(
+		summary = "경기의 참여자인지 확인합니다",
+		description = "경기 아이디를 통해 경기 참가자인지 확인합니다.",
+		tags = {"league"}
+	)
+	@GetMapping("/{leagueId}/check")
+	public CommonResponse<IsLeagueParticipantResponse> checkLeagueParticipant(@PathVariable String clubToken,
+		@PathVariable Long leagueId,
+		@AuthenticationPrincipal CustomOAuth2Member member) {
+		IsLeagueParticipantInfo isLeagueParticipantInfo = leagueFacade.isLeagueParticipant(member.getMemberToken(),
+			leagueId);
+
+		IsLeagueParticipantResponse isLeagueParticipantResponse = leagueDtoMapper.of(isLeagueParticipantInfo);
+		return CommonResponse.success(isLeagueParticipantResponse);
 	}
 
 	@Operation(
 		summary = "경기의 세부 정보를 변경합니다.",
 		description = """
 			경기 이름, 설명, 참가자, 싱글/더블, 프리/토너먼트 변경
-						
+			
 			1. 경기 이름 2 ~ 20 글자
 			2. 경기 설명 2 ~ 1000 글자
 			3. 참가인원:
@@ -137,7 +154,7 @@ public class LeagueController {
 				토너먼트 더블: 참가자 수/2 가 2의 제곱
 				프리 싱글: 2의 배수
 				프리 더블: 4의 배수
-						
+			
 			""",
 		tags = {"league"}
 	)
