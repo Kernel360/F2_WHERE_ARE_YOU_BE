@@ -142,8 +142,8 @@ public class SecurityConfig {
 				.requestMatchers(HttpMethod.GET, "/v1/clubs/{clubToken}")
 				.authenticated()
 
-				.requestMatchers(HttpMethod.POST, "/v1/clubs/{clubToken}/leagues",
-					"/v1/clubs/{clubToken}/clubMembers/approve", "/v1/clubs/{clubToken}/clubMembers/reject")
+				.requestMatchers(HttpMethod.POST, "/v1/clubs/{clubToken}/clubMembers/approve",
+					"/v1/clubs/{clubToken}/clubMembers/reject")
 				.access(hasClubRole("OWNER", "MANAGER"))
 				.requestMatchers(HttpMethod.POST, "/v1/clubs/{clubToken}/league", "/v1/clubs/images")
 				.access(hasClubRole("OWNER", "MANAGER"))
@@ -151,7 +151,8 @@ public class SecurityConfig {
 				.access(hasClubRole("OWNER", "MANAGER"))
 				.requestMatchers(HttpMethod.PATCH, "/v1/clubs/{clubToken}/leagues/{leagueId}")
 				.access(hasClubRole("OWNER", "MANAGER"))
-				.requestMatchers(HttpMethod.POST, "/v1/clubs/{clubToken}/leagues/{leagueId}/participation")
+				.requestMatchers(HttpMethod.POST, "/v1/clubs/{clubToken}/leagues/{leagueId}/participation",
+					"/v1/clubs/{clubToken}/leagues")
 				.access(hasClubRole("OWNER", "MANAGER", "USER"))
 				.requestMatchers(HttpMethod.DELETE, "/v1/clubs/{clubToken}/leagues/{leagueId}/participation")
 				.access(hasClubRole("OWNER", "MANAGER", "USER"))
