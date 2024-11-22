@@ -13,4 +13,6 @@ public interface ClubApplyRepository extends JpaRepository<ClubApply, Long> {
 		ClubApply.ApplyStatus status);
 
 	List<ClubApply> findAllByClubClubTokenAndStatus(String clubToken, ClubApply.ApplyStatus status);
+
+	boolean existsByClubClubTokenAndMemberMemberToken(String clubToken, String memberToken);
 }
