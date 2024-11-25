@@ -23,6 +23,12 @@ public class ClubMemberReaderImpl implements ClubMemberReader {
 	}
 
 	@Override
+	public List<ClubMember> getActiveClubMembersByMemberToken(String memberToken) {
+		return clubMemberRepository.findAllByDeletedFalseAndBannedFalseAndMemberMemberToken(memberToken);
+
+	}
+
+	@Override
 	public ClubMember getClubMember(Long clubMemberId) {
 		return clubMemberRepository.findByClubMemberId(clubMemberId)
 			.orElseThrow(() -> new ClubMemberNotExistException(clubMemberId));
