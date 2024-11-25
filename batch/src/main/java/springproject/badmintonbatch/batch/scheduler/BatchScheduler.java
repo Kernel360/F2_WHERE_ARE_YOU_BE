@@ -20,12 +20,25 @@ public class BatchScheduler {
 	private final Job sendEmailJob;
 	private final Job leagueManagerJob;
 	private final Job leagueStatusUpdateJob;
+	private final Job memberLiftJob;
 
 	@Scheduled(fixedRate = 60000)
 	public void updateLeagueStatus() {
 		log.info("Updating league status");
 		try {
 			jobLauncher.run(leagueStatusUpdateJob, new JobParametersBuilder()
+				.addLong("time", System.currentTimeMillis())
+				.toJobParameters());
+		} catch (Exception exception) {
+			log.error(exception.getMessage(), exception);
+		}
+	}
+
+	@Scheduled(fixedRate = 1800000)
+	public void liftClubMember() {
+		log.info("Lift Club Member");
+		try {
+			jobLauncher.run(memberLiftJob, new JobParametersBuilder()
 				.addLong("time", System.currentTimeMillis())
 				.toJobParameters());
 		} catch (Exception exception) {
