@@ -1,5 +1,6 @@
 package org.badminton.domain.domain.mail;
 
+import org.badminton.domain.common.exception.clubmember.ClubMemberAlreadyExistsException;
 import org.badminton.domain.domain.club.ClubApplyReader;
 import org.badminton.domain.domain.club.ClubReader;
 import org.badminton.domain.domain.club.entity.Club;
@@ -29,6 +30,7 @@ public class MailServiceImpl implements MailService {
 
 	@Override
 	public void prepareClubApplyEmail(String clubToken, String memberToken) {
+		validateClubMember(clubToken, memberToken);
 		clubApplyReader.validateApply(clubToken, memberToken);
 		Club club = clubReader.readClub(clubToken);
 		ClubMember clubOwner = clubMemberReader.getClubOwner(clubToken);
@@ -36,6 +38,12 @@ public class MailServiceImpl implements MailService {
 		String clubName = club.getClubName();
 		String title = APPLY_CLUB_TITLE + clubName;
 		createMessage(ownerEmail, title, APPLY_CLUB_MESSAGE);
+	}
+
+	private void validateClubMember(String clubToken, String memberToken) {
+		if (clubMemberReader.checkIsClubMember(memberToken, clubToken)) {
+			throw new ClubMemberAlreadyExistsException(clubToken, memberToken);
+		}
 	}
 
 	@Override

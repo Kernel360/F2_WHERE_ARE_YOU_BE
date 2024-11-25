@@ -14,6 +14,7 @@ public class MemberLiftProcessor implements ItemProcessor<ClubMemberBanRecord, C
 	public ClubMemberBanRecord process(ClubMemberBanRecord item) {
 
 		item.liftClubMember();
+		item.getClubMember().lift();
 
 		return null;
 	}
