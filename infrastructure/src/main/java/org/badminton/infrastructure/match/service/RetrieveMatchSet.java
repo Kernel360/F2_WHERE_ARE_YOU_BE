@@ -1,5 +1,6 @@
 package org.badminton.infrastructure.match.service;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.badminton.domain.common.enums.MatchType;
 import org.badminton.domain.common.exception.league.LeagueParticipationNotExistException;
@@ -14,6 +15,7 @@ import org.badminton.domain.domain.match.reader.DoublesMatchStore;
 import org.badminton.domain.domain.match.reader.SinglesMatchStore;
 import org.badminton.domain.domain.match.store.DoublesMatchReader;
 import org.badminton.domain.domain.match.store.SinglesMatchReader;
+import org.badminton.domain.domain.match.vo.RedisKey;
 import org.badminton.domain.domain.match.vo.Score;
 import org.badminton.infrastructure.match.repository.SetRepository;
 import org.springframework.stereotype.Service;
@@ -25,7 +27,6 @@ public class RetrieveMatchSet {
     private final SetRepository setRepository;
     private final LeagueReader leagueReader;
     private final LeagueParticipantReader leagueParticipantReader;
-    // TODO: db에 저장
     private final SinglesMatchReader singlesMatchReader;
     private final DoublesMatchReader doublesMatchReader;
     private final SinglesMatchStore singlesMatchStore;
@@ -37,16 +38,18 @@ public class RetrieveMatchSet {
         }
         League league = leagueReader.readLeagueById(leagueId);
         setRepository.setMatchSetScore(league.getMatchType(), matchId, setNumber, score);
+    }
 
-        // TODO: DB에 저장
-        if (getMatchType(leagueId) == MatchType.SINGLES) {
-            SinglesMatch singlesMatch = singlesMatchReader.getSinglesMatch(matchId);
-            SinglesSet singlesSet = singlesMatch.getSinglesSet(setNumber);
+    @Transactional
+    public void registerMatchSetScoreInDb(RedisKey key, Score score) {
+        if (key.getMatchType() == MatchType.SINGLES) {
+            SinglesMatch singlesMatch = singlesMatchReader.getSinglesMatch(key.getMatchId());
+            SinglesSet singlesSet = singlesMatch.getSinglesSet(key.getSetNumber());
             singlesSet.saveSetScore(score.getLeft(), score.getRight());
             singlesMatchStore.store(singlesMatch);
-        } else if (getMatchType(leagueId) == MatchType.DOUBLES) {
-            DoublesMatch doublesMatch = doublesMatchReader.getDoublesMatch(matchId);
-            DoublesSet doublesSet = doublesMatch.getDoublesSet(setNumber);
+        } else if (key.getMatchType() == MatchType.DOUBLES) {
+            DoublesMatch doublesMatch = doublesMatchReader.getDoublesMatch(key.getMatchId());
+            DoublesSet doublesSet = doublesMatch.getDoublesSet(key.getSetNumber());
             doublesSet.saveSetScore(score.getLeft(), score.getRight());
             doublesMatchStore.store(doublesMatch);
         }

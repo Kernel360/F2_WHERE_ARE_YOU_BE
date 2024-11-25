@@ -2,6 +2,7 @@ package org.badminton.api.interfaces.league.controller;
 
 import java.util.List;
 
+import org.badminton.api.interfaces.league.dto.IsLeagueParticipantResponse;
 import org.badminton.api.interfaces.league.dto.LeagueByDateResponse;
 import org.badminton.api.interfaces.league.dto.LeagueCancelResponse;
 import org.badminton.api.interfaces.league.dto.LeagueCreateRequest;
@@ -14,6 +15,7 @@ import org.badminton.api.interfaces.league.dto.LeagueUpdateRequest;
 import org.badminton.api.interfaces.league.dto.LeagueUpdateResponse;
 import org.badminton.domain.domain.league.command.LeagueCreateNoIncludeClubCommand;
 import org.badminton.domain.domain.league.command.LeagueUpdateCommand;
+import org.badminton.domain.domain.league.info.IsLeagueParticipantInfo;
 import org.badminton.domain.domain.league.info.LeagueByDateInfoWithParticipantCountInfo;
 import org.badminton.domain.domain.league.info.LeagueCancelInfo;
 import org.badminton.domain.domain.league.info.LeagueCreateInfo;
@@ -54,4 +56,6 @@ public interface LeagueDtoMapper {
 	LeagueUpdateResponse of(LeagueUpdateInfoWithParticipantCountInfo leagueUpdateInfo);
 
 	List<LeagueByDateResponse> of(List<LeagueByDateInfoWithParticipantCountInfo> responseInfo);
+
+	IsLeagueParticipantResponse of(IsLeagueParticipantInfo isLeagueParticipantInfo);
 }

@@ -5,9 +5,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
-import org.badminton.domain.domain.club.entity.Club;
-import org.badminton.domain.common.exception.clubmember.ClubOwnerCannotWithdraw;
 import org.badminton.domain.common.exception.clubmember.ClubMemberOwnerException;
+import org.badminton.domain.common.exception.clubmember.ClubOwnerCannotWithdraw;
+import org.badminton.domain.domain.club.entity.Club;
 import org.badminton.domain.domain.club.info.ClubCardInfo;
 import org.badminton.domain.domain.club.info.ClubCreateInfo;
 import org.badminton.domain.domain.clubmember.ClubMemberReader;
@@ -57,7 +57,6 @@ public class ClubMemberServiceImpl implements ClubMemberService {
 
 		ClubMember clubMember = clubMemberReader.getClubMember(clubMemberId);
 		clubMember.updateClubMemberRole(command.role());
-		clubOwnerProtect(clubMember);
 		clubMemberStore.store(clubMember);
 
 		return ClubMemberInfo.valueOf(clubMember);
@@ -128,7 +127,7 @@ public class ClubMemberServiceImpl implements ClubMemberService {
 
 	private void checkClubOwner(ClubMember clubMember, String clubToken) {
 		if (clubMember.getRole() == ClubMember.ClubMemberRole.ROLE_OWNER
-			&& clubMemberReader.getClubMemberCountsByClubToken(clubToken) > 1) {
+			&& clubMemberReader.getClubMemberCountByClubToken(clubToken) > 1) {
 			throw new ClubOwnerCannotWithdraw(clubMember.getClubMemberId());
 		}
 	}
@@ -150,7 +149,12 @@ public class ClubMemberServiceImpl implements ClubMemberService {
 	}
 
 	@Override
-	public Integer countByClubClubIdAndDeletedFalse(Long clubId) {
+	public Integer countExistingClub(String clubToken) {
+		return clubMemberReader.getClubMemberCountByClubToken(clubToken);
+	}
+
+	@Override
+	public Integer countExistingClub(Long clubId) {
 		return clubMemberReader.getClubMemberCounts(clubId);
 	}
 

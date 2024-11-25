@@ -10,7 +10,7 @@ public interface BracketGenerationService {
 	// 2. Singles, Doubles 에 따라 Match Strategy 를 만든다.
 	MatchStrategy makeSinglesOrDoublesMatchStrategy(Long leagueId);
 
-	BracketInfo makeBracket(MatchStrategy matchStrategy, Long leagueId);
+	BracketInfo makeBracket(MatchStrategy matchStrategy, Long leagueId, String memberToken);
 
 	void initMatch(MatchStrategy matchStrategy, Long matchId);
 }

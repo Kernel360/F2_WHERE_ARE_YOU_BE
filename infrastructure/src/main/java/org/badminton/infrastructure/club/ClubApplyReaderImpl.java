@@ -24,6 +24,13 @@ public class ClubApplyReaderImpl implements ClubApplyReader {
 
 	@Override
 	public void validateApply(String clubToken, String memberToken) {
+		if (clubApplyRepository.existsByClubClubTokenAndMemberMemberToken(clubToken, memberToken)) {
+			throw new MemberAlreadyApplyClubException(memberToken, clubToken);
+		}
+	}
+
+	@Override
+	public void validateEmailApply(String clubToken, String memberToken) {
 		if (clubApplyRepository.existsByClubClubTokenAndMemberMemberTokenAndStatus(clubToken, memberToken,
 			ClubApply.ApplyStatus.PENDING)) {
 			throw new MemberAlreadyApplyClubException(memberToken, clubToken);
@@ -34,7 +41,7 @@ public class ClubApplyReaderImpl implements ClubApplyReader {
 	public List<ClubApplicantInfo> getClubApplyByClubToken(String clubToken, ClubApply.ApplyStatus applyStatus) {
 		List<ClubApply> clubApplicants = clubApplyRepository.findAllByClubClubTokenAndStatus(clubToken,
 			applyStatus);
-		
+
 		return clubApplicants.stream()
 			.map(ClubApplicantInfo::from)
 			.toList();

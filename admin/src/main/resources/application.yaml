@@ -1,0 +1,36 @@
+spring:
+  application:
+    name: badminton
+  jpa:
+    properties:
+      hibernate:
+        format_sql: true
+        dialect: org.hibernate.dialect.MySQL8Dialect
+    hibernate:
+      ddl-auto: ${DDL_METHOD_API}
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
+    defer-datasource-initialization: true
+  messages:
+    encoding: UTF-8
+    basename: messages
+  sql:
+    init:
+      mode: ${SQL_MODE}
+  datasource:
+    url: ${DATABASE_URL}
+    username: ${DATABASE_USER_NAME}
+    password: ${DATABASE_USER_PASSWORD}
+    driver-class-name: ${DATABASE_DRIVER}
+
+cloud:
+  aws:
+    credentials:
+      access-key: ${S3_ACCESS_KEY}
+      secret-key: ${S3_SECRET_KEY}
+    region:
+      static: ap-northeast-2  # 버킷의 리전
+    s3:
+      bucket: badminton-team   # 버킷 이름
+    stack:
+      auto: false

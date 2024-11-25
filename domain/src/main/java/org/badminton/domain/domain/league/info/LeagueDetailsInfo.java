@@ -1,72 +1,70 @@
 package org.badminton.domain.domain.league.info;
 
 import java.time.LocalDateTime;
-
 import org.badminton.domain.common.enums.MatchGenerationType;
 import org.badminton.domain.common.enums.MatchType;
 import org.badminton.domain.domain.league.enums.LeagueStatus;
 import org.badminton.domain.domain.member.entity.Member;
 
 public record LeagueDetailsInfo(
-	Long leagueId,
+        Long leagueId,
 
-	String leagueName,
+        String leagueOwnerToken,
 
-	String leagueDescription,
+        String leagueName,
 
-	String fullAddress,
-	
-	String region,
+        String leagueDescription,
 
-	Member.MemberTier requiredTier,
+        String fullAddress,
 
-	LeagueStatus leagueStatus,
+        String region,
 
-	MatchType matchType,
+        Member.MemberTier requiredTier,
 
-	LocalDateTime leagueAt,
+        LeagueStatus leagueStatus,
 
-	LocalDateTime recruitingClosedAt,
+        MatchType matchType,
 
-	MatchGenerationType matchGenerationType,
+        LocalDateTime leagueAt,
 
-	int playerLimitCount,
+        LocalDateTime recruitingClosedAt,
 
-	int recruitedMemberCount,
+        MatchGenerationType matchGenerationType,
 
-	boolean isParticipatedInLeague,
+        int playerLimitCount,
 
-	LocalDateTime createdAt,
+        int recruitedMemberCount,
 
-	LocalDateTime modifiedAt,
+        LocalDateTime createdAt,
 
-	boolean isMatchCreated
+        LocalDateTime modifiedAt,
+
+        boolean isMatchCreated
 ) {
 
-	public static LeagueDetailsInfo from(
-		LeagueSummaryInfo leagueSummaryInfo,
-		boolean isMatchCreated,
-		boolean isParticipatedInLeague,
-		int recruitedMemberCount
-	) {
-		return new LeagueDetailsInfo(
-			leagueSummaryInfo.leagueId(),
-			leagueSummaryInfo.leagueName(),
-			leagueSummaryInfo.leagueDescription(),
-			leagueSummaryInfo.fullAddress(),
-			leagueSummaryInfo.region(),
-			leagueSummaryInfo.requiredTier(),
-			leagueSummaryInfo.leagueStatus(),
-			leagueSummaryInfo.matchType(),
-			leagueSummaryInfo.leagueAt(),
-			leagueSummaryInfo.recruitingClosedAt(),
-			leagueSummaryInfo.matchGenerationType(),
-			leagueSummaryInfo.playerLimitCount(),
-			recruitedMemberCount,
-			isParticipatedInLeague,
-			leagueSummaryInfo.createdAt(),
-			leagueSummaryInfo.modifiedAt(),
-			isMatchCreated
-		);
-	}
+    public static LeagueDetailsInfo from(
+            LeagueSummaryInfo leagueSummaryInfo,
+            boolean isMatchCreated,
+            int recruitedMemberCount
+    ) {
+        return new LeagueDetailsInfo(
+                leagueSummaryInfo.leagueId(),
+                leagueSummaryInfo.leagueOwnerToken(),
+                leagueSummaryInfo.leagueName(),
+                leagueSummaryInfo.leagueDescription(),
+                leagueSummaryInfo.fullAddress(),
+                leagueSummaryInfo.region(),
+                leagueSummaryInfo.requiredTier(),
+                leagueSummaryInfo.leagueStatus(),
+                leagueSummaryInfo.matchType(),
+                leagueSummaryInfo.leagueAt(),
+                leagueSummaryInfo.recruitingClosedAt(),
+                leagueSummaryInfo.matchGenerationType(),
+                leagueSummaryInfo.playerLimitCount(),
+                recruitedMemberCount,
+                leagueSummaryInfo.createdAt(),
+                leagueSummaryInfo.modifiedAt(),
+                isMatchCreated
+        );
+    }
 }

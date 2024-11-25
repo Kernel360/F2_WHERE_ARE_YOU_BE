@@ -49,10 +49,10 @@ public class FreeMatchFacade implements MatchOperationHandler {
 	}
 
 	@Override
-	public BracketInfo generateInitialBracket(Long leagueId) {
+	public BracketInfo generateInitialBracket(Long leagueId, String memberToken) {
 		freeBracketGenerationService.checkLeagueRecruitingStatus(leagueId);
 		MatchStrategy matchStrategy = freeBracketGenerationService.makeSinglesOrDoublesMatchStrategy(leagueId);
-		return freeBracketGenerationService.makeBracket(matchStrategy, leagueId);
+		return freeBracketGenerationService.makeBracket(matchStrategy, leagueId, memberToken);
 	}
 
 }
