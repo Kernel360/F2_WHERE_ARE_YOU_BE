@@ -34,7 +34,7 @@ public class FreeBracketGenerationServiceImpl implements BracketGenerationServic
     private final DoublesMatchStore doublesMatchStore;
 
     @Override
-    public void checkLeagueRecruitingStatus(MatchStrategy matchStrategy, Long leagueId) {
+    public void checkLeagueRecruitingStatus(Long leagueId) {
         League league = findLeague(leagueId);
         /*
          * 경기 상태가 COMPLETED 일 수 있는 상황

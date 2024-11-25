@@ -32,7 +32,7 @@ public class TournamentMatchFacade implements MatchOperationHandler {
     @Override
     public BracketInfo generateInitialBracket(Long leagueId, String memberToken) {
         MatchStrategy matchStrategy = tournamentBracketGenerationService.makeSinglesOrDoublesMatchStrategy(leagueId);
-        tournamentBracketGenerationService.checkLeagueRecruitingStatus(matchStrategy, leagueId);
+        tournamentBracketGenerationService.checkLeagueRecruitingStatus(leagueId);
         return tournamentBracketGenerationService.makeBracket(matchStrategy, leagueId, memberToken);
     }
 
