@@ -40,8 +40,8 @@ public class MemberLiftBatchConfig {
 			.build();
 	}
 
-	@Bean
-	PlatformTransactionManager leagueStatusTransactionManager(EntityManagerFactory entityManagerFactory) {
+	@Bean(name = "memberLiftTransactionManager")
+	PlatformTransactionManager memberLiftTransactionManager(EntityManagerFactory entityManagerFactory) {
 		return new JpaTransactionManager(entityManagerFactory);
 	}
 
