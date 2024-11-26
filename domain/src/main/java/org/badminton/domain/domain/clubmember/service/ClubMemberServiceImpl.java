@@ -178,12 +178,13 @@ public class ClubMemberServiceImpl implements ClubMemberService {
 	@Override
 	public MemberIsClubMemberInfo checkIsClubMember(String memberToken, String clubToken) {
 		boolean isClubMember = clubMemberReader.checkIsClubMember(memberToken, clubToken);
+		boolean isBanned = clubMemberReader.checkIsExpelClubMember(memberToken, clubToken);
 		if (isClubMember) {
 			ClubMember clubMember = clubMemberReader.getClubMemberByMemberTokenAndClubToken(
 				clubToken, memberToken);
-			return MemberIsClubMemberInfo.fromClubMember(true, clubMember);
+			return MemberIsClubMemberInfo.fromClubMember(true, clubMember, isBanned);
 		}
-		return MemberIsClubMemberInfo.fromClubMember(false, null);
+		return MemberIsClubMemberInfo.fromClubMember(false, null, isBanned);
 
 	}
 

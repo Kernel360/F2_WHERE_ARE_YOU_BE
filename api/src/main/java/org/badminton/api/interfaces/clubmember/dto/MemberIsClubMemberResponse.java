@@ -9,12 +9,14 @@ public record MemberIsClubMemberResponse(
 	@Schema(description = "동호회 가입 여부", requiredMode = Schema.RequiredMode.REQUIRED)
 	boolean isClubMember,
 	@Schema(description = "동호회 역할")
-	ClubMember.ClubMemberRole role
+	ClubMember.ClubMemberRole role,
+	boolean isBanned
 ) {
 	public static MemberIsClubMemberResponse fromMemberIsClubMemberInfo(MemberIsClubMemberInfo memberIsClubMemberInfo) {
 		return new MemberIsClubMemberResponse(
 			memberIsClubMemberInfo.isClubMember(),
-			memberIsClubMemberInfo.role()
+			memberIsClubMemberInfo.role(),
+			memberIsClubMemberInfo.isBanned()
 		);
 	}
 }
