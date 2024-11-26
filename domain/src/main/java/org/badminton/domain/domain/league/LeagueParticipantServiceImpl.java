@@ -63,6 +63,7 @@ public class LeagueParticipantServiceImpl implements LeagueParticipantService {
 	}
 
 	@Override
+	@Transactional
 	public LeagueParticipantInfo participantInLeague(String memberToken, String clubToken, Long leagueId) {
 		ClubMember clubMember = clubMemberReader.getClubMemberByMemberTokenAndClubToken(clubToken, memberToken);
 		League league = leagueReader.readLeagueById(leagueId);
@@ -77,7 +78,7 @@ public class LeagueParticipantServiceImpl implements LeagueParticipantService {
 		if (league.getPlayerLimitCount() <= leagueParticipantReader.countParticipantMember(league.getLeagueId())) {
 			throw new ParticipationLimitReachedException(league.getLeagueId());
 		}
-		if (league.getPlayerLimitCount() == leagueParticipantReader.countParticipantMember(league.getLeagueId()) - 1) {
+		if (league.getPlayerLimitCount() == leagueParticipantReader.countParticipantMember(league.getLeagueId()) + 1) {
 			league.completeLeagueRecruiting();
 		}
 	}
