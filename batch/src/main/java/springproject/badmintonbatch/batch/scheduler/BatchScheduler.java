@@ -24,7 +24,7 @@ public class BatchScheduler {
 
 	@Scheduled(fixedRate = 60000)
 	public void updateLeagueStatus() {
-		log.info("Updating league status");
+		log.info("리그 상태 업데이트");
 		try {
 			jobLauncher.run(leagueStatusUpdateJob, new JobParametersBuilder()
 				.addLong("time", System.currentTimeMillis())
@@ -36,7 +36,7 @@ public class BatchScheduler {
 
 	@Scheduled(fixedRate = 1800000)
 	public void liftClubMember() {
-		log.info("Lift Club Member");
+		log.info("클럽 맴버 정지 해제");
 		try {
 			jobLauncher.run(memberLiftJob, new JobParametersBuilder()
 				.addLong("time", System.currentTimeMillis())
@@ -48,7 +48,7 @@ public class BatchScheduler {
 
 	@Scheduled(fixedRate = 300000)
 	public void runDeleteMemberJob() {
-		log.info("Sending Email");
+		log.info("메일 보내기");
 		try {
 			jobLauncher.run(sendEmailJob, new JobParametersBuilder()
 				.addLong("time", System.currentTimeMillis())
@@ -60,7 +60,7 @@ public class BatchScheduler {
 
 	@Scheduled(cron = "0 0 0,6,12,18 * * ?")
 	public void changeLeagueStatusJob() {
-		log.info("change league status");
+		log.info("리그 상태 변경");
 		try {
 			jobLauncher.run(leagueManagerJob, new JobParametersBuilder()
 				.addLong("time", System.currentTimeMillis())
