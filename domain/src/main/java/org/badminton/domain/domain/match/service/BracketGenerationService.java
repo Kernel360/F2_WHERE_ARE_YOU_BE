@@ -12,5 +12,5 @@ public interface BracketGenerationService {
 
 	BracketInfo makeBracket(MatchStrategy matchStrategy, Long leagueId, String memberToken);
 
-	void initMatch(MatchStrategy matchStrategy, Long matchId);
+	void startMatch(MatchStrategy matchStrategy, Long matchId);
 }
