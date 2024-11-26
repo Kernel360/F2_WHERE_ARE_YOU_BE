@@ -17,7 +17,7 @@ public record LeagueUpdateInfoWithParticipantCountInfo(
 	String fullAddress,
 
 	String region,
-	
+
 	Member.MemberTier requiredTier,
 
 	LeagueStatus leagueStatus,

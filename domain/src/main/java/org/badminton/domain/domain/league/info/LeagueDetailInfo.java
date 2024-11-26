@@ -17,7 +17,7 @@ public record LeagueDetailInfo(
 	String description,
 
 	String fullAddress,
-	
+
 	String region,
 
 	Member.MemberTier requiredTier,

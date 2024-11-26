@@ -16,6 +16,6 @@ public record MemberCommand(
 ) {
 
 	public Member toEntity() {
-		return new Member(this.email,this.name,this.providerId,this.profileImage,this.authorization);
+		return new Member(this.email, this.name, this.providerId, this.profileImage, this.authorization);
 	}
 }
