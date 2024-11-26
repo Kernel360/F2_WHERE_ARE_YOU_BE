@@ -41,7 +41,7 @@ public class LeagueStatusBatchConfig {
 			.build();
 	}
 
-	@Bean
+	@Bean(name = "leagueStatusTransactionManager")
 	PlatformTransactionManager leagueStatusTransactionManager(EntityManagerFactory entityManagerFactory) {
 		return new JpaTransactionManager(entityManagerFactory);
 	}

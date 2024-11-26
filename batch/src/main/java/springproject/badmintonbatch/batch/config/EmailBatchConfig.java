@@ -40,7 +40,7 @@ public class EmailBatchConfig {
 			.build();
 	}
 
-	@Bean
+	@Bean(name = "emailTransactionManager")
 	public PlatformTransactionManager emailTransactionManager(EntityManagerFactory entityManagerFactory) {
 		return new JpaTransactionManager(entityManagerFactory);
 	}
