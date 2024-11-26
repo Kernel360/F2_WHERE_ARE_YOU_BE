@@ -22,7 +22,7 @@ public class BatchScheduler {
 	private final Job leagueStatusUpdateJob;
 	private final Job memberLiftJob;
 
-	@Scheduled(fixedRate = 60000)
+	@Scheduled(fixedRate = 10000)
 	public void updateLeagueStatus() {
 		log.info("Updating league status");
 		try {
@@ -34,7 +34,7 @@ public class BatchScheduler {
 		}
 	}
 
-	@Scheduled(fixedRate = 1800000)
+	@Scheduled(fixedRate = 10000)
 	public void liftClubMember() {
 		log.info("Lift Club Member");
 		try {
@@ -46,7 +46,7 @@ public class BatchScheduler {
 		}
 	}
 
-	@Scheduled(fixedRate = 300000)
+	@Scheduled(fixedRate = 10000)
 	public void runDeleteMemberJob() {
 		log.info("Sending Email");
 		try {
@@ -58,7 +58,7 @@ public class BatchScheduler {
 		}
 	}
 
-	@Scheduled(cron = "0 0 0,6,12,18 * * ?")
+	@Scheduled(fixedRate = 10000)
 	public void changeLeagueStatusJob() {
 		log.info("change league status");
 		try {
