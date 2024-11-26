@@ -29,6 +29,7 @@ public class LeagueParticipantServiceImpl implements LeagueParticipantService {
 	private final LeagueParticipantReader leagueParticipantReader;
 	private final LeagueParticipantStore leagueParticipantStore;
 	private final LeagueReader leagueReader;
+	private final LeagueStore leagueStore;
 	private final ClubMemberReader clubMemberReader;
 
 	@Override
@@ -64,6 +65,7 @@ public class LeagueParticipantServiceImpl implements LeagueParticipantService {
 		if (league.getLeagueStatus() == LeagueStatus.RECRUITING_COMPLETED) {
 			league.reopenLeagueRecruiting();
 		}
+		leagueStore.store(league);
 		return LeagueParticipantCancelInfo.from(result);
 	}
 
