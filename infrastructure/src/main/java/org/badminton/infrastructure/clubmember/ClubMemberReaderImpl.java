@@ -40,6 +40,12 @@ public class ClubMemberReaderImpl implements ClubMemberReader {
 	}
 
 	@Override
+	public boolean checkIsExpelClubMember(String memberToken, String clubToken) {
+		return clubMemberRepository.existsByClubClubTokenAndMemberMemberTokenAndDeletedTrueAndBannedTrue(clubToken,
+			memberToken);
+	}
+
+	@Override
 	public boolean existsMemberInClub(String memberToken, String clubToken) {
 		return clubMemberRepository.existsByMemberMemberTokenAndClubClubToken(memberToken, clubToken);
 	}
