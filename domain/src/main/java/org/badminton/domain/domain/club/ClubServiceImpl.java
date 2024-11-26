@@ -39,9 +39,8 @@ public class ClubServiceImpl implements ClubService {
     @Override
     @Transactional(readOnly = true)
     public Page<ClubCardInfo> searchClubs(String keyword, Pageable pageable) {
-        var search = ClubSearch.searchResult(keyword, pageable, clubReader);
-        var club = search.getFindClubs();
-        var response = ClubPage.builder().club(club).build();
+        Page<Club> clubs = getClubs(keyword, pageable);
+        var response = ClubPage.builder().club(clubs).build();
         return response.clubToPageCardInfo();
     }
 
@@ -108,4 +107,10 @@ public class ClubServiceImpl implements ClubService {
 
     }
 
+    private Page<Club> getClubs(String keyword, Pageable pageable) {
+        if (keyword == null || keyword.trim().isEmpty()) {
+            return clubReader.readAllClubs(pageable);
+        }
+        return clubReader.keywordSearch(keyword, pageable);
+    }
 }
