@@ -28,11 +28,11 @@ jobs:
           touch ./.env
           echo "${{ secrets.ENV }}" > ./.env
 
-      - name: Generate logback.xml for API
+      - name: Generate logback.xml for BATCH
         run: |
           cd ./batch/src/main/resources
           cat <<EOF > logback.xml
-          ${{ secrets.LOGBACK_API }}
+          ${{ secrets.LOGBACK_BATCH }}
           EOF
 
       - name: Set Gradle Wrapper Permissions
