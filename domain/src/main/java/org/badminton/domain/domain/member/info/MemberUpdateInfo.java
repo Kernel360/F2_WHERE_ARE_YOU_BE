@@ -1,10 +1,9 @@
 package org.badminton.domain.domain.member.info;
 
 import org.badminton.domain.domain.member.entity.Member;
-import org.badminton.domain.domain.member.entity.MemberAuthorization;
 
 public record MemberUpdateInfo(
-	String  memberToken,
+	String memberToken,
 
 	String authorization,
 
@@ -17,7 +16,8 @@ public record MemberUpdateInfo(
 	String profileImage
 ) {
 	public static MemberUpdateInfo fromMemberEntity(Member member) {
-		return new MemberUpdateInfo(member.getMemberToken(),member.getAuthorization(),member.getName(),member.getEmail(),member.getProviderId(),member.getProfileImage());
+		return new MemberUpdateInfo(member.getMemberToken(), member.getAuthorization(), member.getName(),
+			member.getEmail(), member.getProviderId(), member.getProfileImage());
 	}
 
 }

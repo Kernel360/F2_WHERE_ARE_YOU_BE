@@ -6,6 +6,7 @@ import org.badminton.domain.domain.member.entity.Member;
 
 public interface ClubMemberStore {
 	void store(ClubMember member);
+
 	ClubMember createClubMember(ClubCreateInfo club, Member member, ClubMember.ClubMemberRole role);
 
 }

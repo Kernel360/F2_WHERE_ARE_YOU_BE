@@ -4,14 +4,14 @@ import lombok.Getter;
 
 @Getter
 public enum AllowedLeagueStatus {
-    ALL(LeagueStatus.ALL),
-    RECRUITING(LeagueStatus.RECRUITING),
-    PLAYING(LeagueStatus.PLAYING);
+	ALL(LeagueStatus.ALL),
+	RECRUITING(LeagueStatus.RECRUITING),
+	PLAYING(LeagueStatus.PLAYING);
 
-    private final LeagueStatus status;
+	private final LeagueStatus status;
 
-    AllowedLeagueStatus(LeagueStatus status) {
-        this.status = status;
-    }
+	AllowedLeagueStatus(LeagueStatus status) {
+		this.status = status;
+	}
 
 }

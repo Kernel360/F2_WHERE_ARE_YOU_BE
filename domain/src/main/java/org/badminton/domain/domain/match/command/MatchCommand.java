@@ -6,12 +6,12 @@ import lombok.ToString;
 
 public class MatchCommand {
 
-    @Getter
-    @Builder
-    @ToString
-    public static class UpdateSetScore {
-        private final int score1;
-        private final int score2;
+	@Getter
+	@Builder
+	@ToString
+	public static class UpdateSetScore {
+		private final int score1;
+		private final int score2;
 
-    }
+	}
 }
