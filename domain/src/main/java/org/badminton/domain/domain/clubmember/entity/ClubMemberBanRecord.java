@@ -48,4 +48,8 @@ public class ClubMemberBanRecord extends AbstractBaseTime {
 		this.endDate = bannedType.isPermanent() ? null : LocalDateTime.now().plusDays(bannedType.getDays());
 		this.isActive = true;
 	}
+
+	public void liftClubMember() {
+		this.isActive = false;
+	}
 }

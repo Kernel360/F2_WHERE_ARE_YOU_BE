@@ -145,7 +145,7 @@ public class SecurityConfig {
 				.requestMatchers(HttpMethod.POST, "/v1/clubs/{clubToken}/clubMembers/approve",
 					"/v1/clubs/{clubToken}/clubMembers/reject")
 				.access(hasClubRole("OWNER", "MANAGER"))
-				.requestMatchers(HttpMethod.POST, "/v1/clubs/{clubToken}/league", "/v1/clubs/images")
+				.requestMatchers(HttpMethod.POST, "/v1/clubs/images")
 				.access(hasClubRole("OWNER", "MANAGER"))
 				.requestMatchers(HttpMethod.DELETE, "/v1/clubs/{clubToken}/leagues/{leagueId}")
 				.access(hasClubRole("OWNER", "MANAGER"))
@@ -187,7 +187,7 @@ public class SecurityConfig {
 				Has required role: {}
 				""", clubToken, auth.getAuthorities(), Arrays.toString(roles), hasRole
 			);
-			
+
 			if (!hasRole) {
 				throw new AuthenticationException("Insufficient roles to access this resource") {
 				};

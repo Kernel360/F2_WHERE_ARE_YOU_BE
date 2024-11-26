@@ -7,6 +7,6 @@ public record ClubMemberJoinInfo(
 	String role
 ) {
 	public static ClubMemberJoinInfo from(ClubMember clubMember) {
-		return new ClubMemberJoinInfo(clubMember.getClubMemberId(),clubMember.getRole().name());
+		return new ClubMemberJoinInfo(clubMember.getClubMemberId(), clubMember.getRole().name());
 	}
 }

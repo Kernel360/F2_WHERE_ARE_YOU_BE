@@ -5,7 +5,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.badminton.domain.common.exception.league.LeagueAlreadyCanceledException;
+import org.badminton.domain.common.exception.league.LeagueCannotBeUpdated;
 import org.badminton.domain.common.exception.league.NotLeagueOwnerException;
 import org.badminton.domain.common.exception.league.OngoingAndUpcomingLeagueCanNotBePastException;
 import org.badminton.domain.domain.club.ClubReader;
@@ -85,8 +85,9 @@ public class LeagueServiceImpl implements LeagueService {
 			throw new NotLeagueOwnerException(memberToken);
 		}
 
-		if (league.getLeagueStatus() == LeagueStatus.CANCELED) {
-			throw new LeagueAlreadyCanceledException(leagueId);
+		if (!(league.getLeagueStatus() == LeagueStatus.RECRUITING
+			|| league.getLeagueStatus() == LeagueStatus.RECRUITING_COMPLETED)) {
+			throw new LeagueCannotBeUpdated(leagueId, league.getLeagueStatus());
 		}
 		league.updateLeague(leagueUpdateCommand.leagueName(), leagueUpdateCommand.description(),
 			leagueUpdateCommand.playerLimitCount(), leagueUpdateCommand.matchType(),

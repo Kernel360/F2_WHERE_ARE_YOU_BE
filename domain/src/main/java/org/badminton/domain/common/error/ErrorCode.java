@@ -25,6 +25,7 @@ public enum ErrorCode {
 	ACCESS_DENIED(403, "리소스에 대한 접근이 제한되었습니다."),
 	LIMIT_EXCEEDED_403(403, "리소스의 제한 설정을 초과했습니다."),
 	OUT_OF_RANGE_403(403, "리소스의 제한 범위를 벗어났습니다."),
+	UNAUTHORIZED_USER_FOR_BRACKET_GENERATION(403, "경기를 생성한 사람만 대진표를 만들 수 있습니다."),
 
 	// 404 Errors
 	NOT_FOUND(404, "요청한 리소스를 찾을 수 없습니다."),
@@ -50,6 +51,7 @@ public enum ErrorCode {
 	CLUB_MEMBER_ALREADY_EXIST(409, "이미 해당 동호회에 가입을 완료한 회원입니다."),
 	LEAGUE_RECRUITING_ALREADY_COMPLETED(409, "이미 경기 일정에 모집 인원이 다 채워졌습니다."),
 	CLUB_MEMBER_ALREADY_OWNER(409, "이미 해당 동호회를 생성하여 동호회장으로 가입을 완료한 회원입니다."),
+	LEAGUE_CANNOT_BE_UPDATED(409, "모집 중이거나 모집 완료 상태인 경기만 수정이 가능합니다."),
 
 	// RESOURCE_ALREADY_EXIST
 	RESOURCE_ALREADY_EXIST(409, "특정 리소스가 이미 존재합니다."),
@@ -71,8 +73,7 @@ public enum ErrorCode {
 	DELETED(410, "요청한 리소스가 삭제되었습니다."),
 
 	INVALID_PLAYER_COUNT(411, "아직 모집 인원이 채워지지 않았습니다."),
-	LEAGUE_RECRUITING_MUST_BE_COMPLETED_WHEN_BRACKET_GENERATION(412, "대진표를 만들기 위해서는 모집이 종료되어야 합니다."),
-
+	LEAGUE_RECRUITING_MUST_BE_COMPLETED_WHEN_BRACKET_GENERATION(412, "대진표를 만들기 위해서는 모집이 완료되어야 합니다."),
 	INSUFFICIENT_TIER(412, "현재 경기의 티어와 맞지 않습니다"),
 	ONGOING_AND_UPCOMING_LEAGUE_CANNOT_BE_PAST(412, "메인 페이지에서 오늘 날짜 이전의 경기는 조회할 수 없습니다."),
 	RECRUITMENT_END_DATE_AFTER_LEAGUE_START(412, "모집 마감 날짜는 경기 시작 날짜 이전이어야 합니다."),

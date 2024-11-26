@@ -57,8 +57,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
 	private void processAuthenticationWithMemberToken(String memberToken, String registrationId,
 		String oAuthAccessToken) {
-		List<ClubMember> clubMemberEntities = clubMemberReader.getClubMembersByMemberToken(memberToken);
-
+		List<ClubMember> clubMemberEntities = clubMemberReader.getActiveClubMembersByMemberToken(memberToken);
 		MemberResponse memberResponse = new MemberResponse(memberToken,
 			MemberAuthorization.AUTHORIZATION_USER.toString(),
 			null, null, null, null);

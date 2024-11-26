@@ -41,6 +41,5 @@ public interface MatchStrategy {
 
 	SetInfo.Main retrieveSet(Long matchId, int setNumber);
 
-	void initMatch(Long matchId);
-
+	void startMatch(Long matchId);
 }

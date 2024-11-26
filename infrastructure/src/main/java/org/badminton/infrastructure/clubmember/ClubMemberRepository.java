@@ -13,6 +13,8 @@ public interface ClubMemberRepository extends JpaRepository<ClubMember, Long> {
 
 	List<ClubMember> findAllByDeletedFalseAndMemberMemberToken(String memberToken);
 
+	List<ClubMember> findAllByDeletedFalseAndBannedFalseAndMemberMemberToken(String memberToken);
+
 	Optional<ClubMember> findByClubClubTokenAndMemberMemberToken(String clubToken, String memberToken);
 
 	boolean existsByClubClubTokenAndMemberMemberTokenAndDeletedFalse(String clubToken, String memberToken);

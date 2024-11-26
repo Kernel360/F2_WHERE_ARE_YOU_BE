@@ -77,6 +77,10 @@ public class ClubMember extends AbstractBaseTime {
 		this.banned = true;
 	}
 
+	public void lift() {
+		this.banned = false;
+	}
+
 	@Getter
 	public enum BannedType {
 		THREE_DAYS("3일 정지", 3),
