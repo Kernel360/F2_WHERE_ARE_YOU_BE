@@ -44,9 +44,9 @@ public class ClubFacade {
 	@Transactional
 	public ClubDetailsInfo readClub(String clubToken) {
 		var club = clubService.readClub(clubToken);
-		eventPublisher.publishEvent(new ReadClubEvent(clubToken));
 		Map<Member.MemberTier, Long> memberCountByTier = club.getClubMemberCountByTier();
 		int clubMembersCount = clubMemberService.countExistingClub(clubToken);
+		eventPublisher.publishEvent(new ReadClubEvent(clubToken));
 		return ClubDetailsInfo.from(club, memberCountByTier,
 			clubMembersCount);
 	}
