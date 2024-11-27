@@ -7,7 +7,6 @@ import org.badminton.api.interfaces.league.dto.LeagueByDateResponse;
 import org.badminton.api.interfaces.league.dto.LeagueCancelResponse;
 import org.badminton.api.interfaces.league.dto.LeagueCreateRequest;
 import org.badminton.api.interfaces.league.dto.LeagueCreateResponse;
-import org.badminton.api.interfaces.league.dto.LeagueDetailsResponse;
 import org.badminton.api.interfaces.league.dto.LeagueParticipantResponse;
 import org.badminton.api.interfaces.league.dto.LeagueParticipationCancelResponse;
 import org.badminton.api.interfaces.league.dto.LeagueReadResponse;
@@ -19,7 +18,6 @@ import org.badminton.domain.domain.league.info.IsLeagueParticipantInfo;
 import org.badminton.domain.domain.league.info.LeagueByDateInfoWithParticipantCountInfo;
 import org.badminton.domain.domain.league.info.LeagueCancelInfo;
 import org.badminton.domain.domain.league.info.LeagueCreateInfo;
-import org.badminton.domain.domain.league.info.LeagueDetailsInfo;
 import org.badminton.domain.domain.league.info.LeagueParticipantCancelInfo;
 import org.badminton.domain.domain.league.info.LeagueParticipantInfo;
 import org.badminton.domain.domain.league.info.LeagueReadInfo;
@@ -42,8 +40,6 @@ public interface LeagueDtoMapper {
 	LeagueCreateNoIncludeClubCommand of(@Valid LeagueCreateRequest leagueCreateRequest, String leagueToken);
 
 	List<LeagueReadResponse> mapLeagueReadInfoList(List<LeagueReadInfo> responseInfo);
-
-	LeagueDetailsResponse of(LeagueDetailsInfo leagueDetailsInfo);
 
 	LeagueUpdateCommand of(@Valid LeagueUpdateRequest leagueUpdateRequest);
 

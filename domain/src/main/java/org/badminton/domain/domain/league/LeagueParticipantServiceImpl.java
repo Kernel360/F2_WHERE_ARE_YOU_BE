@@ -1,8 +1,11 @@
 package org.badminton.domain.domain.league;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Objects;
 
+import org.badminton.domain.common.exception.league.InvalidDateTimeToParticipateInLeagueException;
+import org.badminton.domain.common.exception.league.LeagueNotRecruitingException;
 import org.badminton.domain.common.exception.league.LeagueOwnerCannotCancelLeagueParticipationException;
 import org.badminton.domain.common.exception.league.LeagueParticipationCannotBeCanceledException;
 import org.badminton.domain.common.exception.league.LeagueParticipationDuplicateException;
@@ -14,6 +17,7 @@ import org.badminton.domain.domain.league.entity.LeagueParticipant;
 import org.badminton.domain.domain.league.enums.LeagueStatus;
 import org.badminton.domain.domain.league.info.IsLeagueParticipantInfo;
 import org.badminton.domain.domain.league.info.LeagueParticipantCancelInfo;
+import org.badminton.domain.domain.league.info.LeagueParticipantDetailsInfo;
 import org.badminton.domain.domain.league.info.LeagueParticipantInfo;
 import org.springframework.stereotype.Service;
 
@@ -72,13 +76,31 @@ public class LeagueParticipantServiceImpl implements LeagueParticipantService {
 	@Override
 	@Transactional
 	public LeagueParticipantInfo participantInLeague(String memberToken, String clubToken, Long leagueId) {
-		ClubMember clubMember = clubMemberReader.getClubMemberByMemberTokenAndClubToken(clubToken, memberToken);
 		League league = leagueReader.readLeagueById(leagueId);
+		if (league.getLeagueStatus() != LeagueStatus.RECRUITING) {
+			throw new LeagueNotRecruitingException(leagueId, league.getLeagueStatus());
+		}
+		if (LocalDateTime.now().isAfter(league.getRecruitingClosedAt())) {
+			throw new InvalidDateTimeToParticipateInLeagueException(leagueId, league.getRecruitingClosedAt());
+		}
+		ClubMember clubMember = clubMemberReader.getClubMemberByMemberTokenAndClubToken(clubToken, memberToken);
 		if (leagueParticipantReader.isParticipant(memberToken, leagueId)) {
 			throw new LeagueParticipationDuplicateException(leagueId, memberToken);
 		}
 		checkParticipantCount(league);
 		return LeagueParticipantInfo.from(leagueParticipantStore.store(clubMember, league));
+	}
+
+	@Override
+	public List<LeagueParticipantDetailsInfo> getLeagueParticipants(Long leagueId) {
+		List<LeagueParticipant> leagueParticipants = leagueParticipantReader.findAllByLeagueIdAndCanceledFalse(
+			leagueId);
+		if (leagueParticipants == null) {
+			return null;
+		}
+		return leagueParticipants.stream()
+			.map(LeagueParticipantDetailsInfo::from)
+			.toList();
 	}
 
 	private void checkParticipantCount(League league) {
