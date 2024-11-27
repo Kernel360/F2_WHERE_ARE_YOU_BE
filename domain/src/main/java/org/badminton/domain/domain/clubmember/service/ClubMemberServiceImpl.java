@@ -182,9 +182,9 @@ public class ClubMemberServiceImpl implements ClubMemberService {
 		if (isClubMember) {
 			ClubMember clubMember = clubMemberReader.getClubMemberByMemberTokenAndClubToken(
 				clubToken, memberToken);
-			return MemberIsClubMemberInfo.fromClubMember(true, clubMember, isBanned);
+			return MemberIsClubMemberInfo.from(true, clubMember, isBanned);
 		}
-		return MemberIsClubMemberInfo.fromClubMember(false, null, isBanned);
+		return MemberIsClubMemberInfo.from(false, null, isBanned);
 
 	}
 
