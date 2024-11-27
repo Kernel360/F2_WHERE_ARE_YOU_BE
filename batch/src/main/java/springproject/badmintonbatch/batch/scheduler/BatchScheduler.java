@@ -68,5 +68,6 @@ public class BatchScheduler {
 		} catch (Exception exception) {
 			log.error(exception.getMessage(), exception);
 		}
+
 	}
 }
