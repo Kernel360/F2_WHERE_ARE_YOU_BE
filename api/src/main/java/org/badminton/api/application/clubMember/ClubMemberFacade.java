@@ -3,6 +3,7 @@ package org.badminton.api.application.clubMember;
 import java.util.List;
 import java.util.Map;
 
+import org.badminton.domain.common.policy.ClubMemberPolicy;
 import org.badminton.domain.domain.club.ClubApplyService;
 import org.badminton.domain.domain.club.command.ClubApplyCommand;
 import org.badminton.domain.domain.clubmember.command.ClubMemberBanCommand;
@@ -31,6 +32,7 @@ public class ClubMemberFacade {
 	private final ClubMemberService clubMemberService;
 	private final ClubApplyService clubApplyService;
 	private final MailService mailService;
+	private final ClubMemberPolicy clubMemberPolicy;
 
 	@Transactional
 	public ApplyClubInfo applyClub(String memberToken, String clubToken, ClubApplyCommand command) {
@@ -40,30 +42,39 @@ public class ClubMemberFacade {
 
 	}
 
-	public ApproveApplyInfo approveApplying(Long clubApplyId) {
+	public ApproveApplyInfo approveApplying(Long clubApplyId, String memberToken, String clubToken) {
+		clubMemberPolicy.validateClubOwner(memberToken, clubToken);
 		mailService.prepareClubApplyResultEmail(clubApplyId, true);
 		return clubApplyService.approveApplying(clubApplyId);
 	}
 
-	public RejectApplyInfo rejectApplying(Long clubApplyId) {
+	public RejectApplyInfo rejectApplying(Long clubApplyId, String memberToken, String clubToken) {
+		clubMemberPolicy.validateClubOwner(memberToken, clubToken);
 		mailService.prepareClubApplyResultEmail(clubApplyId, false);
 		return clubApplyService.rejectApplying(clubApplyId);
 	}
 
 	public ClubMemberInfo updateClubMemberRole(ClubMemberRoleUpdateCommand command, Long clubMemberId,
-		String clubToken) {
+		String clubToken, String memberToken) {
+		clubMemberPolicy.validateClubOwner(memberToken, clubToken);
 		return clubMemberService.updateClubMemberRole(command, clubMemberId, clubToken);
 	}
 
-	public Map<ClubMember.ClubMemberRole, List<ClubMemberInfo>> findAllClubMembers(String clubToken) {
+	public Map<ClubMember.ClubMemberRole, List<ClubMemberInfo>> findAllClubMembers(String clubToken,
+		String memberToken) {
+		clubMemberPolicy.validateClubMember(memberToken, clubToken);
 		return clubMemberService.findAllClubMembers(clubToken);
 	}
 
-	public ClubMemberBanRecordInfo expelClubMember(ClubMemberExpelCommand command, Long clubMemberId) {
+	public ClubMemberBanRecordInfo expelClubMember(ClubMemberExpelCommand command, Long clubMemberId,
+		String memberToken, String clubToken) {
+		clubMemberPolicy.validateAboveClubManager(memberToken, clubToken);
 		return clubMemberService.expelClubMember(command, clubMemberId);
 	}
 
-	public ClubMemberBanRecordInfo banClubMember(ClubMemberBanCommand command, Long clubMemberId) {
+	public ClubMemberBanRecordInfo banClubMember(ClubMemberBanCommand command, Long clubMemberId, String memberToken,
+		String clubToken) {
+		clubMemberPolicy.validateAboveClubManager(memberToken, clubToken);
 		return clubMemberService.banClubMember(command, clubMemberId);
 	}
 
@@ -72,6 +83,7 @@ public class ClubMemberFacade {
 	}
 
 	public ClubMemberInfo getClubMember(String memberToken, String clubToken) {
+		clubMemberPolicy.validateClubMember(memberToken, clubToken);
 		return clubMemberService.getClubMember(memberToken, clubToken);
 	}
 

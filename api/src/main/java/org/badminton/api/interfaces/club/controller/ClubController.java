@@ -18,9 +18,17 @@ import org.badminton.api.interfaces.club.dto.ClubDetailsResponse;
 import org.badminton.api.interfaces.club.dto.ClubUpdateRequest;
 import org.badminton.api.interfaces.club.dto.ClubUpdateResponse;
 import org.badminton.api.interfaces.club.dto.CustomPageResponse;
+import org.badminton.domain.common.policy.ClubMemberPolicy;
+import org.badminton.domain.domain.club.command.ClubCreateCommand;
 import org.badminton.domain.domain.club.command.ClubUpdateCommand;
 import org.badminton.domain.domain.club.info.ClubApplicantInfo;
+import org.badminton.domain.domain.club.info.ClubCardInfo;
+import org.badminton.domain.domain.club.info.ClubCreateInfo;
+import org.badminton.domain.domain.club.info.ClubDeleteInfo;
+import org.badminton.domain.domain.club.info.ClubUpdateInfo;
+import org.springframework.data.domain.Page;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -48,6 +56,7 @@ public class ClubController {
 	private final ClubFacade clubFacade;
 	private final ClubRankFacade clubRankFacade;
 	private final ClubDtoMapper clubDtoMapper;
+	private final ClubMemberPolicy clubMemberPolicy;
 
 	@GetMapping("/{clubToken}")
 	@Operation(summary = "동호회 조회",
@@ -78,9 +87,12 @@ public class ClubController {
 		tags = {"Club"}
 	)
 	public CommonResponse<ClubUpdateResponse> updateClub(@PathVariable String clubToken,
-		@Valid @RequestBody ClubUpdateRequest clubUpdateRequest) {
+		@Valid @RequestBody ClubUpdateRequest clubUpdateRequest, @AuthenticationPrincipal CustomOAuth2Member member) {
+		CustomOAuth2Member member1 = (CustomOAuth2Member)SecurityContextHolder.getContext().getAuthentication();
+		String memberToken = member1.getMemberToken();
+		clubMemberPolicy.validateClubMember(member.getMemberToken(), clubToken);
 		ClubUpdateCommand command = clubDtoMapper.of(clubUpdateRequest);
-		var clubUpdateInfo = clubFacade.updateClubInfo(command, clubToken);
+		ClubUpdateInfo clubUpdateInfo = clubFacade.updateClubInfo(command, clubToken, member.getMemberToken());
 		ClubUpdateResponse response = clubDtoMapper.of(clubUpdateInfo);
 		return CommonResponse.success(response);
 	}
@@ -106,8 +118,8 @@ public class ClubController {
 	public CommonResponse<ClubCreateResponse> createClub(@Valid @RequestBody ClubCreateRequest clubCreateRequest,
 		@AuthenticationPrincipal CustomOAuth2Member member) {
 		String memberToken = member.getMemberToken();
-		var clubCreateCommand = clubDtoMapper.of(clubCreateRequest);
-		var created = clubFacade.createClub(clubCreateCommand, memberToken);
+		ClubCreateCommand clubCreateCommand = clubDtoMapper.of(clubCreateRequest);
+		ClubCreateInfo created = clubFacade.createClub(clubCreateCommand, memberToken);
 		ClubCreateResponse response = clubDtoMapper.of(created);
 		return CommonResponse.success(response);
 	}
@@ -116,13 +128,14 @@ public class ClubController {
 	@Operation(summary = "동호회 삭제",
 		description = "동호회를 삭제합니다.",
 		tags = {"Club"})
-	public CommonResponse<ClubDeleteResponse> deleteClub(@PathVariable String clubToken) {
-		var club = clubFacade.deleteClubInfo(clubToken);
+	public CommonResponse<ClubDeleteResponse> deleteClub(@PathVariable String clubToken,
+		@AuthenticationPrincipal CustomOAuth2Member member) {
+		ClubDeleteInfo club = clubFacade.deleteClubInfo(member.getMemberToken(), clubToken);
 		ClubDeleteResponse deleted = clubDtoMapper.of(club);
 		return CommonResponse.success(deleted);
 	}
 
-	@GetMapping()
+	@GetMapping
 	@Operation(summary = "전체 동호회 조회",
 		description = "전체 동호회를 조회합니다.",
 		tags = {"Club"})
@@ -130,9 +143,9 @@ public class ClubController {
 		@RequestParam(defaultValue = DEFAULT_PAGE_VALUE) int page,
 		@RequestParam(defaultValue = DEFAULT_SIZE_VALUE) int size,
 		@RequestParam(defaultValue = DEFAULT_SORT_BY_VALUE) String sort) {
-		var clubCard = clubFacade.readAllClubs(page, size, sort);
-		var response = clubDtoMapper.of(clubCard);
-		var pageResponse = new CustomPageResponse<>(response);
+		Page<ClubCardInfo> clubCard = clubFacade.readAllClubs(page, size, sort);
+		Page<ClubCardResponse> response = clubDtoMapper.of(clubCard);
+		CustomPageResponse<ClubCardResponse> pageResponse = new CustomPageResponse<>(response);
 		return CommonResponse.success(pageResponse);
 	}
 
@@ -183,9 +196,9 @@ public class ClubController {
 		description = "특정 동호회에 가입 신청한 유저 리스트 조회",
 		tags = {"Club"})
 	@GetMapping("/{clubToken}/applicants")
-	public CommonResponse<List<ClubApplicantResponse>> getClubApplicant(@PathVariable String clubToken) {
-		List<ClubApplicantInfo> clubApplies = clubFacade.readClubApplicants(clubToken);
-
+	public CommonResponse<List<ClubApplicantResponse>> getClubApplicant(@PathVariable String clubToken,
+		@AuthenticationPrincipal CustomOAuth2Member member) {
+		List<ClubApplicantInfo> clubApplies = clubFacade.readClubApplicants(member.getMemberToken(), clubToken);
 		List<ClubApplicantResponse> response = clubApplies.stream()
 			.map(ClubApplicantResponse::from)
 			.collect(Collectors.toList());

@@ -7,7 +7,6 @@ import org.badminton.domain.domain.clubmember.entity.ClubMember;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface ClubMemberRepository extends JpaRepository<ClubMember, Long> {
-	ClubMember findByClubClubIdAndMemberId(Long clubId, Long memberId);
 
 	List<ClubMember> findAllByClubClubToken(String clubToken);
 
@@ -32,5 +31,6 @@ public interface ClubMemberRepository extends JpaRepository<ClubMember, Long> {
 	ClubMember findByClubClubTokenAndRole(String clubToken, ClubMember.ClubMemberRole role);
 
 	Integer countByClubClubTokenAndDeletedFalse(String clubToken);
+
 }
 
