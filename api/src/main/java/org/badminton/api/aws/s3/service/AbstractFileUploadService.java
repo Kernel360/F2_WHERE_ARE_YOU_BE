@@ -20,6 +20,9 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public abstract class AbstractFileUploadService implements ImageService {
 	private static final long MAX_FILE_SIZE = 2548576; // 1.5MB
+	private static final String WEBP = "webp";
+	private static final String AVIF = "avif";
+	private static final String CONTENT_TYPE = "image/webp";
 
 	@Value("${cloud.aws.s3.bucket}")
 	private String bucket;
@@ -49,22 +52,22 @@ public abstract class AbstractFileUploadService implements ImageService {
 			byte[] processedImage;
 			String newFileExtension;
 
-			if ("webp".equalsIgnoreCase(fileExtension)) {
+			if (WEBP.equalsIgnoreCase(fileExtension)) {
 				processedImage = fileBytes;
-				newFileExtension = "webp";
-			} else if ("avif".equalsIgnoreCase(fileExtension)) {
+				newFileExtension = WEBP;
+			} else if (AVIF.equalsIgnoreCase(fileExtension)) {
 				processedImage = fileBytes;
-				newFileExtension = "avif";
+				newFileExtension = AVIF;
 			} else {
 				processedImage = imageConversionService.convertToWebP(uploadFile);
-				newFileExtension = "webp";
+				newFileExtension = WEBP;
 			}
 
 			String fileName = makeFileName(newFileExtension);
 
 			ObjectMetadata objectMetadata = new ObjectMetadata();
 			objectMetadata.setContentLength(processedImage.length);
-			objectMetadata.setContentType("image/webp");
+			objectMetadata.setContentType(CONTENT_TYPE);
 
 			// S3에 파일 업로드
 			s3Client.putObject(new PutObjectRequest(bucket, fileName,
