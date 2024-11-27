@@ -8,7 +8,9 @@ dependencies {
     implementation group: 'org.springdoc', name: 'springdoc-openapi-starter-webmvc-ui', version: '2.6.0'
     implementation 'io.jsonwebtoken:jjwt-api:0.12.3'
     implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.5.RELEASE'
-
+    implementation "com.sksamuel.scrimage:scrimage-core:4.0.32"
+    implementation "com.sksamuel.scrimage:scrimage-webp:4.0.32"
+    
     implementation 'org.mapstruct:mapstruct:1.4.2.Final'
     annotationProcessor "org.mapstruct:mapstruct-processor:1.4.2.Final"
     implementation group: 'org.springframework.boot', name: 'spring-boot-starter-validation', version: '3.3.4'
