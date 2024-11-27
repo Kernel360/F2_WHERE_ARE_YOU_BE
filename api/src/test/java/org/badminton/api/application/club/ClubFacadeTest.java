@@ -19,13 +19,14 @@ import org.badminton.domain.domain.club.info.ClubSummaryInfo;
 import org.badminton.domain.domain.club.info.ClubUpdateInfo;
 import org.badminton.domain.domain.clubmember.service.ClubMemberService;
 import org.badminton.domain.domain.member.entity.Member;
-import org.badminton.domain.domain.statistics.ClubStatisticsService;
+import org.badminton.domain.domain.statistics.event.CreateClubEvent;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -43,7 +44,7 @@ class ClubFacadeTest {
 	private ClubMemberService clubMemberService;
 
 	@Mock
-	private ClubStatisticsService clubStatisticsService;
+	private ApplicationEventPublisher eventPublisher;
 
 	@BeforeEach
 	void setUp() {
@@ -145,7 +146,7 @@ class ClubFacadeTest {
 		assertNotNull(result);
 		verify(clubService, times(1)).createClub(createCommand);
 		verify(clubMemberService, times(1)).clubMemberOwner(memberToken, mockClubCreateInfo);
-		verify(clubStatisticsService, times(1)).createStatistic(mockClubCreateInfo);
+		verify(eventPublisher, times(1)).publishEvent(any(CreateClubEvent.class));
 	}
 
 	@Test

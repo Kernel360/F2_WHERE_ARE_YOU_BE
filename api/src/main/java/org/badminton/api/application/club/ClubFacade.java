@@ -14,7 +14,9 @@ import org.badminton.domain.domain.club.info.ClubDetailsInfo;
 import org.badminton.domain.domain.club.info.ClubUpdateInfo;
 import org.badminton.domain.domain.clubmember.service.ClubMemberService;
 import org.badminton.domain.domain.member.entity.Member;
-import org.badminton.domain.domain.statistics.ClubStatisticsService;
+import org.badminton.domain.domain.statistics.event.CreateClubEvent;
+import org.badminton.domain.domain.statistics.event.ReadClubEvent;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -31,7 +33,7 @@ import lombok.extern.slf4j.Slf4j;
 public class ClubFacade {
 	private final ClubService clubService;
 	private final ClubMemberService clubMemberService;
-	private final ClubStatisticsService clubStatisticsService;
+	private final ApplicationEventPublisher eventPublisher;
 
 	@Transactional(readOnly = true)
 	public Page<ClubCardInfo> readAllClubs(int page, int size, String sort) {
@@ -43,9 +45,8 @@ public class ClubFacade {
 	public ClubDetailsInfo readClub(String clubToken) {
 		var club = clubService.readClub(clubToken);
 		Map<Member.MemberTier, Long> memberCountByTier = club.getClubMemberCountByTier();
-
 		int clubMembersCount = clubMemberService.countExistingClub(clubToken);
-		clubStatisticsService.increaseVisitedClubCount(clubToken);
+		eventPublisher.publishEvent(new ReadClubEvent(clubToken));
 		return ClubDetailsInfo.from(club, memberCountByTier,
 			clubMembersCount);
 	}
@@ -58,9 +59,9 @@ public class ClubFacade {
 
 	@Transactional
 	public ClubCreateInfo createClub(ClubCreateCommand createCommand, String memberToken) {
-		var clubCreateInfo = clubService.createClub(createCommand);
+		ClubCreateInfo clubCreateInfo = clubService.createClub(createCommand);
 		clubMemberService.clubMemberOwner(memberToken, clubCreateInfo);
-		clubStatisticsService.createStatistic(clubCreateInfo);
+		eventPublisher.publishEvent(new CreateClubEvent(clubCreateInfo));
 		return clubCreateInfo;
 	}
 
