@@ -19,29 +19,47 @@ public class LeagueStatusProcessor implements ItemProcessor<League, League> {
 	private final SinglesMatchReader singlesMatchReader;
 	private final DoublesMatchReader doublesMatchReader;
 
+	@Override
 	public League process(League item) {
 		LocalDateTime now = LocalDateTime.now();
 
-		if (!isParticipantCountValid(item)) {
-			item.cancelLeague();
-			return item;
-		}
-
-		item.completeLeagueRecruiting();
-
-		if (isLeagueInProgress(item, now)) {
-			item.startLeague();
-		}
-
-		if (isLeagueOverdue(item, now)) {
-			if (!areAllMatchesFinished(item)) {
-				item.cancelLeague();
-				return item;
-			}
-			item.finishLeague();
+		switch (item.getLeagueStatus()) {
+			case RECRUITING:
+				handleRecruiting(item);
+				break;
+			case RECRUITING_COMPLETED:
+				handleRecruitingCompleted(item, now);
+				break;
+			case PLAYING:
+				handlePlaying(item, now);
+				break;
 		}
 
 		return item;
+	}
+
+	private void handleRecruiting(League item) {
+		if (!isParticipantCountValid(item)) {
+			item.cancelLeague();
+		} else {
+			item.completeLeagueRecruiting();
+		}
+	}
+
+	private void handleRecruitingCompleted(League item, LocalDateTime now) {
+		if (isLeagueInProgress(item, now)) {
+			item.startLeague();
+		}
+	}
+
+	private void handlePlaying(League item, LocalDateTime now) {
+		if (isLeagueOverdue(item, now)) {
+			if (!areAllMatchesFinished(item)) {
+				item.cancelLeague();
+			} else {
+				item.finishLeague();
+			}
+		}
 	}
 
 	private boolean isParticipantCountValid(League item) {
@@ -49,7 +67,7 @@ public class LeagueStatusProcessor implements ItemProcessor<League, League> {
 	}
 
 	private boolean isLeagueInProgress(League item, LocalDateTime now) {
-		return item.getLeagueAt().isBefore(now) && item.getLeagueAt().plusHours(12).isAfter(now);
+		return item.getLeagueAt().isBefore(now);
 	}
 
 	private boolean isLeagueOverdue(League item, LocalDateTime now) {
@@ -61,3 +79,4 @@ public class LeagueStatusProcessor implements ItemProcessor<League, League> {
 			&& doublesMatchReader.allMatchesFinishedForLeague(item.getLeagueId());
 	}
 }
+
