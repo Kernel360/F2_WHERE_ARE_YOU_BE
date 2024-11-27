@@ -1,6 +1,7 @@
 package org.badminton.api.aws.s3.service;
 
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 
 import org.badminton.api.common.exception.EmptyFileException;
 import org.springframework.stereotype.Service;
@@ -20,8 +21,8 @@ public class ImageConversionService {
 			WebpWriter writer = WebpWriter.DEFAULT;
 			writer.write(image, ImageMetadata.fromStream(file.getInputStream()), outputStream);
 			return outputStream.toByteArray();
-		} catch (Exception e) {
-			throw new EmptyFileException(e);
+		} catch (IOException exception) {
+			throw new EmptyFileException(exception);
 		}
 
 	}

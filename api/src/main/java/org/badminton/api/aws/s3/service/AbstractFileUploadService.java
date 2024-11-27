@@ -34,35 +34,19 @@ public abstract class AbstractFileUploadService implements ImageService {
 
 	public String uploadFile(ImageUploadRequest file) {
 		MultipartFile uploadFile = file.multipartFile();
+		if (uploadFile.getSize() > MAX_FILE_SIZE) {
+			throw new FileSizeOverException();
+		}
 
+		// 파일이 비어있거나 파일 이름이 없는 경우 체크
+		if (uploadFile.isEmpty() || Objects.isNull(uploadFile.getOriginalFilename())) {
+			throw new EmptyFileException();
+		}
 		try {
-			if (uploadFile.getSize() > MAX_FILE_SIZE) {
-				throw new FileSizeOverException();
-			}
-
-			// 파일이 비어있거나 파일 이름이 없는 경우 체크
-			if (uploadFile.isEmpty() || Objects.isNull(uploadFile.getOriginalFilename())) {
-				throw new EmptyFileException();
-			}
-
-			// 파일 형식이 WebP인지 체크
-			byte[] fileBytes = uploadFile.getBytes();
 			String fileExtension = getFileExtension(uploadFile.getOriginalFilename());
 
-			byte[] processedImage;
-			String newFileExtension;
-
-			if (WEBP.equalsIgnoreCase(fileExtension)) {
-				processedImage = fileBytes;
-				newFileExtension = WEBP;
-			} else if (AVIF.equalsIgnoreCase(fileExtension)) {
-				processedImage = fileBytes;
-				newFileExtension = AVIF;
-			} else {
-				processedImage = imageConversionService.convertToWebP(uploadFile);
-				newFileExtension = WEBP;
-			}
-
+			byte[] processedImage = processImage(uploadFile, fileExtension);
+			String newFileExtension = determineNewFileExtension(fileExtension);
 			String fileName = makeFileName(newFileExtension);
 
 			ObjectMetadata objectMetadata = new ObjectMetadata();
@@ -95,6 +79,21 @@ public abstract class AbstractFileUploadService implements ImageService {
 			return originUrl.replace(S3_URL_PREFIX, CLOUDFRONT_URL_PREFIX);
 		} else {
 			throw new EmptyFileException();
+		}
+	}
+
+	private byte[] processImage(MultipartFile file, String extension) throws IOException {
+		if (WEBP.equalsIgnoreCase(extension) || AVIF.equalsIgnoreCase(extension)) {
+			return file.getBytes();
+		}
+		return imageConversionService.convertToWebP(file);
+	}
+
+	private String determineNewFileExtension(String extension) {
+		if (WEBP.equalsIgnoreCase(extension) || AVIF.equalsIgnoreCase(extension)) {
+			return extension;
+		} else {
+			return WEBP;
 		}
 	}
 
