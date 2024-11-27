@@ -1,6 +1,7 @@
 package org.badminton.domain.domain.league.info;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 import org.badminton.domain.common.enums.MatchGenerationType;
 import org.badminton.domain.common.enums.MatchType;
@@ -40,13 +41,16 @@ public record LeagueDetailsInfo(
 
 	LocalDateTime modifiedAt,
 
-	boolean isMatchCreated
+	boolean isMatchCreated,
+
+	List<LeagueParticipantDetailsInfo> leagueParticipants
 ) {
 
 	public static LeagueDetailsInfo from(
 		LeagueSummaryInfo leagueSummaryInfo,
 		boolean isMatchCreated,
-		int recruitedMemberCount
+		int recruitedMemberCount,
+		List<LeagueParticipantDetailsInfo> leagueParticipants
 	) {
 		return new LeagueDetailsInfo(
 			leagueSummaryInfo.leagueId(),
@@ -65,7 +69,8 @@ public record LeagueDetailsInfo(
 			recruitedMemberCount,
 			leagueSummaryInfo.createdAt(),
 			leagueSummaryInfo.modifiedAt(),
-			isMatchCreated
+			isMatchCreated,
+			leagueParticipants
 		);
 	}
 }

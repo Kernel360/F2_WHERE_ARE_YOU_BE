@@ -17,7 +17,7 @@ public record LeagueParticipantResponse(
 	LocalDateTime modifiedAt
 ) {
 
-	public static LeagueParticipantResponse fromLeagueParticipantInfo(LeagueParticipantInfo leagueParticipant) {
+	public static LeagueParticipantResponse from(LeagueParticipantInfo leagueParticipant) {
 		return new LeagueParticipantResponse(leagueParticipant.leagueId(),
 			leagueParticipant.memberToken(),
 			leagueParticipant.createdAt(), leagueParticipant.modifiedAt());
