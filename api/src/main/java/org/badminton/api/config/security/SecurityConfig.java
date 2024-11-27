@@ -125,8 +125,8 @@ public class SecurityConfig {
 				.permitAll()
 				.requestMatchers(HttpMethod.GET, "/v1/clubs/{clubToken}/leagues/date")
 				.permitAll()
-				.requestMatchers(HttpMethod.GET, "/v1/clubs", "/v1/clubs/{clubToken}", "/v1/clubs/search",
-					"/v2/**").permitAll()
+				.requestMatchers(HttpMethod.GET, "/v1/clubs", "/v1/clubs/{clubToken}", "/v1/clubs/search", "/v2/**")
+				.permitAll()
 				.requestMatchers(HttpMethod.POST, "/v1/clubs")
 				.permitAll()
 				.requestMatchers(HttpMethod.DELETE, "/v1/clubs/{clubToken}")
