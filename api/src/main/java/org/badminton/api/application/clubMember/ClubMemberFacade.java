@@ -19,6 +19,7 @@ import org.badminton.domain.domain.clubmember.info.RejectApplyInfo;
 import org.badminton.domain.domain.clubmember.service.ClubMemberService;
 import org.badminton.domain.domain.mail.MailService;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -31,9 +32,11 @@ public class ClubMemberFacade {
 	private final ClubApplyService clubApplyService;
 	private final MailService mailService;
 
+	@Transactional
 	public ApplyClubInfo applyClub(String memberToken, String clubToken, ClubApplyCommand command) {
+		ApplyClubInfo applyClubInfo = clubApplyService.applyClub(memberToken, clubToken, command.applyReason());
 		mailService.prepareClubApplyEmail(clubToken, memberToken);
-		return clubApplyService.applyClub(memberToken, clubToken, command.applyReason());
+		return applyClubInfo;
 
 	}
 
