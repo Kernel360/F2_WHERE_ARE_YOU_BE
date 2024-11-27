@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.badminton.domain.common.exception.league.LeagueCannotBeCanceled;
 import org.badminton.domain.common.exception.league.LeagueCannotBeUpdated;
 import org.badminton.domain.common.exception.league.NotLeagueOwnerException;
 import org.badminton.domain.common.exception.league.OngoingAndUpcomingLeagueCanNotBePastException;
@@ -141,6 +142,9 @@ public class LeagueServiceImpl implements LeagueService {
 		var league = leagueReader.readLeague(clubToken, leagueId);
 		if (!league.getLeagueOwnerMemberToken().equals(memberToken)) {
 			throw new NotLeagueOwnerException(memberToken);
+		}
+		if (LocalDateTime.now().isAfter(league.getLeagueAt())) {
+			throw new LeagueCannotBeCanceled(leagueId, league.getLeagueAt());
 		}
 		league.cancelLeague();
 		leagueStore.store(league);

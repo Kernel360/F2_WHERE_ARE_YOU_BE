@@ -43,7 +43,7 @@ public class Club extends AbstractBaseTime {
 
 	private String clubName;
 
-	@Column(columnDefinition = "TEXT", length = 1000)
+	@Column(columnDefinition = "TEXT", length = 1200)
 	private String clubDescription;
 
 	private String clubImage;

@@ -148,9 +148,9 @@ public class SecurityConfig {
 				.requestMatchers(HttpMethod.POST, "/v1/clubs/images")
 				.access(hasClubRole("OWNER", "MANAGER"))
 				.requestMatchers(HttpMethod.DELETE, "/v1/clubs/{clubToken}/leagues/{leagueId}")
-				.access(hasClubRole("OWNER", "MANAGER"))
+				.access(hasClubRole("OWNER", "MANAGER", "USER"))
 				.requestMatchers(HttpMethod.PATCH, "/v1/clubs/{clubToken}/leagues/{leagueId}")
-				.access(hasClubRole("OWNER", "MANAGER"))
+				.access(hasClubRole("OWNER", "MANAGER", "USER"))
 				.requestMatchers(HttpMethod.POST, "/v1/clubs/{clubToken}/leagues/{leagueId}/participation",
 					"/v1/clubs/{clubToken}/leagues")
 				.access(hasClubRole("OWNER", "MANAGER", "USER"))

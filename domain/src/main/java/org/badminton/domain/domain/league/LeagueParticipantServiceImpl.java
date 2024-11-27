@@ -1,9 +1,10 @@
 package org.badminton.domain.domain.league;
 
+import java.time.LocalDateTime;
 import java.util.Objects;
 
-import org.badminton.domain.common.exception.league.LeagueCannotBeCanceledWhenIsNotRecruiting;
 import org.badminton.domain.common.exception.league.LeagueOwnerCannotCancelLeagueParticipationException;
+import org.badminton.domain.common.exception.league.LeagueParticipationCannotBeCanceledException;
 import org.badminton.domain.common.exception.league.LeagueParticipationDuplicateException;
 import org.badminton.domain.common.exception.league.ParticipationLimitReachedException;
 import org.badminton.domain.domain.clubmember.ClubMemberReader;
@@ -28,6 +29,7 @@ public class LeagueParticipantServiceImpl implements LeagueParticipantService {
 	private final LeagueParticipantReader leagueParticipantReader;
 	private final LeagueParticipantStore leagueParticipantStore;
 	private final LeagueReader leagueReader;
+	private final LeagueStore leagueStore;
 	private final ClubMemberReader clubMemberReader;
 
 	@Override
@@ -44,25 +46,31 @@ public class LeagueParticipantServiceImpl implements LeagueParticipantService {
 	}
 
 	@Override
-	public LeagueParticipantCancelInfo participantLeagueCancel(String memberToken, String clubToken, Long leagueId) {
+	public LeagueParticipantCancelInfo cancelLeagueParticipation(String memberToken, String clubToken, Long leagueId) {
 		League league = leagueReader.readLeagueById(leagueId);
 		if (Objects.equals(league.getLeagueOwnerMemberToken(), memberToken)) {
 			throw new LeagueOwnerCannotCancelLeagueParticipationException(memberToken, leagueId);
 		}
-		if (league.getLeagueStatus() != LeagueStatus.RECRUITING) {
-			throw new LeagueCannotBeCanceledWhenIsNotRecruiting(leagueId, league.getLeagueStatus());
+		if (LocalDateTime.now().isAfter(league.getRecruitingClosedAt())) {
+			throw new LeagueParticipationCannotBeCanceledException(leagueId, league.getRecruitingClosedAt());
+		}
+		if (league.getLeagueStatus() == LeagueStatus.PLAYING || league.getLeagueStatus() == LeagueStatus.CANCELED
+			|| league.getLeagueStatus() == LeagueStatus.FINISHED) {
+			throw new LeagueParticipationCannotBeCanceledException(leagueId, league.getLeagueStatus());
 		}
 		ClubMember clubMember = clubMemberReader.getClubMemberByMemberTokenAndClubToken(clubToken, memberToken);
-		Long clubMemberId = clubMember.getClubMemberId();
-		LeagueParticipant leagueParticipant = leagueParticipantReader.findParticipant(leagueId, clubMemberId);
+		LeagueParticipant leagueParticipant = leagueParticipantReader.findParticipant(leagueId,
+			clubMember.getClubMemberId());
 		var result = leagueParticipantStore.cancelStore(leagueParticipant);
-		if (league.getPlayerLimitCount() < leagueParticipantReader.countParticipantMember(league.getLeagueId())) {
+		if (league.getLeagueStatus() == LeagueStatus.RECRUITING_COMPLETED) {
 			league.reopenLeagueRecruiting();
 		}
+		leagueStore.store(league);
 		return LeagueParticipantCancelInfo.from(result);
 	}
 
 	@Override
+	@Transactional
 	public LeagueParticipantInfo participantInLeague(String memberToken, String clubToken, Long leagueId) {
 		ClubMember clubMember = clubMemberReader.getClubMemberByMemberTokenAndClubToken(clubToken, memberToken);
 		League league = leagueReader.readLeagueById(leagueId);
@@ -77,7 +85,7 @@ public class LeagueParticipantServiceImpl implements LeagueParticipantService {
 		if (league.getPlayerLimitCount() <= leagueParticipantReader.countParticipantMember(league.getLeagueId())) {
 			throw new ParticipationLimitReachedException(league.getLeagueId());
 		}
-		if (league.getPlayerLimitCount() == leagueParticipantReader.countParticipantMember(league.getLeagueId()) - 1) {
+		if (league.getPlayerLimitCount() == leagueParticipantReader.countParticipantMember(league.getLeagueId()) + 1) {
 			league.completeLeagueRecruiting();
 		}
 	}
