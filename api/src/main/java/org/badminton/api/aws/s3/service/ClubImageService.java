@@ -10,8 +10,8 @@ import com.amazonaws.services.s3.AmazonS3;
 @Service
 public class ClubImageService extends AbstractFileUploadService {
 
-	public ClubImageService(AmazonS3 s3Client) {
-		super(s3Client);
+	public ClubImageService(AmazonS3 s3Client, ImageConversionService imageConversionService) {
+		super(s3Client, imageConversionService);
 	}
 
 	@Override
@@ -20,10 +20,8 @@ public class ClubImageService extends AbstractFileUploadService {
 	}
 
 	@Override
-	public String makeFileName(String originalFilename) {
-		String[] originFile = originalFilename.split("\\.");
-		String extension = originFile[originFile.length - 1];
-		return "club-banner/" + UUID.randomUUID() + "." + extension;
+	public String makeFileName(String newFileExtension) {
+		return "club-banner/" + UUID.randomUUID() + "." + newFileExtension;
 	}
 }
 
