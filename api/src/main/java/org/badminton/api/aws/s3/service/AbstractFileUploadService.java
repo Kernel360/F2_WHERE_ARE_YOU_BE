@@ -35,7 +35,7 @@ public abstract class AbstractFileUploadService implements ImageService {
 	public String uploadFile(ImageUploadRequest file) {
 		MultipartFile uploadFile = file.multipartFile();
 		if (uploadFile.getSize() > MAX_FILE_SIZE) {
-			throw new FileSizeOverException();
+			throw new FileSizeOverException(uploadFile.getSize());
 		}
 
 		// 파일이 비어있거나 파일 이름이 없는 경우 체크
