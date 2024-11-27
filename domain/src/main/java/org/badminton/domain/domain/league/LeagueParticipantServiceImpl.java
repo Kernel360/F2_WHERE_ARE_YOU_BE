@@ -3,8 +3,8 @@ package org.badminton.domain.domain.league;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
-import org.badminton.domain.common.exception.league.LeagueCannotBeCanceledException;
 import org.badminton.domain.common.exception.league.LeagueOwnerCannotCancelLeagueParticipationException;
+import org.badminton.domain.common.exception.league.LeagueParticipationCannotBeCanceledException;
 import org.badminton.domain.common.exception.league.LeagueParticipationDuplicateException;
 import org.badminton.domain.common.exception.league.ParticipationLimitReachedException;
 import org.badminton.domain.domain.clubmember.ClubMemberReader;
@@ -52,11 +52,11 @@ public class LeagueParticipantServiceImpl implements LeagueParticipantService {
 			throw new LeagueOwnerCannotCancelLeagueParticipationException(memberToken, leagueId);
 		}
 		if (LocalDateTime.now().isAfter(league.getRecruitingClosedAt())) {
-			throw new LeagueCannotBeCanceledException(leagueId, league.getRecruitingClosedAt());
+			throw new LeagueParticipationCannotBeCanceledException(leagueId, league.getRecruitingClosedAt());
 		}
 		if (league.getLeagueStatus() == LeagueStatus.PLAYING || league.getLeagueStatus() == LeagueStatus.CANCELED
 			|| league.getLeagueStatus() == LeagueStatus.FINISHED) {
-			throw new LeagueCannotBeCanceledException(leagueId, league.getLeagueStatus());
+			throw new LeagueParticipationCannotBeCanceledException(leagueId, league.getLeagueStatus());
 		}
 		ClubMember clubMember = clubMemberReader.getClubMemberByMemberTokenAndClubToken(clubToken, memberToken);
 		LeagueParticipant leagueParticipant = leagueParticipantReader.findParticipant(leagueId,
