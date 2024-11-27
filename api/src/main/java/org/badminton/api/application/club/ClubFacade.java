@@ -3,6 +3,7 @@ package org.badminton.api.application.club;
 import java.util.List;
 import java.util.Map;
 
+import org.badminton.domain.common.policy.ClubMemberPolicy;
 import org.badminton.domain.domain.club.ClubService;
 import org.badminton.domain.domain.club.command.ClubCreateCommand;
 import org.badminton.domain.domain.club.command.ClubUpdateCommand;
@@ -34,6 +35,7 @@ public class ClubFacade {
 	private final ClubService clubService;
 	private final ClubMemberService clubMemberService;
 	private final ApplicationEventPublisher eventPublisher;
+	private final ClubMemberPolicy clubMemberPolicy;
 
 	@Transactional(readOnly = true)
 	public Page<ClubCardInfo> readAllClubs(int page, int size, String sort) {
@@ -66,19 +68,21 @@ public class ClubFacade {
 	}
 
 	@Transactional
-	public ClubUpdateInfo updateClubInfo(ClubUpdateCommand clubUpdateCommand, String clubToken) {
-		return clubService.updateClub(clubUpdateCommand, clubToken);
+	public ClubUpdateInfo updateClubInfo(ClubUpdateCommand clubUpdateCommand, String clubToken, String memberToken) {
+		clubMemberPolicy.validateClubOwner(memberToken, clubToken);
+		return clubService.updateClub(clubUpdateCommand, clubToken, memberToken);
 	}
 
 	@Transactional
-	public ClubDeleteInfo deleteClubInfo(String clubToken) {
+	public ClubDeleteInfo deleteClubInfo(String memberToken, String clubToken) {
+		clubMemberPolicy.validateClubOwner(memberToken, clubToken);
 		clubMemberService.deleteAllClubMembers(clubToken);
 		return clubService.deleteClub(clubToken);
 	}
 
 	@Transactional
-	public List<ClubApplicantInfo> readClubApplicants(String clubToken) {
+	public List<ClubApplicantInfo> readClubApplicants(String memberToken, String clubToken) {
+		clubMemberPolicy.validateAboveClubManager(memberToken, clubToken);
 		return clubService.readClubApplicants(clubToken);
 	}
-
 }

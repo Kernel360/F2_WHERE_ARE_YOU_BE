@@ -55,7 +55,7 @@ public class LeagueParticipantServiceImpl implements LeagueParticipantService {
 		validateLeagueOwner(league, memberToken);
 		validateCancelAvailableTime(league);
 		validateCancelAvailableLeagueStatus(league);
-		ClubMember clubMember = clubMemberReader.getClubMemberByMemberTokenAndClubToken(clubToken, memberToken);
+		ClubMember clubMember = clubMemberReader.getClubMember(clubToken, memberToken);
 		LeagueParticipant leagueParticipant = leagueParticipantReader.findParticipant(leagueId,
 			clubMember.getClubMemberId());
 		var result = leagueParticipantStore.cancelStore(leagueParticipant);
@@ -73,7 +73,7 @@ public class LeagueParticipantServiceImpl implements LeagueParticipantService {
 		validateLeagueRecruiting(league);
 		validateDuplicateLeagueParticipation(memberToken, leagueId);
 		checkParticipantCount(league);
-		ClubMember clubMember = clubMemberReader.getClubMemberByMemberTokenAndClubToken(clubToken, memberToken);
+		ClubMember clubMember = clubMemberReader.getClubMember(clubToken, memberToken);
 		return LeagueParticipantInfo.from(leagueParticipantStore.store(clubMember, league));
 	}
 

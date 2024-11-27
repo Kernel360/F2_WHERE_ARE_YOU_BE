@@ -22,7 +22,7 @@ public interface ClubService {
 
 	ClubCreateInfo createClub(ClubCreateCommand clubCreateCommand);
 
-	ClubUpdateInfo updateClub(ClubUpdateCommand clubUpdateCommand, String clubToken);
+	ClubUpdateInfo updateClub(ClubUpdateCommand clubUpdateCommand, String clubToken, String memberToken);
 
 	ClubDeleteInfo deleteClub(String clubToken);
 

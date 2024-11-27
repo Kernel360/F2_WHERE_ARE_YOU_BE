@@ -22,7 +22,7 @@ public interface ClubMemberReader {
 
 	boolean checkIsExpelClubMember(String memberToken, String clubToken);
 
-	ClubMember getClubMemberByMemberTokenAndClubToken(String clubToken, String memberToken);
+	ClubMember getClubMember(String clubToken, String memberToken);
 
 	Integer getClubMemberApproveCount(Long clubId);
 

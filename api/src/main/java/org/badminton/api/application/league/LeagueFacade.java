@@ -3,6 +3,7 @@ package org.badminton.api.application.league;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.badminton.domain.common.policy.ClubMemberPolicy;
 import org.badminton.domain.domain.league.LeagueParticipantService;
 import org.badminton.domain.domain.league.LeagueService;
 import org.badminton.domain.domain.league.command.LeagueCreateNoIncludeClubCommand;
@@ -31,12 +32,15 @@ public class LeagueFacade {
 	private final LeagueService leagueService;
 	private final LeagueParticipantService leagueParticipantService;
 	private final MatchRetrieveService matchRetrieveService;
+	private final ClubMemberPolicy clubMemberPolicy;
 
 	public LeagueFacade(LeagueService leagueService, LeagueParticipantService leagueParticipantService,
-		@Qualifier("freeMatchRetrieveServiceImpl") MatchRetrieveService matchRetrieveService) {
+		@Qualifier("freeMatchRetrieveServiceImpl") MatchRetrieveService matchRetrieveService,
+		ClubMemberPolicy clubMemberPolicy) {
 		this.leagueService = leagueService;
 		this.leagueParticipantService = leagueParticipantService;
 		this.matchRetrieveService = matchRetrieveService;
+		this.clubMemberPolicy = clubMemberPolicy;
 	}
 
 	public List<LeagueReadInfo> getLeaguesByMonth(String clubToken, String date) {
@@ -53,6 +57,7 @@ public class LeagueFacade {
 
 	public LeagueCreateInfo createLeague(String memberToken, String clubToken,
 		LeagueCreateNoIncludeClubCommand leagueCreateNoIncludeClubCommand) {
+		clubMemberPolicy.validateClubMember(memberToken, clubToken);
 		LeagueCreateInfo leagueCreateInfo = leagueService.createLeague(memberToken, clubToken,
 			leagueCreateNoIncludeClubCommand);
 		leagueParticipantService.participantInLeague(memberToken, clubToken, leagueCreateInfo.leagueId());
@@ -75,6 +80,7 @@ public class LeagueFacade {
 
 	public LeagueUpdateInfoWithParticipantCountInfo updateLeague(String clubToken, Long leagueId,
 		LeagueUpdateCommand leagueUpdateCommand, String memberToken) {
+		clubMemberPolicy.validateClubMember(memberToken, clubToken);
 		LeagueUpdateInfo leagueUpdateInfo = leagueService.updateLeague(clubToken, leagueId, leagueUpdateCommand,
 			memberToken);
 		int recruitedMemberCount = leagueParticipantService.countParticipantMember(leagueId);
@@ -82,6 +88,7 @@ public class LeagueFacade {
 	}
 
 	public LeagueCancelInfo cancelLeague(String clubToken, Long leagueId, String memberToken) {
+		clubMemberPolicy.validateClubMember(memberToken, clubToken);
 		return leagueService.cancelLeague(clubToken, leagueId, memberToken);
 	}
 

@@ -95,7 +95,7 @@ public class ClubMemberServiceImpl implements ClubMemberService {
 
 	@Override
 	public ClubMemberInfo getClubMember(String memberToken, String clubToken) {
-		ClubMember clubMember = clubMemberReader.getClubMemberByMemberTokenAndClubToken(clubToken, memberToken);
+		ClubMember clubMember = clubMemberReader.getClubMember(clubToken, memberToken);
 		return ClubMemberInfo.valueOf(clubMember);
 	}
 
@@ -180,7 +180,7 @@ public class ClubMemberServiceImpl implements ClubMemberService {
 		boolean isClubMember = clubMemberReader.checkIsClubMember(memberToken, clubToken);
 		boolean isBanned = clubMemberReader.checkIsExpelClubMember(memberToken, clubToken);
 		if (isClubMember) {
-			ClubMember clubMember = clubMemberReader.getClubMemberByMemberTokenAndClubToken(
+			ClubMember clubMember = clubMemberReader.getClubMember(
 				clubToken, memberToken);
 			return MemberIsClubMemberInfo.from(true, clubMember, isBanned);
 		}

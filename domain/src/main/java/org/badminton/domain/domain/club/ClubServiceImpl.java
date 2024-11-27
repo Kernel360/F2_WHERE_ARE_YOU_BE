@@ -3,6 +3,7 @@ package org.badminton.domain.domain.club;
 import java.util.List;
 
 import org.badminton.domain.common.exception.club.ClubNameDuplicateException;
+import org.badminton.domain.common.policy.ClubMemberPolicy;
 import org.badminton.domain.domain.club.command.ClubCreateCommand;
 import org.badminton.domain.domain.club.command.ClubUpdateCommand;
 import org.badminton.domain.domain.club.entity.Club;
@@ -29,6 +30,7 @@ public class ClubServiceImpl implements ClubService {
 	private final ClubReader clubReader;
 	private final ClubStore clubStore;
 	private final ClubApplyReader clubApplyReader;
+	private final ClubMemberPolicy clubMemberPolicy;
 
 	@Override
 	@Transactional(readOnly = true)
@@ -78,7 +80,8 @@ public class ClubServiceImpl implements ClubService {
 
 	@Override
 	@Transactional
-	public ClubUpdateInfo updateClub(ClubUpdateCommand clubUpdateCommand, String clubToken) {
+	public ClubUpdateInfo updateClub(ClubUpdateCommand clubUpdateCommand, String clubToken, String memberToken) {
+		clubMemberPolicy.validateClubOwner(memberToken, clubToken);
 		var club = clubReader.readExistingClub(clubToken);
 		club.updateClub(clubUpdateCommand);
 		var updated = clubStore.store(club);
