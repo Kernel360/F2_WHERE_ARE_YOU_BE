@@ -11,7 +11,10 @@ import com.sksamuel.scrimage.ImmutableImage;
 import com.sksamuel.scrimage.metadata.ImageMetadata;
 import com.sksamuel.scrimage.webp.WebpWriter;
 
+import lombok.extern.slf4j.Slf4j;
+
 @Service
+@Slf4j
 public class ImageConversionService {
 
 	public byte[] convertToWebP(MultipartFile file) {
@@ -22,6 +25,7 @@ public class ImageConversionService {
 			writer.write(image, ImageMetadata.fromStream(file.getInputStream()), outputStream);
 			return outputStream.toByteArray();
 		} catch (IOException exception) {
+			log.error("Image conversion failed for file: {}", file.getOriginalFilename(), exception);
 			throw new EmptyFileException(exception);
 		}
 
