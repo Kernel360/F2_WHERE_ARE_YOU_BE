@@ -77,7 +77,7 @@ public class FreeBracketGenerationServiceImpl implements BracketGenerationServic
 	@Override
 	public void startMatch(MatchStrategy matchStrategy, Long leagueId, Long matchId) {
 		League league = leagueReader.readLeagueById(leagueId);
-		if (league.getLeagueAt().isBefore(LocalDateTime.now())) {
+		if (LocalDateTime.now().isBefore(league.getLeagueAt())) {
 			throw new CannotStartMatchException(league.getLeagueId(), league.getLeagueAt());
 		}
 		matchStrategy.startMatch(matchId);
