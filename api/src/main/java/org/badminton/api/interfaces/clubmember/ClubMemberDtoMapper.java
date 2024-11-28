@@ -25,6 +25,8 @@ import org.badminton.domain.domain.clubmember.info.RejectApplyInfo;
 import org.mapstruct.InjectionStrategy;
 import org.mapstruct.Mapper;
 import org.mapstruct.ReportingPolicy;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 
 @Mapper(
 	componentModel = "spring",
@@ -32,6 +34,15 @@ import org.mapstruct.ReportingPolicy;
 	unmappedTargetPolicy = ReportingPolicy.ERROR
 )
 public interface ClubMemberDtoMapper {
+
+	List<ClubMemberResponse> of(List<ClubMemberInfo> clubMemberInfoList);
+
+	default Page<ClubMemberResponse> of(Page<ClubMemberInfo> clubMemberInfopage) {
+		List<ClubMemberResponse> clubMemberResponses = of(clubMemberInfopage.getContent());
+		return new PageImpl<>(clubMemberResponses, clubMemberInfopage.getPageable(),
+			clubMemberInfopage.getTotalElements());
+	}
+
 	ClubMemberJoinResponse of(ClubMemberJoinInfo clubMemberJoinInfo);
 
 	ClubMemberBanRecordResponse of(ClubMemberBanRecordInfo clubMemberBanRecordInfo);

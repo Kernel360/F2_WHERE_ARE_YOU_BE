@@ -1,14 +1,10 @@
 package org.badminton.api.application.clubMember;
 
-import java.util.List;
-import java.util.Map;
-
 import org.badminton.domain.domain.club.ClubApplyService;
 import org.badminton.domain.domain.club.command.ClubApplyCommand;
 import org.badminton.domain.domain.clubmember.command.ClubMemberBanCommand;
 import org.badminton.domain.domain.clubmember.command.ClubMemberExpelCommand;
 import org.badminton.domain.domain.clubmember.command.ClubMemberRoleUpdateCommand;
-import org.badminton.domain.domain.clubmember.entity.ClubMember;
 import org.badminton.domain.domain.clubmember.info.ApplyClubInfo;
 import org.badminton.domain.domain.clubmember.info.ApproveApplyInfo;
 import org.badminton.domain.domain.clubmember.info.ClubMemberBanRecordInfo;
@@ -18,6 +14,9 @@ import org.badminton.domain.domain.clubmember.info.MemberIsClubMemberInfo;
 import org.badminton.domain.domain.clubmember.info.RejectApplyInfo;
 import org.badminton.domain.domain.clubmember.service.ClubMemberService;
 import org.badminton.domain.domain.mail.MailService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
@@ -52,8 +51,16 @@ public class ClubMemberFacade {
 		return clubMemberService.updateClubMemberRole(command, clubMemberId, clubToken);
 	}
 
-	public Map<ClubMember.ClubMemberRole, List<ClubMemberInfo>> findAllClubMembers(String clubToken) {
-		return clubMemberService.findAllClubMembers(clubToken);
+	public Page<ClubMemberInfo> findAllActiveClubMembers(String clubToken, int page, int size) {
+		PageRequest pageable = PageRequest.of(page, size);
+		return clubMemberService.findAllActiveClubMembers(clubToken, pageable);
+	}
+
+	public Page<ClubMemberInfo> findAllBannedClubMembers(String clubToken, int page, int size) {
+		Sort sort = Sort.by(Sort.Order.by("role")
+			.with(Sort.NullHandling.NATIVE));
+		PageRequest pageable = PageRequest.of(page, size);
+		return clubMemberService.findAllBannedClubMembers(clubToken, pageable);
 	}
 
 	public ClubMemberBanRecordInfo expelClubMember(ClubMemberExpelCommand command, Long clubMemberId) {
