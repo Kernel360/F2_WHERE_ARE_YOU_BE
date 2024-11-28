@@ -169,7 +169,7 @@ public class MatchController {
 		StartMatchCommand startMatchCommand =
 			new StartMatchCommand(clubToken, leagueId, matchId);
 		MatchOperationHandler matchOperationFacade = matchFacade.getMatchOperationHandler(leagueId);
-		matchOperationFacade.startMatch(leagueId, startMatchCommand);
+		matchOperationFacade.startMatch(startMatchCommand);
 		return CommonResponse.success("OK");
 	}
 }

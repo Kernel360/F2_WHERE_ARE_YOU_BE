@@ -48,9 +48,10 @@ public class TournamentMatchFacade implements MatchOperationHandler {
 	}
 
 	@Override
-	public void startMatch(Long leagueId, StartMatchCommand startMatchCommand) {
+	public void startMatch(StartMatchCommand startMatchCommand) {
 		MatchStrategy matchStrategy = tournamentBracketGenerationService.makeSinglesOrDoublesMatchStrategy(
 			startMatchCommand.leagueId());
-		tournamentBracketGenerationService.startMatch(matchStrategy, leagueId, startMatchCommand.matchId());
+		tournamentBracketGenerationService.startMatch(matchStrategy, startMatchCommand.leagueId(),
+			startMatchCommand.matchId());
 	}
 }

@@ -11,5 +11,5 @@ public interface MatchOperationHandler {
 	SetInfo.Main registerSetScoreInMatch(Long leagueId, Long matchId, Integer setIndex,
 		MatchCommand.UpdateSetScore updateSetScoreCommand, String memberToken);
 
-	void startMatch(Long leagueId, StartMatchCommand startMatchCommand);
+	void startMatch(StartMatchCommand startMatchCommand);
 }
