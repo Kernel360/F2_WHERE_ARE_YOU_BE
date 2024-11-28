@@ -103,6 +103,7 @@ public class SecurityConfig {
 				.requestMatchers(HttpMethod.POST, "/v1/clubs/{clubToken}/clubMembers/").authenticated()
 				.requestMatchers("/v1/clubs/{clubToken}/leagues/month").permitAll()
 				.requestMatchers("/v1/clubs/{clubToken}/leagues/date").permitAll()
+				.requestMatchers("/v1/clubs/**").permitAll()
 				.anyRequest().authenticated());
 		return http.build();
 	}
@@ -121,45 +122,45 @@ public class SecurityConfig {
 			.exceptionHandling(
 				exception -> exception.authenticationEntryPoint(failedAuthenticationEntryPoint))
 			.authorizeHttpRequests(auth -> auth
-				.requestMatchers(HttpMethod.GET, "/v1/clubs/{clubToken}/leagues/month")
-				.permitAll()
-				.requestMatchers(HttpMethod.GET, "/v1/clubs/{clubToken}/leagues/date")
-				.permitAll()
-				.requestMatchers(HttpMethod.GET, "/v1/clubs", "/v1/clubs/{clubToken}", "/v1/clubs/search", "/v2/**")
-				.permitAll()
-				.requestMatchers(HttpMethod.POST, "/v1/clubs")
-				.permitAll()
+				// .requestMatchers(HttpMethod.GET, "/v1/clubs/{clubToken}/leagues/month")
+				// .permitAll()
+				// .requestMatchers(HttpMethod.GET, "/v1/clubs/{clubToken}/leagues/date")
+				// .permitAll()
+				// .requestMatchers(HttpMethod.GET, "/v1/clubs", "/v1/clubs/{clubToken}", "/v1/clubs/search", "/v2/**")
+				// .permitAll()
+				// .requestMatchers(HttpMethod.POST, "/v1/clubs")
+				// .permitAll()
 				// .requestMatchers(HttpMethod.DELETE, "/v1/clubs/{clubToken}")
-				// .access(hasClubRole("OWNER"))
+				// .permitAll()
 				// .requestMatchers(HttpMethod.GET, "/v1/clubs/{clubToken}/applicants")
-				// .access(hasClubRole("OWNER", "MANAGER"))
+				// .permitAll()
 				// .requestMatchers(HttpMethod.PATCH, "/v1/clubs/{clubToken}")
-				// .access(hasClubRole("OWNER", "MANAGER"))
-				.requestMatchers(HttpMethod.GET, "/v1/clubs/{clubToken}/leagues/{leagueId}")
-				.permitAll()
+				// .permitAll()
+				// .requestMatchers(HttpMethod.GET, "/v1/clubs/{clubToken}/leagues/{leagueId}")
+				// .permitAll()
 				// .requestMatchers(HttpMethod.GET, "/v1/clubs/{clubToken}/clubMembers")
-				// .access(hasClubRole("OWNER", "MANAGER", "USER"))
-				.requestMatchers(HttpMethod.GET, "/v1/clubs/{clubToken}")
-				.permitAll()
-
+				// .permitAll()
+				// .requestMatchers(HttpMethod.GET, "/v1/clubs/{clubToken}")
+				// .permitAll()
 				// .requestMatchers(HttpMethod.POST, "/v1/clubs/{clubToken}/clubMembers/approve",
 				// 	"/v1/clubs/{clubToken}/clubMembers/reject")
-				// .access(hasClubRole("OWNER", "MANAGER"))
+				// .permitAll()
 				// .requestMatchers(HttpMethod.POST, "/v1/clubs/images")
-				// .access(hasClubRole("OWNER", "MANAGER"))
+				// .permitAll()
 				// .requestMatchers(HttpMethod.DELETE, "/v1/clubs/{clubToken}/leagues/{leagueId}")
-				// .access(hasClubRole("OWNER", "MANAGER", "USER"))
+				// .permitAll()
 				// .requestMatchers(HttpMethod.PATCH, "/v1/clubs/{clubToken}/leagues/{leagueId}")
-				// .access(hasClubRole("OWNER", "MANAGER", "USER"))
+				// .permitAll()
 				// .requestMatchers(HttpMethod.POST, "/v1/clubs/{clubToken}/leagues/{leagueId}/participation",
 				// 	"/v1/clubs/{clubToken}/leagues")
-				// .access(hasClubRole("OWNER", "MANAGER", "USER"))
+				// .permitAll()
 				// .requestMatchers(HttpMethod.DELETE, "/v1/clubs/{clubToken}/leagues/{leagueId}/participation")
-				// .access(hasClubRole("OWNER", "MANAGER", "USER"))
+				// .permitAll()
 				// .requestMatchers(HttpMethod.PATCH,
-				// "/v1/clubs/{clubToken}/clubMembers/role",
+				// 	"/v1/clubs/{clubToken}/clubMembers/role",
 				// 	"v1/clubs/{clubToken}/clubMembers/ban", "v1/clubs/{clubToken}/clubMembers/expel")
-				// .access(hasClubRole("OWNER"))
+				// .permitAll()
+
 				.anyRequest()
 				.authenticated()
 			);
