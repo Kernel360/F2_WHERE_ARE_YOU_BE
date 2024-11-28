@@ -1,12 +1,10 @@
 package org.badminton.api.interfaces.clubmember.controller;
 
-import java.util.List;
-import java.util.Map;
-
 import org.badminton.api.application.clubMember.ClubMemberFacade;
 import org.badminton.api.common.response.CommonResponse;
 import org.badminton.api.interfaces.auth.dto.CustomOAuth2Member;
 import org.badminton.api.interfaces.club.dto.ClubApplyRequest;
+import org.badminton.api.interfaces.club.dto.CustomPageResponse;
 import org.badminton.api.interfaces.clubmember.ClubMemberDtoMapper;
 import org.badminton.api.interfaces.clubmember.dto.ApproveApplyResponse;
 import org.badminton.api.interfaces.clubmember.dto.ClubApplyResponse;
@@ -14,7 +12,6 @@ import org.badminton.api.interfaces.clubmember.dto.ClubMemberBanRecordResponse;
 import org.badminton.api.interfaces.clubmember.dto.ClubMemberBanRequest;
 import org.badminton.api.interfaces.clubmember.dto.ClubMemberExpelRequest;
 import org.badminton.api.interfaces.clubmember.dto.ClubMemberResponse;
-import org.badminton.api.interfaces.clubmember.dto.ClubMemberRoleResponse;
 import org.badminton.api.interfaces.clubmember.dto.ClubMemberRoleUpdateRequest;
 import org.badminton.api.interfaces.clubmember.dto.ClubMemberWithdrawResponse;
 import org.badminton.api.interfaces.clubmember.dto.MemberIsClubMemberResponse;
@@ -23,7 +20,6 @@ import org.badminton.domain.domain.club.command.ClubApplyCommand;
 import org.badminton.domain.domain.clubmember.command.ClubMemberBanCommand;
 import org.badminton.domain.domain.clubmember.command.ClubMemberExpelCommand;
 import org.badminton.domain.domain.clubmember.command.ClubMemberRoleUpdateCommand;
-import org.badminton.domain.domain.clubmember.entity.ClubMember;
 import org.badminton.domain.domain.clubmember.info.ApplyClubInfo;
 import org.badminton.domain.domain.clubmember.info.ApproveApplyInfo;
 import org.badminton.domain.domain.clubmember.info.ClubMemberBanRecordInfo;
@@ -31,6 +27,9 @@ import org.badminton.domain.domain.clubmember.info.ClubMemberInfo;
 import org.badminton.domain.domain.clubmember.info.ClubMemberWithdrawInfo;
 import org.badminton.domain.domain.clubmember.info.MemberIsClubMemberInfo;
 import org.badminton.domain.domain.clubmember.info.RejectApplyInfo;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -53,36 +52,51 @@ import lombok.extern.slf4j.Slf4j;
 @RequestMapping("/v1/clubs/{clubToken}/clubMembers")
 public class ClubMemberController {
 
+	private static final String DEFAULT_PAGE_VALUE = "0";
+	private static final String DEFAULT_SIZE_VALUE = "9";
+
 	private final ClubMemberFacade clubMemberFacade;
 	private final ClubMemberDtoMapper clubMemberDtoMapper;
 
 	@Operation(summary = "동호회 회원 전체 조회",
-		description = "동호회에 가입한 회원들의 리스트를 조회합니다.",
+		description = "동호회에 가입한 회원들의 리스트를 조회합니다. 제재된 회원은 제외하고 조회합니다.",
 		tags = {"ClubMember"})
 	@GetMapping
-	public CommonResponse<ClubMemberRoleResponse> getClubMembersInClub(
-		@PathVariable String clubToken, @AuthenticationPrincipal CustomOAuth2Member member
+	public CommonResponse<CustomPageResponse<ClubMemberResponse>> getClubMembersInClub(
+		@RequestParam(defaultValue = DEFAULT_PAGE_VALUE) int page,
+		@RequestParam(defaultValue = DEFAULT_SIZE_VALUE) int size,
+		@PathVariable String clubToken,
+		@AuthenticationPrincipal CustomOAuth2Member member
 	) {
-		Map<ClubMember.ClubMemberRole, List<ClubMemberInfo>> clubMemberInfoMap = clubMemberFacade.findAllClubMembers(
-			clubToken, member.getMemberToken());
-		Map<String, List<ClubMemberResponse>> clubMemberRoleListMap = clubMemberDtoMapper.of(
-			clubMemberInfoMap);
+		Page<ClubMemberInfo> clubMembers = clubMemberFacade.findAllActiveClubMembers(member.getMemberToken(), clubToken,
+			PageRequest.of(page, size));
+		Page<ClubMemberResponse> clubMemberResponses = clubMemberDtoMapper.of(clubMembers);
+		return CommonResponse.success(new CustomPageResponse<>(clubMemberResponses));
+	}
 
-		List<ClubMemberResponse> roleOwner = clubMemberRoleListMap.get("ROLE_OWNER");
-		List<ClubMemberResponse> roleManager = clubMemberRoleListMap.get("ROLE_MANAGER");
-		List<ClubMemberResponse> roleUser = clubMemberRoleListMap.get("ROLE_USER");
-
-		ClubMemberRoleResponse response = new ClubMemberRoleResponse(roleOwner, roleManager, roleUser);
-
-		return CommonResponse.success(response);
+	@Operation(summary = "동호회에서 제재된 회원들을 조회",
+		description = "동호회에서 제재된 회원들의 리스트를 조회합니다.",
+		tags = {"ClubMember"})
+	@GetMapping("/ban")
+	public CommonResponse<CustomPageResponse<ClubMemberResponse>> getBannedClubMember(
+		@RequestParam(defaultValue = DEFAULT_PAGE_VALUE) int page,
+		@RequestParam(defaultValue = DEFAULT_SIZE_VALUE) int size,
+		@PathVariable String clubToken,
+		@AuthenticationPrincipal CustomOAuth2Member member
+	) {
+		Sort sort = Sort.by(Sort.Order.by("role"));
+		Page<ClubMemberInfo> clubMembers = clubMemberFacade.findAllBannedClubMembers(member.getMemberToken(), clubToken,
+			PageRequest.of(page, size, sort));
+		Page<ClubMemberResponse> clubMemberResponses = clubMemberDtoMapper.of(clubMembers);
+		return CommonResponse.success(new CustomPageResponse<>(clubMemberResponses));
 	}
 
 	@Operation(summary = "동호회 가입 신청",
 		description = """
 			동호회에 가입을 신청합니다.
-			
+						
 			1. 가입 신청 글 2 ~ 20자
-			
+						
 			""",
 		tags = {"ClubMember"})
 	@PostMapping
@@ -124,7 +138,7 @@ public class ClubMemberController {
 		summary = "동호회원 역할 변경시키기",
 		description = """
 			동호회원의 역할을 변경시킵니다. 다음 제약 사항과 정보를 반드시 확인해야 합니다:
-			
+						
 			1. 회원 역할:
 			   - 탈퇴 대상 회원의 현재 역할을 나타냅니다.
 			   - 다음 중 하나여야 합니다:
@@ -152,13 +166,13 @@ public class ClubMemberController {
 		summary = "동호회원 강제 탈퇴시키기",
 		description = """
 			동호회원을 강제로 탈퇴시킵니다. 다음 제약 사항을 반드시 준수해야 합니다:
-			
+						
 			1. 회원 제제 사유:
 			   - 필수 입력 항목입니다.
 			   - 최소 2자 이상이어야 합니다.
 			   - 최대 100자 이하여야 합니다.
 			2. 자기자신은 탈퇴 시킬 수 없습니다.
-			
+						
 			""",
 		tags = {"ClubMember"}
 	)
@@ -181,7 +195,7 @@ public class ClubMemberController {
 		summary = "동호회원 정지시키기",
 		description = """
 			동호회원을 정지시킵니다. 다음 제약 사항을 반드시 준수해야 합니다:
-			
+						
 			1. 회원 제제 사유:
 			   - 필수 입력 항목입니다.
 			   - 최소 2자 이상이어야 합니다.
@@ -192,7 +206,7 @@ public class ClubMemberController {
 			     THREE_DAYS: 3일 정지
 			     SEVEN_DAYS: 7일 정지
 			     TWO_WEEKS: 14일 정지
-			
+						
 			""",
 		tags = {"ClubMember"}
 	)

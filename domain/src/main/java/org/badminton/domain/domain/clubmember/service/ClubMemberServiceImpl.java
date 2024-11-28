@@ -1,9 +1,7 @@
 package org.badminton.domain.domain.clubmember.service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.TreeMap;
 
 import org.badminton.domain.common.exception.clubmember.ClubMemberOwnerException;
 import org.badminton.domain.common.exception.clubmember.ClubOwnerCannotWithdraw;
@@ -23,6 +21,8 @@ import org.badminton.domain.domain.clubmember.info.ClubMemberWithdrawInfo;
 import org.badminton.domain.domain.clubmember.info.MemberIsClubMemberInfo;
 import org.badminton.domain.domain.member.MemberReader;
 import org.badminton.domain.domain.member.entity.Member;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -69,28 +69,22 @@ public class ClubMemberServiceImpl implements ClubMemberService {
 	}
 
 	@Override
-	public Map<ClubMember.ClubMemberRole, List<ClubMemberInfo>> findAllClubMembers(String clubToken) {
-		Map<ClubMember.ClubMemberRole, List<ClubMemberInfo>> responseMap = new TreeMap<>(
-			new ClubMemberRoleComparator());
-
-		List<ClubMember> clubMembers =
-			clubMemberReader.getAllClubMemberByClubId(clubToken);
-
-		clubMembers.stream()
-			.map(ClubMemberInfo::valueOf)
-			.forEach(clubMemberResponse -> {
-				ClubMember.ClubMemberRole role = clubMemberResponse.role();
-				responseMap.computeIfAbsent(role, clubMember -> new ArrayList<>()).add(clubMemberResponse);
-			});
-
-		return responseMap;
-	}
-
-	@Override
 	@Transactional(readOnly = true)
 	public List<ClubMemberMyPageInfo> getClubMembers(String memberToken) {
 		List<ClubMember> clubMembers = clubMemberReader.getClubMembersByMemberToken(memberToken);
 		return ClubMemberMyPageInfo.from(clubMembers);
+	}
+
+	@Override
+	public Page<ClubMemberInfo> findAllActiveClubMembers(String clubToken, Pageable pageable) {
+		Page<ClubMember> clubMembers = clubMemberReader.readAllActiveClubMembers(clubToken, pageable);
+		return clubMembers.map(ClubMemberInfo::valueOf);
+	}
+
+	@Override
+	public Page<ClubMemberInfo> findAllBannedClubMembers(String clubToken, Pageable pageable) {
+		Page<ClubMember> clubMembers = clubMemberReader.readAllBannedClubMembers(clubToken, pageable);
+		return clubMembers.map(ClubMemberInfo::valueOf);
 	}
 
 	@Override

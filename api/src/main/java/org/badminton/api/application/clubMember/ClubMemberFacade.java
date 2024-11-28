@@ -1,15 +1,11 @@
 package org.badminton.api.application.clubMember;
 
-import java.util.List;
-import java.util.Map;
-
 import org.badminton.domain.common.policy.ClubMemberPolicy;
 import org.badminton.domain.domain.club.ClubApplyService;
 import org.badminton.domain.domain.club.command.ClubApplyCommand;
 import org.badminton.domain.domain.clubmember.command.ClubMemberBanCommand;
 import org.badminton.domain.domain.clubmember.command.ClubMemberExpelCommand;
 import org.badminton.domain.domain.clubmember.command.ClubMemberRoleUpdateCommand;
-import org.badminton.domain.domain.clubmember.entity.ClubMember;
 import org.badminton.domain.domain.clubmember.info.ApplyClubInfo;
 import org.badminton.domain.domain.clubmember.info.ApproveApplyInfo;
 import org.badminton.domain.domain.clubmember.info.ClubMemberBanRecordInfo;
@@ -19,6 +15,8 @@ import org.badminton.domain.domain.clubmember.info.MemberIsClubMemberInfo;
 import org.badminton.domain.domain.clubmember.info.RejectApplyInfo;
 import org.badminton.domain.domain.clubmember.service.ClubMemberService;
 import org.badminton.domain.domain.mail.MailService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -39,7 +37,6 @@ public class ClubMemberFacade {
 		ApplyClubInfo applyClubInfo = clubApplyService.applyClub(memberToken, clubToken, command.applyReason());
 		mailService.prepareClubApplyEmail(clubToken, memberToken);
 		return applyClubInfo;
-
 	}
 
 	public ApproveApplyInfo approveApplying(Long clubApplyId, String memberToken, String clubToken) {
@@ -60,10 +57,14 @@ public class ClubMemberFacade {
 		return clubMemberService.updateClubMemberRole(command, clubMemberId, clubToken);
 	}
 
-	public Map<ClubMember.ClubMemberRole, List<ClubMemberInfo>> findAllClubMembers(String clubToken,
-		String memberToken) {
+	public Page<ClubMemberInfo> findAllActiveClubMembers(String memberToken, String clubToken, Pageable pageable) {
 		clubMemberPolicy.validateClubMember(memberToken, clubToken);
-		return clubMemberService.findAllClubMembers(clubToken);
+		return clubMemberService.findAllActiveClubMembers(clubToken, pageable);
+	}
+
+	public Page<ClubMemberInfo> findAllBannedClubMembers(String memberToken, String clubToken, Pageable pageable) {
+		clubMemberPolicy.validateClubMember(memberToken, clubToken);
+		return clubMemberService.findAllBannedClubMembers(clubToken, pageable);
 	}
 
 	public ClubMemberBanRecordInfo expelClubMember(ClubMemberExpelCommand command, Long clubMemberId,

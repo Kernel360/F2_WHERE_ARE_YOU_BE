@@ -5,6 +5,8 @@ import java.util.List;
 import org.badminton.domain.common.exception.clubmember.ClubMemberNotExistException;
 import org.badminton.domain.domain.clubmember.ClubMemberReader;
 import org.badminton.domain.domain.clubmember.entity.ClubMember;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
 import lombok.RequiredArgsConstructor;
@@ -32,6 +34,16 @@ public class ClubMemberReaderImpl implements ClubMemberReader {
 	public ClubMember getClubMember(Long clubMemberId) {
 		return clubMemberRepository.findByClubMemberId(clubMemberId)
 			.orElseThrow(() -> new ClubMemberNotExistException(clubMemberId));
+	}
+
+	@Override
+	public Page<ClubMember> readAllActiveClubMembers(String clubToken, Pageable pageable) {
+		return clubMemberRepository.findAllActiveClubMembersOrderByRole(clubToken, pageable);
+	}
+
+	@Override
+	public Page<ClubMember> readAllBannedClubMembers(String clubToken, Pageable pageable) {
+		return clubMemberRepository.findAllByClubClubTokenAndBannedTrue(clubToken, pageable);
 	}
 
 	@Override
@@ -73,11 +85,6 @@ public class ClubMemberReaderImpl implements ClubMemberReader {
 	@Override
 	public ClubMember getClubOwner(String clubToken) {
 		return clubMemberRepository.findByClubClubTokenAndRole(clubToken, ClubMember.ClubMemberRole.ROLE_OWNER);
-	}
-
-	@Override
-	public List<ClubMember> getAllClubMemberByClubId(String clubToken) {
-		return clubMemberRepository.findAllByClubClubTokenAndDeletedFalse(clubToken);
 	}
 
 	@Override
