@@ -16,9 +16,7 @@ import org.badminton.domain.domain.clubmember.info.RejectApplyInfo;
 import org.badminton.domain.domain.clubmember.service.ClubMemberService;
 import org.badminton.domain.domain.mail.MailService;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -59,17 +57,13 @@ public class ClubMemberFacade {
 		return clubMemberService.updateClubMemberRole(command, clubMemberId, clubToken);
 	}
 
-	public Page<ClubMemberInfo> findAllActiveClubMembers(String memberToken, String clubToken, int page, int size) {
+	public Page<ClubMemberInfo> findAllActiveClubMembers(String memberToken, String clubToken, Pageable pageable) {
 		clubMemberPolicy.validateClubMember(memberToken, clubToken);
-		PageRequest pageable = PageRequest.of(page, size);
 		return clubMemberService.findAllActiveClubMembers(clubToken, pageable);
 	}
 
-	public Page<ClubMemberInfo> findAllBannedClubMembers(String memberToken, String clubToken, int page, int size) {
+	public Page<ClubMemberInfo> findAllBannedClubMembers(String memberToken, String clubToken, Pageable pageable) {
 		clubMemberPolicy.validateClubMember(memberToken, clubToken);
-		Sort sort = Sort.by(Sort.Order.by("role")
-			.with(Sort.NullHandling.NATIVE));
-		Pageable pageable = PageRequest.of(page, size, sort);
 		return clubMemberService.findAllBannedClubMembers(clubToken, pageable);
 	}
 

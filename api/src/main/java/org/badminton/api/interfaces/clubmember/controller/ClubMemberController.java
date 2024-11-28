@@ -28,6 +28,8 @@ import org.badminton.domain.domain.clubmember.info.ClubMemberWithdrawInfo;
 import org.badminton.domain.domain.clubmember.info.MemberIsClubMemberInfo;
 import org.badminton.domain.domain.clubmember.info.RejectApplyInfo;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -67,7 +69,7 @@ public class ClubMemberController {
 		@AuthenticationPrincipal CustomOAuth2Member member
 	) {
 		Page<ClubMemberInfo> clubMembers = clubMemberFacade.findAllActiveClubMembers(member.getMemberToken(), clubToken,
-			page, size);
+			PageRequest.of(page, size));
 		Page<ClubMemberResponse> clubMemberResponses = clubMemberDtoMapper.of(clubMembers);
 		return CommonResponse.success(new CustomPageResponse<>(clubMemberResponses));
 	}
@@ -82,8 +84,9 @@ public class ClubMemberController {
 		@PathVariable String clubToken,
 		@AuthenticationPrincipal CustomOAuth2Member member
 	) {
+		Sort sort = Sort.by(Sort.Order.by("role"));
 		Page<ClubMemberInfo> clubMembers = clubMemberFacade.findAllBannedClubMembers(member.getMemberToken(), clubToken,
-			page, size);
+			PageRequest.of(page, size, sort));
 		Page<ClubMemberResponse> clubMemberResponses = clubMemberDtoMapper.of(clubMembers);
 		return CommonResponse.success(new CustomPageResponse<>(clubMemberResponses));
 	}
