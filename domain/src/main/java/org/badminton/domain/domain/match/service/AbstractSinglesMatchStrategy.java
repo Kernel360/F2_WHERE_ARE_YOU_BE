@@ -17,6 +17,7 @@ import org.badminton.domain.domain.match.info.LeagueSetsScoreInProgressInfo;
 import org.badminton.domain.domain.match.info.MatchInfo;
 import org.badminton.domain.domain.match.info.MatchSetInfo;
 import org.badminton.domain.domain.match.info.SetInfo;
+import org.badminton.domain.domain.match.reader.SinglesMatchStore;
 import org.badminton.domain.domain.match.store.SinglesMatchReader;
 import org.springframework.stereotype.Service;
 
@@ -28,6 +29,7 @@ public abstract class AbstractSinglesMatchStrategy implements MatchStrategy {
 
 	public static final int FIRST_ROUND_NUMBER = 1;
 	private final SinglesMatchReader singlesMatchReader;
+	private final SinglesMatchStore singlesMatchStore;
 
 	@Override
 	public abstract void checkDuplicateInitialBracket(Long leagueId);
@@ -103,5 +105,13 @@ public abstract class AbstractSinglesMatchStrategy implements MatchStrategy {
 		SinglesMatch singlesMatch = singlesMatchReader.getSinglesMatch(matchId);
 		SinglesSet singlesSet = singlesMatch.getSinglesSet(setNumber);
 		return MatchSetInfo.fromSingles(singlesSet);
+	}
+
+	@Override
+	public void startMatch(Long matchId) {
+		SinglesMatch singlesMatch = singlesMatchReader.getSinglesMatch(matchId);
+		singlesMatch.startMatch();
+		singlesMatch.getSinglesSet(1).initMatch();
+		singlesMatchStore.store(singlesMatch);
 	}
 }

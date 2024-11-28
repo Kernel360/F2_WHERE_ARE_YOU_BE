@@ -6,10 +6,10 @@ import org.badminton.domain.domain.match.info.BracketInfo;
 import org.badminton.domain.domain.match.info.SetInfo;
 
 public interface MatchOperationHandler {
-    BracketInfo generateInitialBracket(Long leagueId, String memberToken);
+	BracketInfo generateInitialBracket(Long leagueId, String memberToken);
 
-    SetInfo.Main registerSetScoreInMatch(Long leagueId, Long matchId, Integer setIndex,
-                                         MatchCommand.UpdateSetScore updateSetScoreCommand, String memberToken);
+	SetInfo.Main registerSetScoreInMatch(Long leagueId, Long matchId, Integer setIndex,
+		MatchCommand.UpdateSetScore updateSetScoreCommand, String memberToken);
 
-    void startMatch(StartMatchCommand startMatchCommand);
+	void startMatch(StartMatchCommand startMatchCommand);
 }
