@@ -89,6 +89,7 @@ public enum ErrorCode {
 	INVALID_TIME_TO_CANCEL_LEAGUE_PARTICIPATION(412, "모집 마감 시간이 지나면 경기 참여를 취소할 수 없습니다."),
 	INVALID_TIME_TO_PARTICIPATE_IN_LEAGUE(412, "모집 마감 시간이 지나면 경기 참여 신청을 할 수 없습니다."),
 	INVALID_TIME_TO_CANCEL_LEAGUE(412, "경기 시작 시간이 지난 경기는 취소할 수 없습니다."),
+	INVALID_TIME_TO_START_MATCH(412, "경기 시작 시간 전에는 매치를 시작할 수 없습니다."),
 	LEAGUE_NOT_RECRUITING(412, "모집 중이 아닙니다."),
 	LEAGUE_PARTICIPANT_POWER_OF_TWO(412, "토너먼트 경기에서는 경기 참여 인원이 2의 제곱이어야 합니다"),
 	LEAGUE_PARTICIPANTS_NOT_EXISTS(412, "해당 매치의 참여자가 아직 정해지지 않았습니다"),

@@ -42,10 +42,10 @@ public class FreeMatchFacade implements MatchOperationHandler {
 	}
 
 	@Override
-	public void startMatch(StartMatchCommand startMatchCommand) {
+	public void startMatch(Long leagueId, StartMatchCommand startMatchCommand) {
 		MatchStrategy matchStrategy = freeBracketGenerationService.makeSinglesOrDoublesMatchStrategy(
 			startMatchCommand.leagueId());
-		freeBracketGenerationService.startMatch(matchStrategy, startMatchCommand.matchId());
+		freeBracketGenerationService.startMatch(matchStrategy, leagueId, startMatchCommand.matchId());
 	}
 
 	@Override
