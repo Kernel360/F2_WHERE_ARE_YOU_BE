@@ -4,11 +4,12 @@ import org.badminton.domain.domain.clubmember.entity.ClubMember;
 
 public record MemberIsClubMemberInfo(
 	boolean isClubMember,
-	ClubMember.ClubMemberRole role
+	ClubMember.ClubMemberRole role,
+	boolean isBanned
 ) {
-	public static MemberIsClubMemberInfo fromClubMember(boolean isClubMember, ClubMember clubMember) {
+	public static MemberIsClubMemberInfo from(boolean isClubMember, ClubMember clubMember, boolean isBanned) {
 		ClubMember.ClubMemberRole role = (clubMember != null) ? clubMember.getRole() : null;
-		return new MemberIsClubMemberInfo(isClubMember, role);
+		return new MemberIsClubMemberInfo(isClubMember, role, isBanned);
 	}
 
 }

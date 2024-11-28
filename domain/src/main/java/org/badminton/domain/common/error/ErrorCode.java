@@ -15,6 +15,7 @@ public enum ErrorCode {
 	LIMIT_EXCEEDED(400, "파라미터 또는 리소스 속성값이 제한을 초과했습니다."),
 	OUT_OF_RANGE(400, "파라미터 또는 리소스 속성값이 범위를 벗어났습니다."),
 	FILE_NOT_EXIST(400, "파일이 존재하지 않거나 잘못된 파일입니다."),
+	FILE_SIZE_OVER(400, "파일의 크기는 2.5MB 이내야 됩니다."),
 	VALIDATION_ERROR(400, "입력값 검증에 실패했습니다"),
 
 	// 401 Errors
@@ -36,11 +37,13 @@ public enum ErrorCode {
 	MEMBER_NOT_EXIST(404, "해당하는 회원이 존재하지 않습니다."),
 	CLUB_NOT_EXIST(404, "해당하는 동호회가 존재하지 않습니다."),
 	LEAGUE_NOT_EXIST(404, "해당하는 경기 일정이 존재하지 않습니다."),
-	BRACKET_NOT_EXIST(404, "해당하는 경기게 아직 대진표가 만들어지지 않았습니다."),
+	BRACKET_NOT_EXIST(404, "해당하는 경기에 아직 대진표가 만들어지지 않았습니다."),
 	MATCH_NOT_EXIST(404, "해당하는 대진이 존재하지 않습니다."),
 	SET_NOT_EXIST(404, "해당하는 세트는 존재하지 않습니다."),
-	MEMBER_NOT_JOINED_CLUB(404, "해당하는 회원은 동호회에 가입하지 않았습니다."),
+	MEMBER_NOT_JOINED_CLUB(404, "동호회에 가입 후 이용해주세요."),
 	CLUB_MEMBER_NOT_EXIST(404, "해당하는 회원은 해당 동호회에 아직 가입하지 않았습니다."),
+	CLUB_MEMBER_IS_NOT_OWNER(404, "동호회 회장만 이용 가능합니다."),
+	CLUB_MEMBER_IS_NOT_ABOVE_MANAGER(404, "동호회 매니저 이상만 이용 가능합니다."),
 	MATCH_DETAILS_NOT_EXIST(404, "해당하는 게임의 상세 정보가 아직 초기화되지 않았습니다."),
 	IMAGE_FILE_NOT_FOUND(404, "파일의 형식이 잘못되었습니다."),
 	SET_NOT_EXIST_IN_CACHE(404, "캐시에 해당하는 세트 점수가 존재하지 않습니다."),
@@ -81,6 +84,7 @@ public enum ErrorCode {
 	PLAYER_LIMIT_COUNT_MUST_BE_MULTIPLE_WHEN_DOUBLES_MATCH(412, "경기 최대 참여 인원은 복식 경기일 경우 4의 배수여야 합니다."),
 	PLAYER_LIMIT_COUNT_MUST_BE_MORE_THAN_FOUR(412, "경기 최대 참여 인원은 복식 경기일 경우 4 이상이어야 합니다."),
 	LEAGUE_OWNER_CANNOT_CANCEL_LEAGUE_PARTICIPATION(412, "경기를 생성한 사람은 경기 참여를 취소할 수 없습니다."),
+	LEAGUE_CANNOT_BE_CANCELED_WHEN_IS_NOT_RECRUITING(412, "경기 모집 중일 때만 경기를 취소할 수 있습니다."),
 	INVALID_LEAGUE_STATUS_TO_CANCEL_LEAGUE_PARTICIPATION(412, "경기 중이거나, 취소되거나, 종료된 경기에 대해 경기 참여를 취소할 수 없습니다."),
 	INVALID_TIME_TO_CANCEL_LEAGUE_PARTICIPATION(412, "모집 마감 시간이 지나면 경기 참여를 취소할 수 없습니다."),
 	INVALID_TIME_TO_PARTICIPATE_IN_LEAGUE(412, "모집 마감 시간이 지나면 경기 참여 신청을 할 수 없습니다."),
@@ -92,6 +96,7 @@ public enum ErrorCode {
 	ALREADY_WINNER_DETERMINED(412, "매치의 승리자가 정해졌습니다"),
 	CLUB_OWNER_CANT_WITHDRAW(412, "동호회원이 2명 이상인 동호회 회장은 동호회를 탈퇴할 수 없습니다."),
 	NOT_LEAGUE_OWNER(412, "경기를 만든 사용자만 수정 및 삭제를 할 수 있습니다"),
+	CLUB_MEMBER_EXPEL_EXCEPTION(412, "해당 동호회에서 제제를 받아 가입 신청을 할 수 없습니다."),
 
 	// 500 Errors
 	INTERNAL_SERVER_ERROR(500, "서버 내부 오류가 발생했습니다."),

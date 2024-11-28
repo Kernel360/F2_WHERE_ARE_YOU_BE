@@ -44,7 +44,7 @@ public class League extends AbstractBaseTime {
 
 	private String leagueName;
 
-	@Column(columnDefinition = "TEXT", length = 1000)
+	@Column(columnDefinition = "TEXT", length = 1200)
 	private String description;
 
 	@Column(nullable = false, columnDefinition = "INT DEFAULT 1")

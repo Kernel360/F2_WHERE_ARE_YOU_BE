@@ -1,7 +1,6 @@
 package org.badminton.api.config.security;
 
 import java.util.Arrays;
-import java.util.Optional;
 
 import org.badminton.api.application.auth.CustomOAuth2MemberService;
 import org.badminton.api.exceptionhandler.FailedAuthenticationEntryPoint;
@@ -15,21 +14,15 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpMethod;
-import org.springframework.security.authorization.AuthorizationDecision;
-import org.springframework.security.authorization.AuthorizationManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.annotation.web.configurers.CorsConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.access.intercept.RequestAuthorizationContext;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -42,7 +35,6 @@ public class SecurityConfig {
 	private final CustomOAuth2MemberService customOAuth2MemberService;
 	private final CustomSuccessHandler customSuccessHandler;
 	private final JwtUtil jwtUtil;
-	private final ClubPermissionEvaluator clubPermissionEvaluator;
 	private final ClubMemberReader clubMemberReader;
 	private final FailedAuthenticationEntryPoint failedAuthenticationEntryPoint;
 
@@ -125,87 +117,44 @@ public class SecurityConfig {
 				.permitAll()
 				.requestMatchers(HttpMethod.GET, "/v1/clubs/{clubToken}/leagues/date")
 				.permitAll()
-				.requestMatchers(HttpMethod.GET, "/v1/clubs", "/v1/clubs/{clubToken}", "/v1/clubs/search",
-					"/v2/**").permitAll()
+				.requestMatchers(HttpMethod.GET, "/v1/clubs", "/v1/clubs/{clubToken}", "/v1/clubs/search", "/v2/**")
+				.permitAll()
 				.requestMatchers(HttpMethod.POST, "/v1/clubs")
 				.permitAll()
 				.requestMatchers(HttpMethod.DELETE, "/v1/clubs/{clubToken}")
-				.access(hasClubRole("OWNER"))
+				.permitAll()
 				.requestMatchers(HttpMethod.GET, "/v1/clubs/{clubToken}/applicants")
-				.access(hasClubRole("OWNER", "MANAGER"))
+				.permitAll()
 				.requestMatchers(HttpMethod.PATCH, "/v1/clubs/{clubToken}")
-				.access(hasClubRole("OWNER", "MANAGER"))
+				.permitAll()
 				.requestMatchers(HttpMethod.GET, "/v1/clubs/{clubToken}/leagues/{leagueId}")
 				.permitAll()
 				.requestMatchers(HttpMethod.GET, "/v1/clubs/{clubToken}/clubMembers")
-				.access(hasClubRole("OWNER", "MANAGER", "USER"))
+				.permitAll()
 				.requestMatchers(HttpMethod.GET, "/v1/clubs/{clubToken}")
-				.authenticated()
-
+				.permitAll()
 				.requestMatchers(HttpMethod.POST, "/v1/clubs/{clubToken}/clubMembers/approve",
 					"/v1/clubs/{clubToken}/clubMembers/reject")
-				.access(hasClubRole("OWNER", "MANAGER"))
+				.permitAll()
 				.requestMatchers(HttpMethod.POST, "/v1/clubs/images")
-				.access(hasClubRole("OWNER", "MANAGER"))
+				.permitAll()
 				.requestMatchers(HttpMethod.DELETE, "/v1/clubs/{clubToken}/leagues/{leagueId}")
-				.access(hasClubRole("OWNER", "MANAGER"))
+				.permitAll()
 				.requestMatchers(HttpMethod.PATCH, "/v1/clubs/{clubToken}/leagues/{leagueId}")
-				.access(hasClubRole("OWNER", "MANAGER"))
+				.permitAll()
 				.requestMatchers(HttpMethod.POST, "/v1/clubs/{clubToken}/leagues/{leagueId}/participation",
 					"/v1/clubs/{clubToken}/leagues")
-				.access(hasClubRole("OWNER", "MANAGER", "USER"))
+				.permitAll()
 				.requestMatchers(HttpMethod.DELETE, "/v1/clubs/{clubToken}/leagues/{leagueId}/participation")
-				.access(hasClubRole("OWNER", "MANAGER", "USER"))
-				.requestMatchers(HttpMethod.PATCH, "/v1/clubs/{clubToken}/clubMembers/role",
+				.permitAll()
+				.requestMatchers(HttpMethod.PATCH,
+					"/v1/clubs/{clubToken}/clubMembers/role",
 					"v1/clubs/{clubToken}/clubMembers/ban", "v1/clubs/{clubToken}/clubMembers/expel")
-				.access(hasClubRole("OWNER"))
+				.permitAll()
 				.anyRequest()
 				.authenticated()
 			);
 		return http.build();
-	}
-
-	private AuthorizationManager<RequestAuthorizationContext> hasClubRole(String... roles) {
-		return (authentication, context) -> {
-
-			Authentication auth = authentication.get();
-			if (auth == null || !auth.isAuthenticated()) {
-				return new AuthorizationDecision(false);
-			}
-
-			String clubToken = getClubTokenFromContext(context);
-			if (clubToken == null) {
-				return new AuthorizationDecision(false);
-			}
-
-			boolean hasRole = clubPermissionEvaluator.hasClubRole(auth, clubToken, roles);
-
-			log.info("""
-				Checking roles for clubToken: {}
-				User authorities: {}
-				Required roles: {}
-				Has required role: {}
-				""", clubToken, auth.getAuthorities(), Arrays.toString(roles), hasRole
-			);
-
-			if (!hasRole) {
-				throw new AuthenticationException("Insufficient roles to access this resource") {
-				};
-			}
-			return new AuthorizationDecision(hasRole);
-		};
-	}
-
-	private String getClubTokenFromContext(RequestAuthorizationContext context) {
-
-		String clubToken = context.getVariables().get("clubToken");
-		if (clubToken != null) {
-			return clubToken;
-		}
-		HttpServletRequest request = context.getRequest();
-		return Optional.ofNullable(request.getParameter("clubToken"))
-			.filter(s -> !s.isEmpty())
-			.orElse(null);
 	}
 
 	private void corsConfigurer(CorsConfigurer<HttpSecurity> corsConfigurer) {

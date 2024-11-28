@@ -20,7 +20,7 @@ public record BracketInfo(
 
 	public static BracketInfo fromSingles(int roundNumber, List<SinglesMatch> singlesMatchList) {
 		SinglesMatch singlesMatch = singlesMatchList.get(0);
-		return new BracketInfo(singlesMatch.getId(),
+		return new BracketInfo(singlesMatch.getLeague().getLeagueId(),
 			singlesMatch.getLeague().getMatchGenerationType(),
 			singlesMatch.getLeague().getMatchType(),
 			singlesMatch.getLeague().getLeagueStatus(),
@@ -33,7 +33,7 @@ public record BracketInfo(
 
 	public static BracketInfo fromDoubles(int roundNumber, List<DoublesMatch> doublesMatchList) {
 		DoublesMatch doublesMatch = doublesMatchList.get(0);
-		return new BracketInfo(doublesMatch.getId(),
+		return new BracketInfo(doublesMatch.getLeague().getLeagueId(),
 			doublesMatch.getLeague().getMatchGenerationType(),
 			doublesMatch.getLeague().getMatchType(), doublesMatch.getLeague().getLeagueStatus(), roundNumber,
 			null,

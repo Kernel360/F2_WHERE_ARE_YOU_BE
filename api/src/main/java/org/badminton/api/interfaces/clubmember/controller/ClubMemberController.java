@@ -63,9 +63,11 @@ public class ClubMemberController {
 	public CommonResponse<CustomPageResponse<ClubMemberResponse>> getClubMembersInClub(
 		@RequestParam(defaultValue = DEFAULT_PAGE_VALUE) int page,
 		@RequestParam(defaultValue = DEFAULT_SIZE_VALUE) int size,
-		@PathVariable String clubToken
+		@PathVariable String clubToken,
+		@AuthenticationPrincipal CustomOAuth2Member member
 	) {
-		Page<ClubMemberInfo> clubMembers = clubMemberFacade.findAllActiveClubMembers(clubToken, page, size);
+		Page<ClubMemberInfo> clubMembers = clubMemberFacade.findAllActiveClubMembers(member.getMemberToken(), clubToken,
+			page, size);
 		Page<ClubMemberResponse> clubMemberResponses = clubMemberDtoMapper.of(clubMembers);
 		return CommonResponse.success(new CustomPageResponse<>(clubMemberResponses));
 	}
@@ -77,9 +79,11 @@ public class ClubMemberController {
 	public CommonResponse<CustomPageResponse<ClubMemberResponse>> getBannedClubMember(
 		@RequestParam(defaultValue = DEFAULT_PAGE_VALUE) int page,
 		@RequestParam(defaultValue = DEFAULT_SIZE_VALUE) int size,
-		@PathVariable String clubToken
+		@PathVariable String clubToken,
+		@AuthenticationPrincipal CustomOAuth2Member member
 	) {
-		Page<ClubMemberInfo> clubMembers = clubMemberFacade.findAllBannedClubMembers(clubToken, page, size);
+		Page<ClubMemberInfo> clubMembers = clubMemberFacade.findAllBannedClubMembers(member.getMemberToken(), clubToken,
+			page, size);
 		Page<ClubMemberResponse> clubMemberResponses = clubMemberDtoMapper.of(clubMembers);
 		return CommonResponse.success(new CustomPageResponse<>(clubMemberResponses));
 	}
@@ -107,8 +111,9 @@ public class ClubMemberController {
 		tags = {"ClubMember"})
 	@PostMapping("/approve")
 	public CommonResponse<ApproveApplyResponse> approvedClub(@RequestParam Long clubApplyId,
-		@PathVariable String clubToken) {
-		ApproveApplyInfo approveApplyInfo = clubMemberFacade.approveApplying(clubApplyId);
+		@PathVariable String clubToken, @AuthenticationPrincipal CustomOAuth2Member member) {
+		ApproveApplyInfo approveApplyInfo = clubMemberFacade.approveApplying(clubApplyId, member.getMemberToken(),
+			clubToken);
 		ApproveApplyResponse approveApplyResponse = clubMemberDtoMapper.of(approveApplyInfo);
 
 		return CommonResponse.success(approveApplyResponse);
@@ -119,8 +124,9 @@ public class ClubMemberController {
 		tags = {"ClubMember"})
 	@PostMapping("/reject")
 	public CommonResponse<RejectApplyResponse> rejectClub(@RequestParam Long clubApplyId,
-		@PathVariable String clubToken) {
-		RejectApplyInfo rejectApplyInfo = clubMemberFacade.rejectApplying(clubApplyId);
+		@PathVariable String clubToken, @AuthenticationPrincipal CustomOAuth2Member member) {
+		RejectApplyInfo rejectApplyInfo = clubMemberFacade.rejectApplying(clubApplyId, member.getMemberToken(),
+			clubToken);
 		RejectApplyResponse rejectApplyResponse = clubMemberDtoMapper.of(rejectApplyInfo);
 		return CommonResponse.success(rejectApplyResponse);
 	}
@@ -143,11 +149,12 @@ public class ClubMemberController {
 	@PatchMapping("/role")
 	public CommonResponse<ClubMemberResponse> updateClubMemberRole(
 		@Valid @RequestBody ClubMemberRoleUpdateRequest request,
-		@RequestParam Long clubMemberId, @PathVariable String clubToken) {
+		@RequestParam Long clubMemberId, @PathVariable String clubToken,
+		@AuthenticationPrincipal CustomOAuth2Member member) {
 
 		ClubMemberRoleUpdateCommand clubMemberRoleUpdateCommand = request.of();
 		ClubMemberInfo clubMemberInfo = clubMemberFacade.updateClubMemberRole(clubMemberRoleUpdateCommand,
-			clubMemberId, clubToken);
+			clubMemberId, clubToken, member.getMemberToken());
 		ClubMemberResponse response = clubMemberDtoMapper.of(clubMemberInfo);
 		return CommonResponse.success(response);
 	}
@@ -170,12 +177,13 @@ public class ClubMemberController {
 	public CommonResponse<ClubMemberBanRecordResponse> expelClubMember(
 		@RequestParam Long clubMemberId,
 		@PathVariable String clubToken,
-		@Valid @RequestBody ClubMemberExpelRequest request
+		@Valid @RequestBody ClubMemberExpelRequest request,
+		@AuthenticationPrincipal CustomOAuth2Member member
 	) {
 		ClubMemberExpelCommand clubMemberExpelCommand = request.of();
 
 		ClubMemberBanRecordInfo clubMemberBanRecordInfo = clubMemberFacade.expelClubMember(clubMemberExpelCommand,
-			clubMemberId);
+			clubMemberId, member.getMemberToken(), clubToken);
 		ClubMemberBanRecordResponse clubMemberBanRecordResponse = clubMemberDtoMapper.of(clubMemberBanRecordInfo);
 		return CommonResponse.success(clubMemberBanRecordResponse);
 	}
@@ -202,11 +210,11 @@ public class ClubMemberController {
 	@PatchMapping("/ban")
 	public CommonResponse<ClubMemberBanRecordResponse> banClubMember(@RequestParam Long clubMemberId,
 		@PathVariable String clubToken,
-		@Valid @RequestBody ClubMemberBanRequest request) {
+		@Valid @RequestBody ClubMemberBanRequest request, @AuthenticationPrincipal CustomOAuth2Member member) {
 
 		ClubMemberBanCommand clubMemberBanCommand = request.of();
 		ClubMemberBanRecordInfo clubMemberBanRecordInfo = clubMemberFacade.banClubMember(clubMemberBanCommand,
-			clubMemberId);
+			clubMemberId, member.getMemberToken(), clubToken);
 		ClubMemberBanRecordResponse clubMemberBanRecordResponse = clubMemberDtoMapper.of(clubMemberBanRecordInfo);
 		return CommonResponse.success(clubMemberBanRecordResponse);
 

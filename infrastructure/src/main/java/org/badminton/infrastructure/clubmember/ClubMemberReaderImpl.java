@@ -52,6 +52,12 @@ public class ClubMemberReaderImpl implements ClubMemberReader {
 	}
 
 	@Override
+	public boolean checkIsExpelClubMember(String memberToken, String clubToken) {
+		return clubMemberRepository.existsByClubClubTokenAndMemberMemberTokenAndBannedTrue(clubToken,
+			memberToken);
+	}
+
+	@Override
 	public boolean existsMemberInClub(String memberToken, String clubToken) {
 		return clubMemberRepository.existsByMemberMemberTokenAndClubClubToken(memberToken, clubToken);
 	}
@@ -61,7 +67,7 @@ public class ClubMemberReaderImpl implements ClubMemberReader {
 	}
 
 	@Override
-	public ClubMember getClubMemberByMemberTokenAndClubToken(String clubToken, String memberToken) {
+	public ClubMember getClubMember(String clubToken, String memberToken) {
 		return clubMemberRepository.findByClubClubTokenAndMemberMemberToken(clubToken, memberToken)
 			.orElseThrow(() -> new ClubMemberNotExistException(clubToken, memberToken));
 	}

@@ -37,4 +37,3 @@ public class ClubImageController {
 		return CommonResponse.success(clubImageService.uploadFile(request));
 	}
 }
-

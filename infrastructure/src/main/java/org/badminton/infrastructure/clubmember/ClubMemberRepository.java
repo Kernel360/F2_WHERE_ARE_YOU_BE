@@ -11,7 +11,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 public interface ClubMemberRepository extends JpaRepository<ClubMember, Long> {
-	ClubMember findByClubClubIdAndMemberId(Long clubId, Long memberId);
 
 	@Query("""
 		   SELECT cm
@@ -41,6 +40,8 @@ public interface ClubMemberRepository extends JpaRepository<ClubMember, Long> {
 
 	boolean existsByClubClubTokenAndMemberMemberTokenAndDeletedFalse(String clubToken, String memberToken);
 
+	boolean existsByClubClubTokenAndMemberMemberTokenAndBannedTrue(String clubToken, String memberToken);
+
 	List<ClubMember> findAllByClubClubTokenAndDeletedFalse(String clubToken);
 
 	boolean existsByMemberMemberTokenAndClubClubToken(String memberToken, String clubToken);
@@ -52,5 +53,6 @@ public interface ClubMemberRepository extends JpaRepository<ClubMember, Long> {
 	ClubMember findByClubClubTokenAndRole(String clubToken, ClubMember.ClubMemberRole role);
 
 	Integer countByClubClubTokenAndDeletedFalse(String clubToken);
+
 }
 
