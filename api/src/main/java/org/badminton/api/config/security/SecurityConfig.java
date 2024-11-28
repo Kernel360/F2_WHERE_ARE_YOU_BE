@@ -35,7 +35,6 @@ public class SecurityConfig {
 	private final CustomOAuth2MemberService customOAuth2MemberService;
 	private final CustomSuccessHandler customSuccessHandler;
 	private final JwtUtil jwtUtil;
-	// private final ClubPermissionEvaluator clubPermissionEvaluator;
 	private final ClubMemberReader clubMemberReader;
 	private final FailedAuthenticationEntryPoint failedAuthenticationEntryPoint;
 
@@ -157,49 +156,6 @@ public class SecurityConfig {
 			);
 		return http.build();
 	}
-	//
-	// private AuthorizationManager<RequestAuthorizationContext> hasClubRole(String... roles) {
-	// 	return (authentication, context) -> {
-	//
-	// 		Authentication auth = authentication.get();
-	// 		if (auth == null || !auth.isAuthenticated()) {
-	// 			return new AuthorizationDecision(false);
-	// 		}
-	//
-	// 		String clubToken = getClubTokenFromContext(context);
-	// 		if (clubToken == null) {
-	// 			return new AuthorizationDecision(false);
-	// 		}
-	//
-	// 		boolean hasRole = clubPermissionEvaluator.hasClubRole(auth, clubToken, roles);
-	//
-	// 		log.info("""
-	// 			Checking roles for clubToken: {}
-	// 			User authorities: {}
-	// 			Required roles: {}
-	// 			Has required role: {}
-	// 			""", clubToken, auth.getAuthorities(), Arrays.toString(roles), hasRole
-	// 		);
-	//
-	// 		if (!hasRole) {
-	// 			throw new AuthenticationException("Insufficient roles to access this resource") {
-	// 			};
-	// 		}
-	// 		return new AuthorizationDecision(hasRole);
-	// 	};
-	// }
-	//
-	// private String getClubTokenFromContext(RequestAuthorizationContext context) {
-	//
-	// 	String clubToken = context.getVariables().get("clubToken");
-	// 	if (clubToken != null) {
-	// 		return clubToken;
-	// 	}
-	// 	HttpServletRequest request = context.getRequest();
-	// 	return Optional.ofNullable(request.getParameter("clubToken"))
-	// 		.filter(s -> !s.isEmpty())
-	// 		.orElse(null);
-	// }
 
 	private void corsConfigurer(CorsConfigurer<HttpSecurity> corsConfigurer) {
 		corsConfigurer.configurationSource(request -> {
