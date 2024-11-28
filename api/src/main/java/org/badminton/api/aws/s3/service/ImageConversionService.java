@@ -1,15 +1,14 @@
 package org.badminton.api.aws.s3.service;
 
+import java.awt.image.BufferedImage;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+
+import javax.imageio.ImageIO;
 
 import org.badminton.api.common.exception.EmptyFileException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
-
-import com.sksamuel.scrimage.ImmutableImage;
-import com.sksamuel.scrimage.metadata.ImageMetadata;
-import com.sksamuel.scrimage.webp.WebpWriter;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -19,15 +18,20 @@ public class ImageConversionService {
 
 	public byte[] convertToWebP(MultipartFile file) {
 		try {
-			ImmutableImage image = ImmutableImage.loader().fromStream(file.getInputStream());
+			// Read input image from MultipartFile
+			BufferedImage inputImage = ImageIO.read(file.getInputStream());
+			if (inputImage == null) {
+				throw new EmptyFileException();
+			}
+
+			// Write output image as WebP
 			ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-			WebpWriter writer = WebpWriter.DEFAULT;
-			writer.write(image, ImageMetadata.fromStream(file.getInputStream()), outputStream);
+			ImageIO.write(inputImage, "webp", outputStream);
+
 			return outputStream.toByteArray();
 		} catch (IOException exception) {
 			log.error("Image conversion failed for file: {}", file.getOriginalFilename(), exception);
 			throw new EmptyFileException(exception);
 		}
-
 	}
 }
