@@ -32,7 +32,7 @@ public class ClubMemberPolicy {
 	public void validateAboveClubManager(String memberToken, String clubToken) {
 		validateClubMember(memberToken, clubToken);
 		ClubMember clubMember = clubMemberReader.getClubMember(clubToken, memberToken);
-		if (!clubMember.getRole().equals(ClubMember.ClubMemberRole.ROLE_MANAGER)) {
+		if (clubMember.getRole().equals(ClubMember.ClubMemberRole.ROLE_USER)) {
 			throw new ClubMemberIsNotAboveManagerException(memberToken, clubToken, clubMember.getRole());
 		}
 	}
