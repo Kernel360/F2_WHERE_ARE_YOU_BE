@@ -57,7 +57,8 @@ public class SecurityConfig {
 			.cors(this::corsConfigurer)
 			.authorizeHttpRequests(auth -> auth
 				.anyRequest().permitAll())
-			.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+			.sessionManagement(session ->
+				session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 			.oauth2Login(oauth2 -> oauth2
 				.userInfoEndpoint(
 					userInfoEndpointConfig -> userInfoEndpointConfig.userService(customOAuth2MemberService))
