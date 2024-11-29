@@ -1,11 +1,13 @@
 package org.badminton.domain.domain.match.info;
 
+import org.badminton.domain.common.enums.SetStatus;
 import org.badminton.domain.domain.match.entity.DoublesSet;
 import org.badminton.domain.domain.match.entity.SinglesSet;
 
 public record MatchSetInfo(
 	SinglesMatchPlayerInfo singlesMatchPlayerInfo,
 	DoublesMatchPlayerInfo doublesMatchPlayerInfo,
+	SetStatus setStatus,
 	int setScore1,
 	int setScore2,
 	int winSetScore1,
@@ -17,6 +19,7 @@ public record MatchSetInfo(
 		return new MatchSetInfo(
 			SinglesMatchPlayerInfo.fromSinglesMatch(singlesSet.getSinglesMatch()),
 			null,
+			singlesSet.getSetStatus(),
 			singlesSet.getPlayer1Score(),
 			singlesSet.getPlayer2Score(),
 			singlesSet.getSinglesMatch().getPlayer1WinSetCount(),
@@ -29,6 +32,7 @@ public record MatchSetInfo(
 		return new MatchSetInfo(
 			null,
 			DoublesMatchPlayerInfo.from(doublesSet.getDoublesMatch()),
+			doublesSet.getSetStatus(),
 			doublesSet.getTeam1Score(),
 			doublesSet.getTeam2Score(),
 			doublesSet.getDoublesMatch().getTeam1WinSetCount(),
