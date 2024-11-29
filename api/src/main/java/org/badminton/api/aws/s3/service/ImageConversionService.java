@@ -30,15 +30,5 @@ public class ImageConversionService {
 		} catch (IOException exception) {
 			throw new EmptyFileException(exception);
 		}
-
-		// try {
-		// 	ImmutableImage image = ImmutableImage.loader().fromStream(file.getInputStream());
-		// 	ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-		// 	WebpWriter writer = WebpWriter.DEFAULT;
-		// 	writer.write(image, ImageMetadata.fromStream(file.getInputStream()), outputStream);
-		// 	return outputStream.toByteArray();
-		// } catch (IOException exception) {
-		// 	throw new EmptyFileException(exception);
-		// }
 	}
 }
