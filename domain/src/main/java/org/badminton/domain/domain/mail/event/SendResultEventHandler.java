@@ -16,7 +16,7 @@ public class SendResultEventHandler {
 	@Async
 	@TransactionalEventListener
 	public void sendResultEventListener(SendResultEmailEvent event) {
-		mailService.prepareClubApplyResultEmail(event.getClubApplyId(), event.isApproved());
+		mailService.prepareClubApplyResultEmail(event.getClubApplyId(), event.isClubJoinApproval());
 	}
 
 }

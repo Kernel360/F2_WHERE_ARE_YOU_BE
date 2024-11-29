@@ -7,5 +7,5 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class SendResultEmailEvent {
 	private final long clubApplyId;
-	private final boolean approved;
+	private final boolean clubJoinApproval;
 }

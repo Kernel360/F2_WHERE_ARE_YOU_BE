@@ -45,11 +45,11 @@ public class MailServiceImpl implements MailService {
 		Club club = clubReader.readClub(clubToken);
 		ClubMember clubOwner = clubMemberReader.getClubOwner(clubToken);
 
-		String toEmail = clubOwner.getMember().getEmail();
+		String senderMailAddress = clubOwner.getMember().getEmail();
 		String clubName = club.getClubName();
 		String title = APPLY_CLUB_TITLE + clubName;
 
-		sendEmail(toEmail, title, APPLY_CLUB_MESSAGE);
+		sendEmail(senderMailAddress, title, APPLY_CLUB_MESSAGE);
 
 	}
 
@@ -66,7 +66,7 @@ public class MailServiceImpl implements MailService {
 		String message;
 		ClubApply clubApply = clubApplyReader.getClubApply(clubApplyId);
 		String clubName = clubApply.getClub().getClubName();
-		String email = clubApply.getMember().getEmail();
+		String senderMailAddress = clubApply.getMember().getEmail();
 
 		if (isApproved) {
 			title = APPROVE_APPLY_CLUB_TITLE;
@@ -76,14 +76,14 @@ public class MailServiceImpl implements MailService {
 			message = REJECT_APPLY_CLUB_MESSAGE + clubName;
 		}
 
-		sendEmail(email, title, message);
+		sendEmail(senderMailAddress, title, message);
 	}
 
-	private void sendEmail(String toEmail, String title, String message) {
+	private void sendEmail(String senderMailAddress, String title, String message) {
 
 		SimpleMailMessage mailMessage = new SimpleMailMessage();
-		
-		mailMessage.setTo(toEmail);
+
+		mailMessage.setTo(senderMailAddress);
 		mailMessage.setFrom(fromAddress);
 		mailMessage.setSubject(title);
 		mailMessage.setText(message);
