@@ -1,4 +1,4 @@
-package springproject.badmintonbatch.batch.config;
+package org.badminton.domain.common.mail;
 
 import java.util.Properties;
 

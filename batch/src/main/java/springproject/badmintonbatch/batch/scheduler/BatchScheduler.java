@@ -17,7 +17,6 @@ import lombok.extern.slf4j.Slf4j;
 public class BatchScheduler {
 
 	private final JobLauncher jobLauncher;
-	private final Job sendEmailJob;
 	private final Job leagueManagerJob;
 	private final Job leagueStatusUpdateJob;
 	private final Job memberLiftJob;
@@ -39,18 +38,6 @@ public class BatchScheduler {
 		log.info("클럽 맴버 정지 해제");
 		try {
 			jobLauncher.run(memberLiftJob, new JobParametersBuilder()
-				.addLong("time", System.currentTimeMillis())
-				.toJobParameters());
-		} catch (Exception exception) {
-			log.error(exception.getMessage(), exception);
-		}
-	}
-
-	@Scheduled(fixedRate = 300000)
-	public void runDeleteMemberJob() {
-		log.info("메일 보내기");
-		try {
-			jobLauncher.run(sendEmailJob, new JobParametersBuilder()
 				.addLong("time", System.currentTimeMillis())
 				.toJobParameters());
 		} catch (Exception exception) {
