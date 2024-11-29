@@ -7,7 +7,9 @@ import org.badminton.domain.domain.club.entity.Club;
 import org.badminton.domain.domain.club.entity.ClubApply;
 import org.badminton.domain.domain.clubmember.ClubMemberReader;
 import org.badminton.domain.domain.clubmember.entity.ClubMember;
-import org.badminton.domain.domain.mail.entity.Mail;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
@@ -17,26 +19,38 @@ import lombok.RequiredArgsConstructor;
 public class MailServiceImpl implements MailService {
 
 	public static final String APPLY_CLUB_TITLE = "동호회에 가입 신청이 생겼습니다 ";
+
 	public static final String APPLY_CLUB_MESSAGE = "동호회 가입신청을 확인해주세요";
+
 	public static final String APPROVE_APPLY_CLUB_TITLE = "동호회 가입 신청이 승인되었습니다 ";
+
 	public static final String APPROVE_APPLY_CLUB_MESSAGE = "동호회 가입 신청이 승인되었습니다 ";
+
 	public static final String REJECT_APPLY_CLUB_TITLE = "동호회 가입 신청이 거부되었습니다 ";
+
 	public static final String REJECT_APPLY_CLUB_MESSAGE = "동호회 가입 신청이 거부되었습니다 ";
 
+	@Value("${custom.spring.mail.username}")
+	private static String fromAddress;
 	private final ClubReader clubReader;
 	private final ClubMemberReader clubMemberReader;
 	private final ClubApplyReader clubApplyReader;
-	private final MailStore mailStore;
+	private final JavaMailSender mailSender;
 
 	@Override
 	public void prepareClubApplyEmail(String clubToken, String memberToken) {
+
 		validateClubMember(clubToken, memberToken);
+
 		Club club = clubReader.readClub(clubToken);
 		ClubMember clubOwner = clubMemberReader.getClubOwner(clubToken);
-		String ownerEmail = clubOwner.getMember().getEmail();
+
+		String toEmail = clubOwner.getMember().getEmail();
 		String clubName = club.getClubName();
 		String title = APPLY_CLUB_TITLE + clubName;
-		createMessage(ownerEmail, title, APPLY_CLUB_MESSAGE);
+
+		sendEmail(toEmail, title, APPLY_CLUB_MESSAGE);
+
 	}
 
 	private void validateClubMember(String clubToken, String memberToken) {
@@ -47,6 +61,7 @@ public class MailServiceImpl implements MailService {
 
 	@Override
 	public void prepareClubApplyResultEmail(Long clubApplyId, boolean isApproved) {
+
 		String title;
 		String message;
 		ClubApply clubApply = clubApplyReader.getClubApply(clubApplyId);
@@ -60,11 +75,19 @@ public class MailServiceImpl implements MailService {
 			title = REJECT_APPLY_CLUB_TITLE;
 			message = REJECT_APPLY_CLUB_MESSAGE + clubName;
 		}
-		createMessage(email, title, message);
+
+		sendEmail(email, title, message);
 	}
 
-	private void createMessage(String toEmail, String title, String message) {
-		Mail mail = new Mail(title, message, toEmail);
-		mailStore.store(mail);
+	private void sendEmail(String toEmail, String title, String message) {
+
+		SimpleMailMessage mailMessage = new SimpleMailMessage();
+		
+		mailMessage.setTo(toEmail);
+		mailMessage.setFrom(fromAddress);
+		mailMessage.setSubject(title);
+		mailMessage.setText(message);
+
+		mailSender.send(mailMessage);
 	}
 }
