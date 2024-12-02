@@ -29,7 +29,7 @@ public class BadmintonException extends RuntimeException {
 	public BadmintonException(ErrorCode errorCode, Exception exception) {
 		super(errorCode.getDescription(), exception);
 		this.errorCode = errorCode;
-		this.errorMessage = errorCode.getDescription();
+		this.errorMessage = errorCode.getDescription() + exception.getMessage();
 	}
 
 }
