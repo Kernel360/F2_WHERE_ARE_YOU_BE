@@ -1,6 +1,5 @@
 package org.badminton.api.application.club;
 
-import java.util.List;
 import java.util.Map;
 
 import org.badminton.domain.common.policy.ClubMemberPolicy;
@@ -81,8 +80,8 @@ public class ClubFacade {
 	}
 
 	@Transactional
-	public List<ClubApplicantInfo> readClubApplicants(String memberToken, String clubToken) {
+	public Page<ClubApplicantInfo> readClubApplicants(String memberToken, String clubToken, Pageable pageable) {
 		clubMemberPolicy.validateAboveClubManager(memberToken, clubToken);
-		return clubService.readClubApplicants(clubToken);
+		return clubService.readClubApplicants(clubToken, pageable);
 	}
 }
