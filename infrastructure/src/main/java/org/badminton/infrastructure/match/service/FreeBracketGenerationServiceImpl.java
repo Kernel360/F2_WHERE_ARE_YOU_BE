@@ -60,9 +60,7 @@ public class FreeBracketGenerationServiceImpl implements BracketGenerationServic
 
 	@Override
 	@Transactional
-	public BracketInfo makeBracket(
-		MatchStrategy matchStrategy, Long leagueId, String memberToken
-	) {
+	public BracketInfo makeBracket(MatchStrategy matchStrategy, Long leagueId, String memberToken) {
 		League league = findLeague(leagueId);
 		if (!league.getLeagueOwnerMemberToken().equals(memberToken)) {
 			throw new NotLeagueOwnerException(leagueId, memberToken);
@@ -87,9 +85,6 @@ public class FreeBracketGenerationServiceImpl implements BracketGenerationServic
 	}
 
 	private List<LeagueParticipant> findLeagueParticipantList(Long leagueId) {
-		/*
-		 * LeagueStatus 가 COMPLETED 인데 League Participant 숫자가 0일 가능성은 없다.
-		 */
 		List<LeagueParticipant> leagueParticipantList =
 			leagueParticipantRepository.findAllByLeagueLeagueIdAndCanceledFalse(leagueId);
 		if (leagueParticipantList.isEmpty()) {
