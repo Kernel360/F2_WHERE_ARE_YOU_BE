@@ -60,7 +60,6 @@ public enum ErrorCode {
 	RESOURCE_ALREADY_EXIST(409, "특정 리소스가 이미 존재합니다."),
 	CLUB_NAME_ALREADY_EXIST(409, "이미 존재하는 동호회 이름입니다."),
 	LEAGUE_ALREADY_EXIST(409, "이미 존재하는 경기 일정입니다."),
-	MATCH_ALREADY_EXIST(409, "이미 대진표가 만들어졌습니다."),
 	MEMBER_ALREADY_JOINED_CLUB(409, "해당하는 회원은 이미 동호회에 가입을 완료했습니다."),
 	MEMBER_ALREADY_APPLY_CLUB(409, "해당하는 회원은 이미 이 동호회에 가입 신청을 했습니다"),
 
@@ -76,7 +75,7 @@ public enum ErrorCode {
 	DELETED(410, "요청한 리소스가 삭제되었습니다."),
 
 	INVALID_PLAYER_COUNT(411, "아직 모집 인원이 채워지지 않았습니다."),
-	LEAGUE_RECRUITING_MUST_BE_COMPLETED_WHEN_BRACKET_GENERATION(412, "대진표를 만들기 위해서는 모집이 완료되어야 합니다."),
+	LEAGUE_RECRUITING_MUST_BE_COMPLETED_WHEN_BRACKET_GENERATION(412, "모집이 완료되면 대진표를 만들 수 있습니다."),
 	INSUFFICIENT_TIER(412, "현재 경기의 티어와 맞지 않습니다"),
 	ONGOING_AND_UPCOMING_LEAGUE_CANNOT_BE_PAST(412, "메인 페이지에서 오늘 날짜 이전의 경기는 조회할 수 없습니다."),
 	RECRUITMENT_END_DATE_AFTER_LEAGUE_START(412, "모집 마감 날짜는 경기 시작 날짜 이전이어야 합니다."),
@@ -87,9 +86,10 @@ public enum ErrorCode {
 	LEAGUE_CANNOT_BE_CANCELED_WHEN_IS_NOT_RECRUITING(412, "경기 모집 중일 때만 경기를 취소할 수 있습니다."),
 	INVALID_LEAGUE_STATUS_TO_CANCEL_LEAGUE_PARTICIPATION(412, "경기 중이거나, 취소되거나, 종료된 경기에 대해 경기 참여를 취소할 수 없습니다."),
 	INVALID_TIME_TO_CANCEL_LEAGUE_PARTICIPATION(412, "모집 마감 시간이 지나면 경기 참여를 취소할 수 없습니다."),
+	INVALID_LEAGUE_STATUS_TO_GENERATE_BRACKET(412, "취소된 경기나 종료된 경기는 대진표를 생성할 수 없습니다."),
 	INVALID_TIME_TO_PARTICIPATE_IN_LEAGUE(412, "모집 마감 시간이 지나면 경기 참여 신청을 할 수 없습니다."),
 	INVALID_TIME_TO_CANCEL_LEAGUE(412, "경기 시작 시간이 지난 경기는 취소할 수 없습니다."),
-	INVALID_TIME_TO_START_MATCH(412, "경기 시작 시간 전에는 매치를 시작할 수 없습니다."),
+	MATCH_ALREADY_STARTED_WHEN_BRACKET_GENERATION(412, "경기가 이미 시작되었습니다. 대진표를 확인해주세요."),
 	LEAGUE_NOT_RECRUITING(412, "모집 중이 아닙니다."),
 	LEAGUE_PARTICIPANT_POWER_OF_TWO(412, "토너먼트 경기에서는 경기 참여 인원이 2의 제곱이어야 합니다"),
 	LEAGUE_PARTICIPANTS_NOT_EXISTS(412, "해당 매치의 참여자가 아직 정해지지 않았습니다"),

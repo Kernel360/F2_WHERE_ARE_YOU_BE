@@ -1,13 +1,13 @@
 package org.badminton.infrastructure.match.service;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
-import org.badminton.domain.common.exception.league.CannotStartMatchException;
 import org.badminton.domain.common.exception.league.InvalidPlayerCountException;
 import org.badminton.domain.common.exception.league.NotLeagueOwnerException;
+import org.badminton.domain.common.exception.match.InvalidLeagueStatusToGenerateBracketException;
 import org.badminton.domain.common.exception.match.LeagueRecruitingMustBeCompletedWhenBracketGenerationException;
 import org.badminton.domain.domain.league.LeagueReader;
+import org.badminton.domain.domain.league.LeagueStore;
 import org.badminton.domain.domain.league.entity.League;
 import org.badminton.domain.domain.league.entity.LeagueParticipant;
 import org.badminton.domain.domain.league.enums.LeagueStatus;
@@ -31,6 +31,7 @@ import lombok.RequiredArgsConstructor;
 public class FreeBracketGenerationServiceImpl implements BracketGenerationService {
 
 	private final LeagueReader leagueReader;
+	private final LeagueStore leagueStore;
 	private final LeagueParticipantRepository leagueParticipantRepository;
 	private final SinglesMatchReader singlesMatchReader;
 	private final DoublesMatchReader doublesMatchReader;
@@ -40,14 +41,11 @@ public class FreeBracketGenerationServiceImpl implements BracketGenerationServic
 	@Override
 	public void checkLeagueRecruitingStatus(Long leagueId) {
 		League league = findLeague(leagueId);
-		/*
-		 * 경기 상태가 COMPLETED 일 수 있는 상황
-		 * 1. 모집 마감 날짜가 지났고, 모집 인원이 채워짐
-		 * 2. 모집 마감 날짜가 지나지 않았지만, 경기 소유자가 모집 마감 상태로 변경(이때 최소 인원은 충족된다.)
-		 * 3. 모집 마감 날짜가 지나지 않았지만, 모집 인원이 채워짐
-		 */
-		if (league.getLeagueStatus() != LeagueStatus.RECRUITING_COMPLETED) {
+		if (league.getLeagueStatus() == LeagueStatus.RECRUITING) {
 			throw new LeagueRecruitingMustBeCompletedWhenBracketGenerationException(leagueId, league.getLeagueStatus());
+		}
+		if (league.getLeagueStatus() == LeagueStatus.FINISHED || league.getLeagueStatus() == LeagueStatus.CANCELED) {
+			throw new InvalidLeagueStatusToGenerateBracketException(leagueId, league.getLeagueStatus());
 		}
 	}
 
@@ -76,10 +74,9 @@ public class FreeBracketGenerationServiceImpl implements BracketGenerationServic
 
 	@Override
 	public void startMatch(MatchStrategy matchStrategy, Long leagueId, Long matchId) {
-		League league = leagueReader.readLeagueById(leagueId);
-		if (LocalDateTime.now().isBefore(league.getLeagueAt())) {
-			throw new CannotStartMatchException(league.getLeagueId(), league.getLeagueAt());
-		}
+		League league = findLeague(leagueId);
+		league.startLeague();
+		leagueStore.store(league);
 		matchStrategy.startMatch(matchId);
 	}
 
@@ -88,9 +85,6 @@ public class FreeBracketGenerationServiceImpl implements BracketGenerationServic
 	}
 
 	private List<LeagueParticipant> findLeagueParticipantList(Long leagueId) {
-		/*
-		 * LeagueStatus 가 COMPLETED 인데 League Participant 숫자가 0일 가능성은 없다.
-		 */
 		List<LeagueParticipant> leagueParticipantList =
 			leagueParticipantRepository.findAllByLeagueLeagueIdAndCanceledFalse(leagueId);
 		if (leagueParticipantList.isEmpty()) {
