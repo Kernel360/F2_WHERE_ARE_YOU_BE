@@ -1,7 +1,5 @@
 package org.badminton.domain.domain.mail;
 
-import java.nio.charset.StandardCharsets;
-
 import org.badminton.domain.common.exception.clubmember.ClubMemberAlreadyExistsException;
 import org.badminton.domain.domain.club.ClubApplyReader;
 import org.badminton.domain.domain.club.ClubReader;
@@ -82,15 +80,13 @@ public class MailServiceImpl implements MailService {
 	}
 
 	private void sendEmail(String senderMailAddress, String title, String message) {
-		String utf8Message = new String(message.getBytes(StandardCharsets.UTF_8), StandardCharsets.UTF_8);
-		String utf8Title = new String(title.getBytes(StandardCharsets.UTF_8), StandardCharsets.UTF_8);
 
 		SimpleMailMessage mailMessage = new SimpleMailMessage();
 
 		mailMessage.setTo(senderMailAddress);
 		mailMessage.setFrom(fromAddress);
-		mailMessage.setSubject(utf8Title);
-		mailMessage.setText(utf8Message);
+		mailMessage.setSubject(title);
+		mailMessage.setText(message);
 
 		mailSender.send(mailMessage);
 	}
