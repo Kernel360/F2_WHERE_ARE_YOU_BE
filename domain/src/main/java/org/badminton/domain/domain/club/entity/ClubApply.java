@@ -1,5 +1,6 @@
 package org.badminton.domain.domain.club.entity;
 
+import org.badminton.domain.common.AbstractBaseTime;
 import org.badminton.domain.domain.member.entity.Member;
 
 import jakarta.persistence.Column;
@@ -22,7 +23,7 @@ import lombok.NoArgsConstructor;
 @Table(name = "club_apply")
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class ClubApply {
+public class ClubApply extends AbstractBaseTime {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)

@@ -1,7 +1,6 @@
 package org.badminton.api.interfaces.club.controller;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.badminton.api.application.club.ClubFacade;
 import org.badminton.api.application.club.ClubRankFacade;
@@ -27,6 +26,8 @@ import org.badminton.domain.domain.club.info.ClubCreateInfo;
 import org.badminton.domain.domain.club.info.ClubDeleteInfo;
 import org.badminton.domain.domain.club.info.ClubUpdateInfo;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -71,14 +72,14 @@ public class ClubController {
 	@Operation(summary = "동호회 수정",
 		description = """
 			새로운 동호회를 수정합니다. 다음 조건을 만족해야 합니다:
-			
+						
 			1. 동호회 이름:
 			   - 필수 입력
 			   - 2자 이상 20자 이하
-			
+						
 			2. 동호회 소개:
 			   - 2자 이상 1000자 이하
-			
+						
 			3. 동호회 이미지 URL:
 			   - 호스트: badminton-team.s3.ap-northeast-2.amazonaws.com
 			   - 경로: /club-banner/로 시작
@@ -102,10 +103,10 @@ public class ClubController {
 			1. 동호회 이름:
 			   - 필수 입력
 			   - 2자 이상 20자 이하
-			
+						
 			2. 동호회 소개:
 			   - 2자 이상 1000자 이하
-			
+						
 			3. 동호회 이미지 URL:
 			   - 호스트: badminton-team.s3.ap-northeast-2.amazonaws.com
 			   - 경로: /club-banner/로 시작
@@ -194,13 +195,16 @@ public class ClubController {
 		description = "특정 동호회에 가입 신청한 유저 리스트 조회",
 		tags = {"Club"})
 	@GetMapping("/{clubToken}/applicants")
-	public CommonResponse<List<ClubApplicantResponse>> getClubApplicant(@PathVariable String clubToken,
-		@AuthenticationPrincipal CustomOAuth2Member member) {
-		List<ClubApplicantInfo> clubApplies = clubFacade.readClubApplicants(member.getMemberToken(), clubToken);
-		List<ClubApplicantResponse> response = clubApplies.stream()
-			.map(ClubApplicantResponse::from)
-			.collect(Collectors.toList());
-
-		return CommonResponse.success(response);
+	public CommonResponse<CustomPageResponse<ClubApplicantResponse>> getClubApplicant(
+		@PathVariable String clubToken,
+		@AuthenticationPrincipal CustomOAuth2Member member,
+		@RequestParam(defaultValue = DEFAULT_PAGE_VALUE) int page,
+		@RequestParam(defaultValue = DEFAULT_SIZE_VALUE) int size
+	) {
+		Sort sort = Sort.by(Sort.Order.by("createdAt"));
+		Page<ClubApplicantInfo> clubApplies = clubFacade.readClubApplicants(member.getMemberToken(), clubToken,
+			PageRequest.of(page, size, sort));
+		Page<ClubApplicantResponse> clubApply = clubApplies.map(ClubApplicantResponse::from);
+		return CommonResponse.success(new CustomPageResponse<>(clubApply));
 	}
 }

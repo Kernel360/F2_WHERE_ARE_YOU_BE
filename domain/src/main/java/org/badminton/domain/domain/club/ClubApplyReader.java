@@ -1,9 +1,9 @@
 package org.badminton.domain.domain.club;
 
-import java.util.List;
-
 import org.badminton.domain.domain.club.entity.ClubApply;
 import org.badminton.domain.domain.club.info.ClubApplicantInfo;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 public interface ClubApplyReader {
 
@@ -13,6 +13,6 @@ public interface ClubApplyReader {
 
 	void validateEmailApply(String clubToken, String memberToken);
 
-	List<ClubApplicantInfo> getClubApplyByClubToken(String clubToken, ClubApply.ApplyStatus applyStatus);
-
+	Page<ClubApplicantInfo> getClubApplyByClubToken(String clubToken, ClubApply.ApplyStatus applyStatus,
+		Pageable pageable);
 }

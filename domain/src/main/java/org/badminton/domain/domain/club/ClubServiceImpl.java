@@ -106,10 +106,9 @@ public class ClubServiceImpl implements ClubService {
 
 	@Override
 	@Transactional(readOnly = true)
-	public List<ClubApplicantInfo> readClubApplicants(String clubToken) {
+	public Page<ClubApplicantInfo> readClubApplicants(String clubToken, Pageable pageable) {
 		return clubApplyReader.getClubApplyByClubToken(clubToken,
-			ClubApply.ApplyStatus.PENDING);
-
+			ClubApply.ApplyStatus.PENDING, pageable);
 	}
 
 	private Page<Club> getClubs(String keyword, Pageable pageable) {
