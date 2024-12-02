@@ -34,12 +34,14 @@ public abstract class AbstractDoublesMatchStrategy implements MatchStrategy {
 
 	@Override
 	public void checkDuplicateInitialBracket(Long leagueId) {
-		boolean isBracketEmpty = doublesMatchReader.checkIfBracketEmpty(leagueId);
-		if (!isBracketEmpty && doublesMatchReader.allMatchesNotStartedForLeague(leagueId)) {
-			doublesMatchStore.deleteDoublesBracket(leagueId);
-		} else if (!isBracketEmpty && !doublesMatchReader.allMatchesNotStartedForLeague(leagueId)) {
-			throw new MatchAlreadyStartedExceptionWhenBracketGenerationException(leagueId);
+		if (doublesMatchReader.checkIfBracketEmpty(leagueId)) {
+			return;
 		}
+		if (doublesMatchReader.allMatchesFinishedForLeague(leagueId)) {
+			doublesMatchStore.deleteDoublesBracket(leagueId);
+			return;
+		}
+		throw new MatchAlreadyStartedExceptionWhenBracketGenerationException(leagueId);
 	}
 
 	@Override
