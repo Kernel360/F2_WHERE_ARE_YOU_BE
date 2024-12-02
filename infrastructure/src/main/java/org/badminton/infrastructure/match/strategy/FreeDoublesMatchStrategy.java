@@ -7,7 +7,6 @@ import java.util.List;
 import org.badminton.domain.common.enums.MatchResult;
 import org.badminton.domain.common.enums.SetStatus;
 import org.badminton.domain.common.exception.match.AlreadyWinnerDeterminedException;
-import org.badminton.domain.common.exception.match.MatchDuplicateException;
 import org.badminton.domain.common.exception.match.SetFinishedException;
 import org.badminton.domain.domain.league.LeagueReader;
 import org.badminton.domain.domain.league.entity.League;
@@ -110,17 +109,6 @@ public class FreeDoublesMatchStrategy extends AbstractDoublesMatchStrategy {
 		DoublesMatch doublesMatch = doublesMatchReader.getDoublesMatch(matchId);
 		DoublesSet doublesSet = doublesMatch.getDoublesSet(setNumber);
 		return SetInfo.fromDoublesSet(matchId, setNumber, doublesSet);
-	}
-
-	@Override
-	public void checkDuplicateInitialBracket(Long leagueId) {
-		boolean isBracketEmpty = doublesMatchReader.checkIfBracketEmpty(leagueId);
-
-		if (!isBracketEmpty && doublesMatchReader.allMatchesNotStartedForLeague(leagueId)) {
-			doublesMatchStore.deleteDoublesBracket(leagueId);
-		} else if (!isBracketEmpty && !doublesMatchReader.allMatchesNotStartedForLeague(leagueId)) {
-			throw new MatchDuplicateException(leagueId);
-		}
 	}
 
 	private void makeDoublesSetsInMatch(DoublesMatch doublesMatch) {

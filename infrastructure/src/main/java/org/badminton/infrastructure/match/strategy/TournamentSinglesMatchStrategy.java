@@ -8,7 +8,6 @@ import org.badminton.domain.common.enums.MatchResult;
 import org.badminton.domain.common.enums.SetStatus;
 import org.badminton.domain.common.exception.match.AlreadyWinnerDeterminedException;
 import org.badminton.domain.common.exception.match.LeagueParticipantsNotExistsException;
-import org.badminton.domain.common.exception.match.MatchDuplicateException;
 import org.badminton.domain.common.exception.match.SetFinishedException;
 import org.badminton.domain.domain.league.LeagueParticipantReader;
 import org.badminton.domain.domain.league.LeagueReader;
@@ -67,17 +66,6 @@ public class TournamentSinglesMatchStrategy extends AbstractSinglesMatchStrategy
 
 		return BracketInfo.fromSingles(totalRounds, allMatches);
 
-	}
-
-	@Override
-	public void checkDuplicateInitialBracket(Long leagueId) {
-		boolean isBracketEmpty = singlesMatchReader.checkIfBracketEmpty(leagueId);
-
-		if (!isBracketEmpty && singlesMatchReader.allMatchesNotStartedForLeague(leagueId)) {
-			singlesMatchStore.deleteSinglesBracket(leagueId);
-		} else if (!isBracketEmpty && !singlesMatchReader.allMatchesNotStartedForLeague(leagueId)) {
-			throw new MatchDuplicateException(leagueId);
-		}
 	}
 
 	@Override

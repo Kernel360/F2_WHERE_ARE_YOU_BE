@@ -7,6 +7,7 @@ import java.util.List;
 import org.badminton.domain.common.enums.MatchStatus;
 import org.badminton.domain.common.error.ErrorCode;
 import org.badminton.domain.common.exception.BadmintonException;
+import org.badminton.domain.common.exception.match.MatchAlreadyStartedExceptionWhenBracketGenerationException;
 import org.badminton.domain.domain.league.entity.League;
 import org.badminton.domain.domain.league.entity.LeagueParticipant;
 import org.badminton.domain.domain.match.command.MatchCommand;
@@ -32,7 +33,14 @@ public abstract class AbstractDoublesMatchStrategy implements MatchStrategy {
 	private final DoublesMatchStore doublesMatchStore;
 
 	@Override
-	public abstract void checkDuplicateInitialBracket(Long leagueId);
+	public void checkDuplicateInitialBracket(Long leagueId) {
+		boolean isBracketEmpty = doublesMatchReader.checkIfBracketEmpty(leagueId);
+		if (!isBracketEmpty && doublesMatchReader.allMatchesNotStartedForLeague(leagueId)) {
+			doublesMatchStore.deleteDoublesBracket(leagueId);
+		} else if (!isBracketEmpty && !doublesMatchReader.allMatchesNotStartedForLeague(leagueId)) {
+			throw new MatchAlreadyStartedExceptionWhenBracketGenerationException(leagueId);
+		}
+	}
 
 	@Override
 	public BracketInfo retrieveBracketInLeague(Long leagueId) {
