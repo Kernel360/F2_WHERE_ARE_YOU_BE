@@ -54,7 +54,7 @@ public class MatchController {
 
 	@GetMapping("/{matchId}")
 	@Operation(summary = "특정 게임의 세트별 점수 상세 조회",
-		description = "특정 게임의 세트별 점수를 상세 조회합니다.",
+		description = "특정 게임의 세트별 점수를 상세 조회합니다. FINISHED 인 세트만 조회합니다.",
 		tags = {"Match"})
 	public CommonResponse<MatchDetailsResponse> getMatchDetails(
 		@PathVariable String clubToken,

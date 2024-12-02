@@ -126,4 +126,11 @@ public class DoublesMatch extends AbstractBaseTime {
 			.filter(doublesSet -> doublesSet.getSetStatus() == SetStatus.IN_PROGRESS)
 			.findFirst();
 	}
+
+	public Integer getSetNumberInProgress() {
+		if (getSetInProgress().isEmpty()) {
+			return null;
+		}
+		return getSetInProgress().get().getSetNumber();
+	}
 }

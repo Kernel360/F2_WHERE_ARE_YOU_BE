@@ -23,7 +23,6 @@ public record SinglesMatchResponse(
 
 	public static SinglesMatchResponse fromSinglesMatchInfo(SinglesMatchInfo singlesMatchInfo) {
 		return new SinglesMatchResponse(
-
 			singlesMatchInfo.matchId(),
 			singlesMatchInfo.roundNumber(),
 			singlesMatchInfo.matchStatus(),
