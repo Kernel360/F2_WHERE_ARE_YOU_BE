@@ -22,8 +22,10 @@ public record SinglesMatchResponse(
 ) {
 
 	public static SinglesMatchResponse fromSinglesMatchInfo(SinglesMatchInfo singlesMatchInfo) {
+		if (singlesMatchInfo == null) {
+			return null;
+		}
 		return new SinglesMatchResponse(
-
 			singlesMatchInfo.matchId(),
 			singlesMatchInfo.roundNumber(),
 			singlesMatchInfo.matchStatus(),

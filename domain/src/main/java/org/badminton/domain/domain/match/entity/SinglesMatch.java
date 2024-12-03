@@ -115,6 +115,13 @@ public class SinglesMatch extends AbstractBaseTime {
 			.findFirst();
 	}
 
+	public Integer getSetNumberInProgress() {
+		if (getSetInProgress().isEmpty()) {
+			return null;
+		}
+		return getSetInProgress().get().getSetNumber();
+	}
+
 	public SinglesSet getSinglesSet(int setNumber) {
 		return this.singlesSets.get(setNumber - 1);
 	}
