@@ -2,6 +2,7 @@ package org.badminton.api.aws.s3.service;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 
 import org.badminton.api.common.exception.EmptyFileException;
 import org.springframework.stereotype.Service;
@@ -18,13 +19,21 @@ import lombok.extern.slf4j.Slf4j;
 public class ImageConversionService {
 
 	public byte[] convertToWebP(MultipartFile file) {
-		try {
-			ImmutableImage image = ImmutableImage.loader().fromStream(file.getInputStream());
-			ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+		try (ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+			 InputStream inputStream = file.getInputStream()) {
+
+			// 스트림을 한 번만 열어 사용
+			ImmutableImage image = ImmutableImage.loader().fromStream(inputStream);
 			WebpWriter writer = WebpWriter.DEFAULT;
-			writer.write(image, ImageMetadata.fromStream(file.getInputStream()), outputStream);
+
+			// 메타데이터는 비워두거나 생성
+			ImageMetadata metadata = ImageMetadata.empty;
+
+			writer.write(image, metadata, outputStream);
+
 			return outputStream.toByteArray();
 		} catch (IOException exception) {
+			log.error("Error converting image to WebP: {}", exception.getMessage(), exception);
 			throw new EmptyFileException(exception);
 		}
 	}

@@ -1,9 +1,7 @@
 package org.badminton.api.aws.s3.service;
 
-import java.util.UUID;
-
-import org.badminton.api.aws.s3.model.dto.ImageUploadRequest;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.amazonaws.services.s3.AmazonS3;
 
@@ -15,13 +13,13 @@ public class ClubImageService extends AbstractFileUploadService {
 	}
 
 	@Override
-	public String uploadFile(ImageUploadRequest file) {
-		return super.uploadFile(file);
+	public String uploadFile(MultipartFile file, String uuid) {
+		return super.uploadFile(file, uuid);
 	}
 
 	@Override
-	public String makeFileName(String newFileExtension) {
-		return "club-banner/" + UUID.randomUUID() + "." + newFileExtension;
+	public String makeFileName(String newFileExtension, String uuid) {
+		return "club-banner/" + uuid + "." + newFileExtension;
 	}
 }
 
