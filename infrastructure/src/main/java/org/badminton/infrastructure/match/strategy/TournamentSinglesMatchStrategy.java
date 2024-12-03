@@ -55,6 +55,14 @@ public class TournamentSinglesMatchStrategy extends AbstractSinglesMatchStrategy
 			|| singlesMatch.getPlayer2MatchResult() == MatchResult.WIN;
 	}
 
+	private static boolean isParticipantOddSize(List<LeagueParticipant> participants) {
+		return participants.size() % 2 != 0;
+	}
+
+	private static boolean isSinglesMatchOddSize(List<SinglesMatch> singlesMatches) {
+		return singlesMatches.size() % 2 != 0;
+	}
+
 	@Override
 	public BracketInfo makeBracket(League league, List<LeagueParticipant> leagueParticipantList) {
 		List<SinglesMatch> allMatches = new ArrayList<>();
@@ -116,23 +124,7 @@ public class TournamentSinglesMatchStrategy extends AbstractSinglesMatchStrategy
 		}
 
 		if (isMatchWinnerDetermined(singlesMatch)) {
-
-			singlesMatchStore.store(singlesMatch);
-			updateNextRoundMatch(singlesMatch);
-			boolean allRoundMatchesDone = singlesMatchReader.allRoundMatchesDone(singlesMatch.getLeague().getLeagueId(),
-				singlesMatch.getRoundNumber());
-			boolean currentRoundInTotalRound =
-				singlesMatch.getRoundNumber() < singlesMatch.getLeague().getTotalRounds();
-
-			if (allRoundMatchesDone && currentRoundInTotalRound) {
-				List<SinglesMatch> nextRoundMatches = singlesMatchReader.findMatchesByLeagueAndRound(
-					singlesMatch.getLeague().getLeagueId(), singlesMatch.getRoundNumber() + 1
-				);
-				nextRoundMatches.stream()
-					.filter(match -> match.getMatchStatus() == MatchStatus.BYE)
-					.forEach(this::updateNextRoundMatch);
-			}
-
+			processMatchAndNextRound(singlesMatch);
 		}
 
 		if (isAllMatchFinished(singlesMatch)) {
@@ -140,6 +132,24 @@ public class TournamentSinglesMatchStrategy extends AbstractSinglesMatchStrategy
 		}
 
 		return SetInfo.fromSinglesSet(matchId, setNumber, singlesMatch.getSinglesSets().get(setNumber - 1));
+	}
+
+	private void processMatchAndNextRound(SinglesMatch singlesMatch) {
+		singlesMatchStore.store(singlesMatch);
+		updateNextRoundMatch(singlesMatch);
+		boolean allRoundMatchesDone = singlesMatchReader.allRoundMatchesDone(singlesMatch.getLeague().getLeagueId(),
+			singlesMatch.getRoundNumber());
+		boolean currentRoundInTotalRound =
+			singlesMatch.getRoundNumber() < singlesMatch.getLeague().getTotalRounds();
+
+		if (allRoundMatchesDone && currentRoundInTotalRound) {
+			List<SinglesMatch> nextRoundMatches = singlesMatchReader.findMatchesByLeagueAndRound(
+				singlesMatch.getLeague().getLeagueId(), singlesMatch.getRoundNumber() + 1
+			);
+			nextRoundMatches.stream()
+				.filter(match -> match.getMatchStatus() == MatchStatus.BYE)
+				.forEach(this::updateNextRoundMatch);
+		}
 	}
 
 	private void changeNextSetStatus(SinglesMatch singlesMatch, Integer setNumber) {
@@ -174,7 +184,7 @@ public class TournamentSinglesMatchStrategy extends AbstractSinglesMatchStrategy
 			matches.add(match);
 		}
 
-		if (participants.size() % 2 != 0) {
+		if (isParticipantOddSize(participants)) {
 			LeagueParticipant byeParticipant = participants.remove(participants.size() - 1);
 			SinglesMatch byeMatch = new SinglesMatch(league, byeParticipant, null, 1);
 			byeMatch.byeMatch();
@@ -198,31 +208,46 @@ public class TournamentSinglesMatchStrategy extends AbstractSinglesMatchStrategy
 		List<SinglesMatch> previousMatches = singlesMatchReader.findMatchesByLeagueAndRound(league.getLeagueId(), 1);
 
 		for (int roundNumber = 2; roundNumber <= totalRounds; roundNumber++) {
-			List<SinglesMatch> currentRoundMatches = new ArrayList<>();
-
-			for (int i = 0; i < previousMatches.size() - 1; i += PARTICIPANTS_PER_MATCH) {
-				SinglesMatch match = new SinglesMatch(league, null, null, roundNumber);
-				makeSetsInMatch(match);
-				singlesMatchStore.store(match);
-				currentRoundMatches.add(match);
-				matches.add(match);
-			}
-
-			if (previousMatches.size() % 2 != 0) {
-				SinglesMatch byeMatch = previousMatches.get(previousMatches.size() - 1);
-				LeagueParticipant winner = determineWinner(byeMatch);
-
-				SinglesMatch byMatch = new SinglesMatch(league, winner, null, roundNumber);
-				byMatch.byeMatch();
-				singlesMatchStore.store(byMatch);
-				currentRoundMatches.add(byMatch);
-				matches.add(byMatch);
-			}
+			List<SinglesMatch> currentRoundMatches = generateMatchesForRound(league, previousMatches, roundNumber);
+			handleOddSizeMatches(previousMatches, league, roundNumber, matches, currentRoundMatches);
 
 			previousMatches = currentRoundMatches;
 		}
 
 		return matches;
+	}
+
+	private List<SinglesMatch> generateMatchesForRound(League league, List<SinglesMatch> previousMatches,
+		int roundNumber) {
+		List<SinglesMatch> currentRoundMatches = new ArrayList<>();
+
+		for (int i = 0; i < previousMatches.size() - 1; i += PARTICIPANTS_PER_MATCH) {
+			SinglesMatch match = new SinglesMatch(league, null, null, roundNumber);
+			makeSetsInMatch(match);
+			singlesMatchStore.store(match);
+			currentRoundMatches.add(match);
+		}
+
+		return currentRoundMatches;
+	}
+
+	private void handleOddSizeMatches(List<SinglesMatch> previousMatches, League league, int roundNumber,
+		List<SinglesMatch> allMatches, List<SinglesMatch> currentRoundMatches) {
+		if (isSinglesMatchOddSize(previousMatches)) {
+			SinglesMatch byeMatch = previousMatches.get(previousMatches.size() - 1);
+			LeagueParticipant winner = determineWinner(byeMatch);
+
+			SinglesMatch byMatch = createByeMatch(league, winner, roundNumber);
+			singlesMatchStore.store(byMatch);
+			currentRoundMatches.add(byMatch);
+			allMatches.add(byMatch);
+		}
+	}
+
+	private SinglesMatch createByeMatch(League league, LeagueParticipant winner, int roundNumber) {
+		SinglesMatch byeMatch = new SinglesMatch(league, winner, null, roundNumber);
+		byeMatch.byeMatch();
+		return byeMatch;
 	}
 
 	private void updateSetScore(SinglesMatch singlesMatch, int setNumber,

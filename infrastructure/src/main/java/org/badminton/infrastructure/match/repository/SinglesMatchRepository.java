@@ -30,7 +30,7 @@ public interface SinglesMatchRepository extends JpaRepository<SinglesMatch, Long
 	@Query("SELECT COUNT(match) = 0 FROM SinglesMatch match WHERE match.league.leagueId = :leagueId AND match.matchStatus != 'FINISHED'")
 	boolean allMatchesFinishedForLeague(@Param("leagueId") Long leagueId);
 
-	@Query("SELECT COUNT(match) = 0 FROM SinglesMatch match WHERE match.league.leagueId = :leagueId AND match.matchStatus NOT IN (:statuses)")
+	@Query("SELECT NOT EXISTS (SELECT 1 FROM SinglesMatch match WHERE match.league.leagueId = :leagueId AND match.matchStatus NOT IN (:statuses))")
 	boolean allMatchesNotStartedForLeague(@Param("leagueId") Long leagueId,
 		@Param("statuses") List<MatchStatus> statuses);
 

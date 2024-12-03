@@ -32,7 +32,17 @@ public class MatchUtils {
 
 	private static boolean isCurrentMatchInRound(int currentMatchId, int currentRoundStartId,
 		int matchesInCurrentRound) {
-		return currentMatchId >= currentRoundStartId && currentMatchId < currentRoundStartId + matchesInCurrentRound;
+		return isMatchIdGreaterThanOrEqualToRoundStart(currentMatchId, currentRoundStartId)
+			&& isMatchIdLessThanRoundEnd(currentMatchId, currentRoundStartId, matchesInCurrentRound);
+	}
+
+	private static boolean isMatchIdLessThanRoundEnd(int currentMatchId, int currentRoundStartId,
+		int matchesInCurrentRound) {
+		return currentMatchId < currentRoundStartId + matchesInCurrentRound;
+	}
+
+	private static boolean isMatchIdGreaterThanOrEqualToRoundStart(int currentMatchId, int currentRoundStartId) {
+		return currentMatchId >= currentRoundStartId;
 	}
 
 	public static int calculateTotalRounds(int currentTeams) {
