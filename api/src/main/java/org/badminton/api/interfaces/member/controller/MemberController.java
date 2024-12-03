@@ -133,7 +133,7 @@ public class MemberController {
 			throw new ImageFileNotFoundException();
 		}
 		ImageUploadRequest request = new ImageUploadRequest(multipartFile);
-		return CommonResponse.success(memberProfileImageService.uploadFile(request, member.getMemberToken()));
+		return CommonResponse.success(memberFacade.saveImage(request, member.getMemberToken()));
 	}
 
 	@Operation(
