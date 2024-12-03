@@ -6,9 +6,9 @@ import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
+import org.apache.commons.lang3.StringUtils;
 import org.badminton.api.aws.s3.event.memeber.MemberImageEvent;
 import org.badminton.api.aws.s3.model.dto.ImageUploadRequest;
-import org.badminton.api.common.exception.member.MemberNotExistException;
 import org.badminton.api.interfaces.match.dto.MatchResultResponse;
 import org.badminton.domain.domain.club.info.ClubCardInfo;
 import org.badminton.domain.domain.clubmember.info.ClubMemberMyPageInfo;
@@ -96,14 +96,11 @@ public class MemberFacade {
 	}
 
 	@Transactional
-	public String saveImage(ImageUploadRequest request, String memberToken) {
+	public String saveImage(ImageUploadRequest request) {
 		// uuid 객체 생성
 		String uuid = UUID.randomUUID().toString();
 		String extension = getFileExtension(Objects.requireNonNull(request.multipartFile().getOriginalFilename()));
 
-		if (memberToken == null) {
-			throw new MemberNotExistException("멤버 토큰이 없습니다. 로그인을 먼저 해주세요.");
-		}
 		// 비동기 처리
 		eventPublisher.publishEvent(new MemberImageEvent(request.multipartFile(), uuid));
 
@@ -122,7 +119,7 @@ public class MemberFacade {
 	private String getFileExtension(String filename) {
 		int dotIndex = filename.lastIndexOf(".");
 		if (dotIndex == -1) {
-			return "";
+			return StringUtils.EMPTY;
 		}
 		return filename.substring(dotIndex + 1);
 	}

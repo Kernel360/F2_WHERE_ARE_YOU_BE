@@ -125,15 +125,15 @@ public class MemberController {
 			)
 		)
 	)
+
 	@PostMapping("/profileImage")
 	public CommonResponse<String> uploadProfileImage(
-		@RequestPart(value = "multipartFile", required = false) MultipartFile multipartFile,
-		@AuthenticationPrincipal CustomOAuth2Member member) {
+		@RequestPart(value = "multipartFile", required = false) MultipartFile multipartFile) {
 		if (multipartFile == null || multipartFile.isEmpty()) {
 			throw new ImageFileNotFoundException();
 		}
 		ImageUploadRequest request = new ImageUploadRequest(multipartFile);
-		return CommonResponse.success(memberFacade.saveImage(request, member.getMemberToken()));
+		return CommonResponse.success(memberFacade.saveImage(request));
 	}
 
 	@Operation(
