@@ -1,6 +1,5 @@
 package org.badminton.api.interfaces.match.dto;
 
-import java.util.Collections;
 import java.util.List;
 
 import org.badminton.domain.common.enums.SetStatus;
@@ -21,7 +20,7 @@ public record DoublesSetResponse(
 
 	public static List<DoublesSetResponse> fromDoublesSetInfoList(List<DoublesSetInfo> doublesSetInfoList) {
 		if (doublesSetInfoList == null)
-			return Collections.emptyList();
+			return null;
 		return doublesSetInfoList.stream()
 			.map(doublesSet -> new DoublesSetResponse(doublesSet.setNumber(), doublesSet.score1(), doublesSet.score2(),
 				doublesSet.setStatus()))
