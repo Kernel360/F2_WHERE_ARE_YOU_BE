@@ -36,18 +36,10 @@ public record MatchDetailsResponse(
 			matchDetails.leagueName(),
 			matchDetails.matchType(),
 			matchDetails.setNumberInProgress(),
-			matchDetails.matchType() == MatchType.SINGLES
-				? SinglesMatchResponse.fromSinglesMatchInfo(matchDetails.singlesMatch())
-				: null,
-			matchDetails.matchType() == MatchType.DOUBLES
-				? DoublesMatchResponse.fromDoublesMatchInfo(matchDetails.doublesMatch())
-				: null,
-			matchDetails.matchType() == MatchType.SINGLES
-				? SinglesSetResponse.fromSinglesSetInfoList(matchDetails.singlesSets())
-				: null,
-			matchDetails.matchType() == MatchType.DOUBLES
-				? DoublesSetResponse.fromDoublesSetInfoList(matchDetails.doublesSets())
-				: null
+			SinglesMatchResponse.fromSinglesMatchInfo(matchDetails.singlesMatch()),
+			DoublesMatchResponse.fromDoublesMatchInfo(matchDetails.doublesMatch()),
+			SinglesSetResponse.fromSinglesSetInfoList(matchDetails.singlesSets()),
+			DoublesSetResponse.fromDoublesSetInfoList(matchDetails.doublesSets())
 		);
 	}
 }

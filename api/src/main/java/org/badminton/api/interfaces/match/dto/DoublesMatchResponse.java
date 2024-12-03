@@ -11,22 +11,22 @@ public record DoublesMatchResponse(
 
 	@Schema(description = "매치 아이디", requiredMode = Schema.RequiredMode.REQUIRED)
 	Long matchId,
+	@Schema(description = "매치의 라운드 번호", requiredMode = Schema.RequiredMode.REQUIRED)
 	int roundNumber,
 	@Schema(description = "매치 상태(NOT_STARTED | IN_PROGRESS | FINISHED)", requiredMode = Schema.RequiredMode.REQUIRED)
 	MatchStatus matchStatus,
-
 	@Schema(description = "팀1", requiredMode = Schema.RequiredMode.REQUIRED)
 	MatchTeamResponse team1,
-
 	@Schema(description = "팀2", requiredMode = Schema.RequiredMode.REQUIRED)
 	MatchTeamResponse team2,
-
 	@Schema(description = "승자의 멤버토큰", requiredMode = Schema.RequiredMode.REQUIRED)
 	List<String> winnersToken
 
 ) {
 
 	public static DoublesMatchResponse fromDoublesMatchInfo(DoublesMatchInfo doublesMatchInfo) {
+		if (doublesMatchInfo == null)
+			return null;
 		return new DoublesMatchResponse(
 			doublesMatchInfo.matchId(),
 			doublesMatchInfo.roundNumber(),
