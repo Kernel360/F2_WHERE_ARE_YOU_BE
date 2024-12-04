@@ -94,4 +94,3 @@ public record LeagueCreateRequest(
 		}
 	}
 }
-

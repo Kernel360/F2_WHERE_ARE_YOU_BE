@@ -16,6 +16,7 @@ import org.badminton.domain.domain.league.info.LeagueCreateInfo;
 import org.badminton.domain.domain.league.info.LeagueDetailsInfo;
 import org.badminton.domain.domain.league.info.LeagueParticipantDetailsInfo;
 import org.badminton.domain.domain.league.info.LeagueReadInfo;
+import org.badminton.domain.domain.league.info.LeagueRecruitingCompleteInfo;
 import org.badminton.domain.domain.league.info.LeagueSummaryInfo;
 import org.badminton.domain.domain.league.info.LeagueUpdateInfo;
 import org.badminton.domain.domain.league.info.LeagueUpdateInfoWithParticipantCountInfo;
@@ -92,4 +93,8 @@ public class LeagueFacade {
 		return leagueService.cancelLeague(clubToken, leagueId, memberToken);
 	}
 
+	public LeagueRecruitingCompleteInfo completeLeagueRecruiting(String clubToken, Long leagueId, String memberToken) {
+		clubMemberPolicy.validateClubMember(memberToken, clubToken);
+		return leagueService.completeLeagueRecruiting(clubToken, leagueId, memberToken);
+	}
 }

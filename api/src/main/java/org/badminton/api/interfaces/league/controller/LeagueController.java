@@ -12,6 +12,7 @@ import org.badminton.api.interfaces.league.dto.LeagueCreateRequest;
 import org.badminton.api.interfaces.league.dto.LeagueCreateResponse;
 import org.badminton.api.interfaces.league.dto.LeagueDetailsResponse;
 import org.badminton.api.interfaces.league.dto.LeagueReadResponse;
+import org.badminton.api.interfaces.league.dto.LeagueRecruitingCompleteResponse;
 import org.badminton.api.interfaces.league.dto.LeagueUpdateRequest;
 import org.badminton.api.interfaces.league.dto.LeagueUpdateResponse;
 import org.badminton.domain.domain.league.info.IsLeagueParticipantInfo;
@@ -19,6 +20,7 @@ import org.badminton.domain.domain.league.info.LeagueByDateInfoWithParticipantCo
 import org.badminton.domain.domain.league.info.LeagueCancelInfo;
 import org.badminton.domain.domain.league.info.LeagueDetailsInfo;
 import org.badminton.domain.domain.league.info.LeagueReadInfo;
+import org.badminton.domain.domain.league.info.LeagueRecruitingCompleteInfo;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -26,6 +28,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -157,7 +160,7 @@ public class LeagueController {
 			""",
 		tags = {"league"}
 	)
-	@PatchMapping("/{leagueId}")
+	@PutMapping("/{leagueId}")
 	public CommonResponse<LeagueUpdateResponse> updateLeague(
 		@PathVariable String clubToken,
 		@PathVariable Long leagueId,
@@ -184,5 +187,24 @@ public class LeagueController {
 		LeagueCancelInfo leagueInfo = leagueFacade.cancelLeague(clubToken, leagueId, member.getMemberToken());
 		LeagueCancelResponse leagueCancelResponse = leagueDtoMapper.of(leagueInfo);
 		return CommonResponse.success(leagueCancelResponse);
+	}
+
+	@Operation(
+		summary = "경기 모집 마감",
+		description = "경기 모집 마감 기한 전이라도, 경기 Owner가 모집을 마감할 수 있습니다. 이때 단식(2)/복식(4)에 따른 최소 인원 조건은 충족해야 합니다.",
+		tags = {"league"}
+	)
+	@PatchMapping("/{leagueId}")
+	public CommonResponse<LeagueRecruitingCompleteResponse> completeLeagueRecruiting(
+		@PathVariable String clubToken,
+		@PathVariable Long leagueId,
+		@AuthenticationPrincipal CustomOAuth2Member member
+	) {
+		LeagueRecruitingCompleteInfo leagueRecruitingCompleteInfo = leagueFacade.completeLeagueRecruiting(clubToken,
+			leagueId,
+			member.getMemberToken());
+		LeagueRecruitingCompleteResponse leagueRecruitingCompleteResponse = leagueDtoMapper.of(
+			leagueRecruitingCompleteInfo);
+		return CommonResponse.success(leagueRecruitingCompleteResponse);
 	}
 }
