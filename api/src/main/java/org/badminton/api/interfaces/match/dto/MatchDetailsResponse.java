@@ -23,9 +23,9 @@ public record MatchDetailsResponse(
 	SinglesMatchResponse singlesMatch,
 	@Schema(description = "복식 경기")
 	DoublesMatchResponse doublesMatch,
-	@Schema(description = "상태가 FINISHED 인 단식 경기 세트")
+	@Schema(description = "상태가 FINISHED 인 단식 경기 세트, 복식이라면 null을 리턴")
 	List<SinglesSetResponse> singlesSets,
-	@Schema(description = "상태가 FINISHED 인 복식 경기 세트")
+	@Schema(description = "상태가 FINISHED 인 복식 경기 세트, 단식이라면 null을 리턴")
 	List<DoublesSetResponse> doublesSets
 ) {
 
