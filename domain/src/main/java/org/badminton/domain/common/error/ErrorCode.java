@@ -52,7 +52,8 @@ public enum ErrorCode {
 	CONFLICT(409, "리소스 충돌이 발생했습니다."),
 	ALREADY_EXIST(409, "리소스가 이미 존재합니다."),
 	CLUB_MEMBER_ALREADY_EXIST(409, "이미 해당 동호회에 가입을 완료한 회원입니다."),
-	LEAGUE_RECRUITING_ALREADY_COMPLETED(409, "이미 경기 일정에 모집 인원이 다 채워졌습니다."),
+	LEAGUE_PARTICIPANT_IS_ALREADY_FULL(409, "이미 경기 일정에 모집 인원이 다 채워졌습니다."),
+	LEAGUE_RECRUITING_ALREADY_COMPLETED(409, "이미 모집이 마감된 경기입니다."),
 	CLUB_MEMBER_ALREADY_OWNER(409, "이미 해당 동호회를 생성하여 동호회장으로 가입을 완료한 회원입니다."),
 	LEAGUE_CANNOT_BE_UPDATED(409, "모집 중이거나 모집 완료 상태인 경기만 수정이 가능합니다."),
 
