@@ -67,7 +67,7 @@ public class TournamentBracketGenerationServiceImpl implements BracketGeneration
 	public BracketInfo makeBracket(MatchStrategy matchStrategy, Long leagueId, String memberToken) {
 		League league = findLeague(leagueId);
 		if (!league.getLeagueOwnerMemberToken().equals(memberToken)) {
-			throw new NotLeagueOwnerException(memberToken);
+			throw new NotLeagueOwnerException(leagueId, memberToken);
 		}
 		matchStrategy.checkDuplicateInitialBracket(leagueId);
 
