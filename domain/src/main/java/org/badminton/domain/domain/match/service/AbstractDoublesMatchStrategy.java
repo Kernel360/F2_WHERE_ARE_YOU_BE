@@ -10,7 +10,6 @@ import org.badminton.domain.common.exception.BadmintonException;
 import org.badminton.domain.common.exception.match.MatchAlreadyStartedExceptionWhenBracketGenerationException;
 import org.badminton.domain.domain.league.entity.League;
 import org.badminton.domain.domain.league.entity.LeagueParticipant;
-import org.badminton.domain.domain.match.command.MatchCommand;
 import org.badminton.domain.domain.match.entity.DoublesMatch;
 import org.badminton.domain.domain.match.entity.DoublesSet;
 import org.badminton.domain.domain.match.info.BracketInfo;
@@ -37,7 +36,7 @@ public abstract class AbstractDoublesMatchStrategy implements MatchStrategy {
 		if (doublesMatchReader.checkIfBracketEmpty(leagueId)) {
 			return;
 		}
-		if (doublesMatchReader.allMatchesFinishedForLeague(leagueId)) {
+		if (doublesMatchReader.allMatchesNotStartedForLeague(leagueId)) {
 			doublesMatchStore.deleteDoublesBracket(leagueId);
 			return;
 		}
@@ -69,12 +68,6 @@ public abstract class AbstractDoublesMatchStrategy implements MatchStrategy {
 
 	@Override
 	public abstract BracketInfo makeBracket(League league, List<LeagueParticipant> leagueParticipantList);
-
-	@Override
-	public SetInfo.Main registerSetScoreInMatch(Long matchId, Integer setIndex,
-		MatchCommand.UpdateSetScore updateSetScoreCommand) {
-		return null;
-	}
 
 	@Override
 	public boolean isMatchInLeague(Long leagueId) {
