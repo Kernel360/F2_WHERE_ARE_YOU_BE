@@ -8,10 +8,10 @@ import org.badminton.domain.common.AbstractBaseTime;
 import org.badminton.domain.common.consts.Constants;
 import org.badminton.domain.common.enums.MatchGenerationType;
 import org.badminton.domain.common.enums.MatchType;
+import org.badminton.domain.common.exception.league.InvalidDoublesPlayerLimitCountException;
+import org.badminton.domain.common.exception.league.InvalidSinglesPlayerLimitCountException;
 import org.badminton.domain.common.exception.league.LeagueRecruitingAlreadyCompletedException;
 import org.badminton.domain.common.exception.league.PlayerLimitCountDecreasedNotAllowedException;
-import org.badminton.domain.common.exception.league.PlayerLimitCountMustBeMoreThanFourException;
-import org.badminton.domain.common.exception.league.PlayerLimitCountMustBeMultipleWhenDoublesMatch;
 import org.badminton.domain.domain.club.entity.Club;
 import org.badminton.domain.domain.league.enums.LeagueStatus;
 import org.badminton.domain.domain.league.vo.Address;
@@ -118,16 +118,16 @@ public class League extends AbstractBaseTime {
 
 	private void validateLeagueParticipantCountWhenSingles(int participantCount) {
 		if (participantCount < Constants.PLAYER_LIMIT_MIN) {
-			throw new PlayerLimitCountMustBeMoreThanFourException(participantCount);
+			throw new InvalidSinglesPlayerLimitCountException(participantCount, this.matchType);
 		}
 	}
 
 	private void validateLeagueParticipantCountWhenDoubles(int participantCount) {
 		if (participantCount < Constants.DOUBLES_PLAYER_LIMIT_MIN) {
-			throw new PlayerLimitCountMustBeMoreThanFourException(participantCount);
+			throw new InvalidDoublesPlayerLimitCountException(participantCount);
 		}
 		if (participantCount % 2 == 1) {
-			throw new PlayerLimitCountMustBeMultipleWhenDoublesMatch(participantCount, this.matchType);
+			throw new InvalidDoublesPlayerLimitCountException(participantCount, this.matchType);
 		}
 	}
 

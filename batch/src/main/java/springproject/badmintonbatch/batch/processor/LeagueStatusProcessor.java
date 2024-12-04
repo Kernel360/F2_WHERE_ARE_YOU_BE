@@ -2,8 +2,8 @@ package springproject.badmintonbatch.batch.processor;
 
 import java.time.LocalDateTime;
 
-import org.badminton.domain.common.exception.league.PlayerLimitCountMustBeMoreThanFourException;
-import org.badminton.domain.common.exception.league.PlayerLimitCountMustBeMultipleWhenDoublesMatch;
+import org.badminton.domain.common.exception.league.InvalidDoublesPlayerLimitCountException;
+import org.badminton.domain.common.exception.league.InvalidSinglesPlayerLimitCountException;
 import org.badminton.domain.domain.league.LeagueParticipantReader;
 import org.badminton.domain.domain.league.entity.League;
 import org.badminton.domain.domain.match.store.DoublesMatchReader;
@@ -36,14 +36,13 @@ public class LeagueStatusProcessor implements ItemProcessor<League, League> {
 				handlePlaying(item, now);
 				break;
 		}
-
 		return item;
 	}
 
 	private void handleRecruiting(League item) {
 		try {
 			item.completeLeagueRecruiting(leagueParticipantReader.countParticipantMember(item.getLeagueId()));
-		} catch (PlayerLimitCountMustBeMoreThanFourException | PlayerLimitCountMustBeMultipleWhenDoublesMatch e) {
+		} catch (InvalidSinglesPlayerLimitCountException | InvalidDoublesPlayerLimitCountException e) {
 			item.cancelLeague();
 		}
 	}

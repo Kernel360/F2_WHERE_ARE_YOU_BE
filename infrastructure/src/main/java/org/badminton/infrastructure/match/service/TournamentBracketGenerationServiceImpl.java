@@ -2,7 +2,7 @@ package org.badminton.infrastructure.match.service;
 
 import java.util.List;
 
-import org.badminton.domain.common.exception.league.InvalidPlayerCountException;
+import org.badminton.domain.common.exception.league.InvalidLeagueParticipantCountException;
 import org.badminton.domain.common.exception.league.NotLeagueOwnerException;
 import org.badminton.domain.common.exception.match.InvalidLeagueStatusToGenerateBracketException;
 import org.badminton.domain.common.exception.match.LeagueRecruitingMustBeCompletedWhenBracketGenerationException;
@@ -92,7 +92,7 @@ public class TournamentBracketGenerationServiceImpl implements BracketGeneration
 		List<LeagueParticipant> leagueParticipantList =
 			leagueParticipantReader.findAllByLeagueIdAndCanceledFalse(leagueId);
 		if (leagueParticipantList.isEmpty()) {
-			throw new InvalidPlayerCountException(leagueId, 0);
+			throw new InvalidLeagueParticipantCountException(leagueId, 0);
 		}
 		return leagueParticipantList;
 	}
