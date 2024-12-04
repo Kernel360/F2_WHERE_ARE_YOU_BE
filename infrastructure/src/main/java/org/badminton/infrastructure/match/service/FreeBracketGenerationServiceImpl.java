@@ -66,9 +66,7 @@ public class FreeBracketGenerationServiceImpl implements BracketGenerationServic
 			throw new NotLeagueOwnerException(leagueId, memberToken);
 		}
 		matchStrategy.checkDuplicateInitialBracket(leagueId);
-
 		List<LeagueParticipant> leagueParticipantList = findLeagueParticipantList(leagueId);
-
 		return matchStrategy.makeBracket(findLeague(leagueId), leagueParticipantList);
 	}
 

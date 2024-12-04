@@ -70,7 +70,6 @@ public class TournamentBracketGenerationServiceImpl implements BracketGeneration
 			throw new NotLeagueOwnerException(leagueId, memberToken);
 		}
 		matchStrategy.checkDuplicateInitialBracket(leagueId);
-
 		List<LeagueParticipant> leagueParticipantList = findLeagueParticipantList(leagueId);
 
 		return matchStrategy.makeBracket(findLeague(leagueId), leagueParticipantList);
