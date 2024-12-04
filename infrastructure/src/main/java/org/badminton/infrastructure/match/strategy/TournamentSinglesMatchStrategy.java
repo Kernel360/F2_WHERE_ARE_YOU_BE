@@ -294,7 +294,6 @@ public class TournamentSinglesMatchStrategy extends AbstractSinglesMatchStrategy
 		}
 		if (nextRoundMatch.getLeagueParticipant2() == null) {
 			nextRoundMatch.defineLeagueParticipant2(winner);
-			return;
 		}
 	}
 
