@@ -21,4 +21,6 @@ public interface DoublesMatchReader {
 
 	boolean allMatchesNotStartedForLeague(Long leagueId);
 
+	boolean allRoundMatchesDone(Long leagueId, int roundNumber);
+
 }
