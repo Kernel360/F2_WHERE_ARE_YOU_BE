@@ -3,8 +3,8 @@ package org.badminton.infrastructure.match.service;
 import org.badminton.domain.common.enums.MatchType;
 import org.badminton.domain.common.enums.SetStatus;
 import org.badminton.domain.common.exception.league.LeagueParticipationNotExistException;
-import org.badminton.domain.common.exception.match.BeforeSetNotFinishedException;
-import org.badminton.domain.common.exception.match.NotLeagueParticipationInMatchException;
+import org.badminton.domain.common.exception.match.LeagueParticipationNotExistInMatchException;
+import org.badminton.domain.common.exception.match.PreviousDetNotFinishedException;
 import org.badminton.domain.common.exception.match.RoundNotFinishedException;
 import org.badminton.domain.domain.league.LeagueParticipantReader;
 import org.badminton.domain.domain.league.LeagueReader;
@@ -86,7 +86,7 @@ public class RetrieveMatchSet {
 		SinglesMatch match = singlesMatchReader.getSinglesMatch(matchId);
 
 		if (match.getLeagueParticipant1() == null || match.getLeagueParticipant2() == null) {
-			throw new NotLeagueParticipationInMatchException(matchId);
+			throw new LeagueParticipationNotExistInMatchException(matchId);
 		}
 
 		if (setNumber == 1) {
@@ -94,7 +94,7 @@ public class RetrieveMatchSet {
 		}
 
 		if (match.getSinglesSet(setNumber - 1).getSetStatus() != SetStatus.FINISHED) {
-			throw new BeforeSetNotFinishedException(setNumber - 1);
+			throw new PreviousDetNotFinishedException(setNumber - 1);
 		}
 	}
 
@@ -102,7 +102,7 @@ public class RetrieveMatchSet {
 		DoublesMatch match = doublesMatchReader.getDoublesMatch(matchId);
 
 		if (match.getTeam1() == null || match.getTeam2() == null) {
-			throw new NotLeagueParticipationInMatchException(matchId);
+			throw new LeagueParticipationNotExistInMatchException(matchId);
 		}
 
 		if (setNumber == 1) {
@@ -110,7 +110,7 @@ public class RetrieveMatchSet {
 		}
 
 		if (match.getDoublesSet(setNumber - 1).getSetStatus() != SetStatus.FINISHED) {
-			throw new BeforeSetNotFinishedException(setNumber - 1);
+			throw new PreviousDetNotFinishedException(setNumber - 1);
 		}
 	}
 

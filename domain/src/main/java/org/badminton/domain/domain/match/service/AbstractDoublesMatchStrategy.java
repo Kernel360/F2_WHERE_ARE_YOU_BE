@@ -123,9 +123,10 @@ public abstract class AbstractDoublesMatchStrategy implements MatchStrategy {
 		if (roundNumber == 1) {
 			return;
 		}
+		int previousRoundNumber = roundNumber - 1;
 
-		if (!doublesMatchReader.allRoundMatchesDone(leagueId, roundNumber - 1)) {
-			throw new RoundNotFinishedException(roundNumber - 1);
+		if (!doublesMatchReader.allRoundMatchesDone(leagueId, previousRoundNumber)) {
+			throw new RoundNotFinishedException(previousRoundNumber);
 		}
 	}
 }
