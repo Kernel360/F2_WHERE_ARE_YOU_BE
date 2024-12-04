@@ -147,8 +147,8 @@ public class SecurityConfig {
 				.requestMatchers(HttpMethod.DELETE, "/v1/clubs/{clubToken}/leagues/{leagueId}/participation")
 				.permitAll()
 				.requestMatchers(HttpMethod.PATCH,
-					"/v1/clubs/{clubToken}/clubMembers/role",
-					"v1/clubs/{clubToken}/clubMembers/ban", "v1/clubs/{clubToken}/clubMembers/expel")
+					"/v1/clubs/{clubToken}/clubMembers/role", "v1/clubs/{clubToken}/clubMembers/ban",
+					"v1/clubs/{clubToken}/clubMembers/expel")
 				.permitAll()
 				.anyRequest()
 				.authenticated()
