@@ -12,9 +12,11 @@ import org.springframework.batch.item.ItemProcessor;
 import org.springframework.stereotype.Component;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @Component("leagueStatusItemProcessor")
 @RequiredArgsConstructor
+@Slf4j
 public class LeagueStatusProcessor implements ItemProcessor<League, League> {
 
 	private final LeagueParticipantReader leagueParticipantReader;
@@ -43,6 +45,7 @@ public class LeagueStatusProcessor implements ItemProcessor<League, League> {
 		try {
 			item.completeLeagueRecruiting(leagueParticipantReader.countParticipantMember(item.getLeagueId()));
 		} catch (InvalidSinglesPlayerLimitCountException | InvalidDoublesPlayerLimitCountException e) {
+			log.error(e.getErrorMessage(), e);
 			item.cancelLeague();
 		}
 	}
