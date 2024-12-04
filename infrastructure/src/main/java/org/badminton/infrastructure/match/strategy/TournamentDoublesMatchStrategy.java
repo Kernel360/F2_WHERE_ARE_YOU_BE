@@ -89,7 +89,6 @@ public class TournamentDoublesMatchStrategy extends AbstractDoublesMatchStrategy
 		}
 
 		updateSetScore(doublesMatch, setNumber, updateSetScoreCommand);
-		doublesMatchStore.store(doublesMatch);
 
 		if (LIMIT_SET_GAME > setNumber) {
 			changeNextSetStatus(doublesMatch, setNumber);
@@ -103,6 +102,7 @@ public class TournamentDoublesMatchStrategy extends AbstractDoublesMatchStrategy
 			leagueReader.readLeagueById(doublesMatch.getLeague().getLeagueId()).finishLeague();
 		}
 
+		doublesMatchStore.store(doublesMatch);
 		return SetInfo.fromDoublesSet(matchId, setNumber, doublesMatch.getDoublesSets().get(setNumber - 1));
 	}
 

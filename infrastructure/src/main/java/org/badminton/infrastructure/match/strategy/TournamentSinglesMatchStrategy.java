@@ -105,7 +105,6 @@ public class TournamentSinglesMatchStrategy extends AbstractSinglesMatchStrategy
 		}
 
 		updateSetScore(singlesMatch, setNumber, updateSetScoreCommand);
-		singlesMatchStore.store(singlesMatch);
 
 		if (LIMIT_SET_GAME > setNumber) {
 			changeNextSetStatus(singlesMatch, setNumber);
@@ -118,7 +117,7 @@ public class TournamentSinglesMatchStrategy extends AbstractSinglesMatchStrategy
 		if (isAllMatchFinished(singlesMatch)) {
 			leagueReader.readLeagueById(singlesMatch.getLeague().getLeagueId()).finishLeague();
 		}
-
+		singlesMatchStore.store(singlesMatch);
 		return SetInfo.fromSinglesSet(matchId, setNumber, singlesMatch.getSinglesSets().get(setNumber - 1));
 	}
 
