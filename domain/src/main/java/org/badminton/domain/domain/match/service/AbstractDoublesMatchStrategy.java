@@ -36,7 +36,7 @@ public abstract class AbstractDoublesMatchStrategy implements MatchStrategy {
 		if (doublesMatchReader.checkIfBracketEmpty(leagueId)) {
 			return;
 		}
-		if (doublesMatchReader.allMatchesFinishedForLeague(leagueId)) {
+		if (doublesMatchReader.allMatchesNotStartedForLeague(leagueId)) {
 			doublesMatchStore.deleteDoublesBracket(leagueId);
 			return;
 		}

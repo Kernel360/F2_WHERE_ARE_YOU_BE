@@ -37,7 +37,7 @@ public abstract class AbstractSinglesMatchStrategy implements MatchStrategy {
 		if (singlesMatchReader.checkIfBracketEmpty(leagueId)) {
 			return;
 		}
-		if (singlesMatchReader.allMatchesFinishedForLeague(leagueId)) {
+		if (singlesMatchReader.allMatchesNotStartedForLeague(leagueId)) {
 			singlesMatchStore.deleteSinglesBracket(leagueId);
 			return;
 		}
