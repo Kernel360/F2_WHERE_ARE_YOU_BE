@@ -193,53 +193,55 @@ public class TournamentSinglesMatchStrategy extends AbstractSinglesMatchStrategy
 
 	private List<SinglesMatch> createSubsequentRoundsMatches(League league, int totalRounds) {
 		List<SinglesMatch> matches = new ArrayList<>();
-		List<SinglesMatch> previousMatches = singlesMatchReader.findMatchesByLeagueAndRound(league.getLeagueId(), 1);
+		List<SinglesMatch> previousRoundMatches = singlesMatchReader.findMatchesByLeagueAndRound(league.getLeagueId(),
+			1);
 
 		for (int roundNumber = 2; roundNumber <= totalRounds; roundNumber++) {
-			List<SinglesMatch> currentRoundMatches = createMatchesForRound(league, previousMatches, roundNumber);
+			List<SinglesMatch> currentRoundMatches = createMatchesRound(league, previousRoundMatches, roundNumber);
 			matches.addAll(currentRoundMatches);
-			previousMatches = currentRoundMatches;
+			previousRoundMatches = currentRoundMatches;
 		}
 
 		return matches;
 	}
 
-	private List<SinglesMatch> createMatchesForRound(League league, List<SinglesMatch> previousMatches,
+	private List<SinglesMatch> createMatchesRound(League league, List<SinglesMatch> previousRoundMatches,
 		int roundNumber) {
 		List<SinglesMatch> currentRoundMatches = new ArrayList<>();
 
-		currentRoundMatches.addAll(createRegularMatchesForRound(league, previousMatches, roundNumber));
+		currentRoundMatches.addAll(createRegularMatchesForRound(league, previousRoundMatches, roundNumber));
 
-		if (isSinglesMatchOddSize(previousMatches)) {
-			currentRoundMatches.add(createByeMatchForRound(league, previousMatches, roundNumber));
+		if (isSinglesMatchOddSize(previousRoundMatches)) {
+			currentRoundMatches.add(createByeRoundMatch(league, previousRoundMatches, roundNumber));
 		}
 
 		return currentRoundMatches;
 	}
 
-	private List<SinglesMatch> createRegularMatchesForRound(League league, List<SinglesMatch> previousMatches,
+	private List<SinglesMatch> createRegularMatchesForRound(League league, List<SinglesMatch> previousRoundMatches,
 		int roundNumber) {
-		List<SinglesMatch> regularMatches = new ArrayList<>();
+		List<SinglesMatch> regularRoundMatches = new ArrayList<>();
 
-		for (int i = 0; i < previousMatches.size() - 1; i += PARTICIPANTS_PER_MATCH) {
+		for (int i = 0; i < previousRoundMatches.size() - 1; i += PARTICIPANTS_PER_MATCH) {
 			SinglesMatch match = new SinglesMatch(league, null, null, roundNumber);
 			makeSetsInMatch(match);
 			singlesMatchStore.store(match);
-			regularMatches.add(match);
+			regularRoundMatches.add(match);
 		}
 
-		return regularMatches;
+		return regularRoundMatches;
 	}
 
-	private SinglesMatch createByeMatchForRound(League league, List<SinglesMatch> previousMatches, int roundNumber) {
-		SinglesMatch byeMatch = previousMatches.get(previousMatches.size() - 1);
+	private SinglesMatch createByeRoundMatch(League league, List<SinglesMatch> previousRoundMatches,
+		int roundNumber) {
+		SinglesMatch byeMatch = previousRoundMatches.get(previousRoundMatches.size() - 1);
 		LeagueParticipant winner = determineWinner(byeMatch);
 
-		SinglesMatch byMatch = new SinglesMatch(league, winner, null, roundNumber);
-		byMatch.byeMatch();
-		singlesMatchStore.store(byMatch);
+		SinglesMatch nextByeMatch = new SinglesMatch(league, winner, null, roundNumber);
+		nextByeMatch.byeMatch();
+		singlesMatchStore.store(nextByeMatch);
 
-		return byMatch;
+		return nextByeMatch;
 	}
 
 	private void updateSetScore(SinglesMatch singlesMatch, int setNumber,
