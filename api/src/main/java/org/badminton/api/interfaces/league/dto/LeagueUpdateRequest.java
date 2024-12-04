@@ -3,8 +3,7 @@ package org.badminton.api.interfaces.league.dto;
 import org.badminton.domain.common.consts.Constants;
 import org.badminton.domain.common.enums.MatchGenerationType;
 import org.badminton.domain.common.enums.MatchType;
-import org.badminton.domain.common.exception.league.PlayerLimitCountMustBeMoreThanFourException;
-import org.badminton.domain.common.exception.league.PlayerLimitCountMustBeMultipleWhenDoublesMatch;
+import org.badminton.domain.common.exception.league.InvalidDoublesPlayerLimitCountException;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Max;
@@ -49,13 +48,13 @@ public record LeagueUpdateRequest(
 
 	private void validateIsEven() {
 		if (this.playerLimitCount % 2 == 1) {
-			throw new PlayerLimitCountMustBeMultipleWhenDoublesMatch(this.playerLimitCount, this.matchType);
+			throw new InvalidDoublesPlayerLimitCountException(this.playerLimitCount, this.matchType);
 		}
 	}
 
 	private void validateMin() {
 		if (this.playerLimitCount < Constants.DOUBLES_PLAYER_LIMIT_MIN) {
-			throw new PlayerLimitCountMustBeMoreThanFourException(this.playerLimitCount);
+			throw new InvalidDoublesPlayerLimitCountException(this.playerLimitCount);
 		}
 	}
 }

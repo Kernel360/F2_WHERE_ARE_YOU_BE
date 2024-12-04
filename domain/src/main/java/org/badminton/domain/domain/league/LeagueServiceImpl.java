@@ -24,6 +24,7 @@ import org.badminton.domain.domain.league.info.LeagueCancelInfo;
 import org.badminton.domain.domain.league.info.LeagueCreateInfo;
 import org.badminton.domain.domain.league.info.LeagueDetailInfo;
 import org.badminton.domain.domain.league.info.LeagueReadInfo;
+import org.badminton.domain.domain.league.info.LeagueRecruitingCompleteInfo;
 import org.badminton.domain.domain.league.info.LeagueSummaryInfo;
 import org.badminton.domain.domain.league.info.LeagueUpdateInfo;
 import org.badminton.domain.domain.league.info.OngoingAndUpcomingLeagueInfo;
@@ -81,10 +82,7 @@ public class LeagueServiceImpl implements LeagueService {
 	public LeagueUpdateInfo updateLeague(String clubToken, Long leagueId, LeagueUpdateCommand leagueUpdateCommand,
 		String memberToken) {
 		League league = leagueReader.readLeague(clubToken, leagueId);
-
-		if (!league.getLeagueOwnerMemberToken().equals(memberToken)) {
-			throw new NotLeagueOwnerException(memberToken);
-		}
+		validateLeagueOwner(memberToken, league);
 
 		if (!(league.getLeagueStatus() == LeagueStatus.RECRUITING
 			|| league.getLeagueStatus() == LeagueStatus.RECRUITING_COMPLETED)) {
@@ -94,6 +92,15 @@ public class LeagueServiceImpl implements LeagueService {
 			leagueUpdateCommand.playerLimitCount(), leagueUpdateCommand.matchType(),
 			leagueUpdateCommand.matchGenerationType());
 		return LeagueUpdateInfo.from(leagueStore.store(league));
+	}
+
+	@Override
+	public LeagueRecruitingCompleteInfo completeLeagueRecruiting(String clubToken, Long leagueId, String memberToken) {
+		League league = leagueReader.readLeague(clubToken, leagueId);
+		validateLeagueOwner(memberToken, league);
+		league.completeLeagueRecruiting(leagueParticipantReader.countParticipantMember(leagueId));
+		leagueStore.store(league);
+		return new LeagueRecruitingCompleteInfo(league.getLeagueId(), league.getLeagueStatus());
 	}
 
 	@Override
@@ -140,15 +147,19 @@ public class LeagueServiceImpl implements LeagueService {
 	@Override
 	public LeagueCancelInfo cancelLeague(String clubToken, Long leagueId, String memberToken) {
 		var league = leagueReader.readLeague(clubToken, leagueId);
-		if (!league.getLeagueOwnerMemberToken().equals(memberToken)) {
-			throw new NotLeagueOwnerException(memberToken);
-		}
+		validateLeagueOwner(memberToken, league);
 		if (LocalDateTime.now().isAfter(league.getLeagueAt())) {
 			throw new LeagueCannotBeCanceled(leagueId, league.getLeagueAt());
 		}
 		league.cancelLeague();
 		leagueStore.store(league);
 		return LeagueCancelInfo.from(league);
+	}
+
+	private void validateLeagueOwner(String memberToken, League league) {
+		if (!league.getLeagueOwnerMemberToken().equals(memberToken)) {
+			throw new NotLeagueOwnerException(memberToken);
+		}
 	}
 
 	private LocalDate parseDateByMonth(String date) {

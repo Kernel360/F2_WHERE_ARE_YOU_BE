@@ -1,10 +1,16 @@
 package org.badminton.domain.domain.league.entity;
 
+import static org.badminton.domain.common.enums.MatchType.*;
+
 import java.time.LocalDateTime;
 
 import org.badminton.domain.common.AbstractBaseTime;
+import org.badminton.domain.common.consts.Constants;
 import org.badminton.domain.common.enums.MatchGenerationType;
 import org.badminton.domain.common.enums.MatchType;
+import org.badminton.domain.common.exception.league.InvalidDoublesPlayerLimitCountException;
+import org.badminton.domain.common.exception.league.InvalidSinglesPlayerLimitCountException;
+import org.badminton.domain.common.exception.league.LeagueRecruitingAlreadyCompletedException;
 import org.badminton.domain.common.exception.league.PlayerLimitCountDecreasedNotAllowedException;
 import org.badminton.domain.domain.club.entity.Club;
 import org.badminton.domain.domain.league.enums.LeagueStatus;
@@ -110,14 +116,42 @@ public class League extends AbstractBaseTime {
 		this.matchGenerationType = matchGenerationType;
 	}
 
+	private void validateLeagueParticipantCountWhenSingles(int participantCount) {
+		if (participantCount < Constants.PLAYER_LIMIT_MIN) {
+			throw new InvalidSinglesPlayerLimitCountException(participantCount, this.matchType);
+		}
+	}
+
+	private void validateLeagueParticipantCountWhenDoubles(int participantCount) {
+		if (participantCount < Constants.DOUBLES_PLAYER_LIMIT_MIN) {
+			throw new InvalidDoublesPlayerLimitCountException(participantCount);
+		}
+		if (participantCount % 2 == 1) {
+			throw new InvalidDoublesPlayerLimitCountException(participantCount, this.matchType);
+		}
+	}
+
 	private void validatePlayerLimitCountWhenUpdate(int playerLimitCount) {
 		if (this.playerLimitCount > playerLimitCount) {
 			throw new PlayerLimitCountDecreasedNotAllowedException(this.playerLimitCount, playerLimitCount);
 		}
 	}
 
-	public void completeLeagueRecruiting() {
+	public void completeLeagueRecruiting(int participantCount) {
+		if (this.leagueStatus == LeagueStatus.RECRUITING_COMPLETED) {
+			throw new LeagueRecruitingAlreadyCompletedException(this.leagueId, this.leagueStatus, participantCount,
+				this.playerLimitCount);
+		}
+		validateLeagueParticipantCount(participantCount);
 		this.leagueStatus = LeagueStatus.RECRUITING_COMPLETED;
+	}
+
+	private void validateLeagueParticipantCount(int participantCount) {
+		if (this.matchType == SINGLES) {
+			validateLeagueParticipantCountWhenSingles(participantCount);
+		} else if (this.matchType == DOUBLES) {
+			validateLeagueParticipantCountWhenDoubles(participantCount);
+		}
 	}
 
 	public void reopenLeagueRecruiting() {

@@ -2,6 +2,8 @@ package springproject.badmintonbatch.batch.processor;
 
 import java.time.LocalDateTime;
 
+import org.badminton.domain.common.exception.league.InvalidDoublesPlayerLimitCountException;
+import org.badminton.domain.common.exception.league.InvalidSinglesPlayerLimitCountException;
 import org.badminton.domain.domain.league.LeagueParticipantReader;
 import org.badminton.domain.domain.league.entity.League;
 import org.badminton.domain.domain.match.store.DoublesMatchReader;
@@ -10,9 +12,11 @@ import org.springframework.batch.item.ItemProcessor;
 import org.springframework.stereotype.Component;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @Component("leagueStatusItemProcessor")
 @RequiredArgsConstructor
+@Slf4j
 public class LeagueStatusProcessor implements ItemProcessor<League, League> {
 
 	private final LeagueParticipantReader leagueParticipantReader;
@@ -34,15 +38,15 @@ public class LeagueStatusProcessor implements ItemProcessor<League, League> {
 				handlePlaying(item, now);
 				break;
 		}
-
 		return item;
 	}
 
 	private void handleRecruiting(League item) {
-		if (!isParticipantCountValid(item)) {
+		try {
+			item.completeLeagueRecruiting(leagueParticipantReader.countParticipantMember(item.getLeagueId()));
+		} catch (InvalidSinglesPlayerLimitCountException | InvalidDoublesPlayerLimitCountException e) {
+			log.error(e.getErrorMessage(), e);
 			item.cancelLeague();
-		} else {
-			item.completeLeagueRecruiting();
 		}
 	}
 
@@ -60,10 +64,6 @@ public class LeagueStatusProcessor implements ItemProcessor<League, League> {
 				item.finishLeague();
 			}
 		}
-	}
-
-	private boolean isParticipantCountValid(League item) {
-		return leagueParticipantReader.countParticipantMember(item.getLeagueId()) == item.getPlayerLimitCount();
 	}
 
 	private boolean isLeagueInProgress(League item, LocalDateTime now) {
