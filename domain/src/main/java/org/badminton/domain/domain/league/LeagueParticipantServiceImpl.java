@@ -52,7 +52,7 @@ public class LeagueParticipantServiceImpl implements LeagueParticipantService {
 	@Override
 	public LeagueParticipantCancelInfo cancelLeagueParticipation(String memberToken, String clubToken, Long leagueId) {
 		League league = leagueReader.readLeagueById(leagueId);
-		validateLeagueOwner(league, memberToken);
+		leagueOwnerCannotCancelParticipation(league, memberToken);
 		validateCancelAvailableTime(league);
 		validateCancelAvailableLeagueStatus(league);
 		ClubMember clubMember = clubMemberReader.getClubMember(clubToken, memberToken);
@@ -87,7 +87,7 @@ public class LeagueParticipantServiceImpl implements LeagueParticipantService {
 	}
 
 	private void validateCancelAvailableLeagueStatus(League league) {
-		if (league.getLeagueStatus() != LeagueStatus.RECRUITING_COMPLETED) {
+		if (league.getLeagueStatus() != LeagueStatus.RECRUITING) {
 			throw new LeagueParticipationCannotBeCanceledException(league.getLeagueId(), league.getLeagueStatus());
 		}
 	}
@@ -99,7 +99,7 @@ public class LeagueParticipantServiceImpl implements LeagueParticipantService {
 		}
 	}
 
-	private void validateLeagueOwner(League league, String memberToken) {
+	private void leagueOwnerCannotCancelParticipation(League league, String memberToken) {
 		if (Objects.equals(league.getLeagueOwnerMemberToken(), memberToken)) {
 			throw new LeagueOwnerCannotCancelLeagueParticipationException(memberToken, league.getLeagueId());
 		}
