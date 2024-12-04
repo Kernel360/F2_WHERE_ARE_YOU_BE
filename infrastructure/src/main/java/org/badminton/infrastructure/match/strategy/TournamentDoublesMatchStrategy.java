@@ -7,7 +7,9 @@ import java.util.List;
 import org.badminton.domain.common.enums.MatchResult;
 import org.badminton.domain.common.enums.SetStatus;
 import org.badminton.domain.common.exception.match.AlreadyWinnerDeterminedException;
+import org.badminton.domain.common.exception.match.BeforeSetNotFinishedException;
 import org.badminton.domain.common.exception.match.LeagueParticipantsNotExistsException;
+import org.badminton.domain.common.exception.match.RoundNotFinishedException;
 import org.badminton.domain.common.exception.match.SetFinishedException;
 import org.badminton.domain.domain.league.LeagueParticipantReader;
 import org.badminton.domain.domain.league.LeagueReader;
@@ -76,6 +78,10 @@ public class TournamentDoublesMatchStrategy extends AbstractDoublesMatchStrategy
 		MatchCommand.UpdateSetScore updateSetScoreCommand) {
 		DoublesMatch doublesMatch = doublesMatchReader.getDoublesMatch(matchId);
 
+		validatePreviousSetCompletion(setNumber, doublesMatch);
+
+		validatePreviousRoundCompletion(doublesMatch.getLeague().getLeagueId(), doublesMatch.getRoundNumber());
+
 		if (isMatchWinnerDetermined(doublesMatch)) {
 			throw new AlreadyWinnerDeterminedException(doublesMatch.getId());
 		}
@@ -104,6 +110,27 @@ public class TournamentDoublesMatchStrategy extends AbstractDoublesMatchStrategy
 
 		doublesMatchStore.store(doublesMatch);
 		return SetInfo.fromDoublesSet(matchId, setNumber, doublesMatch.getDoublesSets().get(setNumber - 1));
+	}
+
+	private void validatePreviousRoundCompletion(Long leagueId, int roundNumber) {
+
+		if (roundNumber == 1) {
+			return;
+		}
+
+		if (!doublesMatchReader.allRoundMatchesDone(leagueId, roundNumber - 1)) {
+			throw new RoundNotFinishedException(roundNumber - 1);
+		}
+	}
+
+	private void validatePreviousSetCompletion(int setNumber, DoublesMatch doublesMatch) {
+
+		if (setNumber == 1) {
+			return;
+		}
+		if (doublesMatch.getDoublesSet(setNumber - 1).getSetStatus() != SetStatus.FINISHED) {
+			throw new BeforeSetNotFinishedException(setNumber - 1);
+		}
 	}
 
 	private void changeNextSetStatus(DoublesMatch doublesMatch, Integer setNumber) {

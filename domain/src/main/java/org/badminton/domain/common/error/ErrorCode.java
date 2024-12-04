@@ -70,11 +70,15 @@ public enum ErrorCode {
 	LEAGUE_ALREADY_CANCELED(409, "해당하는 경기는 이미 취소된 경기입니다."),
 	LEAGUE_AT_LESS_THAN_THREE_HOUR_INTERVAL(409, "3시간 이후에 경기를 생성할 수 있습니다."),
 	CLUB_MEMBER_OWNER_PROTECT(409, "동호회 회장의 리소스는 보호되어야 합니다."),
+	ROUND_NOT_FINISHED(409, "해당 라운드가 끝나지 않았습니다"),
+	SET_NOT_FINISHED(409, "해당 세트가 종료되지 않았습니다"),
 
 	// 410 Errors
 	DELETED(410, "요청한 리소스가 삭제되었습니다."),
 
 	INVALID_PLAYER_COUNT(411, "아직 모집 인원이 채워지지 않았습니다."),
+	NOT_PARTICIPATION_IN_MATCH(411, "해당 매치에 참가자가 아직 존재하지 않습니다"),
+
 	LEAGUE_RECRUITING_MUST_BE_COMPLETED_WHEN_BRACKET_GENERATION(412, "모집이 완료되면 대진표를 만들 수 있습니다."),
 	INSUFFICIENT_TIER(412, "현재 경기의 티어와 맞지 않습니다"),
 	ONGOING_AND_UPCOMING_LEAGUE_CANNOT_BE_PAST(412, "메인 페이지에서 오늘 날짜 이전의 경기는 조회할 수 없습니다."),
