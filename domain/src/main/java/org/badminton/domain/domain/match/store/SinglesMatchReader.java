@@ -22,4 +22,6 @@ public interface SinglesMatchReader {
 	boolean allMatchesFinishedForLeague(Long leagueId);
 
 	boolean allMatchesNotStartedForLeague(Long leagueId);
+
+	boolean allRoundMatchesDone(Long leagueId, int roundNumber);
 }

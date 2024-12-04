@@ -14,7 +14,9 @@ import org.badminton.domain.domain.clubmember.info.ClubMemberWithdrawInfo;
 import org.badminton.domain.domain.clubmember.info.MemberIsClubMemberInfo;
 import org.badminton.domain.domain.clubmember.info.RejectApplyInfo;
 import org.badminton.domain.domain.clubmember.service.ClubMemberService;
-import org.badminton.domain.domain.mail.MailService;
+import org.badminton.domain.domain.mail.event.SendApplyEmailEvent;
+import org.badminton.domain.domain.mail.event.SendResultEmailEvent;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -29,25 +31,27 @@ import lombok.extern.slf4j.Slf4j;
 public class ClubMemberFacade {
 	private final ClubMemberService clubMemberService;
 	private final ClubApplyService clubApplyService;
-	private final MailService mailService;
 	private final ClubMemberPolicy clubMemberPolicy;
+	private final ApplicationEventPublisher eventPublisher;
 
 	@Transactional
 	public ApplyClubInfo applyClub(String memberToken, String clubToken, ClubApplyCommand command) {
 		ApplyClubInfo applyClubInfo = clubApplyService.applyClub(memberToken, clubToken, command.applyReason());
-		mailService.prepareClubApplyEmail(clubToken, memberToken);
+		eventPublisher.publishEvent(new SendApplyEmailEvent(clubToken, memberToken));
 		return applyClubInfo;
 	}
 
+	@Transactional
 	public ApproveApplyInfo approveApplying(Long clubApplyId, String memberToken, String clubToken) {
 		clubMemberPolicy.validateClubOwner(memberToken, clubToken);
-		mailService.prepareClubApplyResultEmail(clubApplyId, true);
+		eventPublisher.publishEvent(new SendResultEmailEvent(clubApplyId, true));
 		return clubApplyService.approveApplying(clubApplyId);
 	}
 
+	@Transactional
 	public RejectApplyInfo rejectApplying(Long clubApplyId, String memberToken, String clubToken) {
 		clubMemberPolicy.validateClubOwner(memberToken, clubToken);
-		mailService.prepareClubApplyResultEmail(clubApplyId, false);
+		eventPublisher.publishEvent(new SendResultEmailEvent(clubApplyId, false));
 		return clubApplyService.rejectApplying(clubApplyId);
 	}
 

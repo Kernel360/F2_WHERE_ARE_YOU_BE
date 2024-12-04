@@ -1,10 +1,10 @@
 package org.badminton.api.aws.s3.service;
 
-import org.badminton.api.aws.s3.model.dto.ImageUploadRequest;
+import org.springframework.web.multipart.MultipartFile;
 
 public interface ImageService {
-	String uploadFile(ImageUploadRequest file);
+	String uploadFile(MultipartFile file, String uuid);
 
-	String makeFileName(String newFileExtension);
+	String makeFileName(String newFileExtension, String uuid);
 }
 

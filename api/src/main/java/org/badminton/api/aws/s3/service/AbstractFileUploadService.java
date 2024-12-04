@@ -4,7 +4,6 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.Objects;
 
-import org.badminton.api.aws.s3.model.dto.ImageUploadRequest;
 import org.badminton.api.common.exception.EmptyFileException;
 import org.badminton.api.common.exception.FileSizeOverException;
 import org.springframework.beans.factory.annotation.Value;
@@ -32,22 +31,20 @@ public abstract class AbstractFileUploadService implements ImageService {
 	private static final String S3_URL_PREFIX = "https://badminton-team.s3.ap-northeast-2.amazonaws.com";
 	private static final String CLOUDFRONT_URL_PREFIX = "https://d36om9pjoifd2y.cloudfront.net";
 
-	public String uploadFile(ImageUploadRequest file) {
-		MultipartFile uploadFile = file.multipartFile();
+	public String uploadFile(MultipartFile uploadFile, String uuid) {
 		if (uploadFile.getSize() > MAX_FILE_SIZE) {
 			throw new FileSizeOverException(uploadFile.getSize());
 		}
 
-		// 파일이 비어있거나 파일 이름이 없는 경우 체크
 		if (uploadFile.isEmpty() || Objects.isNull(uploadFile.getOriginalFilename())) {
 			throw new EmptyFileException();
 		}
+
 		try {
 			String fileExtension = getFileExtension(uploadFile.getOriginalFilename());
-
 			byte[] processedImage = processImage(uploadFile, fileExtension);
 			String newFileExtension = determineNewFileExtension(fileExtension);
-			String fileName = makeFileName(newFileExtension);
+			String fileName = makeFileName(newFileExtension, uuid);
 
 			ObjectMetadata objectMetadata = new ObjectMetadata();
 			objectMetadata.setContentLength(processedImage.length);
@@ -98,5 +95,5 @@ public abstract class AbstractFileUploadService implements ImageService {
 	}
 
 	@Override
-	public abstract String makeFileName(String newFileExtension);
+	public abstract String makeFileName(String newFileExtension, String uuid);
 }

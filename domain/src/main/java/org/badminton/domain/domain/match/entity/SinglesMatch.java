@@ -133,4 +133,8 @@ public class SinglesMatch extends AbstractBaseTime {
 	public void startMatch() {
 		this.matchStatus = MatchStatus.IN_PROGRESS;
 	}
+
+	public void byeMatch() {
+		this.matchStatus = MatchStatus.BYE;
+	}
 }

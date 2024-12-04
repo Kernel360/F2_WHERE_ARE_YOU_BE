@@ -29,7 +29,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -89,8 +88,7 @@ public class ClubController {
 	)
 	public CommonResponse<ClubUpdateResponse> updateClub(@PathVariable String clubToken,
 		@Valid @RequestBody ClubUpdateRequest clubUpdateRequest, @AuthenticationPrincipal CustomOAuth2Member member) {
-		CustomOAuth2Member member1 = (CustomOAuth2Member)SecurityContextHolder.getContext().getAuthentication();
-		String memberToken = member1.getMemberToken();
+		
 		clubMemberPolicy.validateClubMember(member.getMemberToken(), clubToken);
 		ClubUpdateCommand command = clubDtoMapper.of(clubUpdateRequest);
 		ClubUpdateInfo clubUpdateInfo = clubFacade.updateClubInfo(command, clubToken, member.getMemberToken());

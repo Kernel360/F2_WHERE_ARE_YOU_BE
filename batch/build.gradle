@@ -6,7 +6,6 @@ dependencies {
     implementation group: 'org.springdoc', name: 'springdoc-openapi-starter-webmvc-ui', version: '2.6.0'
     implementation 'io.jsonwebtoken:jjwt-api:0.12.3'
     implementation 'org.springframework.boot:spring-boot-starter-batch'
-    implementation 'org.springframework.boot:spring-boot-starter-mail'
 
 
     testImplementation 'org.springframework.batch:spring-batch-test'
