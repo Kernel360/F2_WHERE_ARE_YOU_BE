@@ -51,8 +51,7 @@ public class SecurityConfig {
 	public SecurityFilterChain publicFilterChain(HttpSecurity http) throws Exception {
 		http
 			.securityMatcher("/", "/oauth2/**", "/login/**", "/error", "/swagger-ui/**", "/v1/leagues/**",
-				"/v1/members/session",
-				"/v1/clubs/{clubToken}/clubMembers/check")
+				"/v1/members/session", "/v1/clubs/{clubToken}/clubMembers/check")
 			.csrf(AbstractHttpConfigurer::disable)
 			.cors(this::corsConfigurer)
 			.authorizeHttpRequests(auth -> auth
