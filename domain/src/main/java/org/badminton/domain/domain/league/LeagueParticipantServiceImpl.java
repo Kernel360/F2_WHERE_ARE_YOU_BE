@@ -59,9 +59,6 @@ public class LeagueParticipantServiceImpl implements LeagueParticipantService {
 		LeagueParticipant leagueParticipant = leagueParticipantReader.findParticipant(leagueId,
 			clubMember.getClubMemberId());
 		var result = leagueParticipantStore.cancelStore(leagueParticipant);
-		if (league.getLeagueStatus() == LeagueStatus.RECRUITING_COMPLETED) {
-			league.reopenLeagueRecruiting();
-		}
 		leagueStore.store(league);
 		return LeagueParticipantCancelInfo.from(result);
 	}
@@ -90,8 +87,7 @@ public class LeagueParticipantServiceImpl implements LeagueParticipantService {
 	}
 
 	private void validateCancelAvailableLeagueStatus(League league) {
-		if (league.getLeagueStatus() == LeagueStatus.PLAYING || league.getLeagueStatus() == LeagueStatus.CANCELED
-			|| league.getLeagueStatus() == LeagueStatus.FINISHED) {
+		if (league.getLeagueStatus() != LeagueStatus.RECRUITING_COMPLETED) {
 			throw new LeagueParticipationCannotBeCanceledException(league.getLeagueId(), league.getLeagueStatus());
 		}
 	}
@@ -112,9 +108,6 @@ public class LeagueParticipantServiceImpl implements LeagueParticipantService {
 	private void checkParticipantCount(League league) {
 		if (league.getPlayerLimitCount() <= leagueParticipantReader.countParticipantMember(league.getLeagueId())) {
 			throw new ParticipationLimitReachedException(league.getLeagueId());
-		}
-		if (league.getPlayerLimitCount() == leagueParticipantReader.countParticipantMember(league.getLeagueId()) + 1) {
-			league.completeLeagueRecruiting();
 		}
 	}
 

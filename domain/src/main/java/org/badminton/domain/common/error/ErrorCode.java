@@ -84,7 +84,7 @@ public enum ErrorCode {
 	PLAYER_LIMIT_COUNT_MUST_BE_MORE_THAN_FOUR(412, "경기 최대 참여 인원은 복식 경기일 경우 4 이상이어야 합니다."),
 	LEAGUE_OWNER_CANNOT_CANCEL_LEAGUE_PARTICIPATION(412, "경기를 생성한 사람은 경기 참여를 취소할 수 없습니다."),
 	LEAGUE_CANNOT_BE_CANCELED_WHEN_IS_NOT_RECRUITING(412, "경기 모집 중일 때만 경기를 취소할 수 있습니다."),
-	INVALID_LEAGUE_STATUS_TO_CANCEL_LEAGUE_PARTICIPATION(412, "경기 중이거나, 취소되거나, 종료된 경기에 대해 경기 참여를 취소할 수 없습니다."),
+	INVALID_LEAGUE_STATUS_TO_CANCEL_LEAGUE_PARTICIPATION(412, "모집 중인 경기에 대해서만 경기 참여를 취소할 수 있습니다."),
 	INVALID_TIME_TO_CANCEL_LEAGUE_PARTICIPATION(412, "모집 마감 시간이 지나면 경기 참여를 취소할 수 없습니다."),
 	INVALID_LEAGUE_STATUS_TO_GENERATE_BRACKET(412, "취소된 경기나 종료된 경기는 대진표를 생성할 수 없습니다."),
 	INVALID_TIME_TO_PARTICIPATE_IN_LEAGUE(412, "모집 마감 시간이 지나면 경기 참여 신청을 할 수 없습니다."),
