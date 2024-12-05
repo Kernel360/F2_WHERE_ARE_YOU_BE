@@ -35,12 +35,7 @@ public abstract class AbstractFileUploadService implements ImageService {
 		if (byteFiles.length > MAX_FILE_SIZE) {
 			throw new FileSizeOverException(byteFiles.length);
 		}
-		log.info("upload : {}", fileName);
-		// if (uploadFile.isEmpty() || Objects.isNull(uploadFile.getOriginalFilename())) {
-		// 	throw new EmptyFileException();
-		// }
-		log.info("upload validate 이후 : {}", fileName);
-
+		
 		try {
 			String fileExtension = getFileExtension(fileName);
 			byte[] processedImage = processImage(byteFiles, fileExtension);

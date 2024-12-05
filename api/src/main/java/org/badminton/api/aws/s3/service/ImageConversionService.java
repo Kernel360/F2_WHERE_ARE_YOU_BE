@@ -19,10 +19,9 @@ import lombok.extern.slf4j.Slf4j;
 public class ImageConversionService {
 
 	public byte[] convertToWebP(byte[] fileName) {
-		log.info("try 시작 전 :{}", fileName);
 		try (ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
 
-			log.info("try 시작 :{}", fileName);
+			log.info("try 시작 부분 :{}", fileName);
 
 			InputStream inputStream = new ByteArrayInputStream(fileName);
 
@@ -31,7 +30,6 @@ public class ImageConversionService {
 			ImageMetadata metadata = ImageMetadata.empty;
 
 			writer.write(image, metadata, outputStream);
-			log.info("writer.write 후");
 
 			return outputStream.toByteArray();
 		} catch (IOException exception) {
