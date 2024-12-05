@@ -122,6 +122,7 @@ public class MatchController {
 		@Valid @RequestBody SetScoreUpdateRequest setScoreUpdateRequest,
 		@AuthenticationPrincipal CustomOAuth2Member member
 	) {
+		clubMemberPolicy.validateLeagueParticipant(leagueId, member.getMemberToken());
 		String memberToken = member.getMemberToken();
 		SetInfo.Main setInfo = matchFacade.registerSetScore(leagueId, matchId, setNumber, setScoreUpdateRequest,
 			memberToken);

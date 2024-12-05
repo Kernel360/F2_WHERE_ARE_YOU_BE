@@ -2,7 +2,6 @@ package org.badminton.infrastructure.match.service;
 
 import org.badminton.domain.common.enums.MatchType;
 import org.badminton.domain.common.enums.SetStatus;
-import org.badminton.domain.common.exception.league.LeagueParticipationNotExistException;
 import org.badminton.domain.common.exception.match.LeagueParticipantNotDeterminedException;
 import org.badminton.domain.common.exception.match.PreviousDetNotFinishedException;
 import org.badminton.domain.common.exception.match.RoundNotFinishedException;
@@ -37,10 +36,6 @@ public class RetrieveMatchSet {
 	private final DoublesMatchStore doublesMatchStore;
 
 	public void setMatchSetScore(Long leagueId, Long matchId, int setNumber, Score score, String memberToken) {
-		if (!leagueParticipantReader.isParticipant(memberToken, leagueId)) {
-			throw new LeagueParticipationNotExistException(leagueId, memberToken);
-		}
-
 		League league = leagueReader.readLeagueById(leagueId);
 
 		if (league.getMatchType() == MatchType.SINGLES) {
