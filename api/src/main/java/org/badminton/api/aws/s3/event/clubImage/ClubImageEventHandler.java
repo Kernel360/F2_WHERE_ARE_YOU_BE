@@ -17,7 +17,6 @@ public class ClubImageEventHandler {
 	@Async
 	@TransactionalEventListener
 	public void convertAndSaveImage(ClubImageEvent clubImageEvent) {
-		log.info("convertAndSaveImage 메서드 : {}", clubImageEvent.getMultipartFile().getName());
 		clubImageService.uploadFile(clubImageEvent.getMultipartFile(), clubImageEvent.getUuid());
 	}
 }

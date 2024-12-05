@@ -22,11 +22,9 @@ public class ImageConversionService {
 		try (ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
 			 InputStream inputStream = file.getInputStream()) {
 
-			// 스트림을 한 번만 열어 사용
 			ImmutableImage image = ImmutableImage.loader().fromStream(inputStream);
 			WebpWriter writer = WebpWriter.DEFAULT;
 
-			// 메타데이터는 비워두거나 생성
 			ImageMetadata metadata = ImageMetadata.empty;
 
 			writer.write(image, metadata, outputStream);
