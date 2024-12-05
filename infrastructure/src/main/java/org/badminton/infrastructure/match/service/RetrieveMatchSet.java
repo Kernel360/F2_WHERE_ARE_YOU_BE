@@ -3,7 +3,7 @@ package org.badminton.infrastructure.match.service;
 import org.badminton.domain.common.enums.MatchType;
 import org.badminton.domain.common.enums.SetStatus;
 import org.badminton.domain.common.exception.league.LeagueParticipationNotExistException;
-import org.badminton.domain.common.exception.match.LeagueParticipationNotExistInMatchException;
+import org.badminton.domain.common.exception.match.LeagueParticipantNotDeterminedException;
 import org.badminton.domain.common.exception.match.PreviousDetNotFinishedException;
 import org.badminton.domain.common.exception.match.RoundNotFinishedException;
 import org.badminton.domain.domain.league.LeagueParticipantReader;
@@ -86,7 +86,7 @@ public class RetrieveMatchSet {
 		SinglesMatch match = singlesMatchReader.getSinglesMatch(matchId);
 
 		if (match.getLeagueParticipant1() == null || match.getLeagueParticipant2() == null) {
-			throw new LeagueParticipationNotExistInMatchException(matchId);
+			throw new LeagueParticipantNotDeterminedException(matchId);
 		}
 
 		if (setNumber == 1) {
@@ -102,7 +102,7 @@ public class RetrieveMatchSet {
 		DoublesMatch match = doublesMatchReader.getDoublesMatch(matchId);
 
 		if (match.getTeam1() == null || match.getTeam2() == null) {
-			throw new LeagueParticipationNotExistInMatchException(matchId);
+			throw new LeagueParticipantNotDeterminedException(matchId);
 		}
 
 		if (setNumber == 1) {

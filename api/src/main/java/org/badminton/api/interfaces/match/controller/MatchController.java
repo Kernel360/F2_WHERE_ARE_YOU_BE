@@ -13,6 +13,7 @@ import org.badminton.api.interfaces.match.dto.SetScoreFinishResponse;
 import org.badminton.api.interfaces.match.dto.SetScoreResponse;
 import org.badminton.api.interfaces.match.dto.SetScoreUpdateRequest;
 import org.badminton.api.interfaces.match.dto.StartMatchCommand;
+import org.badminton.domain.common.policy.ClubMemberPolicy;
 import org.badminton.domain.domain.match.command.MatchCommand.UpdateSetScore;
 import org.badminton.domain.domain.match.info.BracketInfo;
 import org.badminton.domain.domain.match.info.MatchInfo;
@@ -39,6 +40,7 @@ import lombok.extern.slf4j.Slf4j;
 public class MatchController {
 
 	private final MatchFacade matchFacade;
+	private final ClubMemberPolicy clubMemberPolicy;
 
 	@GetMapping
 	@Operation(summary = "대진표 조회",
@@ -164,10 +166,11 @@ public class MatchController {
 	public CommonResponse<String> startMatch(
 		@PathVariable String clubToken,
 		@PathVariable Long leagueId,
-		@PathVariable Long matchId
+		@PathVariable Long matchId,
+		@AuthenticationPrincipal CustomOAuth2Member member
 	) {
-		StartMatchCommand startMatchCommand =
-			new StartMatchCommand(clubToken, leagueId, matchId);
+		clubMemberPolicy.validateLeagueParticipant(leagueId, member.getMemberToken());
+		StartMatchCommand startMatchCommand = new StartMatchCommand(clubToken, leagueId, matchId);
 		MatchOperationHandler matchOperationFacade = matchFacade.getMatchOperationHandler(leagueId);
 		matchOperationFacade.startMatch(startMatchCommand);
 		return CommonResponse.success("OK");

@@ -9,7 +9,7 @@ import org.badminton.domain.common.enums.MatchStatus;
 import org.badminton.domain.common.enums.SetStatus;
 import org.badminton.domain.common.exception.match.AlreadyWinnerDeterminedException;
 import org.badminton.domain.common.exception.match.ByeMatchException;
-import org.badminton.domain.common.exception.match.LeagueParticipantsNotExistsException;
+import org.badminton.domain.common.exception.match.LeagueParticipantNotDeterminedException;
 import org.badminton.domain.common.exception.match.PreviousDetNotFinishedException;
 import org.badminton.domain.common.exception.match.RoundNotFinishedException;
 import org.badminton.domain.common.exception.match.SetFinishedException;
@@ -107,7 +107,7 @@ public class TournamentSinglesMatchStrategy extends AbstractSinglesMatchStrategy
 		}
 
 		if (singlesMatch.getLeagueParticipant1() == null || singlesMatch.getLeagueParticipant2() == null) {
-			throw new LeagueParticipantsNotExistsException(matchId);
+			throw new LeagueParticipantNotDeterminedException(matchId);
 		}
 
 		updateSetScore(singlesMatch, setNumber, updateSetScoreCommand);
