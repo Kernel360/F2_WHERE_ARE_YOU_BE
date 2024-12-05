@@ -65,13 +65,13 @@ public class DoublesMatchReaderImpl implements DoublesMatchReader {
 
 	@Override
 	public boolean allMatchesNotStartedForLeague(Long leagueId) {
-		List<MatchStatus> statuses = Arrays.asList(MatchStatus.NOT_STARTED, MatchStatus.BYE);
-		return doublesMatchRepository.allMatchesNotStartedForLeague(leagueId, statuses);
+		List<MatchStatus> UnPlayedMatchStatuses = Arrays.asList(MatchStatus.NOT_STARTED, MatchStatus.BYE);
+		return doublesMatchRepository.allMatchesNotStartedForLeague(leagueId, UnPlayedMatchStatuses);
 	}
 
 	@Override
 	public boolean allRoundMatchesDone(Long leagueId, int roundNumber) {
-		List<MatchStatus> statuses = List.of(MatchStatus.FINISHED, MatchStatus.BYE);
-		return doublesMatchRepository.areAllMatchesFinishedOrBye(leagueId, roundNumber, statuses);
+		List<MatchStatus> CompletedOrBypassedStatuses = List.of(MatchStatus.FINISHED, MatchStatus.BYE);
+		return doublesMatchRepository.areAllMatchesFinishedOrBye(leagueId, roundNumber, CompletedOrBypassedStatuses);
 	}
 }

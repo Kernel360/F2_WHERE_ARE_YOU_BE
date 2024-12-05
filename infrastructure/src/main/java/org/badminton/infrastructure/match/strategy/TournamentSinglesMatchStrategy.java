@@ -8,9 +8,9 @@ import org.badminton.domain.common.enums.MatchResult;
 import org.badminton.domain.common.enums.MatchStatus;
 import org.badminton.domain.common.enums.SetStatus;
 import org.badminton.domain.common.exception.match.AlreadyWinnerDeterminedException;
-import org.badminton.domain.common.exception.match.ByeMatchException;
 import org.badminton.domain.common.exception.match.LeagueParticipantsNotExistsException;
 import org.badminton.domain.common.exception.match.PreviousDetNotFinishedException;
+import org.badminton.domain.common.exception.match.RegisterScoreInByeMatchException;
 import org.badminton.domain.common.exception.match.RoundNotFinishedException;
 import org.badminton.domain.common.exception.match.SetFinishedException;
 import org.badminton.domain.domain.league.LeagueParticipantReader;
@@ -95,7 +95,7 @@ public class TournamentSinglesMatchStrategy extends AbstractSinglesMatchStrategy
 		validatePreviousRoundCompletion(singlesMatch.getLeague().getLeagueId(), singlesMatch.getRoundNumber());
 
 		if (singlesMatch.getMatchStatus() == MatchStatus.BYE) {
-			throw new ByeMatchException(singlesMatch.getId());
+			throw new RegisterScoreInByeMatchException(singlesMatch.getId());
 		}
 
 		if (isMatchWinnerDetermined(singlesMatch)) {

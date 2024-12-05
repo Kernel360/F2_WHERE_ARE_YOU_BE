@@ -104,7 +104,7 @@ public enum ErrorCode {
 	CLUB_OWNER_CANT_WITHDRAW(412, "동호회원이 2명 이상인 동호회 회장은 동호회를 탈퇴할 수 없습니다."),
 	NOT_LEAGUE_OWNER(412, "경기를 만든 사용자만 수정 및 삭제를 할 수 있습니다"),
 	CLUB_MEMBER_EXPEL_EXCEPTION(412, "해당 동호회에서 제제를 받아 가입 신청을 할 수 없습니다."),
-	BYE_MATCH(412, "해당 매치는 부전승 매치 입니다"),
+	BYE_MATCH_ACTION_NOT_ALLOWED(412, "해당 매치는 부전승 매치이기 때문에 점수를 수정할 수 없습니다"),
 
 	// 500 Errors
 	INTERNAL_SERVER_ERROR(500, "서버 내부 오류가 발생했습니다."),
