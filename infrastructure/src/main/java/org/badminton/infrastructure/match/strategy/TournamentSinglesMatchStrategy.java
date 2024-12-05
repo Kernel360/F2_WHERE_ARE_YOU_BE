@@ -10,6 +10,8 @@ import org.badminton.domain.common.enums.SetStatus;
 import org.badminton.domain.common.exception.match.AlreadyWinnerDeterminedException;
 import org.badminton.domain.common.exception.match.ByeMatchException;
 import org.badminton.domain.common.exception.match.LeagueParticipantsNotExistsException;
+import org.badminton.domain.common.exception.match.PreviousDetNotFinishedException;
+import org.badminton.domain.common.exception.match.RoundNotFinishedException;
 import org.badminton.domain.common.exception.match.SetFinishedException;
 import org.badminton.domain.domain.league.LeagueParticipantReader;
 import org.badminton.domain.domain.league.LeagueReader;
@@ -88,6 +90,10 @@ public class TournamentSinglesMatchStrategy extends AbstractSinglesMatchStrategy
 		MatchCommand.UpdateSetScore updateSetScoreCommand) {
 		SinglesMatch singlesMatch = singlesMatchReader.getSinglesMatch(matchId);
 
+		validatePreviousSetCompletion(setNumber, singlesMatch);
+
+		validatePreviousRoundCompletion(singlesMatch.getLeague().getLeagueId(), singlesMatch.getRoundNumber());
+
 		if (singlesMatch.getMatchStatus() == MatchStatus.BYE) {
 			throw new ByeMatchException(singlesMatch.getId());
 		}
@@ -105,7 +111,6 @@ public class TournamentSinglesMatchStrategy extends AbstractSinglesMatchStrategy
 		}
 
 		updateSetScore(singlesMatch, setNumber, updateSetScoreCommand);
-		singlesMatchStore.store(singlesMatch);
 
 		if (LIMIT_SET_GAME > setNumber) {
 			changeNextSetStatus(singlesMatch, setNumber);
@@ -118,8 +123,29 @@ public class TournamentSinglesMatchStrategy extends AbstractSinglesMatchStrategy
 		if (isAllMatchFinished(singlesMatch)) {
 			leagueReader.readLeagueById(singlesMatch.getLeague().getLeagueId()).finishLeague();
 		}
-
+		singlesMatchStore.store(singlesMatch);
 		return SetInfo.fromSinglesSet(matchId, setNumber, singlesMatch.getSinglesSets().get(setNumber - 1));
+	}
+
+	private void validatePreviousRoundCompletion(Long leagueId, int roundNumber) {
+
+		if (roundNumber == 1) {
+			return;
+		}
+
+		if (!singlesMatchReader.allRoundMatchesDone(leagueId, roundNumber - 1)) {
+			throw new RoundNotFinishedException(roundNumber - 1);
+		}
+	}
+
+	private void validatePreviousSetCompletion(int setNumber, SinglesMatch singlesMatch) {
+
+		if (setNumber == 1) {
+			return;
+		}
+		if (singlesMatch.getSinglesSet(setNumber - 1).getSetStatus() != SetStatus.FINISHED) {
+			throw new PreviousDetNotFinishedException(setNumber - 1);
+		}
 	}
 
 	private void processMatchAndNextRound(SinglesMatch singlesMatch) {

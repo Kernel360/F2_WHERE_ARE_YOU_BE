@@ -8,6 +8,7 @@ import org.badminton.domain.common.enums.MatchResult;
 import org.badminton.domain.common.enums.MatchStatus;
 import org.badminton.domain.common.enums.SetStatus;
 import org.badminton.domain.common.exception.match.AlreadyWinnerDeterminedException;
+import org.badminton.domain.common.exception.match.PreviousDetNotFinishedException;
 import org.badminton.domain.common.exception.match.SetFinishedException;
 import org.badminton.domain.domain.league.LeagueReader;
 import org.badminton.domain.domain.league.entity.League;
@@ -65,6 +66,8 @@ public class FreeSinglesMatchStrategy extends AbstractSinglesMatchStrategy {
 		MatchCommand.UpdateSetScore updateSetScoreCommand) {
 		SinglesMatch singlesMatch = singlesMatchReader.getSinglesMatch(matchId);
 
+		validatePreviousSetCompletion(setNumber, singlesMatch);
+
 		if (isMatchWinnerDetermined(singlesMatch)) {
 			throw new AlreadyWinnerDeterminedException(singlesMatch.getId());
 		}
@@ -92,6 +95,16 @@ public class FreeSinglesMatchStrategy extends AbstractSinglesMatchStrategy {
 
 		singlesMatchStore.store(singlesMatch);
 		return SetInfo.fromSinglesSet(matchId, setNumber, singlesMatch.getSinglesSets().get(setNumber - 1));
+	}
+
+	private void validatePreviousSetCompletion(int setNumber, SinglesMatch singlesMatch) {
+
+		if (setNumber == 1) {
+			return;
+		}
+		if (singlesMatch.getSinglesSet(setNumber - 1).getSetStatus() != SetStatus.FINISHED) {
+			throw new PreviousDetNotFinishedException(setNumber - 1);
+		}
 	}
 
 	private void changeNextSetStatus(SinglesMatch singlesMatch, Integer setNumber) {

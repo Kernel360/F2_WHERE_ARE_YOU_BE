@@ -2,6 +2,7 @@ package org.badminton.infrastructure.match.reader;
 
 import java.util.List;
 
+import org.badminton.domain.common.enums.MatchStatus;
 import org.badminton.domain.common.enums.MatchType;
 import org.badminton.domain.common.exception.match.BracketNotExistException;
 import org.badminton.domain.common.exception.match.MatchNotExistException;
@@ -64,5 +65,11 @@ public class DoublesMatchReaderImpl implements DoublesMatchReader {
 	@Override
 	public boolean allMatchesNotStartedForLeague(Long leagueId) {
 		return doublesMatchRepository.allMatchesNotStartedForLeague(leagueId);
+	}
+
+	@Override
+	public boolean allRoundMatchesDone(Long leagueId, int roundNumber) {
+		List<MatchStatus> statuses = List.of(MatchStatus.FINISHED, MatchStatus.BYE);
+		return doublesMatchRepository.areAllMatchesFinishedOrBye(leagueId, roundNumber, statuses);
 	}
 }
