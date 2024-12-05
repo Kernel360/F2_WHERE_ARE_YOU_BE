@@ -16,7 +16,8 @@ public class MemberImageEventHandler {
 	@TransactionalEventListener
 	public void convertAndSaveImage(MemberImageEvent memberImageEvent) {
 		memberProfileImageService.uploadFile(
-			memberImageEvent.getMultipartFile(),
+			memberImageEvent.getByteFile(),
+			memberImageEvent.getOriginalFilename(),
 			memberImageEvent.getUuid()
 		);
 	}
