@@ -6,7 +6,9 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.event.TransactionalEventListener;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class MemberImageEventHandler {
@@ -15,9 +17,13 @@ public class MemberImageEventHandler {
 	@Async
 	@TransactionalEventListener
 	public void convertAndSaveImage(MemberImageEvent memberImageEvent) {
+		log.info("memberException : {} ", memberImageEvent);
 		memberProfileImageService.uploadFile(
-			memberImageEvent.getMultipartFile(),
+			memberImageEvent.getByteFile(),
+			memberImageEvent.getOriginalFilename(),
 			memberImageEvent.getUuid()
 		);
+		log.info("memberException 후 : {} ", memberImageEvent);
+
 	}
 }

@@ -17,6 +17,12 @@ public class ClubImageEventHandler {
 	@Async
 	@TransactionalEventListener
 	public void convertAndSaveImage(ClubImageEvent clubImageEvent) {
-		clubImageService.uploadFile(clubImageEvent.getMultipartFile(), clubImageEvent.getUuid());
+		log.info("ClubImageEventHandler : {} ", clubImageEvent);
+		clubImageService.uploadFile(
+			clubImageEvent.getByteFile(),
+			clubImageEvent.getOriginalFilename(),
+			clubImageEvent.getUuid()
+		);
+		log.info("ClubImageEventHandler 후 : {} ", clubImageEvent);
 	}
 }

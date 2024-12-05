@@ -1,5 +1,6 @@
 package org.badminton.api.application.member;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
@@ -9,6 +10,7 @@ import java.util.UUID;
 import org.apache.commons.lang3.StringUtils;
 import org.badminton.api.aws.s3.event.memeber.MemberImageEvent;
 import org.badminton.api.aws.s3.model.dto.ImageUploadRequest;
+import org.badminton.api.common.exception.EmptyFileException;
 import org.badminton.api.interfaces.match.dto.MatchResultResponse;
 import org.badminton.domain.domain.club.info.ClubCardInfo;
 import org.badminton.domain.domain.clubmember.info.ClubMemberMyPageInfo;
@@ -97,15 +99,22 @@ public class MemberFacade {
 
 	@Transactional
 	public String saveImage(ImageUploadRequest request) {
-		// uuid 객체 생성
-		String uuid = UUID.randomUUID().toString();
-		String extension = getFileExtension(Objects.requireNonNull(request.multipartFile().getOriginalFilename()));
+		try {
+			byte[] byteFile = request.multipartFile().getBytes();
 
-		// 비동기 처리
-		eventPublisher.publishEvent(new MemberImageEvent(request.multipartFile(), uuid));
+			String originalNam = request.multipartFile().getOriginalFilename();
+			// uuid 객체 생성
+			String uuid = UUID.randomUUID().toString();
+			String extension = getFileExtension(Objects.requireNonNull(originalNam));
 
-		// url 만드는 곳으로 전달
-		return preReturnUrl(uuid, extension);
+			// 비동기 처리
+			eventPublisher.publishEvent(new MemberImageEvent(byteFile, originalNam, uuid));
+
+			// url 만드는 곳으로 전달
+			return preReturnUrl(uuid, extension);
+		} catch (IOException e) {
+			throw new EmptyFileException(e);
+		}
 	}
 
 	private String preReturnUrl(String uuid, String extension) {
