@@ -133,4 +133,8 @@ public class DoublesMatch extends AbstractBaseTime {
 		}
 		return getSetInProgress().get().getSetNumber();
 	}
+
+	public void byeMatch() {
+		this.matchStatus = MatchStatus.BYE;
+	}
 }
