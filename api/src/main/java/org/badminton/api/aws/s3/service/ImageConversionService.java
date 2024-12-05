@@ -33,7 +33,6 @@ public class ImageConversionService {
 
 			return outputStream.toByteArray();
 		} catch (IOException exception) {
-			log.error("Error converting image to WebP: {}", exception.getMessage(), exception);
 			throw new EmptyFileException(exception);
 		}
 	}

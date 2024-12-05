@@ -3,11 +3,10 @@ package org.badminton.api.aws.s3.controller;
 import org.badminton.api.application.clubImage.ClubImageFacade;
 import org.badminton.api.aws.s3.model.dto.ImageUploadRequest;
 import org.badminton.api.common.response.CommonResponse;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -32,8 +31,7 @@ public class ClubImageController {
 			)
 		)
 	)
-	public CommonResponse<String> saveImage(@RequestPart("multipartFile") MultipartFile multipartFile) {
-		ImageUploadRequest request = new ImageUploadRequest(multipartFile);
+	public CommonResponse<String> saveImage(@ModelAttribute ImageUploadRequest request) {
 		return CommonResponse.success(clubImageFacade.saveImage(request));
 	}
 }

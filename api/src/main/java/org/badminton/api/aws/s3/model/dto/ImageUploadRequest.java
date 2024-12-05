@@ -6,9 +6,11 @@ import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import com.fasterxml.jackson.databind.annotation.JsonNaming;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import lombok.NonNull;
 
 @JsonNaming(PropertyNamingStrategies.LowerCamelCaseStrategy.class)
 public record ImageUploadRequest(
+	@NonNull
 	@Schema(description = "업로드할 이미지 파일", type = "string", format = "binary")
 	MultipartFile multipartFile
 ) {

@@ -5,7 +5,6 @@ import java.util.List;
 import org.badminton.api.application.member.MemberFacade;
 import org.badminton.api.aws.s3.model.dto.ImageUploadRequest;
 import org.badminton.api.aws.s3.service.MemberProfileImageService;
-import org.badminton.api.common.exception.member.ImageFileNotFoundException;
 import org.badminton.api.common.response.CommonResponse;
 import org.badminton.api.interfaces.auth.dto.CustomOAuth2Member;
 import org.badminton.api.interfaces.club.dto.ClubCardResponse;
@@ -23,14 +22,13 @@ import org.badminton.domain.domain.member.info.SimpleMemberInfo;
 import org.springframework.data.domain.Page;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -125,14 +123,9 @@ public class MemberController {
 			)
 		)
 	)
-
 	@PostMapping("/profileImage")
 	public CommonResponse<String> uploadProfileImage(
-		@RequestPart(value = "multipartFile", required = false) MultipartFile multipartFile) {
-		if (multipartFile == null || multipartFile.isEmpty()) {
-			throw new ImageFileNotFoundException();
-		}
-		ImageUploadRequest request = new ImageUploadRequest(multipartFile);
+		@ModelAttribute ImageUploadRequest request) {
 		return CommonResponse.success(memberFacade.saveImage(request));
 	}
 
