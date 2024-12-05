@@ -15,7 +15,9 @@ import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @RequiredArgsConstructor
 public abstract class AbstractFileUploadService implements ImageService {
 	private static final long MAX_FILE_SIZE = 2548576; // 1.5MB
@@ -39,7 +41,6 @@ public abstract class AbstractFileUploadService implements ImageService {
 		if (uploadFile.isEmpty() || Objects.isNull(uploadFile.getOriginalFilename())) {
 			throw new EmptyFileException();
 		}
-
 		try {
 			String fileExtension = getFileExtension(uploadFile.getOriginalFilename());
 			byte[] processedImage = processImage(uploadFile, fileExtension);
@@ -50,12 +51,10 @@ public abstract class AbstractFileUploadService implements ImageService {
 			objectMetadata.setContentLength(processedImage.length);
 			objectMetadata.setContentType(CONTENT_TYPE);
 
-			// S3에 파일 업로드
 			s3Client.putObject(new PutObjectRequest(bucket, fileName,
 				new ByteArrayInputStream(processedImage), objectMetadata)
 				.withCannedAcl(CannedAccessControlList.PublicRead));
 
-			// 업로드 후 CloudFront URL 반환
 			return toCloudFrontUrl(s3Client.getUrl(bucket, fileName).toString());
 
 		} catch (IOException e) {
