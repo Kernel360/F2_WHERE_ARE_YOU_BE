@@ -1,5 +1,6 @@
 package org.badminton.infrastructure.match.reader;
 
+import java.util.Arrays;
 import java.util.List;
 
 import org.badminton.domain.common.enums.MatchStatus;
@@ -64,7 +65,8 @@ public class DoublesMatchReaderImpl implements DoublesMatchReader {
 
 	@Override
 	public boolean allMatchesNotStartedForLeague(Long leagueId) {
-		return doublesMatchRepository.allMatchesNotStartedForLeague(leagueId);
+		List<MatchStatus> statuses = Arrays.asList(MatchStatus.NOT_STARTED, MatchStatus.BYE);
+		return doublesMatchRepository.allMatchesNotStartedForLeague(leagueId, statuses);
 	}
 
 	@Override
