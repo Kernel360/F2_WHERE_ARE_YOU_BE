@@ -12,6 +12,4 @@ public interface LeagueParticipantReader {
 	LeagueParticipant findParticipant(Long leagueId, Long clubMemberId);
 
 	List<LeagueParticipant> findAllByLeagueIdAndCanceledFalse(Long leagueId);
-
-	List<LeagueParticipant> findAllByClubMemberIdAndCanceledFalse(Long clubMemberId);
 }

@@ -9,12 +9,10 @@ import org.badminton.domain.domain.member.entity.Member;
 public record SinglesMatchInfo(
 	Long matchId,
 	int roundNumber,
-	boolean isParticipant1Banned,
 	String participant1MemberToken,
 	String participant1Name,
 	String participant1Image,
 	int participant1WinSetCount,
-	boolean isParticipant2Banned,
 	String participant2MemberToken,
 	String participant2Name,
 	String participant2Image,
@@ -23,18 +21,17 @@ public record SinglesMatchInfo(
 	String winnerToken,
 	Member.MemberTier participant1Tier,
 	Member.MemberTier participant2Tier
+
 ) {
 
 	public static SinglesMatchInfo fromSinglesMatch(SinglesMatch singlesMatch) {
 		return new SinglesMatchInfo(
 			singlesMatch.getId(),
 			singlesMatch.getRoundNumber(),
-			isParticipantBanned(singlesMatch.getLeagueParticipant1()),
 			getParticipantMemberToken(singlesMatch.getLeagueParticipant1()),
 			getParticipantName(singlesMatch.getLeagueParticipant1()),
 			getParticipantImage(singlesMatch.getLeagueParticipant1()),
 			singlesMatch.getPlayer1WinSetCount(),
-			isParticipantBanned(singlesMatch.getLeagueParticipant2()),
 			getParticipantMemberToken(singlesMatch.getLeagueParticipant2()),
 			getParticipantName(singlesMatch.getLeagueParticipant2()),
 			getParticipantImage(singlesMatch.getLeagueParticipant2()),
@@ -44,10 +41,6 @@ public record SinglesMatchInfo(
 			getParticipantMemberTier(singlesMatch.getLeagueParticipant1()),
 			getParticipantMemberTier(singlesMatch.getLeagueParticipant2())
 		);
-	}
-
-	private static boolean isParticipantBanned(LeagueParticipant leagueParticipant) {
-		return leagueParticipant.getClubMember().isBanned();
 	}
 
 	private static Member.MemberTier getParticipantMemberTier(LeagueParticipant participant) {
