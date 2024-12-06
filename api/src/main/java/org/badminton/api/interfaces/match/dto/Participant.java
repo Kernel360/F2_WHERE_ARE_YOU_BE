@@ -19,7 +19,9 @@ public record Participant(
 	Member.MemberTier tier,
 
 	@Schema(description = "이긴 세트수", requiredMode = Schema.RequiredMode.REQUIRED)
-	int participantWinSetCount
+	int participantWinSetCount,
 
+	@Schema(description = "밴 여부", requiredMode = Schema.RequiredMode.REQUIRED)
+	boolean isParticipantBanned
 ) {
 }
