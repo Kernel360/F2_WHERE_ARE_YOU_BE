@@ -135,4 +135,8 @@ public class RetrieveMatchSet {
 		League league = leagueReader.readLeagueById(leagueId);
 		return league.getMatchType();
 	}
+
+	public void deleteCache(RedisKey key) {
+		setRepository.deleteScore(key);
+	}
 }

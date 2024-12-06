@@ -60,4 +60,8 @@ public class SetRepository {
 		}
 		return scores;
 	}
+
+	public void deleteScore(RedisKey redisKey) {
+		hashOps.delete(redisKey.getKey(), redisKey.getField());
+	}
 }

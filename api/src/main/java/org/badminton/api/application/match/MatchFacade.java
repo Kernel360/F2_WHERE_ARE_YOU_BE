@@ -57,6 +57,7 @@ public class MatchFacade {
 		Map<RedisKey, Score> allScores = setRepository.getAllScores();
 		for (RedisKey key : allScores.keySet()) {
 			retrieveMatchSet.registerMatchSetScoreInDb(key, allScores.get(key));
+			retrieveMatchSet.deleteCache(key);
 		}
 	}
 
