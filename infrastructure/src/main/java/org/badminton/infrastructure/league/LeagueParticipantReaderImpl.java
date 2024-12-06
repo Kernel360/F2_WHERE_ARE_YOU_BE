@@ -39,9 +39,4 @@ public class LeagueParticipantReaderImpl implements LeagueParticipantReader {
 		return leagueParticipantRepository.findAllByLeagueLeagueIdAndCanceledFalse(leagueId);
 	}
 
-	@Override
-	public List<LeagueParticipant> findAllByClubMemberIdAndCanceledFalse(Long clubMemberId) {
-		return leagueParticipantRepository.findAllByClubMemberClubMemberId(clubMemberId);
-	}
-
 }
