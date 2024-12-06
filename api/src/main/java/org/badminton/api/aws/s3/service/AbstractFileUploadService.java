@@ -2,12 +2,10 @@ package org.badminton.api.aws.s3.service;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.util.Objects;
 
 import org.badminton.api.common.exception.EmptyFileException;
 import org.badminton.api.common.exception.FileSizeOverException;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.web.multipart.MultipartFile;
 
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
@@ -33,29 +31,29 @@ public abstract class AbstractFileUploadService implements ImageService {
 	private static final String S3_URL_PREFIX = "https://badminton-team.s3.ap-northeast-2.amazonaws.com";
 	private static final String CLOUDFRONT_URL_PREFIX = "https://d36om9pjoifd2y.cloudfront.net";
 
-	public String uploadFile(MultipartFile uploadFile, String uuid) {
-		if (uploadFile.getSize() > MAX_FILE_SIZE) {
-			throw new FileSizeOverException(uploadFile.getSize());
+	public String uploadFile(byte[] byteFiles, String fileName, String uuid) {
+		if (byteFiles.length > MAX_FILE_SIZE) {
+			throw new FileSizeOverException(byteFiles.length);
 		}
-
-		if (uploadFile.isEmpty() || Objects.isNull(uploadFile.getOriginalFilename())) {
-			throw new EmptyFileException();
-		}
+		
 		try {
-			String fileExtension = getFileExtension(uploadFile.getOriginalFilename());
-			byte[] processedImage = processImage(uploadFile, fileExtension);
+			String fileExtension = getFileExtension(fileName);
+			byte[] processedImage = processImage(byteFiles, fileExtension);
+			log.info(" try processedImage : {}", processedImage);
+
 			String newFileExtension = determineNewFileExtension(fileExtension);
-			String fileName = makeFileName(newFileExtension, uuid);
+			String newFileName = makeFileName(newFileExtension, uuid);
 
 			ObjectMetadata objectMetadata = new ObjectMetadata();
 			objectMetadata.setContentLength(processedImage.length);
 			objectMetadata.setContentType(CONTENT_TYPE);
 
-			s3Client.putObject(new PutObjectRequest(bucket, fileName,
+			s3Client.putObject(new PutObjectRequest(bucket, newFileName,
 				new ByteArrayInputStream(processedImage), objectMetadata)
 				.withCannedAcl(CannedAccessControlList.PublicRead));
+			log.info(" s3Client 실행 : {}", newFileName);
 
-			return toCloudFrontUrl(s3Client.getUrl(bucket, fileName).toString());
+			return toCloudFrontUrl(s3Client.getUrl(bucket, newFileName).toString());
 
 		} catch (IOException e) {
 			throw new EmptyFileException();
@@ -78,11 +76,11 @@ public abstract class AbstractFileUploadService implements ImageService {
 		}
 	}
 
-	private byte[] processImage(MultipartFile file, String extension) throws IOException {
+	private byte[] processImage(byte[] bytesFile, String extension) throws IOException {
 		if (WEBP.equalsIgnoreCase(extension) || AVIF.equalsIgnoreCase(extension)) {
-			return file.getBytes();
+			return bytesFile;
 		}
-		return imageConversionService.convertToWebP(file);
+		return imageConversionService.convertToWebP(bytesFile);
 	}
 
 	private String determineNewFileExtension(String extension) {
