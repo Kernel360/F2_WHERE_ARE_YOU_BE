@@ -19,8 +19,10 @@ import org.badminton.domain.domain.clubmember.info.ClubMemberInfo;
 import org.badminton.domain.domain.clubmember.info.ClubMemberMyPageInfo;
 import org.badminton.domain.domain.clubmember.info.ClubMemberWithdrawInfo;
 import org.badminton.domain.domain.clubmember.info.MemberIsClubMemberInfo;
+import org.badminton.domain.domain.league.event.LeagueParticipantCancelEvent;
 import org.badminton.domain.domain.member.MemberReader;
 import org.badminton.domain.domain.member.entity.Member;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -37,6 +39,7 @@ public class ClubMemberServiceImpl implements ClubMemberService {
 	private final MemberReader memberReader;
 	private final ClubMemberReader clubMemberReader;
 	private final ClubMemberStore clubMemberStore;
+	private final ApplicationEventPublisher eventPublisher;
 
 	@Override
 	@Transactional
@@ -48,6 +51,7 @@ public class ClubMemberServiceImpl implements ClubMemberService {
 	}
 
 	@Override
+	@Transactional
 	public ClubMemberInfo updateClubMemberRole(ClubMemberRoleUpdateCommand command, Long clubMemberId,
 		String clubToken) {
 
@@ -76,40 +80,50 @@ public class ClubMemberServiceImpl implements ClubMemberService {
 	}
 
 	@Override
+	@Transactional(readOnly = true)
 	public Page<ClubMemberInfo> findAllActiveClubMembers(String clubToken, Pageable pageable) {
 		Page<ClubMember> clubMembers = clubMemberReader.readAllActiveClubMembers(clubToken, pageable);
 		return clubMembers.map(ClubMemberInfo::valueOf);
 	}
 
 	@Override
+	@Transactional(readOnly = true)
 	public Page<ClubMemberInfo> findAllBannedClubMembers(String clubToken, Pageable pageable) {
 		Page<ClubMember> clubMembers = clubMemberReader.readAllBannedClubMembers(clubToken, pageable);
 		return clubMembers.map(ClubMemberInfo::valueOf);
 	}
 
 	@Override
+	@Transactional(readOnly = true)
 	public ClubMemberInfo getClubMember(String memberToken, String clubToken) {
 		ClubMember clubMember = clubMemberReader.getClubMember(clubToken, memberToken);
 		return ClubMemberInfo.valueOf(clubMember);
 	}
 
 	@Override
+	@Transactional
 	public ClubMemberBanRecordInfo expelClubMember(ClubMemberExpelCommand command, Long clubMemberId) {
 		ExpelStrategy expelStrategy = new ExpelStrategy(clubMemberStore);
 		ClubMember clubMember = getClubMember(clubMemberId);
 		clubOwnerProtect(clubMember);
+		//경기 참가를 취소시키는 이벤트 필요한 매개변수? 클럽맴버 아이디로 모든 참가기록 조회, 모든 게임 참가 취소(끝난경기 제외)
+		eventPublisher.publishEvent(new LeagueParticipantCancelEvent(clubMemberId));
 		return expelStrategy.execute(clubMember, command);
 	}
 
 	@Override
+	@Transactional
 	public ClubMemberBanRecordInfo banClubMember(ClubMemberBanCommand command, Long clubMemberId) {
 		BanStrategy banStrategy = new BanStrategy(clubMemberStore);
 		ClubMember clubMember = getClubMember(clubMemberId);
 		clubOwnerProtect(clubMember);
+		//이벤트
+		eventPublisher.publishEvent(new LeagueParticipantCancelEvent(clubMemberId));
 		return banStrategy.execute(clubMember, command);
 	}
 
 	@Override
+	@Transactional
 	public ClubMemberWithdrawInfo withdrawClubMember(Long clubMemberId, String clubToken) {
 		ClubMember clubMember = clubMemberReader.getClubMember(clubMemberId);
 		checkClubOwner(clubMember, clubToken);
@@ -143,16 +157,19 @@ public class ClubMemberServiceImpl implements ClubMemberService {
 	}
 
 	@Override
+	@Transactional(readOnly = true)
 	public Integer countExistingClub(String clubToken) {
 		return clubMemberReader.getClubMemberCountByClubToken(clubToken);
 	}
 
 	@Override
+	@Transactional(readOnly = true)
 	public Integer countExistingClub(Long clubId) {
 		return clubMemberReader.getClubMemberCounts(clubId);
 	}
 
 	@Override
+	@Transactional
 	public List<ClubCardInfo> getClubsByMemberToken(String memberToken) {
 		List<ClubMember> clubMembers = clubMemberReader.getClubMembersByMemberToken(memberToken);
 
@@ -170,6 +187,7 @@ public class ClubMemberServiceImpl implements ClubMemberService {
 	}
 
 	@Override
+	@Transactional
 	public MemberIsClubMemberInfo checkIsClubMember(String memberToken, String clubToken) {
 		boolean isClubMember = clubMemberReader.checkIsClubMember(memberToken, clubToken);
 		boolean isBanned = clubMemberReader.checkIsExpelClubMember(memberToken, clubToken);

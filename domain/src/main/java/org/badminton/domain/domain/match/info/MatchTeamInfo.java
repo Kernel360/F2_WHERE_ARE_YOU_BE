@@ -13,7 +13,9 @@ public record MatchTeamInfo(
 	String participant2Image,
 	int winSetCounts,
 	Member.MemberTier participant1Tier,
-	Member.MemberTier participant2Tier
+	Member.MemberTier participant2Tier,
+	boolean participant1IsBanned,
+	boolean participant2IsBanned
 ) {
 
 	public static MatchTeamInfo fromTeam(Team team, int winSetCounts) {
@@ -29,8 +31,9 @@ public record MatchTeamInfo(
 			getParticipantImage(team.getLeagueParticipant2()),
 			winSetCounts,
 			getParticipantMemberTier(team.getLeagueParticipant1()),
-			getParticipantMemberTier(team.getLeagueParticipant2())
-
+			getParticipantMemberTier(team.getLeagueParticipant2()),
+			getIsParticipant(team.getLeagueParticipant1()),
+			getIsParticipant(team.getLeagueParticipant1())
 		);
 	}
 
@@ -58,11 +61,15 @@ public record MatchTeamInfo(
 	private static String getParticipantImage(LeagueParticipant participant) {
 		if (isLeagueParticipantExist(participant))
 			return participant.getMember().getProfileImage();
-
 		return null;
 	}
 
 	private static boolean isLeagueParticipantExist(LeagueParticipant participant) {
 		return participant != null && participant.getMember() != null;
 	}
+
+	private static boolean getIsParticipant(LeagueParticipant participant) {
+		return participant.isCanceled();
+	}
+
 }

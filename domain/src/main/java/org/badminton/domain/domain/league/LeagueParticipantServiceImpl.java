@@ -19,9 +19,11 @@ import org.badminton.domain.domain.league.info.IsLeagueParticipantInfo;
 import org.badminton.domain.domain.league.info.LeagueParticipantCancelInfo;
 import org.badminton.domain.domain.league.info.LeagueParticipantDetailsInfo;
 import org.badminton.domain.domain.league.info.LeagueParticipantInfo;
+import org.badminton.domain.domain.match.store.DoublesMatchReader;
+import org.badminton.domain.domain.match.store.SinglesMatchReader;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -35,6 +37,9 @@ public class LeagueParticipantServiceImpl implements LeagueParticipantService {
 	private final LeagueReader leagueReader;
 	private final LeagueStore leagueStore;
 	private final ClubMemberReader clubMemberReader;
+	private final SinglesMatchReader singlesMatchReader;
+	private final DoublesMatchReader doublesMatchReader;
+	private final LeagueParticipantCancelProcessor cancelProcessor;
 
 	@Override
 	@Transactional
@@ -50,6 +55,7 @@ public class LeagueParticipantServiceImpl implements LeagueParticipantService {
 	}
 
 	@Override
+	@Transactional
 	public LeagueParticipantCancelInfo cancelLeagueParticipation(String memberToken, String clubToken, Long leagueId) {
 		League league = leagueReader.readLeagueById(leagueId);
 		leagueOwnerCannotCancelParticipation(league, memberToken);
@@ -75,6 +81,7 @@ public class LeagueParticipantServiceImpl implements LeagueParticipantService {
 	}
 
 	@Override
+	@Transactional(readOnly = true)
 	public List<LeagueParticipantDetailsInfo> getLeagueParticipants(Long leagueId) {
 		List<LeagueParticipant> leagueParticipants = leagueParticipantReader.findAllByLeagueIdAndCanceledFalse(
 			leagueId);
@@ -84,6 +91,18 @@ public class LeagueParticipantServiceImpl implements LeagueParticipantService {
 		return leagueParticipants.stream()
 			.map(LeagueParticipantDetailsInfo::from)
 			.toList();
+	}
+
+	@Override
+	@Transactional
+	public void cancelAllLeagueParticipants(Long clubMemberId) {
+		List<LeagueParticipant> leagueParticipants =
+			leagueParticipantReader.findAllByClubMemberIdAndCanceledFalse(clubMemberId);
+		leagueParticipants.forEach(this::leagueParticipantCancel);
+	}
+
+	private void leagueParticipantCancel(LeagueParticipant leagueParticipant) {
+		cancelProcessor.cancel(leagueParticipant);
 	}
 
 	private void validateCancelAvailableLeagueStatus(League league) {
@@ -127,5 +146,4 @@ public class LeagueParticipantServiceImpl implements LeagueParticipantService {
 			throw new LeagueNotRecruitingException(league.getLeagueId(), league.getLeagueStatus());
 		}
 	}
-
 }
