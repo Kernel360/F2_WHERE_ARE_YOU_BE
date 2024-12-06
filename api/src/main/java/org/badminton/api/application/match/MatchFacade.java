@@ -2,11 +2,11 @@ package org.badminton.api.application.match;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import org.badminton.api.interfaces.match.dto.SetScoreUpdateRequest;
 import org.badminton.domain.common.enums.MatchGenerationType;
 import org.badminton.domain.common.enums.MatchType;
-import org.badminton.domain.common.exception.match.SetScoreNotInCacheException;
 import org.badminton.domain.domain.league.LeagueReader;
 import org.badminton.domain.domain.match.info.BracketInfo;
 import org.badminton.domain.domain.match.info.LeagueSetsScoreInProgressInfo;
@@ -103,26 +103,28 @@ public class MatchFacade {
 	}
 
 	public SetInfo.Main retrieveSetInfo(Long leagueId, Long matchId, int setNumber) {
-		try {
-			Score score = retrieveMatchSet.getMatchSetScore(leagueId, matchId, setNumber);
+		Optional<Score> score = retrieveMatchSet.getMatchSetScore(leagueId, matchId, setNumber);
+		if (score.isPresent()) {
 			MatchType matchType = retrieveMatchSet.getMatchType(leagueId);
 			return SetInfo.Main.builder()
 				.matchId(matchId)
-				.score1(score.getLeft())
-				.score2(score.getRight())
+				.score1(score.get().getLeft())
+				.score2(score.get().getRight())
 				.matchType(matchType)
 				.setNumber(setNumber)
 				.build();
-		} catch (SetScoreNotInCacheException e) {
-			MatchRetrieveService matchRetrieveService = getMatchRetrieveService(leagueId);
-			MatchStrategy matchStrategy = matchRetrieveService.makeSinglesOrDoublesMatchStrategy(leagueId);
-			return matchRetrieveService.retrieveSet(matchStrategy, matchId, setNumber);
 		}
+		MatchRetrieveService matchRetrieveService = getMatchRetrieveService(leagueId);
+		MatchStrategy matchStrategy = matchRetrieveService.makeSinglesOrDoublesMatchStrategy(leagueId);
+		return matchRetrieveService.retrieveSet(matchStrategy, matchId, setNumber);
 	}
 
 	public MatchSetInfo retrieveMatchSetInfo(Long leagueId, Long matchId, int setNumber) {
+		Optional<Score> score = retrieveMatchSet.getMatchSetScore(leagueId, matchId, setNumber);
 		MatchRetrieveService matchRetrieveService = getMatchRetrieveService(leagueId);
 		MatchStrategy matchStrategy = matchRetrieveService.makeSinglesOrDoublesMatchStrategy(leagueId);
-		return matchRetrieveService.retrieveMatchSet(matchStrategy, matchId, setNumber);
+		MatchSetInfo matchSetInfo = matchRetrieveService.retrieveMatchSet(matchStrategy, matchId, setNumber);
+		score.ifPresent(matchSetInfo::cacheScore);
+		return matchSetInfo;
 	}
 }

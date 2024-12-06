@@ -3,17 +3,23 @@ package org.badminton.domain.domain.match.info;
 import org.badminton.domain.common.enums.SetStatus;
 import org.badminton.domain.domain.match.entity.DoublesSet;
 import org.badminton.domain.domain.match.entity.SinglesSet;
+import org.badminton.domain.domain.match.vo.Score;
 
-public record MatchSetInfo(
-	SinglesMatchPlayerInfo singlesMatchPlayerInfo,
-	DoublesMatchPlayerInfo doublesMatchPlayerInfo,
-	SetStatus setStatus,
-	int setScore1,
-	int setScore2,
-	int winSetScore1,
-	int winSetScore2,
-	int setNumber
-) {
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+
+@AllArgsConstructor
+@Getter
+public class MatchSetInfo {
+
+	private final SinglesMatchPlayerInfo singlesMatchPlayerInfo;
+	private final DoublesMatchPlayerInfo doublesMatchPlayerInfo;
+	private final SetStatus setStatus;
+	private int setScore1;
+	private int setScore2;
+	private final int winSetScore1;
+	private final int winSetScore2;
+	private final int setNumber;
 
 	public static MatchSetInfo fromSingles(SinglesSet singlesSet) {
 		return new MatchSetInfo(
@@ -41,4 +47,8 @@ public record MatchSetInfo(
 		);
 	}
 
+	public void cacheScore(Score score) {
+		this.setScore1 = score.getLeft();
+		this.setScore2 = score.getRight();
+	}
 }

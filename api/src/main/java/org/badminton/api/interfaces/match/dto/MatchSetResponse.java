@@ -27,15 +27,14 @@ public record MatchSetResponse(
 
 	public static MatchSetResponse from(MatchSetInfo matchSetInfo) {
 		return new MatchSetResponse(
-			SinglesMatchPlayerResponse.from(matchSetInfo.singlesMatchPlayerInfo()),
-			DoublesMatchPlayerResponse.of(matchSetInfo.doublesMatchPlayerInfo()),
-			matchSetInfo.setStatus(),
-			matchSetInfo.setScore1(),
-			matchSetInfo.setScore2(),
-			matchSetInfo.winSetScore1(),
-			matchSetInfo.winSetScore2(),
-			matchSetInfo.setNumber()
+			SinglesMatchPlayerResponse.from(matchSetInfo.getSinglesMatchPlayerInfo()),
+			DoublesMatchPlayerResponse.of(matchSetInfo.getDoublesMatchPlayerInfo()),
+			matchSetInfo.getSetStatus(),
+			matchSetInfo.getSetScore1(),
+			matchSetInfo.getSetScore2(),
+			matchSetInfo.getWinSetScore1(),
+			matchSetInfo.getWinSetScore2(),
+			matchSetInfo.getSetNumber()
 		);
 	}
-
 }

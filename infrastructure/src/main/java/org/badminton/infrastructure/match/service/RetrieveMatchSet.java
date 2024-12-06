@@ -1,5 +1,7 @@
 package org.badminton.infrastructure.match.service;
 
+import java.util.Optional;
+
 import org.badminton.domain.common.enums.MatchType;
 import org.badminton.domain.common.enums.SetStatus;
 import org.badminton.domain.common.exception.match.LeagueParticipantNotDeterminedException;
@@ -124,7 +126,7 @@ public class RetrieveMatchSet {
 		}
 	}
 
-	public Score getMatchSetScore(Long leagueId, Long matchId, int setNumber) {
+	public Optional<Score> getMatchSetScore(Long leagueId, Long matchId, int setNumber) {
 		League league = leagueReader.readLeagueById(leagueId);
 		return setRepository.getMatchSetScore(league.getMatchType(), matchId, setNumber);
 	}

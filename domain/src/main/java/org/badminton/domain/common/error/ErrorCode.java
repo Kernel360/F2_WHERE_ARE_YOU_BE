@@ -26,7 +26,7 @@ public enum ErrorCode {
 	ACCESS_DENIED(403, "리소스에 대한 접근이 제한되었습니다."),
 	LIMIT_EXCEEDED_403(403, "리소스의 제한 설정을 초과했습니다."),
 	OUT_OF_RANGE_403(403, "리소스의 제한 범위를 벗어났습니다."),
-	UNAUTHORIZED_USER_FOR_BRACKET_GENERATION(403, "경기를 생성한 사람만 대진표를 만들 수 있습니다."),
+	UNAUTHORIZED_USER_FOR_BRACKET_GENERATION(403, "경기를 만든 사용자만 대진표를 만들 수 있습니다."),
 
 	// 404 Errors
 	NOT_FOUND(404, "요청한 리소스를 찾을 수 없습니다."),
@@ -102,7 +102,7 @@ public enum ErrorCode {
 	SET_FINISHED(412, "Set 의 상태가 FINISHED 입니다"),
 	ALREADY_WINNER_DETERMINED(412, "매치의 승리자가 정해졌습니다"),
 	CLUB_OWNER_CANT_WITHDRAW(412, "동호회원이 2명 이상인 동호회 회장은 동호회를 탈퇴할 수 없습니다."),
-	NOT_LEAGUE_OWNER(412, "경기를 만든 사용자만 수정 및 삭제를 할 수 있습니다"),
+	NOT_LEAGUE_OWNER(412, "경기를 만든 사용자만 이용할 수 있습니다."),
 	CLUB_MEMBER_EXPEL_EXCEPTION(412, "해당 동호회에서 제제를 받아 가입 신청을 할 수 없습니다."),
 	BYE_MATCH_ACTION_NOT_ALLOWED(412, "해당 매치는 부전승 매치이기 때문에 점수를 수정할 수 없습니다"),
 
