@@ -12,7 +12,6 @@ spring:
   application:
     name: badminton
   jpa:
-    open-in-view: false
     properties:
       hibernate:
         format_sql: true

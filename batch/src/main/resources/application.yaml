@@ -14,7 +14,6 @@ spring:
       naming:
         physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
     defer-datasource-initialization: true
-    open-in-view: false
   messages:
     encoding: UTF-8
     basename: messages
