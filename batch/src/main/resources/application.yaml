@@ -9,12 +9,12 @@ spring:
     properties:
       hibernate:
         format_sql: true
-        dialect: org.hibernate.dialect.MySQL8Dialect
     hibernate:
       ddl-auto: ${DDL_METHOD_BATCH}
       naming:
         physical-strategy: org.hibernate.boot.model.naming.PhysicalNamingStrategyStandardImpl
     defer-datasource-initialization: true
+    open-in-view: false
   messages:
     encoding: UTF-8
     basename: messages
@@ -102,12 +102,6 @@ custom:
       port: 587
       username: ${MAIL_NAME}
       password: ${MAIL_PASSWORD}
-      properties:
-        mail:
-          smtp:
-            auth: true
-            starttls:
-              enable: true
 ---
 spring:
   config:
