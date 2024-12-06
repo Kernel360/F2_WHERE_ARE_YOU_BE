@@ -1,5 +1,7 @@
 package org.badminton.domain.domain.match.vo;
 
+import java.util.Optional;
+
 import lombok.Getter;
 
 @Getter
@@ -17,6 +19,10 @@ public class Score {
 		String[] split = score.split(":");
 		this.left = Integer.parseInt(split[0]);
 		this.right = Integer.parseInt(split[1]);
+	}
+
+	public static Optional<Score> emptyScore() {
+		return Optional.empty();
 	}
 
 	@Override

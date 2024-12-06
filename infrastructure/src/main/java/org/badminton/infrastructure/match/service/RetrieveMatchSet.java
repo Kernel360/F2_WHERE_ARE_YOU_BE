@@ -1,8 +1,9 @@
 package org.badminton.infrastructure.match.service;
 
+import java.util.Optional;
+
 import org.badminton.domain.common.enums.MatchType;
 import org.badminton.domain.common.enums.SetStatus;
-import org.badminton.domain.common.exception.league.LeagueParticipationNotExistException;
 import org.badminton.domain.common.exception.match.LeagueParticipantNotDeterminedException;
 import org.badminton.domain.common.exception.match.PreviousDetNotFinishedException;
 import org.badminton.domain.common.exception.match.RoundNotFinishedException;
@@ -37,10 +38,6 @@ public class RetrieveMatchSet {
 	private final DoublesMatchStore doublesMatchStore;
 
 	public void setMatchSetScore(Long leagueId, Long matchId, int setNumber, Score score, String memberToken) {
-		if (!leagueParticipantReader.isParticipant(memberToken, leagueId)) {
-			throw new LeagueParticipationNotExistException(leagueId, memberToken);
-		}
-
 		League league = leagueReader.readLeagueById(leagueId);
 
 		if (league.getMatchType() == MatchType.SINGLES) {
@@ -129,7 +126,7 @@ public class RetrieveMatchSet {
 		}
 	}
 
-	public Score getMatchSetScore(Long leagueId, Long matchId, int setNumber) {
+	public Optional<Score> getMatchSetScore(Long leagueId, Long matchId, int setNumber) {
 		League league = leagueReader.readLeagueById(leagueId);
 		return setRepository.getMatchSetScore(league.getMatchType(), matchId, setNumber);
 	}
@@ -137,5 +134,9 @@ public class RetrieveMatchSet {
 	public MatchType getMatchType(Long leagueId) {
 		League league = leagueReader.readLeagueById(leagueId);
 		return league.getMatchType();
+	}
+
+	public void deleteCache(RedisKey key) {
+		setRepository.deleteScore(key);
 	}
 }
