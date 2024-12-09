@@ -20,8 +20,8 @@ import org.badminton.domain.domain.league.info.LeagueParticipantCancelInfo;
 import org.badminton.domain.domain.league.info.LeagueParticipantDetailsInfo;
 import org.badminton.domain.domain.league.info.LeagueParticipantInfo;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -50,6 +50,7 @@ public class LeagueParticipantServiceImpl implements LeagueParticipantService {
 	}
 
 	@Override
+	@Transactional
 	public LeagueParticipantCancelInfo cancelLeagueParticipation(String memberToken, String clubToken, Long leagueId) {
 		League league = leagueReader.readLeagueById(leagueId);
 		leagueOwnerCannotCancelParticipation(league, memberToken);
@@ -75,6 +76,7 @@ public class LeagueParticipantServiceImpl implements LeagueParticipantService {
 	}
 
 	@Override
+	@Transactional(readOnly = true)
 	public List<LeagueParticipantDetailsInfo> getLeagueParticipants(Long leagueId) {
 		List<LeagueParticipant> leagueParticipants = leagueParticipantReader.findAllByLeagueIdAndCanceledFalse(
 			leagueId);
@@ -127,5 +129,4 @@ public class LeagueParticipantServiceImpl implements LeagueParticipantService {
 			throw new LeagueNotRecruitingException(league.getLeagueId(), league.getLeagueStatus());
 		}
 	}
-
 }

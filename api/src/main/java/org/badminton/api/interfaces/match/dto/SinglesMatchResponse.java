@@ -31,10 +31,10 @@ public record SinglesMatchResponse(
 			singlesMatchInfo.matchStatus(),
 			new Participant(singlesMatchInfo.participant1MemberToken(), singlesMatchInfo.participant1Name(),
 				singlesMatchInfo.participant1Image(), singlesMatchInfo.participant1Tier(),
-				singlesMatchInfo.participant1WinSetCount()),
+				singlesMatchInfo.participant1WinSetCount(), singlesMatchInfo.isParticipant1Banned()),
 			new Participant(singlesMatchInfo.participant2MemberToken(), singlesMatchInfo.participant2Name(),
 				singlesMatchInfo.participant2Image(), singlesMatchInfo.participant2Tier(),
-				singlesMatchInfo.participant2WinSetCount()),
+				singlesMatchInfo.participant2WinSetCount(), singlesMatchInfo.isParticipant2Banned()),
 			singlesMatchInfo.winnerToken()
 		);
 	}

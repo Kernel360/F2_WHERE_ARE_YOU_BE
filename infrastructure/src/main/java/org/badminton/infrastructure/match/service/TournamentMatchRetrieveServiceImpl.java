@@ -13,6 +13,7 @@ import org.badminton.domain.domain.match.store.SinglesMatchReader;
 import org.badminton.infrastructure.match.strategy.TournamentDoublesMatchStrategy;
 import org.badminton.infrastructure.match.strategy.TournamentSinglesMatchStrategy;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class TournamentMatchRetrieveServiceImpl extends AbstractMatchRetrieveService {
@@ -37,6 +38,7 @@ public class TournamentMatchRetrieveServiceImpl extends AbstractMatchRetrieveSer
 	}
 
 	@Override
+	@Transactional
 	public MatchStrategy makeSinglesOrDoublesMatchStrategy(Long leagueId) {
 		League league = findLeague(leagueId);
 		return switch (league.getMatchType()) {
@@ -50,6 +52,7 @@ public class TournamentMatchRetrieveServiceImpl extends AbstractMatchRetrieveSer
 	}
 
 	@Override
+	@Transactional
 	public SetInfo.Main retrieveSet(MatchStrategy matchStrategy, Long matchId, int setNumber) {
 		return matchStrategy.retrieveSet(matchId, setNumber);
 	}
