@@ -17,4 +17,5 @@ public interface LeagueParticipantService {
 	LeagueParticipantInfo participantInLeague(String memberToken, String clubToken, Long leagueId);
 
 	List<LeagueParticipantDetailsInfo> getLeagueParticipants(Long leagueId);
+
 }
