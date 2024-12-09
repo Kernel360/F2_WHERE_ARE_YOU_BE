@@ -50,8 +50,8 @@ public class ClubServiceImpl implements ClubService {
 
 	@Override
 	@Transactional(readOnly = true)
-	public List<ClubCardInfo> readRecentlyClub() {
-		List<Club> clubs = clubReader.readRecentlyClubs();
+	public List<ClubCardInfo> getRecentlyCreatedClub() {
+		List<Club> clubs = clubReader.readRecentlyCreatedClubs();
 		return clubs.stream()
 			.map(club -> ClubCardInfo.from(club, club.getClubMemberCountByTier()))
 			.toList();

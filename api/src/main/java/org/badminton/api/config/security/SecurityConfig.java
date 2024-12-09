@@ -53,8 +53,7 @@ public class SecurityConfig {
 			.securityMatcher("/", "/oauth2/**", "/login/**", "/error", "/swagger-ui/**", "/v1/leagues/**",
 				"/v1/members/session", "/v1/clubs/{clubToken}/clubMembers/check")
 			.csrf(AbstractHttpConfigurer::disable)
-			.cors(this::corsConfigurer)
-			.authorizeHttpRequests(auth -> auth
+			.cors(this::corsConfigurer).authorizeHttpRequests(auth -> auth
 				.anyRequest().permitAll())
 			.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 			.oauth2Login(oauth2 -> oauth2

@@ -1,11 +1,10 @@
 package org.badminton.api.application.club;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import org.badminton.api.application.club.strategy.Rank;
 import org.badminton.domain.domain.club.ClubService;
 import org.badminton.domain.domain.club.info.ClubCardInfo;
+import org.badminton.domain.domain.statistics.ClubStatistics;
 import org.badminton.domain.domain.statistics.ClubStatisticsService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,24 +20,27 @@ public class ClubRankFacade {
 	private final ClubStatisticsService clubStatisticsService;
 
 	@Transactional(readOnly = true)
-	public List<ClubCardInfo> rankClub(Rank rank) {
-		var clubStatisticsList = clubStatisticsService.getAll();
+	public List<ClubCardInfo> getTop10PopularClub() {
+		List<ClubStatistics> top10PopularClubStatistics = clubStatisticsService.getTop10PopularClubStatistics();
 
-		var rankResult = rank.arrangeByStrategy(clubStatisticsList);
-
-		List<ClubCardInfo> clubList = new ArrayList<>();
-		rankResult.stream()
-			.limit(10)
-			.forEach(clubStatistics -> {
-				var club = clubService.readClubById(clubStatistics.getClub().getClubId());
-				clubList.add(club);
-			});
-
-		return clubList;
+		return top10PopularClubStatistics.stream()
+			.map(clubStatistics ->
+				ClubCardInfo.from(clubStatistics.getClub(), clubStatistics.getClub().getClubMemberCountByTier()))
+			.toList();
 	}
 
 	@Transactional(readOnly = true)
-	public List<ClubCardInfo> readRecentlyClub() {
-		return clubService.readRecentlyClub();
+	public List<ClubCardInfo> getTop10RecentlyActiveClub() {
+		List<ClubStatistics> top10RecentlyActiveClubStatistics = clubStatisticsService.getTop10RecentlyActiveClubStatistics();
+
+		return top10RecentlyActiveClubStatistics.stream()
+			.map(clubStatistics ->
+				ClubCardInfo.from(clubStatistics.getClub(), clubStatistics.getClub().getClubMemberCountByTier()))
+			.toList();
+	}
+
+	@Transactional(readOnly = true)
+	public List<ClubCardInfo> getTop10RecentlyCreatedClub() {
+		return clubService.getRecentlyCreatedClub();
 	}
 }

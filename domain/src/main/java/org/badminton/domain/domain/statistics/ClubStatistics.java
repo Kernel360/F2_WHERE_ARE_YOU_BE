@@ -36,29 +36,41 @@ public class ClubStatistics extends AbstractBaseTime {
 
 	private int registrationCount;
 
-	public void increaseVisitedCount() {
-		this.visitedCount++;
-	}
+	private double popularityScore;
 
-	public void increaseRegistrationCount(int count) {
-		this.registrationCount = count;
-	}
-
-	public void increaseLeagueCount(int count) {
-		this.leagueCount = count;
-	}
+	private double activityScore;
 
 	public ClubStatistics(ClubCreateInfo clubCreateInfo) {
 		this.club = clubCreateInfo.toEntity();
 		this.visitedCount = 0;
 		this.registrationCount = 0;
+		this.popularityScore = 0.0;
+		this.activityScore = 0.0;
 	}
 
-	public double calculatePopularityScore() {
-		return registrationCount * 0.5 + visitedCount * 0.2;
+	public void increaseVisitedCount() {
+		this.visitedCount++;
+		updateActivityScore();
+		updatePopularityScore();
 	}
 
-	public double calculateActivityScore() {
-		return leagueCount * 1.5 + registrationCount * 0.5 + visitedCount * 0.2;
+	public void increaseRegistrationCount(int count) {
+		this.registrationCount = count;
+		updateActivityScore();
+		updatePopularityScore();
+	}
+
+	public void increaseLeagueCount(int count) {
+		this.leagueCount = count;
+		updateActivityScore();
+		updatePopularityScore();
+	}
+
+	private void updatePopularityScore() {
+		this.popularityScore = registrationCount * 0.5 + visitedCount * 0.2;
+	}
+
+	private void updateActivityScore() {
+		this.activityScore = leagueCount * 1.5 + registrationCount * 0.5 + visitedCount * 0.2;
 	}
 }
