@@ -137,4 +137,32 @@ public class DoublesMatch extends AbstractBaseTime {
 	public void byeMatch() {
 		this.matchStatus = MatchStatus.BYE;
 	}
+
+	public Team determineWinner() {
+		if (this.getMatchStatus() == MatchStatus.BYE || this.getTeam1MatchResult() == MatchResult.WIN) {
+			return this.getTeam1();
+		}
+
+		if (this.getTeam2MatchResult() == MatchResult.WIN) {
+			return this.getTeam2();
+		}
+		return Team.emptyWinner();
+	}
+
+	public boolean isTeam1Exist() {
+		return this.getTeam1() != null;
+	}
+
+	public boolean isTeam2Exist() {
+		return this.getTeam2() != null;
+	}
+
+	public boolean isMatchWinnerDetermined() {
+		return this.team1MatchResult == MatchResult.WIN || this.team2MatchResult == MatchResult.WIN;
+	}
+
+	public boolean isByeMatch() {
+		return this.matchStatus == MatchStatus.BYE && this.isTeam1Exist();
+	}
+
 }

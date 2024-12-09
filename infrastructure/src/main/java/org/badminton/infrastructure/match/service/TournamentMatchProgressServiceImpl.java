@@ -28,17 +28,19 @@ public class TournamentMatchProgressServiceImpl implements MatchProgressService 
 	private final DoublesMatchStore doublesMatchStore;
 	private final LeagueReader leagueReader;
 	private final LeagueParticipantReader leagueParticipantReader;
+	private final TournamentSinglesEndSetHandler tournamentSinglesEndSetHandler;
+	private final TournamentSinglesBracketCreator tournamentSinglesBracketCreator;
+	private final TournamentDoublesEndSetHandler tournamentDoublesEndSetHandler;
+	private final TournamentDoublesBracketCreator tournamentDoublesBracketCreator;
 
 	@Override
 	public MatchStrategy makeSinglesOrDoublesMatchStrategy(Long leagueId) {
 		League league = findLeague(leagueId);
 		return switch (league.getMatchType()) {
-			case SINGLES ->
-				new TournamentSinglesMatchStrategy(singlesMatchReader, singlesMatchStore, leagueParticipantReader,
-					leagueReader);
-			case DOUBLES ->
-				new TournamentDoublesMatchStrategy(doublesMatchReader, doublesMatchStore, leagueParticipantReader,
-					leagueReader);
+			case SINGLES -> new TournamentSinglesMatchStrategy(singlesMatchReader, singlesMatchStore,
+				tournamentSinglesBracketCreator, tournamentSinglesEndSetHandler);
+			case DOUBLES -> new TournamentDoublesMatchStrategy(doublesMatchReader, doublesMatchStore,
+				tournamentDoublesEndSetHandler, tournamentDoublesBracketCreator);
 		};
 	}
 
@@ -48,7 +50,7 @@ public class TournamentMatchProgressServiceImpl implements MatchProgressService 
 		if (!leagueParticipantReader.isParticipant(memberToken, leagueId))
 			throw new LeagueParticipationNotExistException(leagueId, memberToken);
 
-		return matchStrategy.registerSetScoreInMatch(matchId, setIndex, updateSetScoreCommand);
+		return matchStrategy.endSet(matchId, setIndex, updateSetScoreCommand);
 	}
 
 	private League findLeague(Long leagueId) {

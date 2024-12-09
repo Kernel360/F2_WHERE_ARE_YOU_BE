@@ -48,6 +48,14 @@ public class LeagueParticipant extends AbstractBaseTime {
 		this.member = clubMember.getMember();
 	}
 
+	public static LeagueParticipant emptyParticipant() {
+		return null;
+	}
+
+	public static LeagueParticipant emptyWinner() {
+		return null;
+	}
+
 	public void cancelLeagueParticipation() {
 		this.canceled = true;
 	}

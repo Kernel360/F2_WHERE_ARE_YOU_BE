@@ -45,7 +45,7 @@ public class FreeMatchProgressServiceImpl implements MatchProgressService {
 			throw new LeagueParticipationNotExistException(leagueId, memberToken);
 		}
 
-		return matchStrategy.registerSetScoreInMatch(matchId, setIndex, updateSetScoreCommand);
+		return matchStrategy.endSet(matchId, setIndex, updateSetScoreCommand);
 	}
 
 	private League findLeague(Long leagueId) {

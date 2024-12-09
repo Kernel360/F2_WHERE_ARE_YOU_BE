@@ -37,6 +37,10 @@ public class TournamentBracketGenerationServiceImpl implements BracketGeneration
 	private final SinglesMatchStore singlesMatchStore;
 	private final DoublesMatchStore doublesMatchStore;
 	private final LeagueParticipantReader leagueParticipantReader;
+	private final TournamentSinglesEndSetHandler tournamentSinglesEndSetHandler;
+	private final TournamentSinglesBracketCreator tournamentSinglesBracketCreator;
+	private final TournamentDoublesEndSetHandler tournamentDoublesEndSetHandler;
+	private final TournamentDoublesBracketCreator tournamentDoublesBracketCreator;
 
 	@Override
 	public void checkLeagueRecruitingStatus(Long leagueId) {
@@ -53,12 +57,10 @@ public class TournamentBracketGenerationServiceImpl implements BracketGeneration
 	public MatchStrategy makeSinglesOrDoublesMatchStrategy(Long leagueId) {
 		League league = findLeague(leagueId);
 		return switch (league.getMatchType()) {
-			case SINGLES ->
-				new TournamentSinglesMatchStrategy(singlesMatchReader, singlesMatchStore, leagueParticipantReader,
-					leagueReader);
-			case DOUBLES ->
-				new TournamentDoublesMatchStrategy(doublesMatchReader, doublesMatchStore, leagueParticipantReader,
-					leagueReader);
+			case SINGLES -> new TournamentSinglesMatchStrategy(singlesMatchReader, singlesMatchStore,
+				tournamentSinglesBracketCreator, tournamentSinglesEndSetHandler);
+			case DOUBLES -> new TournamentDoublesMatchStrategy(doublesMatchReader, doublesMatchStore,
+				tournamentDoublesEndSetHandler, tournamentDoublesBracketCreator);
 		};
 	}
 

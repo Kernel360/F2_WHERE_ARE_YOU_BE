@@ -57,7 +57,7 @@ public class FreeDoublesMatchStrategy extends AbstractDoublesMatchStrategy {
 	}
 
 	@Override
-	public SetInfo.Main registerSetScoreInMatch(Long matchId, Integer setNumber,
+	public SetInfo.Main endSet(Long matchId, Integer setNumber,
 		MatchCommand.UpdateSetScore updateSetScoreCommand) {
 		DoublesMatch doublesMatch = doublesMatchReader.getDoublesMatch(matchId);
 
