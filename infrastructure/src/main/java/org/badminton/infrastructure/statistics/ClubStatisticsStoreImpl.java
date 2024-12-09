@@ -1,6 +1,5 @@
 package org.badminton.infrastructure.statistics;
 
-import org.badminton.domain.domain.club.info.ClubCreateInfo;
 import org.badminton.domain.domain.statistics.ClubStatistics;
 import org.badminton.domain.domain.statistics.ClubStatisticsStore;
 import org.springframework.stereotype.Component;
@@ -15,18 +14,7 @@ public class ClubStatisticsStoreImpl implements ClubStatisticsStore {
 	private final ClubStatisticsRepository clubStatisticsRepository;
 
 	@Override
-	public void increaseVisitCount(ClubStatistics visitedCount) {
-		clubStatisticsRepository.save(visitedCount);
-	}
-
-	@Override
-	public void store(ClubCreateInfo clubCreateInfo) {
-		ClubStatistics clubStatistics = new ClubStatistics(clubCreateInfo);
+	public void store(ClubStatistics clubStatistics) {
 		clubStatisticsRepository.save(clubStatistics);
-	}
-
-	@Override
-	public void update(ClubStatistics originStatistic) {
-		clubStatisticsRepository.save(originStatistic);
 	}
 }
