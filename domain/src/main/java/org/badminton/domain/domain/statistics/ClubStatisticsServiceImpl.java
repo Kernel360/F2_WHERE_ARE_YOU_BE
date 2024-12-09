@@ -41,8 +41,13 @@ public class ClubStatisticsServiceImpl implements ClubStatisticsService {
 	}
 
 	@Override
-	public List<ClubStatistics> getAll() {
-		return clubStatisticsReader.findAll();
+	public List<ClubStatistics> getTop10PopularClubStatistics() {
+		return clubStatisticsReader.readTop10PopularClubStatistics();
+	}
+
+	@Override
+	public List<ClubStatistics> getTop10RecentlyActiveClubStatistics() {
+		return clubStatisticsReader.readTop10RecentlyActiveClubStatistics();
 	}
 
 	@Override

@@ -38,4 +38,14 @@ public class ClubStatisticsReaderImpl implements ClubStatisticsReader {
 	public List<ClubStatistics> findAll() {
 		return clubStatisticsRepository.findAll();
 	}
+
+	@Override
+	public List<ClubStatistics> readTop10PopularClubStatistics() {
+		return clubStatisticsRepository.findTop10ByOrderByPopularityScoreDesc();
+	}
+
+	@Override
+	public List<ClubStatistics> readTop10RecentlyActiveClubStatistics() {
+		return clubStatisticsRepository.findTop10ByOrderByActivityScoreDesc();
+	}
 }

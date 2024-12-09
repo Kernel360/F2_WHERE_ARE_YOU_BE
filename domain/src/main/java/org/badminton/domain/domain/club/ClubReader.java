@@ -11,7 +11,7 @@ public interface ClubReader {
 
 	Page<Club> keywordSearch(String keyword, Pageable pageable);
 
-	List<Club> readRecentlyClubs();
+	List<Club> readRecentlyCreatedClubs();
 
 	List<Club> readAllClubs();
 

@@ -4,8 +4,6 @@ import java.util.List;
 
 import org.badminton.api.application.club.ClubFacade;
 import org.badminton.api.application.club.ClubRankFacade;
-import org.badminton.api.application.club.strategy.ActivityClub;
-import org.badminton.api.application.club.strategy.PopularClub;
 import org.badminton.api.common.response.CommonResponse;
 import org.badminton.api.interfaces.auth.dto.CustomOAuth2Member;
 import org.badminton.api.interfaces.club.dto.ClubApplicantResponse;
@@ -88,7 +86,7 @@ public class ClubController {
 	)
 	public CommonResponse<ClubUpdateResponse> updateClub(@PathVariable String clubToken,
 		@Valid @RequestBody ClubUpdateRequest clubUpdateRequest, @AuthenticationPrincipal CustomOAuth2Member member) {
-		
+
 		clubMemberPolicy.validateClubMember(member.getMemberToken(), clubToken);
 		ClubUpdateCommand command = clubDtoMapper.of(clubUpdateRequest);
 		ClubUpdateInfo clubUpdateInfo = clubFacade.updateClubInfo(command, clubToken, member.getMemberToken());
@@ -169,7 +167,7 @@ public class ClubController {
 		tags = {"Club"})
 	@GetMapping("/popular")
 	public CommonResponse<List<ClubCardResponse>> clubSearchPopular() {
-		var clubCardList = clubRankFacade.rankClub(new PopularClub());
+		var clubCardList = clubRankFacade.getTop10PopularClub();
 		return CommonResponse.success(clubDtoMapper.of(clubCardList));
 	}
 
@@ -178,7 +176,7 @@ public class ClubController {
 		tags = {"Club"})
 	@GetMapping("/activity")
 	public CommonResponse<List<ClubCardResponse>> clubSearchActivity() {
-		var clubCardList = clubRankFacade.rankClub(new ActivityClub());
+		var clubCardList = clubRankFacade.getTop10RecentlyActiveClub();
 		return CommonResponse.success(clubDtoMapper.of(clubCardList));
 	}
 
@@ -187,7 +185,7 @@ public class ClubController {
 		tags = {"Club"})
 	@GetMapping("/recently")
 	public CommonResponse<List<ClubCardResponse>> clubSearchRecently() {
-		var clubCardList = clubRankFacade.readRecentlyClub();
+		var clubCardList = clubRankFacade.getTop10RecentlyCreatedClub();
 		return CommonResponse.success(clubDtoMapper.of(clubCardList));
 	}
 

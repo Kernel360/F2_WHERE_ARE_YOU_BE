@@ -30,5 +30,5 @@ public interface ClubService {
 
 	Page<ClubApplicantInfo> readClubApplicants(String clubToken, Pageable pageable);
 
-	List<ClubCardInfo> readRecentlyClub();
+	List<ClubCardInfo> getRecentlyCreatedClub();
 }

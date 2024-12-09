@@ -11,4 +11,8 @@ public interface ClubStatisticsReader {
 	ClubStatistics findByClubId(Long clubId);
 
 	List<ClubStatistics> findAll();
+
+	List<ClubStatistics> readTop10PopularClubStatistics();
+
+	List<ClubStatistics> readTop10RecentlyActiveClubStatistics();
 }
