@@ -25,7 +25,7 @@ public class ClubRankFacade {
 
 		return top10PopularClubStatistics.stream()
 			.map(clubStatistics ->
-				ClubCardInfo.from(clubStatistics.getClub(), clubStatistics.getClub().getClubMemberCountByTier()))
+				ClubCardInfo.from(clubStatistics.getClub()))
 			.toList();
 	}
 
@@ -35,7 +35,7 @@ public class ClubRankFacade {
 
 		return top10RecentlyActiveClubStatistics.stream()
 			.map(clubStatistics ->
-				ClubCardInfo.from(clubStatistics.getClub(), clubStatistics.getClub().getClubMemberCountByTier()))
+				ClubCardInfo.from(clubStatistics.getClub()))
 			.toList();
 	}
 
