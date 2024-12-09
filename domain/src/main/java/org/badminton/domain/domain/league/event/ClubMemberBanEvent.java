@@ -5,6 +5,6 @@ import lombok.RequiredArgsConstructor;
 
 @Getter
 @RequiredArgsConstructor
-public class LeagueParticipantCancelEvent {
+public class ClubMemberBanEvent {
 	private final long clubMemberId;
 }

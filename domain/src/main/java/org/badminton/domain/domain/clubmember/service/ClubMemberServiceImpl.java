@@ -19,7 +19,7 @@ import org.badminton.domain.domain.clubmember.info.ClubMemberInfo;
 import org.badminton.domain.domain.clubmember.info.ClubMemberMyPageInfo;
 import org.badminton.domain.domain.clubmember.info.ClubMemberWithdrawInfo;
 import org.badminton.domain.domain.clubmember.info.MemberIsClubMemberInfo;
-import org.badminton.domain.domain.league.event.LeagueParticipantCancelEvent;
+import org.badminton.domain.domain.league.event.ClubMemberBanEvent;
 import org.badminton.domain.domain.member.MemberReader;
 import org.badminton.domain.domain.member.entity.Member;
 import org.springframework.context.ApplicationEventPublisher;
@@ -106,7 +106,7 @@ public class ClubMemberServiceImpl implements ClubMemberService {
 		ExpelStrategy expelStrategy = new ExpelStrategy(clubMemberStore);
 		ClubMember clubMember = getClubMember(clubMemberId);
 		clubOwnerProtect(clubMember);
-		eventPublisher.publishEvent(new LeagueParticipantCancelEvent(clubMemberId));
+		eventPublisher.publishEvent(new ClubMemberBanEvent(clubMemberId));
 		return expelStrategy.execute(clubMember, command);
 	}
 
@@ -116,7 +116,7 @@ public class ClubMemberServiceImpl implements ClubMemberService {
 		BanStrategy banStrategy = new BanStrategy(clubMemberStore);
 		ClubMember clubMember = getClubMember(clubMemberId);
 		clubOwnerProtect(clubMember);
-		eventPublisher.publishEvent(new LeagueParticipantCancelEvent(clubMemberId));
+		eventPublisher.publishEvent(new ClubMemberBanEvent(clubMemberId));
 		return banStrategy.execute(clubMember, command);
 	}
 

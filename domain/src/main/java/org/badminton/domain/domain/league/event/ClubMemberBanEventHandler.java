@@ -9,12 +9,12 @@ import lombok.RequiredArgsConstructor;
 
 @Component
 @RequiredArgsConstructor
-public class LeagueParticipantCancelEventHandler {
+public class ClubMemberBanEventHandler {
 	private final LeagueParticipantCancelService leagueParticipantCancelService;
 
 	@Async
 	@TransactionalEventListener
-	public void leagueParticipantCancel(LeagueParticipantCancelEvent leagueParticipantCancelEvent) {
+	public void leagueParticipantCancel(ClubMemberBanEvent leagueParticipantCancelEvent) {
 		leagueParticipantCancelService.cancelAllLeagueParticipants(leagueParticipantCancelEvent.getClubMemberId());
 	}
 }
