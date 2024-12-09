@@ -18,10 +18,8 @@ public class ClubStatisticsReaderImpl implements ClubStatisticsReader {
 	private final ClubStatisticsRepositoryCustom clubStatisticsRepositoryCustom;
 
 	@Override
-	public ClubStatistics getClubStaticsWithIncrease(String clubToken) {
-		ClubStatistics clubStatistics = clubStatisticsRepository.findByClubClubToken(clubToken);
-		clubStatistics.increaseVisitedCount();
-		return clubStatistics;
+	public ClubStatistics readClubStatistics(String clubToken) {
+		return clubStatisticsRepository.findByClubClubToken(clubToken);
 	}
 
 	@Override

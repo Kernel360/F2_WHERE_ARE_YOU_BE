@@ -4,7 +4,7 @@ import java.util.List;
 
 public interface ClubStatisticsReader {
 
-	ClubStatistics getClubStaticsWithIncrease(String clubToken);
+	ClubStatistics readClubStatistics(String clubToken);
 
 	List<Long> findAllClubId();
 
