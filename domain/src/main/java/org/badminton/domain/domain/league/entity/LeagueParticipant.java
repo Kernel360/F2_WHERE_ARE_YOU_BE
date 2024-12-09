@@ -52,6 +52,10 @@ public class LeagueParticipant extends AbstractBaseTime {
 		return null;
 	}
 
+	public static LeagueParticipant emptyWinner() {
+		return null;
+	}
+
 	public void cancelLeagueParticipation() {
 		this.canceled = true;
 	}

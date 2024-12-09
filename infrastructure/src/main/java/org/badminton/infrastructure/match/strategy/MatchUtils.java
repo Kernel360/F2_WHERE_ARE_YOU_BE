@@ -56,10 +56,10 @@ public class MatchUtils {
 		return nextRoundStartId + nextMatchIndexInRound;
 	}
 
-	private static boolean isCurrentMatchInRound(int matchID, int roundStartId,
+	private static boolean isCurrentMatchInRound(int matchId, int roundStartId,
 		int matchesInCurrentRound) {
-		return isMatchIdGreaterThanOrEqualToRoundStart(matchID, roundStartId)
-			&& isMatchIdLessThanRoundEnd(matchID, roundStartId, matchesInCurrentRound);
+		return isMatchIdGreaterThanOrEqualToRoundStart(matchId, roundStartId)
+			&& isMatchIdLessThanRoundEnd(matchId, roundStartId, matchesInCurrentRound);
 	}
 
 	private static boolean isMatchIdLessThanRoundEnd(int currentMatchId, int currentRoundStartId,
@@ -83,7 +83,7 @@ public class MatchUtils {
 
 	public void updateSinglesMatchNextRoundMatch(SinglesMatch singlesMatch) {
 		LeagueParticipant winner = singlesMatch.determineWinner();
-		if (winner == null) {
+		if (winner == LeagueParticipant.emptyWinner()) {
 			return;
 		}
 
@@ -91,7 +91,7 @@ public class MatchUtils {
 		if (singlesMatch.getRoundNumber() == totalRounds) {
 			return;
 		}
-		
+
 		SinglesMatch startMatch = singlesMatchReader.findFirstMatchByLeagueId(
 			singlesMatch.getLeague().getLeagueId());
 
@@ -129,7 +129,7 @@ public class MatchUtils {
 
 	public void updateDoublesMatchNextRoundMatch(DoublesMatch doublesMatch) {
 		Team winner = doublesMatch.determineWinner();
-		if (winner == null) {
+		if (winner == Team.emptyWinner()) {
 			return;
 		}
 

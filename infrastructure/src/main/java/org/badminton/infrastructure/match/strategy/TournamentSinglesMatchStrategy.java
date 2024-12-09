@@ -1,6 +1,7 @@
 package org.badminton.infrastructure.match.strategy;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.badminton.domain.domain.league.entity.League;
@@ -45,20 +46,17 @@ public class TournamentSinglesMatchStrategy extends AbstractSinglesMatchStrategy
 
 		// 전체 매치 배열 생성
 		List<SinglesMatch> allMatches = new ArrayList<>();
-
-		// 현재 라운드의 참가자 리스트
-		// 참가자 리스트 섞기
-		List<LeagueParticipant> currentParticipants = tournamentSinglesBracketCreator.getLeagueParticipants(
-			leagueParticipantList);
+		
+		Collections.shuffle(leagueParticipantList);
 
 		// 전체 라운드의 수 계산
 		// leagueEntity 에 전체 라운드 수 저장
-		int totalRounds = tournamentSinglesBracketCreator.getTotalRounds(league, currentParticipants);
+		int totalRounds = tournamentSinglesBracketCreator.getTotalRounds(league, leagueParticipantList);
 
 		// 전체 매치 배열에 첫번재 라운드 생성 후 넣기
 		// 전체 매치 배열에 첫번째 라운드 제외 모든 라운드 매치 생성 후 넣기
 		// 전체 매치 스트림 -> 부전승이고, leagueParticipant1 이 null 이 아닌 매치들 대상으로 -> leagueParticipant1 다음 라운드의 매치로 이동
-		tournamentSinglesBracketCreator.generateAllMatches(league, allMatches, currentParticipants, totalRounds);
+		tournamentSinglesBracketCreator.generateAllMatches(league, allMatches, leagueParticipantList, totalRounds);
 
 		return BracketInfo.fromSingles(totalRounds, allMatches);
 	}

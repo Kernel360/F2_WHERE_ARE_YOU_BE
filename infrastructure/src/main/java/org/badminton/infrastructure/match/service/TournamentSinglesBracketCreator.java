@@ -3,10 +3,8 @@ package org.badminton.infrastructure.match.service;
 import static org.badminton.domain.common.consts.Constants.*;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
-import org.badminton.domain.common.enums.MatchStatus;
 import org.badminton.domain.domain.league.entity.League;
 import org.badminton.domain.domain.league.entity.LeagueParticipant;
 import org.badminton.domain.domain.match.entity.SinglesMatch;
@@ -43,15 +41,6 @@ public class TournamentSinglesBracketCreator {
 		return totalRounds;
 	}
 
-	public List<LeagueParticipant> getLeagueParticipants(List<LeagueParticipant> leagueParticipantList) {
-		// 현재 라운드의 참가자 리스트
-		List<LeagueParticipant> currentParticipants = new ArrayList<>(leagueParticipantList);
-
-		// 참가자 리스트 섞기
-		Collections.shuffle(currentParticipants);
-		return currentParticipants;
-	}
-
 	public void generateAllMatches(League league, List<SinglesMatch> allMatches,
 		List<LeagueParticipant> currentParticipants,
 		int totalRounds) {
@@ -63,8 +52,7 @@ public class TournamentSinglesBracketCreator {
 
 		// 전체 매치 스트림 -> 부전승이고, leagueParticipant1 이 null 이 아닌 매치들 대상으로 -> leagueParticipant1 다음 라운드의 매치로 이동
 		allMatches.stream()
-			.filter(singlesMatch -> singlesMatch.getMatchStatus() == MatchStatus.BYE
-				&& singlesMatch.isLeagueParticipant1Exist())
+			.filter(SinglesMatch::isByeMatch)
 			.forEach(matchUtils::updateSinglesMatchNextRoundMatch);
 	}
 

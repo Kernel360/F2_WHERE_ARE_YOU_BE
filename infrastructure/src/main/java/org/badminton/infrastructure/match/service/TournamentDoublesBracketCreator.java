@@ -3,10 +3,8 @@ package org.badminton.infrastructure.match.service;
 import static org.badminton.domain.common.consts.Constants.*;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
-import org.badminton.domain.common.enums.MatchStatus;
 import org.badminton.domain.domain.league.entity.League;
 import org.badminton.domain.domain.league.entity.LeagueParticipant;
 import org.badminton.domain.domain.league.vo.Team;
@@ -35,14 +33,6 @@ public class TournamentDoublesBracketCreator {
 		return doublesMatches.size() % 2 != 0;
 	}
 
-	public List<LeagueParticipant> getLeagueParticipants(List<LeagueParticipant> leagueParticipantList) {
-
-		List<LeagueParticipant> currentParticipants = new ArrayList<>(leagueParticipantList);
-
-		Collections.shuffle(currentParticipants);
-		return currentParticipants;
-	}
-
 	public int getTotalRounds(League league, List<LeagueParticipant> currentParticipants) {
 
 		int totalRounds = MatchUtils.calculateTotalRounds(currentParticipants.size() / PARTICIPANTS_PER_TEAM);
@@ -60,7 +50,7 @@ public class TournamentDoublesBracketCreator {
 		allMatches.addAll(createSubsequentRoundsMatches(league, totalRounds));
 
 		allMatches.stream()
-			.filter(doublesMatch -> doublesMatch.getMatchStatus() == MatchStatus.BYE && doublesMatch.isTeam1Exist())
+			.filter(DoublesMatch::isByeMatch)
 			.forEach(matchUtils::updateDoublesMatchNextRoundMatch);
 	}
 

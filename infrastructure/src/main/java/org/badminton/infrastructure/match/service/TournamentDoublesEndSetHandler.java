@@ -15,7 +15,6 @@ import org.badminton.domain.common.exception.match.RegisterScoreInByeMatchExcept
 import org.badminton.domain.common.exception.match.RoundNotFinishedException;
 import org.badminton.domain.common.exception.match.SetFinishedException;
 import org.badminton.domain.domain.league.LeagueReader;
-import org.badminton.domain.domain.league.vo.Team;
 import org.badminton.domain.domain.match.command.MatchCommand;
 import org.badminton.domain.domain.match.entity.DoublesMatch;
 import org.badminton.domain.domain.match.entity.DoublesSet;
@@ -35,11 +34,6 @@ public class TournamentDoublesEndSetHandler {
 	private final LeagueReader leagueReader;
 	private final DoublesMatchStore doublesMatchStore;
 
-	private static boolean isMatchWinnerDetermined(DoublesMatch doublesMatch) {
-		return doublesMatch.getTeam1MatchResult() == MatchResult.WIN
-			|| doublesMatch.getTeam2MatchResult() == MatchResult.WIN;
-	}
-
 	public void processEndSet(Integer setNumber, MatchCommand.UpdateSetScore updateSetScoreCommand,
 		DoublesMatch doublesMatch) {
 
@@ -49,7 +43,7 @@ public class TournamentDoublesEndSetHandler {
 			changeNextSetStatus(doublesMatch, setNumber);
 		}
 
-		if (isMatchWinnerDetermined(doublesMatch)) {
+		if (doublesMatch.isMatchWinnerDetermined()) {
 			processNextRoundMatches(doublesMatch);
 		}
 
@@ -68,7 +62,7 @@ public class TournamentDoublesEndSetHandler {
 			throw new RegisterScoreInByeMatchException(doublesMatch.getId(), MatchType.DOUBLES);
 		}
 
-		if (isMatchWinnerDetermined(doublesMatch)) {
+		if (doublesMatch.isMatchWinnerDetermined()) {
 			throw new AlreadyWinnerDeterminedException(doublesMatch.getId());
 		}
 
@@ -76,7 +70,7 @@ public class TournamentDoublesEndSetHandler {
 			throw new SetFinishedException(setNumber);
 		}
 
-		if (doublesMatch.getTeam1() == Team.emptyParticipant() || doublesMatch.getTeam2() == Team.emptyParticipant()) {
+		if (!doublesMatch.isTeam1Exist() || !doublesMatch.isTeam2Exist()) {
 			throw new LeagueParticipantNotDeterminedException(matchId);
 		}
 	}

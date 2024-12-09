@@ -146,7 +146,7 @@ public class DoublesMatch extends AbstractBaseTime {
 		if (this.getTeam2MatchResult() == MatchResult.WIN) {
 			return this.getTeam2();
 		}
-		return null;
+		return Team.emptyWinner();
 	}
 
 	public boolean isTeam1Exist() {
@@ -155,6 +155,14 @@ public class DoublesMatch extends AbstractBaseTime {
 
 	public boolean isTeam2Exist() {
 		return this.getTeam2() != null;
+	}
+
+	public boolean isMatchWinnerDetermined() {
+		return this.team1MatchResult == MatchResult.WIN || this.team2MatchResult == MatchResult.WIN;
+	}
+
+	public boolean isByeMatch() {
+		return this.matchStatus == MatchStatus.BYE && this.isTeam1Exist();
 	}
 
 }

@@ -80,11 +80,11 @@ public class SinglesMatch extends AbstractBaseTime {
 	}
 
 	public boolean isLeagueParticipant1Exist() {
-		return this.getLeagueParticipant1() != null;
+		return this.leagueParticipant1 != null;
 	}
 
 	public boolean isLeagueParticipant2Exist() {
-		return this.getLeagueParticipant2() != null;
+		return this.leagueParticipant2 != null;
 	}
 
 	public void addSet(SinglesSet singlesSet) {
@@ -153,6 +153,14 @@ public class SinglesMatch extends AbstractBaseTime {
 		if (this.getPlayer2MatchResult() == MatchResult.WIN) {
 			return this.getLeagueParticipant2();
 		}
-		return null;
+		return LeagueParticipant.emptyWinner();
+	}
+
+	public boolean isMatchWinnerDetermined() {
+		return this.player1MatchResult == MatchResult.WIN || this.player2MatchResult == MatchResult.WIN;
+	}
+
+	public boolean isByeMatch() {
+		return this.matchStatus == MatchStatus.BYE && this.isLeagueParticipant1Exist();
 	}
 }

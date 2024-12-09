@@ -15,7 +15,6 @@ import org.badminton.domain.common.exception.match.RegisterScoreInByeMatchExcept
 import org.badminton.domain.common.exception.match.RoundNotFinishedException;
 import org.badminton.domain.common.exception.match.SetFinishedException;
 import org.badminton.domain.domain.league.LeagueReader;
-import org.badminton.domain.domain.league.entity.LeagueParticipant;
 import org.badminton.domain.domain.match.command.MatchCommand;
 import org.badminton.domain.domain.match.entity.SinglesMatch;
 import org.badminton.domain.domain.match.entity.SinglesSet;
@@ -35,11 +34,6 @@ public class TournamentSinglesEndSetHandler {
 	private final LeagueReader leagueReader;
 	private final SinglesMatchStore singlesMatchStore;
 
-	private static boolean isMatchWinnerDetermined(SinglesMatch singlesMatch) {
-		return singlesMatch.getPlayer1MatchResult() == MatchResult.WIN
-			|| singlesMatch.getPlayer2MatchResult() == MatchResult.WIN;
-	}
-
 	public void isEndSetAllowed(SinglesMatch singlesMatch, Integer setNumber, Long matchId) {
 
 		// 이전 세트 모두 종료 확인
@@ -53,7 +47,7 @@ public class TournamentSinglesEndSetHandler {
 		}
 
 		// Winner 가 이미 결정됨 -> 매치가 끝남
-		if (isMatchWinnerDetermined(singlesMatch)) {
+		if (singlesMatch.isMatchWinnerDetermined()) {
 			throw new AlreadyWinnerDeterminedException(singlesMatch.getId());
 		}
 
@@ -63,8 +57,7 @@ public class TournamentSinglesEndSetHandler {
 		}
 
 		// LeagueParticipant 이 없을 때
-		if (singlesMatch.getLeagueParticipant1() == LeagueParticipant.emptyParticipant()
-			|| singlesMatch.getLeagueParticipant2() == LeagueParticipant.emptyParticipant()) {
+		if (!singlesMatch.isLeagueParticipant1Exist() || !singlesMatch.isLeagueParticipant2Exist()) {
 			throw new LeagueParticipantNotDeterminedException(matchId);
 		}
 
@@ -82,7 +75,7 @@ public class TournamentSinglesEndSetHandler {
 		}
 
 		// 승자가 결정 되었다면 승자 처우 결정(다음 라운드 진출 할 수 있으면 승자 이동)
-		if (isMatchWinnerDetermined(singlesMatch)) {
+		if (singlesMatch.isMatchWinnerDetermined()) {
 			processNextRoundMatches(singlesMatch);
 		}
 

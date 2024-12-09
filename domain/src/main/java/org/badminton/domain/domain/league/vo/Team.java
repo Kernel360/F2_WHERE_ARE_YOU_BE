@@ -28,4 +28,8 @@ public class Team {
 	public static Team emptyParticipant() {
 		return null;
 	}
+
+	public static Team emptyWinner() {
+		return null;
+	}
 }

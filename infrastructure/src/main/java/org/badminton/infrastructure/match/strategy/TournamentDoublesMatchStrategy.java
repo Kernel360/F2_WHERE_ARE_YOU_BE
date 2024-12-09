@@ -1,6 +1,7 @@
 package org.badminton.infrastructure.match.strategy;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import org.badminton.domain.domain.league.entity.League;
@@ -45,13 +46,11 @@ public class TournamentDoublesMatchStrategy extends AbstractDoublesMatchStrategy
 	public BracketInfo makeBracket(League league, List<LeagueParticipant> leagueParticipantList) {
 
 		List<DoublesMatch> allMatches = new ArrayList<>();
+		Collections.shuffle(leagueParticipantList);
 
-		List<LeagueParticipant> currentParticipants = tournamentDoublesBracketCreator.getLeagueParticipants(
-			leagueParticipantList);
+		int totalRounds = tournamentDoublesBracketCreator.getTotalRounds(league, leagueParticipantList);
 
-		int totalRounds = tournamentDoublesBracketCreator.getTotalRounds(league, currentParticipants);
-
-		tournamentDoublesBracketCreator.generateAllMatches(league, allMatches, currentParticipants, totalRounds);
+		tournamentDoublesBracketCreator.generateAllMatches(league, allMatches, leagueParticipantList, totalRounds);
 
 		return BracketInfo.fromDoubles(totalRounds, allMatches);
 	}
