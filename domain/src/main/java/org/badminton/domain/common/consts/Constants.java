@@ -18,4 +18,16 @@ public class Constants {
 	public static final int ADDRESS_MAX = 100;
 	public static final int APPLY_MIN = 2;
 	public static final int APPLY_MAX = 50;
+
+	public static final int PARTICIPANTS_PER_MATCH = 2;
+	public static final int SET_COUNT = 3;
+	public static final int FIRST_ROUND_NUMBER = 1;
+	public static final int SECOND_ROUND_NUMBER = 2;
+	public static final int PARTICIPANTS_PER_TEAM = 2;
+	public static final int TEAMS_PER_MATCH = 2;
+
+	public static final int FIRST_SET_NUMBER = 1;
+	public static final int LIMIT_SET_GAME = 3;
+	public static final int INIT_ROUND_NUMBER = 0;
+
 }

@@ -1,6 +1,5 @@
 package org.badminton.infrastructure.match.service;
 
-import org.badminton.domain.domain.league.LeagueParticipantReader;
 import org.badminton.domain.domain.league.LeagueReader;
 import org.badminton.domain.domain.league.entity.League;
 import org.badminton.domain.domain.match.info.SetInfo;
@@ -14,7 +13,10 @@ import org.badminton.infrastructure.match.strategy.TournamentDoublesMatchStrateg
 import org.badminton.infrastructure.match.strategy.TournamentSinglesMatchStrategy;
 import org.springframework.stereotype.Service;
 
+import lombok.RequiredArgsConstructor;
+
 @Service
+@RequiredArgsConstructor
 public class TournamentMatchRetrieveServiceImpl extends AbstractMatchRetrieveService {
 
 	private final LeagueReader leagueReader;
@@ -22,30 +24,19 @@ public class TournamentMatchRetrieveServiceImpl extends AbstractMatchRetrieveSer
 	private final DoublesMatchReader doublesMatchReader;
 	private final SinglesMatchStore singlesMatchStore;
 	private final DoublesMatchStore doublesMatchStore;
-	private final LeagueParticipantReader leagueParticipantReader;
-
-	public TournamentMatchRetrieveServiceImpl(LeagueReader leagueReader, SinglesMatchReader singlesMatchReader,
-		DoublesMatchReader doublesMatchReader,
-		SinglesMatchStore singlesMatchStore, DoublesMatchStore doublesMatchStore,
-		LeagueParticipantReader leagueParticipantReader) {
-		this.singlesMatchReader = singlesMatchReader;
-		this.doublesMatchReader = doublesMatchReader;
-		this.singlesMatchStore = singlesMatchStore;
-		this.doublesMatchStore = doublesMatchStore;
-		this.leagueReader = leagueReader;
-		this.leagueParticipantReader = leagueParticipantReader;
-	}
+	private final TournamentSinglesEndSetHandler tournamentSinglesEndSetHandler;
+	private final TournamentSinglesBracketCreator tournamentSinglesBracketCreator;
+	private final TournamentDoublesEndSetHandler tournamentDoublesEndSetHandler;
+	private final TournamentDoublesBracketCreator tournamentDoublesBracketCreator;
 
 	@Override
 	public MatchStrategy makeSinglesOrDoublesMatchStrategy(Long leagueId) {
 		League league = findLeague(leagueId);
 		return switch (league.getMatchType()) {
-			case SINGLES ->
-				new TournamentSinglesMatchStrategy(singlesMatchReader, singlesMatchStore, leagueParticipantReader,
-					leagueReader);
-			case DOUBLES ->
-				new TournamentDoublesMatchStrategy(doublesMatchReader, doublesMatchStore, leagueParticipantReader,
-					leagueReader);
+			case SINGLES -> new TournamentSinglesMatchStrategy(singlesMatchReader, singlesMatchStore,
+				tournamentSinglesBracketCreator, tournamentSinglesEndSetHandler);
+			case DOUBLES -> new TournamentDoublesMatchStrategy(doublesMatchReader, doublesMatchStore,
+				tournamentDoublesEndSetHandler, tournamentDoublesBracketCreator);
 		};
 	}
 

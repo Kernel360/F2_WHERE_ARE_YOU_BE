@@ -62,7 +62,7 @@ public class FreeSinglesMatchStrategy extends AbstractSinglesMatchStrategy {
 	}
 
 	@Override
-	public SetInfo.Main registerSetScoreInMatch(Long matchId, Integer setNumber,
+	public SetInfo.Main endSet(Long matchId, Integer setNumber,
 		MatchCommand.UpdateSetScore updateSetScoreCommand) {
 		SinglesMatch singlesMatch = singlesMatchReader.getSinglesMatch(matchId);
 

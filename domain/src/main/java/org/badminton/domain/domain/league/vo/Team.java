@@ -24,4 +24,8 @@ public class Team {
 		this.leagueParticipant1 = leagueParticipant1;
 		this.leagueParticipant2 = leagueParticipant2;
 	}
+
+	public static Team emptyParticipant() {
+		return null;
+	}
 }

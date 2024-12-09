@@ -30,7 +30,7 @@ public interface MatchStrategy {
 
 	BracketInfo makeBracket(League league, List<LeagueParticipant> leagueParticipantList);
 
-	SetInfo.Main registerSetScoreInMatch(Long matchId, Integer setIndex,
+	SetInfo.Main endSet(Long matchId, Integer setIndex,
 		MatchCommand.UpdateSetScore updateSetScoreCommand);
 
 	boolean isMatchInLeague(Long leagueId);
