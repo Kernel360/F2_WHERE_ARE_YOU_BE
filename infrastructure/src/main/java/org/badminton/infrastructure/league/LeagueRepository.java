@@ -69,4 +69,6 @@ public interface LeagueRepository extends JpaRepository<League, Long> {
 		LocalDateTime startTime,
 		LocalDateTime endTime
 	);
+
+	Page<League> findAllByLeagueStatusNot(LeagueStatus leagueStatus, Pageable pageable);
 }

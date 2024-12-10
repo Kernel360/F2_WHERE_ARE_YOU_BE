@@ -51,4 +51,6 @@ public interface LeagueReader {
 	MatchGenerationType getMatchGenerationTypeByLeagueId(Long leagueId);
 
 	void checkLeagueExistIn3Hours(String memberToken, LocalDateTime leagueAt);
+
+	Page<League> readLeagueByPageable(Pageable pageable);
 }

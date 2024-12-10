@@ -12,6 +12,7 @@ import org.badminton.domain.domain.league.info.LeagueCancelInfo;
 import org.badminton.domain.domain.league.info.LeagueCreateInfo;
 import org.badminton.domain.domain.league.info.LeagueDetailInfo;
 import org.badminton.domain.domain.league.info.LeagueReadInfo;
+import org.badminton.domain.domain.league.info.LeagueReadPageInfo;
 import org.badminton.domain.domain.league.info.LeagueRecruitingCompleteInfo;
 import org.badminton.domain.domain.league.info.LeagueSummaryInfo;
 import org.badminton.domain.domain.league.info.LeagueUpdateInfo;
@@ -44,4 +45,6 @@ public interface LeagueService {
 		String memberToken);
 
 	LeagueRecruitingCompleteInfo completeLeagueRecruiting(String clubToken, Long leagueId, String memberToken);
+
+	List<LeagueReadPageInfo> getLeaguePageable(Pageable pageable);
 }
