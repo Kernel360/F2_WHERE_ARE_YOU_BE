@@ -103,7 +103,7 @@ public class MainLeagueController {
 		description = "경기 전체에 대한 정보를 페이지네이션으로 가져옵니다.",
 		tags = {"main-league"}
 	)
-	@GetMapping("all")
+	@GetMapping("/all")
 	public CommonResponse<List<LeagueReadPageInfo>> getAllLeague(
 		@RequestParam(defaultValue = DEFAULT_PAGE_VALUE) int page,
 		@RequestParam(defaultValue = DEFAULT_SIZE_VALUE) int size
