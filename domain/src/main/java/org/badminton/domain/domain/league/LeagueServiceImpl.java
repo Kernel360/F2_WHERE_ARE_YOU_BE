@@ -24,6 +24,7 @@ import org.badminton.domain.domain.league.info.LeagueCancelInfo;
 import org.badminton.domain.domain.league.info.LeagueCreateInfo;
 import org.badminton.domain.domain.league.info.LeagueDetailInfo;
 import org.badminton.domain.domain.league.info.LeagueReadInfo;
+import org.badminton.domain.domain.league.info.LeagueReadPageInfo;
 import org.badminton.domain.domain.league.info.LeagueRecruitingCompleteInfo;
 import org.badminton.domain.domain.league.info.LeagueSummaryInfo;
 import org.badminton.domain.domain.league.info.LeagueUpdateInfo;
@@ -32,8 +33,8 @@ import org.badminton.domain.domain.league.vo.LeagueSearchStrategy;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
@@ -60,25 +61,27 @@ public class LeagueServiceImpl implements LeagueService {
 	}
 
 	@Override
-	@Transactional
+	@Transactional(readOnly = true)
 	public LeagueSummaryInfo getLeague(String clubToken, Long leagueId) {
 		var league = leagueReader.readLeague(clubToken, leagueId);
 		return LeagueSummaryInfo.from(league);
 	}
 
 	@Override
-	@Transactional
+	@Transactional(readOnly = true)
 	public LeagueDetailInfo getLeagueDetail(String clubToken, Long leagueId) {
 		var league = leagueReader.readLeague(clubToken, leagueId);
 		return LeagueDetailInfo.from(league);
 	}
 
 	@Override
+	@Transactional(readOnly = true)
 	public Integer getLeagueCountByClubId(Long clubId) {
 		return leagueReader.getCountByClubId(clubId);
 	}
 
 	@Override
+	@Transactional
 	public LeagueUpdateInfo updateLeague(String clubToken, Long leagueId, LeagueUpdateCommand leagueUpdateCommand,
 		String memberToken) {
 		League league = leagueReader.readLeague(clubToken, leagueId);
@@ -95,6 +98,7 @@ public class LeagueServiceImpl implements LeagueService {
 	}
 
 	@Override
+	@Transactional
 	public LeagueRecruitingCompleteInfo completeLeagueRecruiting(String clubToken, Long leagueId, String memberToken) {
 		League league = leagueReader.readLeague(clubToken, leagueId);
 		validateLeagueOwner(memberToken, league);
@@ -104,6 +108,14 @@ public class LeagueServiceImpl implements LeagueService {
 	}
 
 	@Override
+	@Transactional(readOnly = true)
+	public List<LeagueReadPageInfo> getLeaguePageable(Pageable pageable) {
+		Page<League> leagues = leagueReader.readLeagueByPageable(pageable);
+		return leagues.stream().map(LeagueReadPageInfo::from).toList();
+	}
+
+	@Override
+	@Transactional(readOnly = true)
 	public List<LeagueReadInfo> getLeaguesByMonth(String clubToken, String date) {
 		LocalDate parsedDate = parseDateByMonth(date);
 		LocalDateTime startOfMonth = getStartOfMonth(parsedDate);
@@ -111,12 +123,13 @@ public class LeagueServiceImpl implements LeagueService {
 		List<League> result =
 			leagueReader.readLeagueByMonth(clubToken, startOfMonth, endOfMonth);
 		return result.stream()
-			.map(LeagueReadInfo::leagueReadEntityToInfo)
+			.map(LeagueReadInfo::from)
 			.collect(
 				Collectors.toList());
 	}
 
 	@Override
+	@Transactional(readOnly = true)
 	public List<LeagueByDateInfo> getLeaguesByDate(String clubToken, String date) {
 		LocalDate parsedDate = parseDate(date);
 		LocalDateTime startOfDay = getStartOfDay(parsedDate);
@@ -130,6 +143,7 @@ public class LeagueServiceImpl implements LeagueService {
 	}
 
 	@Override
+	@Transactional(readOnly = true)
 	public Page<OngoingAndUpcomingLeagueInfo> getOngoingAndUpcomingLeaguesByDate(
 		AllowedLeagueStatus leagueStatus,
 		Region region,
@@ -145,6 +159,7 @@ public class LeagueServiceImpl implements LeagueService {
 	}
 
 	@Override
+	@Transactional
 	public LeagueCancelInfo cancelLeague(String clubToken, Long leagueId, String memberToken) {
 		var league = leagueReader.readLeague(clubToken, leagueId);
 		validateLeagueOwner(memberToken, league);

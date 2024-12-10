@@ -26,7 +26,7 @@ public record LeagueReadInfo(
 		);
 	}
 
-	public static LeagueReadInfo leagueReadEntityToInfo(League entity) {
+	public static LeagueReadInfo from(League entity) {
 		return new LeagueReadInfo(entity);
 	}
 }

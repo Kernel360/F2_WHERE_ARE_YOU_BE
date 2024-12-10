@@ -80,6 +80,11 @@ public class LeagueReaderImpl implements LeagueReader {
 	}
 
 	@Override
+	public Page<League> readLeagueByPageable(Pageable pageable) {
+		return leagueRepository.findAllByLeagueStatusNot(LeagueStatus.CANCELED, pageable);
+	}
+
+	@Override
 	public Page<League> readLeagueStatusIsNotAllAndRegionIsNotAll(AllowedLeagueStatus leagueStatus, Region region,
 		LocalDate date, Pageable pageable) {
 		LocalDateTime startOfDay = date.atStartOfDay();
