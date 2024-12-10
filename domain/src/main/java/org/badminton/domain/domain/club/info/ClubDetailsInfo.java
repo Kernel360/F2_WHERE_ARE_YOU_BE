@@ -1,7 +1,6 @@
 package org.badminton.domain.domain.club.info;
 
 import java.time.LocalDateTime;
-import java.util.Map;
 
 import org.badminton.domain.domain.member.entity.Member;
 
@@ -18,17 +17,16 @@ public record ClubDetailsInfo(
 	LocalDateTime createdAt
 ) {
 
-	public static ClubDetailsInfo from(ClubSummaryInfo clubSummaryInfo,
-		Map<Member.MemberTier, Long> memberCountByTier, int clubMembersCount) {
+	public static ClubDetailsInfo from(ClubSummaryInfo clubSummaryInfo, int clubMembersCount) {
 		return new ClubDetailsInfo(
 			clubSummaryInfo.clubId(),
 			clubSummaryInfo.clubToken(),
 			clubSummaryInfo.clubName(),
 			clubSummaryInfo.clubDescription(),
 			clubSummaryInfo.clubImage(),
-			memberCountByTier.get(Member.MemberTier.GOLD),
-			memberCountByTier.get(Member.MemberTier.SILVER),
-			memberCountByTier.get(Member.MemberTier.BRONZE),
+			clubSummaryInfo.getClubMemberCountByTier().get(Member.MemberTier.GOLD),
+			clubSummaryInfo.getClubMemberCountByTier().get(Member.MemberTier.SILVER),
+			clubSummaryInfo.getClubMemberCountByTier().get(Member.MemberTier.BRONZE),
 			clubMembersCount,
 			clubSummaryInfo.createdAt()
 		);

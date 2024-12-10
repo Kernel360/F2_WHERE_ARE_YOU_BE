@@ -32,9 +32,9 @@ public class AuthServiceImpl implements AuthService {
 	private String kakaoRevokeUrl;
 	@Value("${spring.security.oauth2.revoke-url.google}")
 	private String googleRevokeUrl;
-	@Value("${NAVER_CLIENT_ID}")
+	@Value("${spring.security.oauth2.client.registration.naver.client-id}")
 	private String naverClientId;
-	@Value("${NAVER_CLIENT_SECRET}")
+	@Value("${spring.security.oauth2.client.registration.naver.client-secret}")
 	private String naverClientSecret;
 
 	@Override

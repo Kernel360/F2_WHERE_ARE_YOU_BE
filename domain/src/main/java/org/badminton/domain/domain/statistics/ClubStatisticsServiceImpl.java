@@ -15,13 +15,26 @@ import lombok.extern.slf4j.Slf4j;
 public class ClubStatisticsServiceImpl implements ClubStatisticsService {
 	private final ClubStatisticsReader clubStatisticsReader;
 	private final ClubStatisticsStore clubStatisticsStore;
+	private final DistributedLockProcessor distributedLockProcessor;
 
 	@Override
-	@Transactional
 	public void increaseVisitedClubCount(String clubToken) {
+		String lockName = "CLUB_VISIT_LOCK_" + clubToken;
+		distributedLockProcessor.execute(lockName, 10000, 10000,
+			() -> increaseClubVisitCountWithNamedLock(clubToken)
+		);
+		// synchronized (this) {
+		// 	increaseClubVisitCountWithNamedLock(clubToken);
+		// }
+	}
+
+	@Transactional
+	public void increaseClubVisitCountWithNamedLock(String clubToken) {
 		ClubStatistics clubStatistics = clubStatisticsReader.readClubStatistics(clubToken);
 		clubStatistics.increaseVisitedCount();
 		clubStatisticsStore.store(clubStatistics);
+		log.info("**** 스레드 이름 : {}", Thread.currentThread().getName());
+		log.info("***** club visit count : {}", clubStatistics.getVisitedCount());
 	}
 
 	@Override

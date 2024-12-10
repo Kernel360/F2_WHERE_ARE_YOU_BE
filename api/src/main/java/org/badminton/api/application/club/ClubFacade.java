@@ -1,7 +1,5 @@
 package org.badminton.api.application.club;
 
-import java.util.Map;
-
 import org.badminton.domain.common.policy.ClubMemberPolicy;
 import org.badminton.domain.domain.club.ClubService;
 import org.badminton.domain.domain.club.command.ClubCreateCommand;
@@ -13,7 +11,6 @@ import org.badminton.domain.domain.club.info.ClubDeleteInfo;
 import org.badminton.domain.domain.club.info.ClubDetailsInfo;
 import org.badminton.domain.domain.club.info.ClubUpdateInfo;
 import org.badminton.domain.domain.clubmember.service.ClubMemberService;
-import org.badminton.domain.domain.member.entity.Member;
 import org.badminton.domain.domain.statistics.event.CreateClubEvent;
 import org.badminton.domain.domain.statistics.event.ReadClubEvent;
 import org.springframework.context.ApplicationEventPublisher;
@@ -45,11 +42,9 @@ public class ClubFacade {
 	@Transactional
 	public ClubDetailsInfo readClub(String clubToken) {
 		var club = clubService.readClub(clubToken);
-		Map<Member.MemberTier, Long> memberCountByTier = club.getClubMemberCountByTier();
 		int clubMembersCount = clubMemberService.countExistingClub(clubToken);
 		eventPublisher.publishEvent(new ReadClubEvent(clubToken));
-		return ClubDetailsInfo.from(club, memberCountByTier,
-			clubMembersCount);
+		return ClubDetailsInfo.from(club, clubMembersCount);
 	}
 
 	@Transactional

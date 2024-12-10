@@ -14,6 +14,9 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-data-redis'
     implementation 'org.springframework.session:spring-session-data-redis'
 
+    implementation 'org.springframework.boot:spring-boot-starter-aop'
+    implementation 'org.redisson:redisson-spring-boot-starter:3.27.0'
+
     testImplementation 'net.datafaker:datafaker:1.5.0'
 
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
