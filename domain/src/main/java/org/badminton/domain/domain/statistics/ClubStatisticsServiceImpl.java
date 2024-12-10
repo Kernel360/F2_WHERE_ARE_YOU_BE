@@ -19,13 +19,15 @@ public class ClubStatisticsServiceImpl implements ClubStatisticsService {
 	@Override
 	@Transactional
 	public void increaseVisitedClubCount(String clubToken) {
-		ClubStatistics increasedResult = clubStatisticsReader.getClubStaticsWithIncrease(clubToken);
-		clubStatisticsStore.increaseVisitCount(increasedResult);
+		ClubStatistics clubStatistics = clubStatisticsReader.readClubStatistics(clubToken);
+		clubStatistics.increaseVisitedCount();
+		clubStatisticsStore.store(clubStatistics);
 	}
 
 	@Override
 	public void createStatistic(ClubCreateInfo clubCreateInfo) {
-		clubStatisticsStore.store(clubCreateInfo);
+		ClubStatistics clubStatistics = new ClubStatistics(clubCreateInfo);
+		clubStatisticsStore.store(clubStatistics);
 	}
 
 	@Override
@@ -37,7 +39,7 @@ public class ClubStatisticsServiceImpl implements ClubStatisticsService {
 	public void updateByCountAndClubId(Long clubId, int count) {
 		var originStatistic = clubStatisticsReader.findByClubId(clubId);
 		originStatistic.increaseRegistrationCount(count);
-		clubStatisticsStore.update(originStatistic);
+		clubStatisticsStore.store(originStatistic);
 	}
 
 	@Override
@@ -54,6 +56,6 @@ public class ClubStatisticsServiceImpl implements ClubStatisticsService {
 	public void updateLeagueCountByClubIdAndCount(Long clubId, int count) {
 		var originStatistic = clubStatisticsReader.findByClubId(clubId);
 		originStatistic.increaseLeagueCount(count);
-		clubStatisticsStore.update(originStatistic);
+		clubStatisticsStore.store(originStatistic);
 	}
 }

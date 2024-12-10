@@ -1,7 +1,6 @@
 package org.badminton.domain.domain.clubmember.service;
 
 import java.util.List;
-import java.util.Map;
 
 import org.badminton.domain.common.exception.clubmember.ClubMemberOwnerException;
 import org.badminton.domain.common.exception.clubmember.ClubOwnerCannotWithdraw;
@@ -177,10 +176,7 @@ public class ClubMemberServiceImpl implements ClubMemberService {
 			.toList();
 
 		return clubs.stream()
-			.map(club -> {
-				Map<Member.MemberTier, Long> tierCounts = club.getClubMemberCountByTier();
-				return ClubCardInfo.from(club, tierCounts);
-			})
+			.map(ClubCardInfo::from)
 			.toList();
 	}
 
