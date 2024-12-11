@@ -30,4 +30,7 @@ public class Constants {
 	public static final int LIMIT_SET_GAME = 3;
 	public static final int INIT_ROUND_NUMBER = 0;
 
+	public static final int FREE_DOUBLES_DIVISOR = 4;
+	public static final int FREE_SINGLES_DIVISOR = 2;
+	public static final int TOURNAMENT_SINGLES_DIVISOR = 2;
 }

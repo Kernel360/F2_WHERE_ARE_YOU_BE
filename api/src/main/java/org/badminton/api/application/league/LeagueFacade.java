@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.badminton.domain.common.policy.ClubMemberPolicy;
+import org.badminton.domain.common.policy.LeagueParticipantPolicy;
 import org.badminton.domain.domain.league.LeagueParticipantService;
 import org.badminton.domain.domain.league.LeagueService;
 import org.badminton.domain.domain.league.command.LeagueCreateNoIncludeClubCommand;
@@ -41,14 +42,16 @@ public class LeagueFacade {
 	private final LeagueParticipantService leagueParticipantService;
 	private final MatchRetrieveService matchRetrieveService;
 	private final ClubMemberPolicy clubMemberPolicy;
+	private final LeagueParticipantPolicy leagueParticipantPolicy;
 
 	public LeagueFacade(LeagueService leagueService, LeagueParticipantService leagueParticipantService,
 		@Qualifier("freeMatchRetrieveServiceImpl") MatchRetrieveService matchRetrieveService,
-		ClubMemberPolicy clubMemberPolicy) {
+		ClubMemberPolicy clubMemberPolicy, LeagueParticipantPolicy leagueParticipantPolicy) {
 		this.leagueService = leagueService;
 		this.leagueParticipantService = leagueParticipantService;
 		this.matchRetrieveService = matchRetrieveService;
 		this.clubMemberPolicy = clubMemberPolicy;
+		this.leagueParticipantPolicy = leagueParticipantPolicy;
 	}
 
 	public List<LeagueReadInfo> getLeaguesByMonth(String clubToken, String date) {

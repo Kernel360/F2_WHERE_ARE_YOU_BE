@@ -6,7 +6,6 @@ import org.badminton.api.common.exception.league.RecruitingClosedAtAfterLeagueAt
 import org.badminton.domain.common.consts.Constants;
 import org.badminton.domain.common.enums.MatchGenerationType;
 import org.badminton.domain.common.enums.MatchType;
-import org.badminton.domain.common.exception.league.InvalidDoublesPlayerLimitCountException;
 import org.badminton.domain.domain.member.entity.Member;
 import org.hibernate.validator.constraints.Length;
 
@@ -63,33 +62,14 @@ public record LeagueCreateRequest(
 	@Schema(description = "대진표 생성 조건", example = "FREE")
 	MatchGenerationType matchGenerationType
 ) {
+
 	public void validate() {
 		validateDate();
-		validatePlayerLimitCount();
 	}
 
 	private void validateDate() {
 		if (recruitingClosedAt.isAfter(leagueAt)) {
 			throw new RecruitingClosedAtAfterLeagueAtException(recruitingClosedAt, leagueAt);
-		}
-	}
-
-	private void validatePlayerLimitCount() {
-		if (this.matchType == MatchType.DOUBLES) {
-			validateIsEven();
-			validateMin();
-		}
-	}
-
-	private void validateIsEven() {
-		if (this.playerLimitCount % 2 == 1) {
-			throw new InvalidDoublesPlayerLimitCountException(this.playerLimitCount, this.matchType);
-		}
-	}
-
-	private void validateMin() {
-		if (this.playerLimitCount < Constants.DOUBLES_PLAYER_LIMIT_MIN) {
-			throw new InvalidDoublesPlayerLimitCountException(this.playerLimitCount);
 		}
 	}
 }
