@@ -1,4 +1,4 @@
-package org.badminton.api.config.redis;
+package org.badminton.infrastructure.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

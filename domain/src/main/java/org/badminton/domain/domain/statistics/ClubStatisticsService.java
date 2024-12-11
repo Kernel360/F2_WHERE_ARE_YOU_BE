@@ -2,6 +2,7 @@ package org.badminton.domain.domain.statistics;
 
 import java.util.List;
 
+import org.badminton.domain.domain.club.info.ClubCardInfo;
 import org.badminton.domain.domain.club.info.ClubCreateInfo;
 
 public interface ClubStatisticsService {
@@ -16,7 +17,7 @@ public interface ClubStatisticsService {
 
 	void updateByCountAndClubId(Long clubId, int count);
 
-	List<ClubStatistics> getTop10PopularClubStatistics();
+	List<ClubCardInfo> getTop10PopularClubStatistics();
 
 	List<ClubStatistics> getTop10RecentlyActiveClubStatistics();
 }

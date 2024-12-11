@@ -20,11 +20,6 @@ dependencies {
     runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.12.3'
     testImplementation 'org.springframework.security:spring-security-test'
 
-    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
-    implementation 'com.fasterxml.jackson.core:jackson-databind'
-    implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310'
-    implementation 'com.fasterxml.jackson.module:jackson-module-parameter-names'
-    implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jdk8'
 
 }
 
