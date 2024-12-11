@@ -120,6 +120,12 @@ public class League extends AbstractBaseTime {
 		if (participantCount < Constants.PLAYER_LIMIT_MIN) {
 			throw new InvalidSinglesPlayerLimitCountException(participantCount, this.matchType);
 		}
+		if (this.matchGenerationType == MatchGenerationType.TOURNAMENT) {
+			return;
+		}
+		if (participantCount % 2 != 0) {
+			throw new InvalidSinglesPlayerLimitCountException(participantCount, this.matchType);
+		}
 	}
 
 	private void validateLeagueParticipantCountWhenDoubles(int participantCount) {
@@ -128,6 +134,12 @@ public class League extends AbstractBaseTime {
 		}
 		if (participantCount % 2 == 1) {
 			throw new InvalidDoublesPlayerLimitCountException(participantCount, this.matchType);
+		}
+		if (this.matchGenerationType == MatchGenerationType.TOURNAMENT) {
+			return;
+		}
+		if (participantCount % 4 != 0) {
+			throw new InvalidDoublesPlayerLimitCountException(participantCount);
 		}
 	}
 
