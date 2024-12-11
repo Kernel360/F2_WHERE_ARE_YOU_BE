@@ -15,7 +15,6 @@ import org.badminton.api.interfaces.league.dto.LeagueReadResponse;
 import org.badminton.api.interfaces.league.dto.LeagueRecruitingCompleteResponse;
 import org.badminton.api.interfaces.league.dto.LeagueUpdateRequest;
 import org.badminton.api.interfaces.league.dto.LeagueUpdateResponse;
-import org.badminton.domain.common.policy.LeagueParticipantPolicy;
 import org.badminton.domain.domain.league.info.IsLeagueParticipantInfo;
 import org.badminton.domain.domain.league.info.LeagueByDateInfoWithParticipantCountInfo;
 import org.badminton.domain.domain.league.info.LeagueCancelInfo;
@@ -110,8 +109,6 @@ public class LeagueController {
 		@AuthenticationPrincipal CustomOAuth2Member member
 	) {
 		leagueCreateRequest.validate();
-		LeagueParticipantPolicy.validatePlayerCount(leagueCreateRequest.matchType(),
-			leagueCreateRequest.matchGenerationType(), leagueCreateRequest.playerLimitCount());
 		var command = leagueDtoMapper.of(leagueCreateRequest, clubToken);
 		var responseInfo = leagueFacade.createLeague(member.getMemberToken(), clubToken, command);
 		LeagueCreateResponse response = leagueDtoMapper.of(responseInfo);
@@ -170,7 +167,7 @@ public class LeagueController {
 		@Valid @RequestBody LeagueUpdateRequest leagueUpdateRequest,
 		@AuthenticationPrincipal CustomOAuth2Member member
 	) {
-		leagueUpdateRequest.validatePlayerLimitCountWhenDoubles();
+		leagueUpdateRequest.validate();
 		var command = leagueDtoMapper.of(leagueUpdateRequest);
 		var leagueUpdateInfo = leagueFacade.updateLeague(clubToken, leagueId, command, member.getMemberToken());
 		LeagueUpdateResponse leagueUpdateResponse = leagueDtoMapper.of(leagueUpdateInfo);

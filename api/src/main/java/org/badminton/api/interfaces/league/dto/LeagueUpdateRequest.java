@@ -3,7 +3,7 @@ package org.badminton.api.interfaces.league.dto;
 import org.badminton.domain.common.consts.Constants;
 import org.badminton.domain.common.enums.MatchGenerationType;
 import org.badminton.domain.common.enums.MatchType;
-import org.badminton.domain.common.exception.league.InvalidDoublesPlayerLimitCountException;
+import org.badminton.domain.common.policy.LeagueParticipantPolicy;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Max;
@@ -38,23 +38,7 @@ public record LeagueUpdateRequest(
 	@Schema(description = "매칭 조건", example = "FREE")
 	MatchGenerationType matchGenerationType
 ) {
-
-	public void validatePlayerLimitCountWhenDoubles() {
-		if (this.matchType == MatchType.DOUBLES) {
-			validateMin();
-			validateIsEven();
-		}
-	}
-
-	private void validateIsEven() {
-		if (this.playerLimitCount % 2 == 1) {
-			throw new InvalidDoublesPlayerLimitCountException(this.playerLimitCount, this.matchType);
-		}
-	}
-
-	private void validateMin() {
-		if (this.playerLimitCount < Constants.DOUBLES_PLAYER_LIMIT_MIN) {
-			throw new InvalidDoublesPlayerLimitCountException(this.playerLimitCount);
-		}
+	public void validate() {
+		LeagueParticipantPolicy.validatePlayerCount(this.matchType, this.matchGenerationType, this.playerLimitCount);
 	}
 }

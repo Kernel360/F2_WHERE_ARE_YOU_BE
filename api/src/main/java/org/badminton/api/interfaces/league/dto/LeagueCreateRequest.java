@@ -6,6 +6,7 @@ import org.badminton.api.common.exception.league.RecruitingClosedAtAfterLeagueAt
 import org.badminton.domain.common.consts.Constants;
 import org.badminton.domain.common.enums.MatchGenerationType;
 import org.badminton.domain.common.enums.MatchType;
+import org.badminton.domain.common.policy.LeagueParticipantPolicy;
 import org.badminton.domain.domain.member.entity.Member;
 import org.hibernate.validator.constraints.Length;
 
@@ -65,6 +66,8 @@ public record LeagueCreateRequest(
 
 	public void validate() {
 		validateDate();
+		LeagueParticipantPolicy.validatePlayerCount(this.matchType(),
+			this.matchGenerationType(), this.playerLimitCount());
 	}
 
 	private void validateDate() {
