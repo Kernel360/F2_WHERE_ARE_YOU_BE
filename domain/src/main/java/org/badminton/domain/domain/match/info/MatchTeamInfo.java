@@ -38,29 +38,30 @@ public record MatchTeamInfo(
 	}
 
 	private static Member.MemberTier getParticipantMemberTier(LeagueParticipant participant) {
-		if (isLeagueParticipantExist(participant))
+		if (isLeagueParticipantExist(participant)) {
 			return participant.getMember().getTier();
-
+		}
 		return null;
 	}
 
 	private static String getParticipantMemberToken(LeagueParticipant participant) {
-		if (isLeagueParticipantExist(participant))
+		if (isLeagueParticipantExist(participant)) {
 			return participant.getMember().getMemberToken();
-
+		}
 		return null;
 	}
 
 	private static String getParticipantName(LeagueParticipant participant) {
-		if (isLeagueParticipantExist(participant))
+		if (isLeagueParticipantExist(participant)) {
 			return participant.getMember().getName();
-
+		}
 		return null;
 	}
 
 	private static String getParticipantImage(LeagueParticipant participant) {
-		if (isLeagueParticipantExist(participant))
+		if (isLeagueParticipantExist(participant)) {
 			return participant.getMember().getProfileImage();
+		}
 		return null;
 	}
 
@@ -69,7 +70,9 @@ public record MatchTeamInfo(
 	}
 
 	private static boolean getIsParticipant(LeagueParticipant participant) {
-		return participant.getClubMember().isBanned();
+		return (participant != null && participant.getMember() != null)
+			? participant.getClubMember().isBanned()
+			: false;
 	}
 
 }
