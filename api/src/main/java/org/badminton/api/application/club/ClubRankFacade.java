@@ -21,12 +21,8 @@ public class ClubRankFacade {
 
 	@Transactional(readOnly = true)
 	public List<ClubCardInfo> getTop10PopularClub() {
-		List<ClubStatistics> top10PopularClubStatistics = clubStatisticsService.getTop10PopularClubStatistics();
 
-		return top10PopularClubStatistics.stream()
-			.map(clubStatistics ->
-				ClubCardInfo.from(clubStatistics.getClub()))
-			.toList();
+		return clubStatisticsService.getTop10PopularClubStatistics();
 	}
 
 	@Transactional(readOnly = true)
