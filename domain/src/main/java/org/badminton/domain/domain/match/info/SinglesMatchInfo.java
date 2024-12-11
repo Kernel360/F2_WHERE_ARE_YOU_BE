@@ -46,8 +46,10 @@ public record SinglesMatchInfo(
 		);
 	}
 
-	private static boolean isParticipantBanned(LeagueParticipant leagueParticipant) {
-		return leagueParticipant.getClubMember().isBanned();
+	private static boolean isParticipantBanned(LeagueParticipant participant) {
+		return (participant != null && participant.getMember() != null)
+			? participant.getClubMember().isBanned()
+			: false;
 	}
 
 	private static Member.MemberTier getParticipantMemberTier(LeagueParticipant participant) {
