@@ -110,3 +110,12 @@ custom:
             auth: true
             starttls:
               enable: true
+---
+spring:
+  jpa:
+    show-sql: true
+logging:
+  level:
+    org.springframework.orm.jpa: DEBUG
+    org.springframework.transaction: DEBUG
+    org.springframework.data.redis: DEBUG
