@@ -18,7 +18,8 @@ import org.badminton.domain.domain.match.reader.DoublesMatchStore;
 import org.badminton.domain.domain.match.reader.SinglesMatchStore;
 import org.badminton.domain.domain.match.store.DoublesMatchReader;
 import org.badminton.domain.domain.match.store.SinglesMatchReader;
-import org.badminton.domain.domain.match.vo.RedisKey;
+import org.badminton.domain.domain.match.vo.LeagueMatchSetRedisKey;
+import org.badminton.domain.domain.match.vo.MatchRedisKey;
 import org.badminton.domain.domain.match.vo.Score;
 import org.badminton.infrastructure.match.repository.SetRepository;
 import org.springframework.stereotype.Service;
@@ -57,7 +58,8 @@ public class RetrieveMatchSet {
 			leagueSetsScoreInProgressInfo = LeagueSetsScoreInProgressInfo.fromDoublesMatchAndSet(doublesMatch,
 				doublesMatch.getDoublesSet(setNumber));
 		}
-		setRepository.saveInProgressSet(leagueId, matchId, setNumber, leagueSetsScoreInProgressInfo);
+		setRepository.saveInProgressSet(new LeagueMatchSetRedisKey(leagueId, matchId, setNumber),
+			leagueSetsScoreInProgressInfo);
 		setRepository.setMatchSetScore(league.getMatchType(), matchId, setNumber, score);
 	}
 
@@ -120,7 +122,7 @@ public class RetrieveMatchSet {
 	}
 
 	@Transactional
-	public void registerMatchSetScoreInDb(RedisKey key, Score score) {
+	public void registerMatchSetScoreInDb(MatchRedisKey key, Score score) {
 		if (key.getMatchType() == MatchType.SINGLES) {
 			SinglesMatch singlesMatch = singlesMatchReader.getSinglesMatch(key.getMatchId());
 			SinglesSet singlesSet = singlesMatch.getSinglesSet(key.getSetNumber());
@@ -144,7 +146,7 @@ public class RetrieveMatchSet {
 		return league.getMatchType();
 	}
 
-	public void deleteCache(RedisKey key) {
+	public void deleteCache(MatchRedisKey key) {
 		setRepository.deleteScore(key);
 	}
 }

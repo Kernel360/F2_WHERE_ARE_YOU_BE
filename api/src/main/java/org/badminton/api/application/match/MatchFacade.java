@@ -15,7 +15,7 @@ import org.badminton.domain.domain.match.info.MatchSetInfo;
 import org.badminton.domain.domain.match.info.SetInfo;
 import org.badminton.domain.domain.match.service.MatchRetrieveService;
 import org.badminton.domain.domain.match.service.MatchStrategy;
-import org.badminton.domain.domain.match.vo.RedisKey;
+import org.badminton.domain.domain.match.vo.MatchRedisKey;
 import org.badminton.domain.domain.match.vo.Score;
 import org.badminton.infrastructure.match.repository.SetRepository;
 import org.badminton.infrastructure.match.service.RetrieveMatchSet;
@@ -55,8 +55,8 @@ public class MatchFacade {
 
 	@Scheduled(fixedRate = 100000)
 	public void saveInDb() {
-		Map<RedisKey, Score> allScores = setRepository.getAllScores();
-		for (RedisKey key : allScores.keySet()) {
+		Map<MatchRedisKey, Score> allScores = setRepository.getAllScores();
+		for (MatchRedisKey key : allScores.keySet()) {
 			retrieveMatchSet.registerMatchSetScoreInDb(key, allScores.get(key));
 			retrieveMatchSet.deleteCache(key);
 		}
