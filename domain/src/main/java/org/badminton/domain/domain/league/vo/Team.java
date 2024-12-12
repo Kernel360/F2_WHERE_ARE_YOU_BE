@@ -32,4 +32,8 @@ public class Team {
 	public static Team emptyWinner() {
 		return null;
 	}
+
+	public boolean isTeam(LeagueParticipant leagueParticipant) {
+		return this.leagueParticipant1.equals(leagueParticipant) || this.leagueParticipant2.equals(leagueParticipant);
+	}
 }

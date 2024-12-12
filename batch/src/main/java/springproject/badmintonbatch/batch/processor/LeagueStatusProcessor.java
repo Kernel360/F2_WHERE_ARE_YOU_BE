@@ -6,8 +6,8 @@ import org.badminton.domain.common.exception.league.InvalidDoublesPlayerLimitCou
 import org.badminton.domain.common.exception.league.InvalidSinglesPlayerLimitCountException;
 import org.badminton.domain.domain.league.LeagueParticipantReader;
 import org.badminton.domain.domain.league.entity.League;
-import org.badminton.domain.domain.match.store.DoublesMatchReader;
-import org.badminton.domain.domain.match.store.SinglesMatchReader;
+import org.badminton.domain.domain.match.reader.DoublesMatchReader;
+import org.badminton.domain.domain.match.reader.SinglesMatchReader;
 import org.springframework.batch.item.ItemProcessor;
 import org.springframework.stereotype.Component;
 

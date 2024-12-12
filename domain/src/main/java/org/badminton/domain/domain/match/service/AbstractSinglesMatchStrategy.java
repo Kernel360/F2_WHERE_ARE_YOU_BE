@@ -19,8 +19,8 @@ import org.badminton.domain.domain.match.info.LeagueSetsScoreInProgressInfo;
 import org.badminton.domain.domain.match.info.MatchInfo;
 import org.badminton.domain.domain.match.info.MatchSetInfo;
 import org.badminton.domain.domain.match.info.SetInfo;
-import org.badminton.domain.domain.match.reader.SinglesMatchStore;
-import org.badminton.domain.domain.match.store.SinglesMatchReader;
+import org.badminton.domain.domain.match.reader.SinglesMatchReader;
+import org.badminton.domain.domain.match.store.SinglesMatchStore;
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;

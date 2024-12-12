@@ -18,8 +18,8 @@ import org.badminton.domain.domain.league.LeagueReader;
 import org.badminton.domain.domain.match.command.MatchCommand;
 import org.badminton.domain.domain.match.entity.DoublesMatch;
 import org.badminton.domain.domain.match.entity.DoublesSet;
-import org.badminton.domain.domain.match.reader.DoublesMatchStore;
-import org.badminton.domain.domain.match.store.DoublesMatchReader;
+import org.badminton.domain.domain.match.reader.DoublesMatchReader;
+import org.badminton.domain.domain.match.store.DoublesMatchStore;
 import org.badminton.infrastructure.match.strategy.MatchUtils;
 import org.springframework.stereotype.Component;
 

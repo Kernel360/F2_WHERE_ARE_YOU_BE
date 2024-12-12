@@ -11,9 +11,9 @@ import org.badminton.domain.domain.match.entity.SinglesMatch;
 import org.badminton.domain.domain.match.entity.SinglesSet;
 import org.badminton.domain.domain.match.info.BracketInfo;
 import org.badminton.domain.domain.match.info.SetInfo;
-import org.badminton.domain.domain.match.reader.SinglesMatchStore;
+import org.badminton.domain.domain.match.reader.SinglesMatchReader;
 import org.badminton.domain.domain.match.service.AbstractSinglesMatchStrategy;
-import org.badminton.domain.domain.match.store.SinglesMatchReader;
+import org.badminton.domain.domain.match.store.SinglesMatchStore;
 import org.badminton.infrastructure.match.service.TournamentSinglesBracketCreator;
 import org.badminton.infrastructure.match.service.TournamentSinglesEndSetHandler;
 import org.springframework.stereotype.Component;
@@ -46,7 +46,7 @@ public class TournamentSinglesMatchStrategy extends AbstractSinglesMatchStrategy
 
 		// 전체 매치 배열 생성
 		List<SinglesMatch> allMatches = new ArrayList<>();
-		
+
 		Collections.shuffle(leagueParticipantList);
 
 		// 전체 라운드의 수 계산
