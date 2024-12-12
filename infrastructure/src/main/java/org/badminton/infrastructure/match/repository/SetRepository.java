@@ -1,6 +1,9 @@
 package org.badminton.infrastructure.match.repository;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
@@ -11,10 +14,14 @@ import org.badminton.domain.domain.match.info.LeagueSetsScoreInProgressInfo;
 import org.badminton.domain.domain.match.vo.RedisKey;
 import org.badminton.domain.domain.match.vo.Score;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Repository;
+
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
@@ -32,7 +39,14 @@ public class SetRepository {
 
 	private HashOperations<String, String, String> hashOps;
 
-	private static final String IN_PROGRESS_MATCH_PREFIX = "IN_PROGRESS_LEAGUE_ID_";
+	private static final String IN_PROGRESS_MATCH_PREFIX = "IN_PROGRESS_";
+	private static final String LEAGUE_ID_PREFIX = "_LEAGUE_ID_";
+	private static final String MATCH_ID_PREFIX = "_MATCH_ID_";
+	private static final String SET_NUMBER_PREFIX = "_SET_NUMBER";
+
+	@Qualifier("objectMapper")
+	@Autowired
+	private ObjectMapper objectMapper;
 
 	@PostConstruct
 	private void init() {
@@ -74,8 +88,32 @@ public class SetRepository {
 		hashOps.delete(redisKey.getKey(), redisKey.getField());
 	}
 
-	public void saveSet(Long leagueId, LeagueSetsScoreInProgressInfo leagueSetsScoreInProgressInfo) {
-		redisTemplate2.opsForValue().set(IN_PROGRESS_MATCH_PREFIX + leagueId, leagueSetsScoreInProgressInfo, 1,
-			TimeUnit.MINUTES);
+	public void saveInProgressSet(Long leagueId, Long matchId, int setNumber,
+		LeagueSetsScoreInProgressInfo leagueSetsScoreInProgressInfo) {
+		redisTemplate2.opsForValue()
+			.set(IN_PROGRESS_MATCH_PREFIX + LEAGUE_ID_PREFIX + leagueId + MATCH_ID_PREFIX + matchId + SET_NUMBER_PREFIX
+					+ setNumber, leagueSetsScoreInProgressInfo, 1,
+				TimeUnit.MINUTES);
 	}
+
+	public List<LeagueSetsScoreInProgressInfo> getInProgressSet(Long leagueId) {
+		Set<String> keys = redisTemplate2.keys(IN_PROGRESS_MATCH_PREFIX + "*");
+
+		List<Object> allLeagueMatches = new ArrayList<>();
+		if (keys != null && !keys.isEmpty()) {
+			for (String key : keys) {
+				Object value = redisTemplate2.opsForValue().get(key);
+				if (value != null) {
+					allLeagueMatches.add(value);
+				}
+			}
+		}
+		if (!allLeagueMatches.isEmpty()) {
+			return objectMapper.convertValue(allLeagueMatches,
+				new TypeReference<List<LeagueSetsScoreInProgressInfo>>() {
+				});
+		}
+		return Collections.emptyList();
+	}
+
 }

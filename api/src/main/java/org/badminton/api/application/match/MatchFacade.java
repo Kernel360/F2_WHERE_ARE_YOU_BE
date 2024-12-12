@@ -92,6 +92,10 @@ public class MatchFacade {
 	}
 
 	public List<LeagueSetsScoreInProgressInfo> retrieveLeagueMatchSetsScoreInProgress(Long leagueId) {
+		List<LeagueSetsScoreInProgressInfo> inProgressSet = setRepository.getInProgressSet(leagueId);
+		if (!inProgressSet.isEmpty()) {
+			return inProgressSet;
+		}
 		MatchRetrieveService matchRetrieveService = getMatchRetrieveService(leagueId);
 		MatchStrategy matchStrategy = matchRetrieveService.makeSinglesOrDoublesMatchStrategy(leagueId);
 		return matchRetrieveService.retrieveLeagueMatchInProgress(matchStrategy, leagueId);

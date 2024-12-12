@@ -45,6 +45,7 @@ public class RetrieveMatchSet {
 			validateSinglesMatch(matchId, setNumber);
 			SinglesMatch singlesMatch = singlesMatchReader.getSinglesMatch(matchId);
 			singlesMatch.startMatchSet(setNumber);
+			singlesMatch.getSinglesSet(setNumber).saveSetScore(score.getLeft(), score.getRight());
 			leagueSetsScoreInProgressInfo = LeagueSetsScoreInProgressInfo.fromSinglesMatchAndSet(singlesMatch,
 				singlesMatch.getSinglesSet(setNumber));
 		} else if (league.getMatchType() == MatchType.DOUBLES) {
@@ -52,10 +53,11 @@ public class RetrieveMatchSet {
 			validateDoublesMatch(matchId, setNumber);
 			DoublesMatch doublesMatch = doublesMatchReader.getDoublesMatch(matchId);
 			doublesMatch.startMatchSet(setNumber);
+			doublesMatch.getDoublesSet(setNumber).saveSetScore(score.getLeft(), score.getRight());
 			leagueSetsScoreInProgressInfo = LeagueSetsScoreInProgressInfo.fromDoublesMatchAndSet(doublesMatch,
 				doublesMatch.getDoublesSet(setNumber));
 		}
-		setRepository.saveSet(leagueId, leagueSetsScoreInProgressInfo);
+		setRepository.saveInProgressSet(leagueId, matchId, setNumber, leagueSetsScoreInProgressInfo);
 		setRepository.setMatchSetScore(league.getMatchType(), matchId, setNumber, score);
 	}
 
