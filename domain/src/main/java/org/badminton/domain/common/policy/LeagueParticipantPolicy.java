@@ -12,19 +12,14 @@ public class LeagueParticipantPolicy {
 
 	public static void validatePlayerCount(MatchType matchType, MatchGenerationType matchGenerationType,
 		int playerCount) {
-		switch (matchType) {
-			case SINGLES -> {
-				switch (matchGenerationType) {
-					case FREE -> validateFreeSinglesPlayerCount(playerCount);
-					case TOURNAMENT -> validateSinglesMinPlayerCount(playerCount);
-				}
-			}
-			case DOUBLES -> {
-				switch (matchGenerationType) {
-					case FREE -> validateFreeDoublesPlayerCount(playerCount);
-					case TOURNAMENT -> validateTournamentDoublesPlayerCount(playerCount);
-				}
-			}
+		if (matchType == MatchType.SINGLES && matchGenerationType == MatchGenerationType.FREE) {
+			validateFreeSinglesPlayerCount(playerCount);
+		} else if (matchType == MatchType.SINGLES && matchGenerationType == MatchGenerationType.TOURNAMENT) {
+			validateSinglesMinPlayerCount(playerCount);
+		} else if (matchType == MatchType.DOUBLES && matchGenerationType == MatchGenerationType.FREE) {
+			validateFreeDoublesPlayerCount(playerCount);
+		} else if (matchType == MatchType.DOUBLES && matchGenerationType == MatchGenerationType.TOURNAMENT) {
+			validateTournamentDoublesPlayerCount(playerCount);
 		}
 	}
 
