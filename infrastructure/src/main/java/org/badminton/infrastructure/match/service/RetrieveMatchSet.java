@@ -14,12 +14,14 @@ import org.badminton.domain.domain.match.entity.DoublesMatch;
 import org.badminton.domain.domain.match.entity.DoublesSet;
 import org.badminton.domain.domain.match.entity.SinglesMatch;
 import org.badminton.domain.domain.match.entity.SinglesSet;
+import org.badminton.domain.domain.match.info.LeagueSetsScoreInProgressInfo;
 import org.badminton.domain.domain.match.reader.DoublesMatchStore;
 import org.badminton.domain.domain.match.reader.SinglesMatchStore;
 import org.badminton.domain.domain.match.store.DoublesMatchReader;
 import org.badminton.domain.domain.match.store.SinglesMatchReader;
 import org.badminton.domain.domain.match.vo.RedisKey;
 import org.badminton.domain.domain.match.vo.Score;
+import org.badminton.infrastructure.match.repository.DoublesMatchRepository;
 import org.badminton.infrastructure.match.repository.SetRepository;
 import org.springframework.stereotype.Service;
 
@@ -36,20 +38,28 @@ public class RetrieveMatchSet {
 	private final DoublesMatchReader doublesMatchReader;
 	private final SinglesMatchStore singlesMatchStore;
 	private final DoublesMatchStore doublesMatchStore;
+	private final DoublesMatchRepository doublesMatchRepository;
 
 	public void setMatchSetScore(Long leagueId, Long matchId, int setNumber, Score score, String memberToken) {
 		League league = leagueReader.readLeagueById(leagueId);
 
+		LeagueSetsScoreInProgressInfo leagueSetsScoreInProgressInfo = null;
 		if (league.getMatchType() == MatchType.SINGLES) {
 			validatePreviousSinglesRoundCompletion(leagueId, matchId);
 			validateSinglesMatch(matchId, setNumber);
-			singlesMatchReader.getSinglesMatch(matchId).startMatchSet(setNumber);
+			SinglesMatch singlesMatch = singlesMatchReader.getSinglesMatch(matchId);
+			singlesMatch.startMatchSet(setNumber);
+			leagueSetsScoreInProgressInfo = LeagueSetsScoreInProgressInfo.fromSinglesMatchAndSet(singlesMatch,
+				singlesMatch.getSinglesSet(setNumber));
 		} else if (league.getMatchType() == MatchType.DOUBLES) {
 			validatePreviousDoublesRoundCompletion(leagueId, matchId);
 			validateDoublesMatch(matchId, setNumber);
-			doublesMatchReader.getDoublesMatch(matchId).startMatchSet(setNumber);
+			DoublesMatch doublesMatch = doublesMatchReader.getDoublesMatch(matchId);
+			doublesMatch.startMatchSet(setNumber);
+			leagueSetsScoreInProgressInfo = LeagueSetsScoreInProgressInfo.fromDoublesMatchAndSet(doublesMatch,
+				doublesMatch.getDoublesSet(setNumber));
 		}
-
+		setRepository.saveSet(leagueId, leagueSetsScoreInProgressInfo);
 		setRepository.setMatchSetScore(league.getMatchType(), matchId, setNumber, score);
 	}
 

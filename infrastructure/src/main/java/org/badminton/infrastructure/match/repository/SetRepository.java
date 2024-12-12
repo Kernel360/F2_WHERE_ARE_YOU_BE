@@ -4,26 +4,35 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 
 import org.badminton.domain.common.enums.MatchType;
+import org.badminton.domain.domain.match.info.LeagueSetsScoreInProgressInfo;
 import org.badminton.domain.domain.match.vo.RedisKey;
 import org.badminton.domain.domain.match.vo.Score;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.HashOperations;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Repository;
 
 import jakarta.annotation.PostConstruct;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @Repository
+@RequiredArgsConstructor
 @Slf4j
 public class SetRepository {
+
+	private final RedisTemplate<String, Object> redisTemplate2;
 
 	@Autowired
 	private StringRedisTemplate redisTemplate;
 
 	private HashOperations<String, String, String> hashOps;
+
+	private static final String IN_PROGRESS_MATCH_PREFIX = "IN_PROGRESS_LEAGUE_ID_";
 
 	@PostConstruct
 	private void init() {
@@ -63,5 +72,10 @@ public class SetRepository {
 
 	public void deleteScore(RedisKey redisKey) {
 		hashOps.delete(redisKey.getKey(), redisKey.getField());
+	}
+
+	public void saveSet(Long leagueId, LeagueSetsScoreInProgressInfo leagueSetsScoreInProgressInfo) {
+		redisTemplate2.opsForValue().set(IN_PROGRESS_MATCH_PREFIX + leagueId, leagueSetsScoreInProgressInfo, 1,
+			TimeUnit.MINUTES);
 	}
 }
