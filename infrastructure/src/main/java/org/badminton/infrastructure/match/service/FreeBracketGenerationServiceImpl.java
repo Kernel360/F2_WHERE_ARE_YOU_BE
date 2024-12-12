@@ -71,6 +71,7 @@ public class FreeBracketGenerationServiceImpl implements BracketGenerationServic
 	}
 
 	@Override
+	@Transactional
 	public void startMatch(MatchStrategy matchStrategy, Long leagueId, Long matchId) {
 		League league = findLeague(leagueId);
 		league.startLeague();

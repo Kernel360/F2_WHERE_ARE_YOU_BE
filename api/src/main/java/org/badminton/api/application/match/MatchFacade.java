@@ -22,6 +22,7 @@ import org.badminton.infrastructure.match.service.RetrieveMatchSet;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -96,6 +97,7 @@ public class MatchFacade {
 		return matchRetrieveService.retrieveLeagueMatchInProgress(matchStrategy, leagueId);
 	}
 
+	@Transactional
 	public SetInfo.Main registerSetScore(Long leagueId, Long matchId, int setNumber,
 		SetScoreUpdateRequest setScoreUpdateRequest, String memberToken) {
 		retrieveMatchSet.setMatchSetScore(leagueId, matchId, setNumber,

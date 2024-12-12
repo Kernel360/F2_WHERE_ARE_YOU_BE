@@ -117,8 +117,9 @@ public class DoublesMatch extends AbstractBaseTime {
 		this.matchStatus = MatchStatus.FINISHED;
 	}
 
-	public void startMatch() {
+	public void startMatchSet(int setNumber) {
 		this.matchStatus = MatchStatus.IN_PROGRESS;
+		this.getDoublesSet(setNumber).open();
 	}
 
 	public Optional<DoublesSet> getSetInProgress() {

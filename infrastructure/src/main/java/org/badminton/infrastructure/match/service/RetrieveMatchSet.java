@@ -43,11 +43,11 @@ public class RetrieveMatchSet {
 		if (league.getMatchType() == MatchType.SINGLES) {
 			validatePreviousSinglesRoundCompletion(leagueId, matchId);
 			validateSinglesMatch(matchId, setNumber);
-		}
-
-		if (league.getMatchType() == MatchType.DOUBLES) {
+			singlesMatchReader.getSinglesMatch(matchId).startMatchSet(setNumber);
+		} else if (league.getMatchType() == MatchType.DOUBLES) {
 			validatePreviousDoublesRoundCompletion(leagueId, matchId);
 			validateDoublesMatch(matchId, setNumber);
+			doublesMatchReader.getDoublesMatch(matchId).startMatchSet(setNumber);
 		}
 
 		setRepository.setMatchSetScore(league.getMatchType(), matchId, setNumber, score);
