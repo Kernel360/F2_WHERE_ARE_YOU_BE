@@ -1,4 +1,4 @@
-package org.badminton.domain.domain.statistics.event;
+package org.badminton.domain.domain.club.event;
 
 import org.badminton.domain.domain.club.ClubService;
 import org.badminton.domain.domain.statistics.ClubStatisticsService;
@@ -10,14 +10,13 @@ import lombok.RequiredArgsConstructor;
 
 @Component
 @RequiredArgsConstructor
-public class CreateClubEventHandler {
+public class UpdateClubEventHandler {
 	private final ClubStatisticsService clubStatisticsService;
 	private final ClubService clubService;
 
 	@Async
 	@TransactionalEventListener
-	public void createClubEventListener(CreateClubEvent event) {
-		clubStatisticsService.createStatistic(event.getClubCreateInfo());
+	public void updateClubEventListener(UpdateClubEvent event) {
 		clubStatisticsService.refreshPopularClubsCache();
 		clubStatisticsService.refreshRecentlyActivityClubsCache();
 		clubService.refreshRecentlyCreatedClubsCache();

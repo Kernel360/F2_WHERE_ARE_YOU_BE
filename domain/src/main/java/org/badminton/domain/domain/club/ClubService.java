@@ -16,6 +16,8 @@ import org.springframework.data.domain.Pageable;
 public interface ClubService {
 	Page<ClubCardInfo> readAllClubs(Pageable pageable);
 
+	Page<ClubCardInfo> getAllClubs(Pageable pageable);
+
 	ClubSummaryInfo readClub(String clubToken);
 
 	Page<ClubCardInfo> searchClubs(String keyword, Pageable pageable);
@@ -31,4 +33,8 @@ public interface ClubService {
 	Page<ClubApplicantInfo> readClubApplicants(String clubToken, Pageable pageable);
 
 	List<ClubCardInfo> getRecentlyCreatedClub();
+
+	void refreshRecentlyCreatedClubsCache();
+
+	void refreshAllClubsCache();
 }

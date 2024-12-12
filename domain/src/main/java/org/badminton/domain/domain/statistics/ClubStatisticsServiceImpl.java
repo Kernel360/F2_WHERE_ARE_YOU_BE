@@ -57,6 +57,16 @@ public class ClubStatisticsServiceImpl implements ClubStatisticsService {
 	}
 
 	@Override
+	public void refreshPopularClubsCache() {
+		clubStatisticsReader.refreshTop10PopularClubsCache();
+	}
+
+	@Override
+	public void refreshRecentlyActivityClubsCache() {
+		clubStatisticsReader.refreshActivityClubsCache();
+	}
+
+	@Override
 	public void updateLeagueCountByClubIdAndCount(Long clubId, int count) {
 		var originStatistic = clubStatisticsReader.findByClubId(clubId);
 		originStatistic.increaseLeagueCount(count);

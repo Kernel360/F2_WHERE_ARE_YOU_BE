@@ -20,4 +20,8 @@ public interface ClubStatisticsService {
 	List<ClubCardInfo> getTop10PopularClub();
 
 	List<ClubCardInfo> getTop10RecentlyActiveClub();
+
+	void refreshPopularClubsCache();
+
+	void refreshRecentlyActivityClubsCache();
 }

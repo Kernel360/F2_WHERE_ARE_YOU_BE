@@ -3,15 +3,18 @@ package org.badminton.domain.domain.club;
 import java.util.List;
 
 import org.badminton.domain.domain.club.entity.Club;
+import org.badminton.domain.domain.club.info.ClubCardInfo;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 public interface ClubReader {
 	Page<Club> readAllClubs(Pageable pageable);
 
+	Page<ClubCardInfo> getAllClubs(Pageable pageable);
+
 	Page<Club> keywordSearch(String keyword, Pageable pageable);
 
-	List<Club> readRecentlyCreatedClubs();
+	List<ClubCardInfo> readRecentlyCreatedClubs();
 
 	List<Club> readAllClubs();
 
@@ -22,4 +25,8 @@ public interface ClubReader {
 	Club readExistingClub(String clubToken);
 
 	boolean UniqueClubName(String clubName);
+
+	List<ClubCardInfo> refreshRecentlyCreatedClubsCache();
+
+	List<ClubCardInfo> refreshAllClubsCache();
 }
