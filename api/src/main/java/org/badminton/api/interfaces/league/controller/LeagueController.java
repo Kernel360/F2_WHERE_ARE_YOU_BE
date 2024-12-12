@@ -167,7 +167,7 @@ public class LeagueController {
 		@Valid @RequestBody LeagueUpdateRequest leagueUpdateRequest,
 		@AuthenticationPrincipal CustomOAuth2Member member
 	) {
-		leagueUpdateRequest.validatePlayerLimitCountWhenDoubles();
+		leagueUpdateRequest.validate();
 		var command = leagueDtoMapper.of(leagueUpdateRequest);
 		var leagueUpdateInfo = leagueFacade.updateLeague(clubToken, leagueId, command, member.getMemberToken());
 		LeagueUpdateResponse leagueUpdateResponse = leagueDtoMapper.of(leagueUpdateInfo);
