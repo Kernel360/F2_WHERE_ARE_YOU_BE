@@ -34,14 +34,13 @@ public class ClubReadConcurrencyTest {
 		///given
 		int numberOfThreads = 100;
 		ExecutorService executorService = Executors.newFixedThreadPool(20);
-		CountDownLatch latch = new CountDownLatch(20);
+		CountDownLatch latch = new CountDownLatch(numberOfThreads);
 
 		//when
 		for (int i = 0; i < numberOfThreads; i++) {
 			executorService.submit(() -> {
 				try {
-					// clubFacade.readClub("club_token_1");
-					clubStatisticsService.increaseVisitedClubCount("club_token_1");
+					clubFacade.readClub("club_token_1");
 				} catch (Exception e) {
 					e.printStackTrace();
 				} finally {
@@ -52,7 +51,7 @@ public class ClubReadConcurrencyTest {
 		// latch.countDown();
 		latch.await();
 
-		Thread.sleep(5000);
+		Thread.sleep(1000);
 		executorService.shutdown();
 
 		//then

@@ -18,18 +18,8 @@ public class ClubStatisticsServiceImpl implements ClubStatisticsService {
 	private final DistributedLockProcessor distributedLockProcessor;
 
 	@Override
-	public void increaseVisitedClubCount(String clubToken) {
-		String lockName = "CLUB_VISIT_LOCK_" + clubToken;
-		distributedLockProcessor.execute(lockName, 10000, 10000,
-			() -> increaseClubVisitCountWithNamedLock(clubToken)
-		);
-		// synchronized (this) {
-		// 	increaseClubVisitCountWithNamedLock(clubToken);
-		// }
-	}
-
 	@Transactional
-	public void increaseClubVisitCountWithNamedLock(String clubToken) {
+	public void increaseVisitedClubCount(String clubToken) {
 		ClubStatistics clubStatistics = clubStatisticsReader.readClubStatistics(clubToken);
 		clubStatistics.increaseVisitedCount();
 		clubStatisticsStore.store(clubStatistics);
