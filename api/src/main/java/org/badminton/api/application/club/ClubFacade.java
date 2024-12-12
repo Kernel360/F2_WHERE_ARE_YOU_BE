@@ -44,8 +44,7 @@ public class ClubFacade {
 	}
 
 	@Transactional(readOnly = true)
-	public Page<ClubCardInfo> getAllClubs(int page, int size, String sort) {
-		Pageable pageable = PageRequest.of(page, size, Sort.by(sort));
+	public Page<ClubCardInfo> getAllClubs(Pageable pageable) {
 		return clubService.getAllClubs(pageable);
 	}
 

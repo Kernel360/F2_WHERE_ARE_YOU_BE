@@ -25,6 +25,7 @@ import org.badminton.domain.domain.club.info.ClubDeleteInfo;
 import org.badminton.domain.domain.club.info.ClubUpdateInfo;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -140,7 +141,9 @@ public class ClubController {
 		@RequestParam(defaultValue = DEFAULT_PAGE_VALUE) int page,
 		@RequestParam(defaultValue = DEFAULT_SIZE_VALUE) int size,
 		@RequestParam(defaultValue = DEFAULT_SORT_BY_VALUE) String sort) {
-		Page<ClubCardInfo> clubCard = clubFacade.getAllClubs(page, size, sort);
+		Pageable pageable = PageRequest.of(page, size, Sort.by(sort));
+
+		Page<ClubCardInfo> clubCard = clubFacade.getAllClubs(pageable);
 		Page<ClubCardResponse> response = clubDtoMapper.of(clubCard);
 		CustomPageResponse<ClubCardResponse> pageResponse = new CustomPageResponse<>(response);
 
