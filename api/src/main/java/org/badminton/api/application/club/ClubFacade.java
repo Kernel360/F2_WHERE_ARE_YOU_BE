@@ -38,16 +38,10 @@ public class ClubFacade {
 	private final ClubMemberPolicy clubMemberPolicy;
 
 	@Transactional(readOnly = true)
-	public Page<ClubCardInfo> readAllClubs(int page, int size, String sort) {
-		Pageable pageable = PageRequest.of(page, size, Sort.by(sort));
+	public Page<ClubCardInfo> readAllClubs(Pageable pageable) {
 		return clubService.readAllClubs(pageable);
 	}
-
-	@Transactional(readOnly = true)
-	public Page<ClubCardInfo> getAllClubs(Pageable pageable) {
-		return clubService.getAllClubs(pageable);
-	}
-
+	
 	@Transactional
 	public ClubDetailsInfo readClub(String clubToken) {
 		var club = clubService.readClub(clubToken);
