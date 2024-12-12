@@ -10,8 +10,6 @@ import org.springframework.data.domain.Pageable;
 public interface ClubReader {
 	Page<Club> readAllClubs(Pageable pageable);
 
-	Page<ClubCardInfo> getAllClubs(Pageable pageable);
-
 	Page<Club> keywordSearch(String keyword, Pageable pageable);
 
 	List<ClubCardInfo> readRecentlyCreatedClubs();
@@ -27,6 +25,4 @@ public interface ClubReader {
 	boolean UniqueClubName(String clubName);
 
 	List<ClubCardInfo> refreshRecentlyCreatedClubsCache();
-
-	List<ClubCardInfo> refreshAllClubsCache();
 }
