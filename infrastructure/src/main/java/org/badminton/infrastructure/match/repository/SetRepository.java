@@ -93,7 +93,7 @@ public class SetRepository {
 		redisTemplate2.opsForValue()
 			.set(IN_PROGRESS_MATCH_PREFIX + LEAGUE_ID_PREFIX + leagueId + MATCH_ID_PREFIX + matchId + SET_NUMBER_PREFIX
 					+ setNumber, leagueSetsScoreInProgressInfo, 1,
-				TimeUnit.MINUTES);
+				TimeUnit.HOURS);
 	}
 
 	public List<LeagueSetsScoreInProgressInfo> getInProgressSet(Long leagueId) {
