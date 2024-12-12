@@ -51,10 +51,13 @@ public class ClubServiceImpl implements ClubService {
 	@Override
 	@Transactional(readOnly = true)
 	public List<ClubCardInfo> getRecentlyCreatedClub() {
-		List<Club> clubs = clubReader.readRecentlyCreatedClubs();
-		return clubs.stream()
-			.map(ClubCardInfo::from)
-			.toList();
+
+		return clubReader.readRecentlyCreatedClubs();
+	}
+
+	@Override
+	public void refreshRecentlyCreatedClubsCache() {
+		clubReader.retrieveAndCacheTop10Clubs();
 	}
 
 	@Override
