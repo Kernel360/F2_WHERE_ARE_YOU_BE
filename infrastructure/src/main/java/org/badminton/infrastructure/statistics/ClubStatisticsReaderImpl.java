@@ -22,6 +22,7 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class ClubStatisticsReaderImpl implements ClubStatisticsReader {
 	private static final String POPULAR_TOP10_REDIS_KEY = ClubRedisKey.getTop10PopularKey();
+	private static final String ACTIVITY_TOP10_REDIS_KEY = ClubRedisKey.getTop10ActivityKey();
 	private final ClubStatisticsRepository clubStatisticsRepository;
 	private final ClubStatisticsRepositoryCustom clubStatisticsRepositoryCustom;
 	private final RedisTemplate<String, Object> redisTemplate;
@@ -70,7 +71,23 @@ public class ClubStatisticsReaderImpl implements ClubStatisticsReader {
 	}
 
 	@Override
-	public List<ClubStatistics> readTop10RecentlyActiveClubStatistics() {
-		return clubStatisticsRepository.findTop10ByOrderByActivityScoreDesc();
+	public List<ClubCardInfo> readTop10RecentlyActiveClub() {
+
+		Object cachedClubs = redisTemplate.opsForValue().get(ACTIVITY_TOP10_REDIS_KEY);
+
+		if (cachedClubs != null) {
+			return objectMapper.convertValue(cachedClubs, new TypeReference<List<ClubCardInfo>>() {
+			});
+		}
+
+		List<ClubStatistics> top10RecentlyActiveClubStatistics = clubStatisticsRepository.findTop10ByOrderByActivityScoreDesc();
+
+		List<ClubCardInfo> top10ClubCardInfo = top10RecentlyActiveClubStatistics.stream()
+			.map(clubStatistics -> ClubCardInfo.from(clubStatistics.getClub()))
+			.toList();
+
+		redisTemplate.opsForValue().set(ACTIVITY_TOP10_REDIS_KEY, top10ClubCardInfo, 1, TimeUnit.HOURS);
+
+		return top10ClubCardInfo;
 	}
 }

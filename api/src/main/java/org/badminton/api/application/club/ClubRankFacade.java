@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.badminton.domain.domain.club.ClubService;
 import org.badminton.domain.domain.club.info.ClubCardInfo;
-import org.badminton.domain.domain.statistics.ClubStatistics;
 import org.badminton.domain.domain.statistics.ClubStatisticsService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,17 +21,13 @@ public class ClubRankFacade {
 	@Transactional(readOnly = true)
 	public List<ClubCardInfo> getTop10PopularClub() {
 
-		return clubStatisticsService.getTop10PopularClubStatistics();
+		return clubStatisticsService.getTop10PopularClub();
 	}
 
 	@Transactional(readOnly = true)
 	public List<ClubCardInfo> getTop10RecentlyActiveClub() {
-		List<ClubStatistics> top10RecentlyActiveClubStatistics = clubStatisticsService.getTop10RecentlyActiveClubStatistics();
 
-		return top10RecentlyActiveClubStatistics.stream()
-			.map(clubStatistics ->
-				ClubCardInfo.from(clubStatistics.getClub()))
-			.toList();
+		return clubStatisticsService.getTop10RecentlyActiveClub();
 	}
 
 	@Transactional(readOnly = true)
