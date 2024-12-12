@@ -15,7 +15,6 @@ import lombok.extern.slf4j.Slf4j;
 public class ClubStatisticsServiceImpl implements ClubStatisticsService {
 	private final ClubStatisticsReader clubStatisticsReader;
 	private final ClubStatisticsStore clubStatisticsStore;
-	private final DistributedLockProcessor distributedLockProcessor;
 
 	@Override
 	@Transactional
