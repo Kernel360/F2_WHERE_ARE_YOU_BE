@@ -7,7 +7,6 @@ import org.badminton.domain.common.enums.SetStatus;
 import org.badminton.domain.common.exception.match.LeagueParticipantNotDeterminedException;
 import org.badminton.domain.common.exception.match.PreviousDetNotFinishedException;
 import org.badminton.domain.common.exception.match.RoundNotFinishedException;
-import org.badminton.domain.domain.league.LeagueParticipantReader;
 import org.badminton.domain.domain.league.LeagueReader;
 import org.badminton.domain.domain.league.entity.League;
 import org.badminton.domain.domain.match.entity.DoublesMatch;
@@ -21,7 +20,6 @@ import org.badminton.domain.domain.match.store.DoublesMatchReader;
 import org.badminton.domain.domain.match.store.SinglesMatchReader;
 import org.badminton.domain.domain.match.vo.RedisKey;
 import org.badminton.domain.domain.match.vo.Score;
-import org.badminton.infrastructure.match.repository.DoublesMatchRepository;
 import org.badminton.infrastructure.match.repository.SetRepository;
 import org.springframework.stereotype.Service;
 
@@ -33,12 +31,10 @@ import lombok.RequiredArgsConstructor;
 public class RetrieveMatchSet {
 	private final SetRepository setRepository;
 	private final LeagueReader leagueReader;
-	private final LeagueParticipantReader leagueParticipantReader;
 	private final SinglesMatchReader singlesMatchReader;
 	private final DoublesMatchReader doublesMatchReader;
 	private final SinglesMatchStore singlesMatchStore;
 	private final DoublesMatchStore doublesMatchStore;
-	private final DoublesMatchRepository doublesMatchRepository;
 
 	public void setMatchSetScore(Long leagueId, Long matchId, int setNumber, Score score, String memberToken) {
 		League league = leagueReader.readLeagueById(leagueId);
