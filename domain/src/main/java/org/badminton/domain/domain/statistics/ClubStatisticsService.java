@@ -17,7 +17,7 @@ public interface ClubStatisticsService {
 
 	void updateByCountAndClubId(Long clubId, int count);
 
-	List<ClubCardInfo> getTop10PopularClubStatistics();
+	List<ClubCardInfo> getTop10PopularClub();
 
-	List<ClubStatistics> getTop10RecentlyActiveClubStatistics();
+	List<ClubCardInfo> getTop10RecentlyActiveClub();
 }
