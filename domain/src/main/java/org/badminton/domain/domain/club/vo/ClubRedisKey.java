@@ -8,6 +8,7 @@ public class ClubRedisKey {
 	private static final String TOP10_POPULAR = "top10:popular";
 	private static final String TOP10_ACTIVITY = "top10:activity";
 	private static final String TOP10_RECENTLY = "top10:recently";
+	private static final String ALL = "all";
 
 	private ClubRedisKey() {
 
@@ -23,6 +24,10 @@ public class ClubRedisKey {
 
 	public static String getTop10RecentlyKey() {
 		return String.format("%s:%s", NAMESPACE, TOP10_RECENTLY);
+	}
+
+	public static String getAllClubsKey() {
+		return String.format("%s:%s", NAMESPACE, ALL);
 	}
 
 }

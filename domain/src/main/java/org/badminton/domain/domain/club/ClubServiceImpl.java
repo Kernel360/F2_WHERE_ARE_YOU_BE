@@ -41,6 +41,11 @@ public class ClubServiceImpl implements ClubService {
 	}
 
 	@Override
+	public Page<ClubCardInfo> getAllClubs(Pageable pageable) {
+		return clubReader.getAllClubs(pageable);
+	}
+
+	@Override
 	@Transactional(readOnly = true)
 	public Page<ClubCardInfo> searchClubs(String keyword, Pageable pageable) {
 		Page<Club> clubs = getClubs(keyword, pageable);
@@ -57,7 +62,12 @@ public class ClubServiceImpl implements ClubService {
 
 	@Override
 	public void refreshRecentlyCreatedClubsCache() {
-		clubReader.retrieveAndCacheTop10Clubs();
+		clubReader.refreshRecentlyCreatedClubsCache();
+	}
+
+	@Override
+	public void refreshAllClubsCache() {
+		clubReader.refreshAllClubsCache();
 	}
 
 	@Override

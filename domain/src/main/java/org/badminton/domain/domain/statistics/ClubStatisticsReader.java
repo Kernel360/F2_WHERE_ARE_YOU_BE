@@ -17,4 +17,8 @@ public interface ClubStatisticsReader {
 	List<ClubCardInfo> readTop10PopularClub();
 
 	List<ClubCardInfo> readTop10RecentlyActiveClub();
+
+	List<ClubCardInfo> refreshTop10PopularClubsCache();
+
+	List<ClubCardInfo> refreshActivityClubsCache();
 }

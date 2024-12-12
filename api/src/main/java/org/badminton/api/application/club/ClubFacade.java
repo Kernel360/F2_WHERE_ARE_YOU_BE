@@ -6,6 +6,7 @@ import org.badminton.domain.common.policy.ClubMemberPolicy;
 import org.badminton.domain.domain.club.ClubService;
 import org.badminton.domain.domain.club.command.ClubCreateCommand;
 import org.badminton.domain.domain.club.command.ClubUpdateCommand;
+import org.badminton.domain.domain.club.event.UpdateClubEvent;
 import org.badminton.domain.domain.club.info.ClubApplicantInfo;
 import org.badminton.domain.domain.club.info.ClubCardInfo;
 import org.badminton.domain.domain.club.info.ClubCreateInfo;
@@ -42,6 +43,12 @@ public class ClubFacade {
 		return clubService.readAllClubs(pageable);
 	}
 
+	@Transactional(readOnly = true)
+	public Page<ClubCardInfo> getAllClubs(int page, int size, String sort) {
+		Pageable pageable = PageRequest.of(page, size, Sort.by(sort));
+		return clubService.getAllClubs(pageable);
+	}
+
 	@Transactional
 	public ClubDetailsInfo readClub(String clubToken) {
 		var club = clubService.readClub(clubToken);
@@ -69,6 +76,7 @@ public class ClubFacade {
 	@Transactional
 	public ClubUpdateInfo updateClubInfo(ClubUpdateCommand clubUpdateCommand, String clubToken, String memberToken) {
 		clubMemberPolicy.validateClubOwner(memberToken, clubToken);
+		eventPublisher.publishEvent(new UpdateClubEvent());
 		return clubService.updateClub(clubUpdateCommand, clubToken, memberToken);
 	}
 
