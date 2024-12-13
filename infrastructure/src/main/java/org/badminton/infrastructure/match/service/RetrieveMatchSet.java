@@ -152,5 +152,7 @@ public class RetrieveMatchSet {
 
 	public void evictLeagueMatchSet(Long leagueId, Long matchId, Integer setNumber) {
 		setRepository.evictLeagueMatchSet(new LeagueMatchSetRedisKey(leagueId, matchId, setNumber));
+		setRepository.deleteScore(
+			new MatchRedisKey(getMatchType(leagueId).getDescription() + matchId, String.valueOf(setNumber)));
 	}
 }
