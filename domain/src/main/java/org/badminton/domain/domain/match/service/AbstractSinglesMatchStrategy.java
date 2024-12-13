@@ -122,8 +122,7 @@ public abstract class AbstractSinglesMatchStrategy implements MatchStrategy {
 	public void startMatch(Long matchId) {
 		SinglesMatch singlesMatch = singlesMatchReader.getSinglesMatch(matchId);
 		validatePreviousRoundCompletion(singlesMatch.getLeague().getLeagueId(), singlesMatch.getRoundNumber());
-		singlesMatch.startMatch();
-		singlesMatch.getSinglesSet(1).initMatch();
+		singlesMatch.startMatchSet(1);
 		singlesMatchStore.store(singlesMatch);
 	}
 

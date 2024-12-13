@@ -15,13 +15,14 @@ import org.badminton.domain.domain.match.info.MatchSetInfo;
 import org.badminton.domain.domain.match.info.SetInfo;
 import org.badminton.domain.domain.match.service.MatchRetrieveService;
 import org.badminton.domain.domain.match.service.MatchStrategy;
-import org.badminton.domain.domain.match.vo.RedisKey;
+import org.badminton.domain.domain.match.vo.MatchRedisKey;
 import org.badminton.domain.domain.match.vo.Score;
 import org.badminton.infrastructure.match.repository.SetRepository;
 import org.badminton.infrastructure.match.service.RetrieveMatchSet;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -54,8 +55,8 @@ public class MatchFacade {
 
 	@Scheduled(fixedRate = 100000)
 	public void saveInDb() {
-		Map<RedisKey, Score> allScores = setRepository.getAllScores();
-		for (RedisKey key : allScores.keySet()) {
+		Map<MatchRedisKey, Score> allScores = setRepository.getAllScores();
+		for (MatchRedisKey key : allScores.keySet()) {
 			retrieveMatchSet.registerMatchSetScoreInDb(key, allScores.get(key));
 			retrieveMatchSet.deleteCache(key);
 		}
@@ -91,11 +92,16 @@ public class MatchFacade {
 	}
 
 	public List<LeagueSetsScoreInProgressInfo> retrieveLeagueMatchSetsScoreInProgress(Long leagueId) {
+		List<LeagueSetsScoreInProgressInfo> inProgressSet = setRepository.getInProgressSet(leagueId);
+		if (!inProgressSet.isEmpty()) {
+			return inProgressSet;
+		}
 		MatchRetrieveService matchRetrieveService = getMatchRetrieveService(leagueId);
 		MatchStrategy matchStrategy = matchRetrieveService.makeSinglesOrDoublesMatchStrategy(leagueId);
 		return matchRetrieveService.retrieveLeagueMatchInProgress(matchStrategy, leagueId);
 	}
 
+	@Transactional
 	public SetInfo.Main registerSetScore(Long leagueId, Long matchId, int setNumber,
 		SetScoreUpdateRequest setScoreUpdateRequest, String memberToken) {
 		retrieveMatchSet.setMatchSetScore(leagueId, matchId, setNumber,

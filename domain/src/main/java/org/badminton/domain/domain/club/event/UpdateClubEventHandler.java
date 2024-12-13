@@ -20,6 +20,5 @@ public class UpdateClubEventHandler {
 		clubStatisticsService.refreshPopularClubsCache();
 		clubStatisticsService.refreshRecentlyActivityClubsCache();
 		clubService.refreshRecentlyCreatedClubsCache();
-		clubService.refreshAllClubsCache();
 	}
 }

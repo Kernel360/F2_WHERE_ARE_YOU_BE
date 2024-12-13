@@ -142,11 +142,9 @@ public class ClubController {
 		@RequestParam(defaultValue = DEFAULT_SIZE_VALUE) int size,
 		@RequestParam(defaultValue = DEFAULT_SORT_BY_VALUE) String sort) {
 		Pageable pageable = PageRequest.of(page, size, Sort.by(sort));
-
-		Page<ClubCardInfo> clubCard = clubFacade.getAllClubs(pageable);
+		Page<ClubCardInfo> clubCard = clubFacade.readAllClubs(pageable);
 		Page<ClubCardResponse> response = clubDtoMapper.of(clubCard);
 		CustomPageResponse<ClubCardResponse> pageResponse = new CustomPageResponse<>(response);
-
 		return CommonResponse.success(pageResponse);
 	}
 

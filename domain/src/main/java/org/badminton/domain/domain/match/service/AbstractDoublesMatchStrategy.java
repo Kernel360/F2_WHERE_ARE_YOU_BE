@@ -113,8 +113,7 @@ public abstract class AbstractDoublesMatchStrategy implements MatchStrategy {
 	public void startMatch(Long matchId) {
 		DoublesMatch doublesMatch = doublesMatchReader.getDoublesMatch(matchId);
 		validatePreviousRoundCompletion(doublesMatch.getLeague().getLeagueId(), doublesMatch.getRoundNumber());
-		doublesMatch.startMatch();
-		doublesMatch.getDoublesSet(1).startSet();
+		doublesMatch.startMatchSet(1);
 		doublesMatchStore.store(doublesMatch);
 	}
 

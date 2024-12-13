@@ -66,8 +66,4 @@ public class SinglesSet extends AbstractBaseTime {
 	public void close() {
 		this.setStatus = SetStatus.FINISHED;
 	}
-
-	public void initMatch() {
-		this.setStatus = SetStatus.IN_PROGRESS;
-	}
 }

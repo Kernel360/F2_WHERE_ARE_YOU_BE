@@ -19,6 +19,7 @@ import org.badminton.domain.domain.match.info.BracketInfo;
 import org.badminton.domain.domain.match.info.MatchInfo;
 import org.badminton.domain.domain.match.info.MatchSetInfo;
 import org.badminton.domain.domain.match.info.SetInfo;
+import org.badminton.infrastructure.match.service.RetrieveMatchSet;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -41,6 +42,7 @@ public class MatchController {
 
 	private final MatchFacade matchFacade;
 	private final ClubMemberPolicy clubMemberPolicy;
+	private final RetrieveMatchSet retrieveMatchSet;
 
 	@GetMapping
 	@Operation(summary = "대진표 조회",
@@ -153,6 +155,7 @@ public class MatchController {
 
 		SetInfo.Main updateSetScoreInfo = matchOperationFacade.registerSetScoreInMatch(leagueId, matchId, setNumber,
 			updateSetScoreCommand, memberToken);
+		retrieveMatchSet.evictLeagueMatchSet(leagueId, matchId, setNumber);
 		return CommonResponse.success(SetScoreFinishResponse.fromUpdateSetScoreInfo(updateSetScoreInfo));
 	}
 
