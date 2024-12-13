@@ -83,8 +83,7 @@ public class SinglesMatchReaderImpl implements SinglesMatchReader {
 
 	@Override
 	public Optional<SinglesMatch> findMatchByLeagueParticipant(LeagueParticipant leagueParticipant) {
-		return singlesMatchRepository.findSinglesMatchByLeagueParticipant1(leagueParticipant)
-			.or(() -> singlesMatchRepository.findSinglesMatchByLeagueParticipant2(leagueParticipant));
+		return singlesMatchRepository.findByLeagueParticipant(leagueParticipant);
 	}
 
 }

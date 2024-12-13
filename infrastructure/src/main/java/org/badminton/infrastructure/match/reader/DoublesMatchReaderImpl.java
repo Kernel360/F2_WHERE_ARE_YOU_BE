@@ -79,9 +79,6 @@ public class DoublesMatchReaderImpl implements DoublesMatchReader {
 
 	@Override
 	public Optional<DoublesMatch> findMatchByLeagueParticipant(LeagueParticipant leagueParticipant) {
-		return doublesMatchRepository.findDoublesMatchByTeam1_LeagueParticipant1(leagueParticipant)
-			.or(() -> doublesMatchRepository.findDoublesMatchByTeam1_LeagueParticipant2(leagueParticipant))
-			.or(() -> doublesMatchRepository.findDoublesMatchByTeam2_LeagueParticipant1(leagueParticipant))
-			.or(() -> doublesMatchRepository.findDoublesMatchByTeam2_LeagueParticipant2(leagueParticipant));
+		return doublesMatchRepository.findByLeagueParticipant(leagueParticipant);
 	}
 }

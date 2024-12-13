@@ -33,12 +33,10 @@ public interface DoublesMatchRepository extends JpaRepository<DoublesMatch, Long
 	boolean allMatchesNotStartedForLeague(@Param("leagueId") Long leagueId,
 		@Param("statuses") List<MatchStatus> statuses);
 
-	Optional<DoublesMatch> findDoublesMatchByTeam1_LeagueParticipant1(LeagueParticipant team1LeagueParticipant1);
-
-	Optional<DoublesMatch> findDoublesMatchByTeam1_LeagueParticipant2(LeagueParticipant team1LeagueParticipant2);
-
-	Optional<DoublesMatch> findDoublesMatchByTeam2_LeagueParticipant1(LeagueParticipant team2LeagueParticipant1);
-
-	Optional<DoublesMatch> findDoublesMatchByTeam2_LeagueParticipant2(LeagueParticipant team2LeagueParticipant2);
+	@Query("SELECT m FROM DoublesMatch m WHERE " +
+		"(m.team1.leagueParticipant1 = :leagueParticipant OR m.team1.leagueParticipant2 = :leagueParticipant) " +
+		"OR (m.team2.leagueParticipant1 = :leagueParticipant OR m.team2.leagueParticipant2 = :leagueParticipant)")
+	Optional<DoublesMatch> findByLeagueParticipant(
+		@Param("leagueParticipant") LeagueParticipant leagueParticipant);
 }
 
