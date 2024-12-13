@@ -33,7 +33,7 @@ public class Team {
 		return null;
 	}
 
-	public boolean isTeam(LeagueParticipant leagueParticipant) {
+	public boolean belongToTeam(LeagueParticipant leagueParticipant) {
 		return this.leagueParticipant1.equals(leagueParticipant) || this.leagueParticipant2.equals(leagueParticipant);
 	}
 }
