@@ -38,7 +38,6 @@ public class LeagueParticipantCancelServiceImpl implements LeagueParticipantCanc
 	public void cancelAllLeagueParticipants(Long clubMemberId) {
 		List<LeagueParticipant> leagueParticipants =
 			leagueParticipantReader.findAllByClubMemberIdAndCanceledFalse(clubMemberId);
-		System.out.println(clubMemberId);
 		leagueParticipants.forEach(this::leagueParticipantCancel);
 	}
 
