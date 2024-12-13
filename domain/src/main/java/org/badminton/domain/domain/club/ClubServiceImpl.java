@@ -14,6 +14,7 @@ import org.badminton.domain.domain.club.info.ClubCreateInfo;
 import org.badminton.domain.domain.club.info.ClubDeleteInfo;
 import org.badminton.domain.domain.club.info.ClubSummaryInfo;
 import org.badminton.domain.domain.club.info.ClubUpdateInfo;
+import org.badminton.domain.domain.club.vo.RedisClub;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -35,17 +36,17 @@ public class ClubServiceImpl implements ClubService {
 	@Override
 	@Transactional(readOnly = true)
 	public Page<ClubCardInfo> readAllClubs(Pageable pageable) {
-		Page<Club> clubsPage = clubReader.readAllClubs(pageable);
-		var response = ClubPage.builder().club(clubsPage).build();
-		return response.clubToPageCardInfo();
+		Page<RedisClub> clubsPage = clubReader.readAllClubs(pageable);
+		var response = ClubPage.builder().redisClub(clubsPage).build();
+		return response.clubToRedisPageCardInfo();
 	}
 
 	@Override
 	@Transactional(readOnly = true)
 	public Page<ClubCardInfo> searchClubs(String keyword, Pageable pageable) {
-		Page<Club> clubs = getClubs(keyword, pageable);
-		var response = ClubPage.builder().club(clubs).build();
-		return response.clubToPageCardInfo();
+		Page<RedisClub> clubsPage = getClubs(keyword, pageable);
+		var response = ClubPage.builder().redisClub(clubsPage).build();
+		return response.clubToRedisPageCardInfo();
 	}
 
 	@Override
@@ -114,7 +115,7 @@ public class ClubServiceImpl implements ClubService {
 			ClubApply.ApplyStatus.PENDING, pageable);
 	}
 
-	private Page<Club> getClubs(String keyword, Pageable pageable) {
+	private Page<RedisClub> getClubs(String keyword, Pageable pageable) {
 		if (keyword == null || keyword.trim().isEmpty()) {
 			return clubReader.readAllClubs(pageable);
 		}
