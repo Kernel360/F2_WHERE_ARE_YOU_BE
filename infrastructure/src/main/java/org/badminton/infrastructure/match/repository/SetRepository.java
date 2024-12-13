@@ -107,4 +107,8 @@ public class SetRepository {
 		return objectMapper.convertValue(allLeagueMatches, new TypeReference<List<LeagueSetsScoreInProgressInfo>>() {
 		});
 	}
+
+	public void evictLeagueMatchSet(LeagueMatchSetRedisKey leagueMatchSetRedisKey) {
+		redisTemplate2.delete(leagueMatchSetRedisKey.getKey());
+	}
 }

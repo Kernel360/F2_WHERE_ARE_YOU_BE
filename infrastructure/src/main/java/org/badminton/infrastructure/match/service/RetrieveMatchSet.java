@@ -149,4 +149,8 @@ public class RetrieveMatchSet {
 	public void deleteCache(MatchRedisKey key) {
 		setRepository.deleteScore(key);
 	}
+
+	public void evictLeagueMatchSet(Long leagueId, Long matchId, Integer setNumber) {
+		setRepository.evictLeagueMatchSet(new LeagueMatchSetRedisKey(leagueId, matchId, setNumber));
+	}
 }
