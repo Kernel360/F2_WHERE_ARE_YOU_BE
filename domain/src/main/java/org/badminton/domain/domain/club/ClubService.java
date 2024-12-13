@@ -31,4 +31,6 @@ public interface ClubService {
 	Page<ClubApplicantInfo> readClubApplicants(String clubToken, Pageable pageable);
 
 	List<ClubCardInfo> getRecentlyCreatedClub();
+
+	void refreshRecentlyCreatedClubsCache();
 }
