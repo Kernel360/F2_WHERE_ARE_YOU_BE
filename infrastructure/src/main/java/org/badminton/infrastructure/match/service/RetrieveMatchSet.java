@@ -13,11 +13,12 @@ import org.badminton.domain.domain.match.entity.DoublesMatch;
 import org.badminton.domain.domain.match.entity.DoublesSet;
 import org.badminton.domain.domain.match.entity.SinglesMatch;
 import org.badminton.domain.domain.match.entity.SinglesSet;
+import org.badminton.domain.domain.match.reader.DoublesMatchReader;
+import org.badminton.domain.domain.match.reader.SinglesMatchReader;
+import org.badminton.domain.domain.match.store.DoublesMatchStore;
+import org.badminton.domain.domain.match.store.SinglesMatchStore;
+
 import org.badminton.domain.domain.match.info.LeagueSetsScoreInProgressInfo;
-import org.badminton.domain.domain.match.reader.DoublesMatchStore;
-import org.badminton.domain.domain.match.reader.SinglesMatchStore;
-import org.badminton.domain.domain.match.store.DoublesMatchReader;
-import org.badminton.domain.domain.match.store.SinglesMatchReader;
 import org.badminton.domain.domain.match.vo.LeagueMatchSetRedisKey;
 import org.badminton.domain.domain.match.vo.MatchRedisKey;
 import org.badminton.domain.domain.match.vo.Score;

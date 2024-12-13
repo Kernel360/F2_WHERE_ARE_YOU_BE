@@ -10,8 +10,8 @@ import org.badminton.domain.domain.league.entity.LeagueParticipant;
 import org.badminton.domain.domain.league.vo.Team;
 import org.badminton.domain.domain.match.entity.DoublesMatch;
 import org.badminton.domain.domain.match.entity.DoublesSet;
-import org.badminton.domain.domain.match.reader.DoublesMatchStore;
-import org.badminton.domain.domain.match.store.DoublesMatchReader;
+import org.badminton.domain.domain.match.reader.DoublesMatchReader;
+import org.badminton.domain.domain.match.store.DoublesMatchStore;
 import org.badminton.infrastructure.match.strategy.MatchUtils;
 import org.springframework.stereotype.Service;
 

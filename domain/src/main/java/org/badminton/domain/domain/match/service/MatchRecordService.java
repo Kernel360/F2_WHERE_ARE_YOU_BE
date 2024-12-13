@@ -6,8 +6,8 @@ import org.badminton.domain.domain.league.service.LeagueRecordService;
 import org.badminton.domain.domain.league.vo.Team;
 import org.badminton.domain.domain.match.entity.DoublesMatch;
 import org.badminton.domain.domain.match.entity.SinglesMatch;
-import org.badminton.domain.domain.match.store.DoublesMatchReader;
-import org.badminton.domain.domain.match.store.SinglesMatchReader;
+import org.badminton.domain.domain.match.reader.DoublesMatchReader;
+import org.badminton.domain.domain.match.reader.SinglesMatchReader;
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;

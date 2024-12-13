@@ -1,7 +1,9 @@
-package org.badminton.domain.domain.match.store;
+package org.badminton.domain.domain.match.reader;
 
 import java.util.List;
+import java.util.Optional;
 
+import org.badminton.domain.domain.league.entity.LeagueParticipant;
 import org.badminton.domain.domain.match.entity.SinglesMatch;
 
 public interface SinglesMatchReader {
@@ -24,4 +26,7 @@ public interface SinglesMatchReader {
 	boolean allMatchesNotStartedForLeague(Long leagueId);
 
 	boolean allRoundMatchesDone(Long leagueId, int roundNumber);
+
+	Optional<SinglesMatch> findMatchByLeagueParticipant(LeagueParticipant leagueParticipant);
+
 }

@@ -18,9 +18,9 @@ import org.badminton.domain.domain.match.entity.DoublesMatch;
 import org.badminton.domain.domain.match.entity.DoublesSet;
 import org.badminton.domain.domain.match.info.BracketInfo;
 import org.badminton.domain.domain.match.info.SetInfo;
-import org.badminton.domain.domain.match.reader.DoublesMatchStore;
+import org.badminton.domain.domain.match.reader.DoublesMatchReader;
 import org.badminton.domain.domain.match.service.AbstractDoublesMatchStrategy;
-import org.badminton.domain.domain.match.store.DoublesMatchReader;
+import org.badminton.domain.domain.match.store.DoublesMatchStore;
 import org.springframework.stereotype.Component;
 
 import lombok.extern.slf4j.Slf4j;

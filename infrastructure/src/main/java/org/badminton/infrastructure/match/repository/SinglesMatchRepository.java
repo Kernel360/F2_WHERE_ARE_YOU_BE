@@ -1,8 +1,10 @@
 package org.badminton.infrastructure.match.repository;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.badminton.domain.common.enums.MatchStatus;
+import org.badminton.domain.domain.league.entity.LeagueParticipant;
 import org.badminton.domain.domain.match.entity.SinglesMatch;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -33,5 +35,10 @@ public interface SinglesMatchRepository extends JpaRepository<SinglesMatch, Long
 	@Query("SELECT NOT EXISTS (SELECT 1 FROM SinglesMatch match WHERE match.league.leagueId = :leagueId AND match.matchStatus NOT IN (:statuses))")
 	boolean allMatchesNotStartedForLeague(@Param("leagueId") Long leagueId,
 		@Param("statuses") List<MatchStatus> statuses);
+	
+	@Query("SELECT m FROM SinglesMatch m WHERE " +
+		"(m.leagueParticipant1 = :leagueParticipant OR m.leagueParticipant2 = :leagueParticipant)")
+	Optional<SinglesMatch> findByLeagueParticipant(
+		@Param("leagueParticipant") LeagueParticipant leagueParticipant);
 
 }

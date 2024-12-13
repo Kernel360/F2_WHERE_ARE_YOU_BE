@@ -164,4 +164,23 @@ public class SinglesMatch extends AbstractBaseTime {
 	public boolean isByeMatch() {
 		return this.matchStatus == MatchStatus.BYE && this.isLeagueParticipant1Exist();
 	}
+
+	public void determineWinnerParticipant(LeagueParticipant leagueParticipant) {
+		if (leagueParticipant1 == leagueParticipant) {
+			this.player2MatchResult = MatchResult.WIN;
+			this.player1MatchResult = MatchResult.LOSE;
+			this.matchStatus = MatchStatus.FINISHED;
+		}
+
+		if (leagueParticipant2 == leagueParticipant) {
+			this.player1MatchResult = MatchResult.WIN;
+			this.player2MatchResult = MatchResult.LOSE;
+			this.matchStatus = MatchStatus.FINISHED;
+		}
+	}
+
+	public void closeMatchContainsBannedParticipant() {
+		this.singlesSets.forEach(set -> set.endSetScore(0, 0));
+		this.finishMatch();
+	}
 }

@@ -2,14 +2,16 @@ package org.badminton.infrastructure.match.reader;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 
 import org.badminton.domain.common.enums.MatchStatus;
 import org.badminton.domain.common.enums.MatchType;
 import org.badminton.domain.common.exception.match.BracketNotExistException;
 import org.badminton.domain.common.exception.match.MatchNotExistException;
+import org.badminton.domain.domain.league.entity.LeagueParticipant;
 import org.badminton.domain.domain.match.entity.DoublesMatch;
+import org.badminton.domain.domain.match.reader.DoublesMatchReader;
 import org.badminton.domain.domain.match.reader.DoublesMatchRepositoryCustom;
-import org.badminton.domain.domain.match.store.DoublesMatchReader;
 import org.badminton.infrastructure.match.repository.DoublesMatchRepository;
 import org.springframework.stereotype.Component;
 
@@ -73,5 +75,10 @@ public class DoublesMatchReaderImpl implements DoublesMatchReader {
 	public boolean allRoundMatchesDone(Long leagueId, int roundNumber) {
 		List<MatchStatus> CompletedOrBypassedStatuses = List.of(MatchStatus.FINISHED, MatchStatus.BYE);
 		return doublesMatchRepository.areAllMatchesFinishedOrBye(leagueId, roundNumber, CompletedOrBypassedStatuses);
+	}
+
+	@Override
+	public Optional<DoublesMatch> findMatchByLeagueParticipant(LeagueParticipant leagueParticipant) {
+		return doublesMatchRepository.findByLeagueParticipant(leagueParticipant);
 	}
 }

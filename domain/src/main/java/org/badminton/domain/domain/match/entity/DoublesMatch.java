@@ -11,6 +11,7 @@ import org.badminton.domain.common.enums.MatchResult;
 import org.badminton.domain.common.enums.MatchStatus;
 import org.badminton.domain.common.enums.SetStatus;
 import org.badminton.domain.domain.league.entity.League;
+import org.badminton.domain.domain.league.entity.LeagueParticipant;
 import org.badminton.domain.domain.league.vo.Team;
 
 import jakarta.persistence.AssociationOverride;
@@ -164,6 +165,27 @@ public class DoublesMatch extends AbstractBaseTime {
 
 	public boolean isByeMatch() {
 		return this.matchStatus == MatchStatus.BYE && this.isTeam1Exist();
+	}
+
+	public void determineWinnerTeam(LeagueParticipant leagueParticipant) {
+		if (team1.belongToTeam(leagueParticipant)) {
+			// 여기에 해당 참가자가 있으면 team1 lose
+			this.team1MatchResult = MatchResult.LOSE;
+			this.team2MatchResult = MatchResult.WIN;
+			this.matchStatus = MatchStatus.FINISHED;
+		}
+
+		if (team2.belongToTeam(leagueParticipant)) {
+			// 여기에 해당 참가자가 있으면 team2 lose
+			this.team2MatchResult = MatchResult.LOSE;
+			this.team1MatchResult = MatchResult.WIN;
+			this.matchStatus = MatchStatus.FINISHED;
+		}
+	}
+
+	public void closeMatchContainsBannedParticipant() {
+		this.doublesSets.forEach(set -> set.endSetScore(0, 0));
+		this.finishMatch();
 	}
 
 }

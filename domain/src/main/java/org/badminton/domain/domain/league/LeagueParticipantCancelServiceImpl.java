@@ -1,13 +1,21 @@
 package org.badminton.domain.domain.league;
 
 import java.util.List;
+import java.util.Optional;
 
+import org.badminton.domain.common.enums.MatchGenerationType;
 import org.badminton.domain.common.enums.MatchType;
 import org.badminton.domain.domain.league.entity.League;
 import org.badminton.domain.domain.league.entity.LeagueParticipant;
 import org.badminton.domain.domain.league.enums.LeagueStatus;
-import org.badminton.domain.domain.match.store.DoublesMatchReader;
-import org.badminton.domain.domain.match.store.SinglesMatchReader;
+import org.badminton.domain.domain.match.entity.DoublesMatch;
+import org.badminton.domain.domain.match.entity.SinglesMatch;
+import org.badminton.domain.domain.match.reader.DoublesMatchReader;
+import org.badminton.domain.domain.match.reader.SinglesMatchReader;
+import org.badminton.domain.domain.match.store.DoublesMatchStore;
+import org.badminton.domain.domain.match.store.DoublesMatchTournamentStore;
+import org.badminton.domain.domain.match.store.SinglesMatchStore;
+import org.badminton.domain.domain.match.store.SinglesMatchTournamentStore;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,6 +28,10 @@ public class LeagueParticipantCancelServiceImpl implements LeagueParticipantCanc
 	private final SinglesMatchReader singlesMatchReader;
 	private final LeagueParticipantStore leagueParticipantStore;
 	private final LeagueParticipantReader leagueParticipantReader;
+	private final DoublesMatchStore doublesMatchStore;
+	private final SinglesMatchStore singlesMatchStore;
+	private final SinglesMatchTournamentStore singlesMatchTournamentStore;
+	private final DoublesMatchTournamentStore doublesMatchTournamentStore;
 
 	@Override
 	@Transactional
@@ -28,7 +40,7 @@ public class LeagueParticipantCancelServiceImpl implements LeagueParticipantCanc
 			leagueParticipantReader.findAllByClubMemberIdAndCanceledFalse(clubMemberId);
 		leagueParticipants.forEach(this::leagueParticipantCancel);
 	}
-	
+
 	private void leagueParticipantCancel(LeagueParticipant leagueParticipant) {
 		League league = leagueParticipant.getLeague();
 
@@ -39,6 +51,56 @@ public class LeagueParticipantCancelServiceImpl implements LeagueParticipantCanc
 
 		if (isRecruitingCompletedWithEmptyBracket(league)) {
 			cancelParticipant(leagueParticipant);
+		}
+
+		if (!isBracketEmpty(league) && league.getMatchType() == MatchType.DOUBLES) {
+			doublesMatchClose(leagueParticipant, league.getMatchGenerationType());
+		}
+		if (!isBracketEmpty(league) && league.getMatchType() == MatchType.SINGLES) {
+			singlesMatchClose(leagueParticipant, league.getMatchGenerationType());
+		}
+	}
+
+	private void doublesMatchClose(LeagueParticipant leagueParticipant, MatchGenerationType matchGenerationType) {
+		Optional<DoublesMatch> doublesMatchOptional = doublesMatchReader.findMatchByLeagueParticipant(
+			leagueParticipant);
+		if (doublesMatchOptional.isPresent()) {
+			DoublesMatch doublesMatch = doublesMatchOptional.get();
+			doublesMatch.determineWinnerTeam(leagueParticipant);
+			doublesMatch.closeMatchContainsBannedParticipant();
+			doublesMatch.finishMatch();
+			doublesMatchStore.store(doublesMatch);
+			doublesMatchTournamentNextRoundSet(doublesMatch, matchGenerationType);
+		}
+	}
+
+	private void singlesMatchClose(LeagueParticipant leagueParticipant, MatchGenerationType matchGenerationType) {
+		Optional<SinglesMatch> singlesMatchOptional = singlesMatchReader.findMatchByLeagueParticipant(
+			leagueParticipant);
+		if (singlesMatchOptional.isPresent()) {
+			SinglesMatch singlesMatch = singlesMatchOptional.get();
+			singlesMatch.determineWinnerParticipant(leagueParticipant);
+			singlesMatch.closeMatchContainsBannedParticipant();
+			singlesMatch.finishMatch();
+			singlesMatchStore.store(singlesMatch);
+			singlesMatchTournamentNextRoundSet(singlesMatch, matchGenerationType);
+		}
+
+	}
+
+	private void doublesMatchTournamentNextRoundSet(
+		DoublesMatch doublesMatch,
+		MatchGenerationType matchGenerationType) {
+		if (matchGenerationType == MatchGenerationType.TOURNAMENT) {
+			doublesMatchTournamentStore.updateDoublesMatchNextRoundMatch(doublesMatch);
+		}
+	}
+
+	private void singlesMatchTournamentNextRoundSet(
+		SinglesMatch singlesMatch,
+		MatchGenerationType matchGenerationType) {
+		if (matchGenerationType == MatchGenerationType.TOURNAMENT) {
+			singlesMatchTournamentStore.updateSinglesMatchNextRoundMatch(singlesMatch);
 		}
 	}
 
