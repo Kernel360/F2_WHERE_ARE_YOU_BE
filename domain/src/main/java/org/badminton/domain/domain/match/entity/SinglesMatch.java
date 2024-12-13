@@ -176,6 +176,10 @@ public class SinglesMatch extends AbstractBaseTime {
 			this.player2MatchResult = MatchResult.LOSE;
 			this.matchStatus = MatchStatus.FINISHED;
 		}
+	}
 
+	public void closeMatchContainsBannedParticipant() {
+		this.singlesSets.forEach(set -> set.endSetScore(0, 0));
+		this.finishMatch();
 	}
 }

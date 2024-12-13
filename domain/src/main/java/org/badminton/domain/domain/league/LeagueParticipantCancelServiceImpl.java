@@ -67,7 +67,7 @@ public class LeagueParticipantCancelServiceImpl implements LeagueParticipantCanc
 		if (doublesMatchOptional.isPresent()) {
 			DoublesMatch doublesMatch = doublesMatchOptional.get();
 			doublesMatch.determineWinnerTeam(leagueParticipant);
-			doublesMatch.getDoublesSets().forEach(set -> set.endSetScore(0, 0));
+			doublesMatch.closeMatchContainsBannedParticipant();
 			doublesMatch.finishMatch();
 			doublesMatchStore.store(doublesMatch);
 			doublesMatchTournamentNextRoundSet(doublesMatch, matchGenerationType);
@@ -80,7 +80,7 @@ public class LeagueParticipantCancelServiceImpl implements LeagueParticipantCanc
 		if (singlesMatchOptional.isPresent()) {
 			SinglesMatch singlesMatch = singlesMatchOptional.get();
 			singlesMatch.determineWinnerParticipant(leagueParticipant);
-			singlesMatch.getSinglesSets().forEach(set -> set.endSetScore(0, 0));
+			singlesMatch.closeMatchContainsBannedParticipant();
 			singlesMatch.finishMatch();
 			singlesMatchStore.store(singlesMatch);
 			singlesMatchTournamentNextRoundSet(singlesMatch, matchGenerationType);

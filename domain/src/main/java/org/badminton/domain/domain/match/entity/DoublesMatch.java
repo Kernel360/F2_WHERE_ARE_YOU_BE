@@ -182,4 +182,9 @@ public class DoublesMatch extends AbstractBaseTime {
 		}
 	}
 
+	public void closeMatchContainsBannedParticipant() {
+		this.doublesSets.forEach(set -> set.endSetScore(0, 0));
+		this.finishMatch();
+	}
+
 }
