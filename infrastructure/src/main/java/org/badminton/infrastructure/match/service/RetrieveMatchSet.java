@@ -7,18 +7,19 @@ import org.badminton.domain.common.enums.SetStatus;
 import org.badminton.domain.common.exception.match.LeagueParticipantNotDeterminedException;
 import org.badminton.domain.common.exception.match.PreviousDetNotFinishedException;
 import org.badminton.domain.common.exception.match.RoundNotFinishedException;
-import org.badminton.domain.domain.league.LeagueParticipantReader;
 import org.badminton.domain.domain.league.LeagueReader;
 import org.badminton.domain.domain.league.entity.League;
 import org.badminton.domain.domain.match.entity.DoublesMatch;
 import org.badminton.domain.domain.match.entity.DoublesSet;
 import org.badminton.domain.domain.match.entity.SinglesMatch;
 import org.badminton.domain.domain.match.entity.SinglesSet;
+import org.badminton.domain.domain.match.info.LeagueSetsScoreInProgressInfo;
 import org.badminton.domain.domain.match.reader.DoublesMatchStore;
 import org.badminton.domain.domain.match.reader.SinglesMatchStore;
 import org.badminton.domain.domain.match.store.DoublesMatchReader;
 import org.badminton.domain.domain.match.store.SinglesMatchReader;
-import org.badminton.domain.domain.match.vo.RedisKey;
+import org.badminton.domain.domain.match.vo.LeagueMatchSetRedisKey;
+import org.badminton.domain.domain.match.vo.MatchRedisKey;
 import org.badminton.domain.domain.match.vo.Score;
 import org.badminton.infrastructure.match.repository.SetRepository;
 import org.springframework.stereotype.Service;
@@ -31,7 +32,6 @@ import lombok.RequiredArgsConstructor;
 public class RetrieveMatchSet {
 	private final SetRepository setRepository;
 	private final LeagueReader leagueReader;
-	private final LeagueParticipantReader leagueParticipantReader;
 	private final SinglesMatchReader singlesMatchReader;
 	private final DoublesMatchReader doublesMatchReader;
 	private final SinglesMatchStore singlesMatchStore;
@@ -40,16 +40,26 @@ public class RetrieveMatchSet {
 	public void setMatchSetScore(Long leagueId, Long matchId, int setNumber, Score score, String memberToken) {
 		League league = leagueReader.readLeagueById(leagueId);
 
+		LeagueSetsScoreInProgressInfo leagueSetsScoreInProgressInfo = null;
 		if (league.getMatchType() == MatchType.SINGLES) {
 			validatePreviousSinglesRoundCompletion(leagueId, matchId);
 			validateSinglesMatch(matchId, setNumber);
-		}
-
-		if (league.getMatchType() == MatchType.DOUBLES) {
+			SinglesMatch singlesMatch = singlesMatchReader.getSinglesMatch(matchId);
+			singlesMatch.startMatchSet(setNumber);
+			singlesMatch.getSinglesSet(setNumber).saveSetScore(score.getLeft(), score.getRight());
+			leagueSetsScoreInProgressInfo = LeagueSetsScoreInProgressInfo.fromSinglesMatchAndSet(singlesMatch,
+				singlesMatch.getSinglesSet(setNumber));
+		} else if (league.getMatchType() == MatchType.DOUBLES) {
 			validatePreviousDoublesRoundCompletion(leagueId, matchId);
 			validateDoublesMatch(matchId, setNumber);
+			DoublesMatch doublesMatch = doublesMatchReader.getDoublesMatch(matchId);
+			doublesMatch.startMatchSet(setNumber);
+			doublesMatch.getDoublesSet(setNumber).saveSetScore(score.getLeft(), score.getRight());
+			leagueSetsScoreInProgressInfo = LeagueSetsScoreInProgressInfo.fromDoublesMatchAndSet(doublesMatch,
+				doublesMatch.getDoublesSet(setNumber));
 		}
-
+		setRepository.saveInProgressSet(new LeagueMatchSetRedisKey(leagueId, matchId, setNumber),
+			leagueSetsScoreInProgressInfo);
 		setRepository.setMatchSetScore(league.getMatchType(), matchId, setNumber, score);
 	}
 
@@ -112,7 +122,7 @@ public class RetrieveMatchSet {
 	}
 
 	@Transactional
-	public void registerMatchSetScoreInDb(RedisKey key, Score score) {
+	public void registerMatchSetScoreInDb(MatchRedisKey key, Score score) {
 		if (key.getMatchType() == MatchType.SINGLES) {
 			SinglesMatch singlesMatch = singlesMatchReader.getSinglesMatch(key.getMatchId());
 			SinglesSet singlesSet = singlesMatch.getSinglesSet(key.getSetNumber());
@@ -136,7 +146,13 @@ public class RetrieveMatchSet {
 		return league.getMatchType();
 	}
 
-	public void deleteCache(RedisKey key) {
+	public void deleteCache(MatchRedisKey key) {
 		setRepository.deleteScore(key);
+	}
+
+	public void evictLeagueMatchSet(Long leagueId, Long matchId, Integer setNumber) {
+		setRepository.evictLeagueMatchSet(new LeagueMatchSetRedisKey(leagueId, matchId, setNumber));
+		setRepository.deleteScore(
+			new MatchRedisKey(getMatchType(leagueId).getDescription() + matchId, String.valueOf(setNumber)));
 	}
 }
