@@ -109,6 +109,16 @@ public class SinglesMatch extends AbstractBaseTime {
 		}
 	}
 
+	public void setDrawMatch() {
+		this.player1MatchResult = MatchResult.DRAW;
+		this.player2MatchResult = MatchResult.DRAW;
+		this.matchStatus = MatchStatus.FINISHED;
+	}
+
+	public boolean isDrawMatch() {
+		return this.player1WinSetCount == this.player2WinSetCount;
+	}
+
 	public void defineLeagueParticipant1(LeagueParticipant leagueParticipant1) {
 		this.leagueParticipant1 = leagueParticipant1;
 	}

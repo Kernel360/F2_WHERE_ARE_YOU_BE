@@ -37,6 +37,8 @@ public class TournamentDoublesEndSetHandler {
 	public void processEndSet(Integer setNumber, MatchCommand.UpdateSetScore updateSetScoreCommand,
 		DoublesMatch doublesMatch) {
 
+		matchUtils.validateSetScores(updateSetScoreCommand);
+		
 		updateWinnerWithSetScore(doublesMatch, setNumber, updateSetScoreCommand);
 
 		if (LIMIT_SET_GAME > setNumber) {

@@ -3,9 +3,12 @@ package org.badminton.infrastructure.match.strategy;
 import static org.badminton.domain.common.consts.Constants.*;
 
 import org.badminton.domain.common.enums.MatchStatus;
+import org.badminton.domain.common.exception.match.SetScoreNotReachedException;
+import org.badminton.domain.common.exception.match.TieScoreNotAllowedException;
 import org.badminton.domain.domain.league.LeagueParticipantReader;
 import org.badminton.domain.domain.league.entity.LeagueParticipant;
 import org.badminton.domain.domain.league.vo.Team;
+import org.badminton.domain.domain.match.command.MatchCommand;
 import org.badminton.domain.domain.match.entity.DoublesMatch;
 import org.badminton.domain.domain.match.entity.SinglesMatch;
 import org.badminton.domain.domain.match.reader.DoublesMatchReader;
@@ -168,6 +171,20 @@ public class MatchUtils {
 		}
 		if (!nextRoundMatch.isTeam2Exist()) {
 			nextRoundMatch.defineTeam2(winner);
+		}
+
+	}
+
+	public void validateSetScores(MatchCommand.UpdateSetScore updateSetScore) {
+		int team1Score = updateSetScore.getScore1();
+		int team2Score = updateSetScore.getScore2();
+
+		if (team1Score == team2Score) {
+			throw new TieScoreNotAllowedException(team1Score, team2Score);
+		}
+
+		if (team1Score < 21 && team2Score < 21) {
+			throw new SetScoreNotReachedException(team1Score, team2Score);
 		}
 
 	}

@@ -76,8 +76,14 @@ public class FreeDoublesMatchStrategy extends AbstractDoublesMatchStrategy {
 
 		if (updateSetScoreCommand.getScore1() > updateSetScoreCommand.getScore2()) {
 			doublesMatch.team1WinSet();
-		} else {
+		}
+
+		if (updateSetScoreCommand.getScore2() > updateSetScoreCommand.getScore1()) {
 			doublesMatch.team2WinSet();
+		}
+
+		if (setNumber.equals(LIMIT_SET_GAME) && doublesMatch.isDrawMatch()) {
+			doublesMatch.setDrawMatch();
 		}
 
 		if (LIMIT_SET_GAME > setNumber) {
