@@ -7,7 +7,7 @@ import java.util.List;
 import org.badminton.domain.common.enums.MatchResult;
 import org.badminton.domain.common.enums.SetStatus;
 import org.badminton.domain.common.exception.match.AlreadyWinnerDeterminedException;
-import org.badminton.domain.common.exception.match.PreviousDetNotFinishedException;
+import org.badminton.domain.common.exception.match.PreviousSetNotFinishedException;
 import org.badminton.domain.common.exception.match.SetFinishedException;
 import org.badminton.domain.domain.league.LeagueReader;
 import org.badminton.domain.domain.league.entity.League;
@@ -98,7 +98,7 @@ public class FreeDoublesMatchStrategy extends AbstractDoublesMatchStrategy {
 			return;
 		}
 		if (doublesMatch.getDoublesSet(setNumber - 1).getSetStatus() != SetStatus.FINISHED) {
-			throw new PreviousDetNotFinishedException(setNumber - 1);
+			throw new PreviousSetNotFinishedException(setNumber - 1);
 		}
 	}
 

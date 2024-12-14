@@ -8,7 +8,6 @@ import org.badminton.domain.common.enums.MatchStatus;
 import org.badminton.domain.common.error.ErrorCode;
 import org.badminton.domain.common.exception.BadmintonException;
 import org.badminton.domain.common.exception.match.MatchAlreadyStartedExceptionWhenBracketGenerationException;
-import org.badminton.domain.common.exception.match.RoundNotFinishedException;
 import org.badminton.domain.domain.league.entity.League;
 import org.badminton.domain.domain.league.entity.LeagueParticipant;
 import org.badminton.domain.domain.match.command.MatchCommand;
@@ -121,20 +120,7 @@ public abstract class AbstractSinglesMatchStrategy implements MatchStrategy {
 	@Override
 	public void startMatch(Long matchId) {
 		SinglesMatch singlesMatch = singlesMatchReader.getSinglesMatch(matchId);
-		validatePreviousRoundCompletion(singlesMatch.getLeague().getLeagueId(), singlesMatch.getRoundNumber());
 		singlesMatch.startMatchSet(1);
 		singlesMatchStore.store(singlesMatch);
-	}
-
-	private void validatePreviousRoundCompletion(Long leagueId, int roundNumber) {
-
-		if (roundNumber == 1) {
-			return;
-		}
-		int previousRoundNumber = roundNumber - 1;
-
-		if (!singlesMatchReader.allRoundMatchesDone(leagueId, previousRoundNumber)) {
-			throw new RoundNotFinishedException(previousRoundNumber);
-		}
 	}
 }

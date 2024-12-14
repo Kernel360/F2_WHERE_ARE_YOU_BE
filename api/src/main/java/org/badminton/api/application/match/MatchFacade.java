@@ -7,6 +7,7 @@ import java.util.Optional;
 import org.badminton.api.interfaces.match.dto.SetScoreUpdateRequest;
 import org.badminton.domain.common.enums.MatchGenerationType;
 import org.badminton.domain.common.enums.MatchType;
+import org.badminton.domain.common.policy.MatchScorePolicy;
 import org.badminton.domain.domain.league.LeagueReader;
 import org.badminton.domain.domain.match.info.BracketInfo;
 import org.badminton.domain.domain.match.info.LeagueSetsScoreInProgressInfo;
@@ -37,13 +38,15 @@ public class MatchFacade {
 	private final LeagueReader leagueReader;
 	private final RetrieveMatchSet retrieveMatchSet;
 	private final SetRepository setRepository;
+	private final MatchScorePolicy matchScorePolicy;
 
 	public MatchFacade(
 		@Qualifier("freeMatchFacade") MatchOperationHandler freeMatchFacade,
 		@Qualifier("tournamentMatchFacade") MatchOperationHandler tournamentMatchFacade,
 		@Qualifier("freeMatchRetrieveServiceImpl") MatchRetrieveService freeMatchRetrieveService,
 		@Qualifier("tournamentMatchRetrieveServiceImpl") MatchRetrieveService tournamentMatchRetrieveService,
-		LeagueReader leagueReader, RetrieveMatchSet retrieveMatchSet, SetRepository setRepository) {
+		LeagueReader leagueReader, RetrieveMatchSet retrieveMatchSet, SetRepository setRepository,
+		MatchScorePolicy matchScorePolicy) {
 		this.freeMatchFacade = freeMatchFacade;
 		this.tournamentMatchFacade = tournamentMatchFacade;
 		this.freeMatchRetrieveService = freeMatchRetrieveService;
@@ -51,6 +54,7 @@ public class MatchFacade {
 		this.leagueReader = leagueReader;
 		this.retrieveMatchSet = retrieveMatchSet;
 		this.setRepository = setRepository;
+		this.matchScorePolicy = matchScorePolicy;
 	}
 
 	@Scheduled(fixedRate = 100000)
@@ -104,8 +108,9 @@ public class MatchFacade {
 	@Transactional
 	public SetInfo.Main registerSetScore(Long leagueId, Long matchId, int setNumber,
 		SetScoreUpdateRequest setScoreUpdateRequest, String memberToken) {
+		matchScorePolicy.validateScoreUpdateAvailable(leagueId, matchId, setNumber);
 		retrieveMatchSet.setMatchSetScore(leagueId, matchId, setNumber,
-			new Score(setScoreUpdateRequest.score1(), setScoreUpdateRequest.score2()), memberToken);
+			new Score(setScoreUpdateRequest.score1(), setScoreUpdateRequest.score2()));
 		return retrieveSetInfo(leagueId, matchId, setNumber);
 	}
 

@@ -38,5 +38,7 @@ public interface DoublesMatchRepository extends JpaRepository<DoublesMatch, Long
 		"OR (m.team2.leagueParticipant1 = :leagueParticipant OR m.team2.leagueParticipant2 = :leagueParticipant)")
 	Optional<DoublesMatch> findByLeagueParticipant(
 		@Param("leagueParticipant") LeagueParticipant leagueParticipant);
+
+	DoublesMatch findByIdAndLeagueLeagueId(Long matchId, Long leagueId);
 }
 

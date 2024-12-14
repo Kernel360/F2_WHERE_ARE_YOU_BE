@@ -45,6 +45,11 @@ public class SinglesMatchReaderImpl implements SinglesMatchReader {
 	}
 
 	@Override
+	public SinglesMatch getSinglesMatch(Long leagueId, Long matchId) {
+		return singlesMatchRepository.findByIdAndLeagueLeagueId(matchId, leagueId);
+	}
+
+	@Override
 	public List<SinglesMatch> getSinglesMatchesByClubMember(Long clubMemberId) {
 		return singlesMatchRepositoryCustom.findAllCompletedByClubMemberId(clubMemberId);
 	}

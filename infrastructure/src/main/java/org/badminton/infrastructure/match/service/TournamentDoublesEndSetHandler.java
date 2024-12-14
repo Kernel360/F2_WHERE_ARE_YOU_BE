@@ -10,7 +10,7 @@ import org.badminton.domain.common.enums.MatchType;
 import org.badminton.domain.common.enums.SetStatus;
 import org.badminton.domain.common.exception.match.AlreadyWinnerDeterminedException;
 import org.badminton.domain.common.exception.match.LeagueParticipantNotDeterminedException;
-import org.badminton.domain.common.exception.match.PreviousDetNotFinishedException;
+import org.badminton.domain.common.exception.match.PreviousSetNotFinishedException;
 import org.badminton.domain.common.exception.match.RegisterScoreInByeMatchException;
 import org.badminton.domain.common.exception.match.RoundNotFinishedException;
 import org.badminton.domain.common.exception.match.SetFinishedException;
@@ -95,7 +95,7 @@ public class TournamentDoublesEndSetHandler {
 		}
 		int previousSetNumber = setNumber - 1;
 		if (doublesMatch.getDoublesSet(previousSetNumber).getSetStatus() != SetStatus.FINISHED) {
-			throw new PreviousDetNotFinishedException(previousSetNumber);
+			throw new PreviousSetNotFinishedException(previousSetNumber);
 		}
 	}
 

@@ -8,7 +8,7 @@ import org.badminton.domain.common.enums.MatchResult;
 import org.badminton.domain.common.enums.MatchStatus;
 import org.badminton.domain.common.enums.SetStatus;
 import org.badminton.domain.common.exception.match.AlreadyWinnerDeterminedException;
-import org.badminton.domain.common.exception.match.PreviousDetNotFinishedException;
+import org.badminton.domain.common.exception.match.PreviousSetNotFinishedException;
 import org.badminton.domain.common.exception.match.SetFinishedException;
 import org.badminton.domain.domain.league.LeagueReader;
 import org.badminton.domain.domain.league.entity.League;
@@ -103,7 +103,7 @@ public class FreeSinglesMatchStrategy extends AbstractSinglesMatchStrategy {
 			return;
 		}
 		if (singlesMatch.getSinglesSet(setNumber - 1).getSetStatus() != SetStatus.FINISHED) {
-			throw new PreviousDetNotFinishedException(setNumber - 1);
+			throw new PreviousSetNotFinishedException(setNumber - 1);
 		}
 	}
 
