@@ -1,4 +1,4 @@
-package org.badminton.domain.domain.match.reader;
+package org.badminton.domain.domain.match.store;
 
 import org.badminton.domain.domain.match.entity.SinglesMatch;
 

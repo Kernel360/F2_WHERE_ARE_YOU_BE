@@ -11,6 +11,7 @@ import org.badminton.domain.common.enums.MatchResult;
 import org.badminton.domain.common.enums.MatchStatus;
 import org.badminton.domain.common.enums.SetStatus;
 import org.badminton.domain.domain.league.entity.League;
+import org.badminton.domain.domain.league.entity.LeagueParticipant;
 import org.badminton.domain.domain.league.vo.Team;
 
 import jakarta.persistence.AssociationOverride;
@@ -101,6 +102,16 @@ public class DoublesMatch extends AbstractBaseTime {
 		}
 	}
 
+	public void setDrawMatch() {
+		this.team1MatchResult = MatchResult.DRAW;
+		this.team2MatchResult = MatchResult.DRAW;
+		this.matchStatus = MatchStatus.FINISHED;
+	}
+
+	public boolean isDrawMatch() {
+		return this.team1WinSetCount == this.team2WinSetCount;
+	}
+
 	public void defineTeam1(Team winner) {
 		this.team1 = winner;
 	}
@@ -117,8 +128,9 @@ public class DoublesMatch extends AbstractBaseTime {
 		this.matchStatus = MatchStatus.FINISHED;
 	}
 
-	public void startMatch() {
+	public void startMatchSet(int setNumber) {
 		this.matchStatus = MatchStatus.IN_PROGRESS;
+		this.getDoublesSet(setNumber).open();
 	}
 
 	public Optional<DoublesSet> getSetInProgress() {
@@ -137,4 +149,53 @@ public class DoublesMatch extends AbstractBaseTime {
 	public void byeMatch() {
 		this.matchStatus = MatchStatus.BYE;
 	}
+
+	public Team determineWinner() {
+		if (this.getMatchStatus() == MatchStatus.BYE || this.getTeam1MatchResult() == MatchResult.WIN) {
+			return this.getTeam1();
+		}
+
+		if (this.getTeam2MatchResult() == MatchResult.WIN) {
+			return this.getTeam2();
+		}
+		return Team.emptyWinner();
+	}
+
+	public boolean isTeam1Exist() {
+		return this.getTeam1() != null;
+	}
+
+	public boolean isTeam2Exist() {
+		return this.getTeam2() != null;
+	}
+
+	public boolean isMatchWinnerDetermined() {
+		return this.team1MatchResult == MatchResult.WIN || this.team2MatchResult == MatchResult.WIN;
+	}
+
+	public boolean isByeMatch() {
+		return this.matchStatus == MatchStatus.BYE && this.isTeam1Exist();
+	}
+
+	public void determineWinnerTeam(LeagueParticipant leagueParticipant) {
+		if (team1.belongToTeam(leagueParticipant)) {
+			// 여기에 해당 참가자가 있으면 team1 lose
+			this.team1MatchResult = MatchResult.LOSE;
+			this.team2MatchResult = MatchResult.WIN;
+			this.matchStatus = MatchStatus.FINISHED;
+		}
+
+		if (team2.belongToTeam(leagueParticipant)) {
+			// 여기에 해당 참가자가 있으면 team2 lose
+			this.team2MatchResult = MatchResult.LOSE;
+			this.team1MatchResult = MatchResult.WIN;
+			this.matchStatus = MatchStatus.FINISHED;
+		}
+	}
+
+	public void closeMatchContainsBannedParticipant() {
+		this.doublesSets.forEach(set -> set.endSetScore(0, 0));
+		this.finishMatch();
+	}
+
 }

@@ -7,7 +7,7 @@ import java.util.List;
 import org.badminton.domain.common.enums.MatchResult;
 import org.badminton.domain.common.enums.SetStatus;
 import org.badminton.domain.common.exception.match.AlreadyWinnerDeterminedException;
-import org.badminton.domain.common.exception.match.PreviousDetNotFinishedException;
+import org.badminton.domain.common.exception.match.PreviousSetNotFinishedException;
 import org.badminton.domain.common.exception.match.SetFinishedException;
 import org.badminton.domain.domain.league.LeagueReader;
 import org.badminton.domain.domain.league.entity.League;
@@ -18,9 +18,9 @@ import org.badminton.domain.domain.match.entity.DoublesMatch;
 import org.badminton.domain.domain.match.entity.DoublesSet;
 import org.badminton.domain.domain.match.info.BracketInfo;
 import org.badminton.domain.domain.match.info.SetInfo;
-import org.badminton.domain.domain.match.reader.DoublesMatchStore;
+import org.badminton.domain.domain.match.reader.DoublesMatchReader;
 import org.badminton.domain.domain.match.service.AbstractDoublesMatchStrategy;
-import org.badminton.domain.domain.match.store.DoublesMatchReader;
+import org.badminton.domain.domain.match.store.DoublesMatchStore;
 import org.springframework.stereotype.Component;
 
 import lombok.extern.slf4j.Slf4j;
@@ -57,7 +57,7 @@ public class FreeDoublesMatchStrategy extends AbstractDoublesMatchStrategy {
 	}
 
 	@Override
-	public SetInfo.Main registerSetScoreInMatch(Long matchId, Integer setNumber,
+	public SetInfo.Main endSet(Long matchId, Integer setNumber,
 		MatchCommand.UpdateSetScore updateSetScoreCommand) {
 		DoublesMatch doublesMatch = doublesMatchReader.getDoublesMatch(matchId);
 
@@ -76,8 +76,14 @@ public class FreeDoublesMatchStrategy extends AbstractDoublesMatchStrategy {
 
 		if (updateSetScoreCommand.getScore1() > updateSetScoreCommand.getScore2()) {
 			doublesMatch.team1WinSet();
-		} else {
+		}
+
+		if (updateSetScoreCommand.getScore2() > updateSetScoreCommand.getScore1()) {
 			doublesMatch.team2WinSet();
+		}
+
+		if (setNumber.equals(LIMIT_SET_GAME) && doublesMatch.isDrawMatch()) {
+			doublesMatch.setDrawMatch();
 		}
 
 		if (LIMIT_SET_GAME > setNumber) {
@@ -98,7 +104,7 @@ public class FreeDoublesMatchStrategy extends AbstractDoublesMatchStrategy {
 			return;
 		}
 		if (doublesMatch.getDoublesSet(setNumber - 1).getSetStatus() != SetStatus.FINISHED) {
-			throw new PreviousDetNotFinishedException(setNumber - 1);
+			throw new PreviousSetNotFinishedException(setNumber - 1);
 		}
 	}
 

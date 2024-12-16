@@ -13,12 +13,12 @@ import org.badminton.domain.domain.league.entity.League;
 import org.badminton.domain.domain.league.entity.LeagueParticipant;
 import org.badminton.domain.domain.league.enums.LeagueStatus;
 import org.badminton.domain.domain.match.info.BracketInfo;
-import org.badminton.domain.domain.match.reader.DoublesMatchStore;
-import org.badminton.domain.domain.match.reader.SinglesMatchStore;
+import org.badminton.domain.domain.match.reader.DoublesMatchReader;
+import org.badminton.domain.domain.match.reader.SinglesMatchReader;
 import org.badminton.domain.domain.match.service.BracketGenerationService;
 import org.badminton.domain.domain.match.service.MatchStrategy;
-import org.badminton.domain.domain.match.store.DoublesMatchReader;
-import org.badminton.domain.domain.match.store.SinglesMatchReader;
+import org.badminton.domain.domain.match.store.DoublesMatchStore;
+import org.badminton.domain.domain.match.store.SinglesMatchStore;
 import org.badminton.infrastructure.match.strategy.TournamentDoublesMatchStrategy;
 import org.badminton.infrastructure.match.strategy.TournamentSinglesMatchStrategy;
 import org.springframework.stereotype.Service;
@@ -37,6 +37,10 @@ public class TournamentBracketGenerationServiceImpl implements BracketGeneration
 	private final SinglesMatchStore singlesMatchStore;
 	private final DoublesMatchStore doublesMatchStore;
 	private final LeagueParticipantReader leagueParticipantReader;
+	private final TournamentSinglesEndSetHandler tournamentSinglesEndSetHandler;
+	private final TournamentSinglesBracketCreator tournamentSinglesBracketCreator;
+	private final TournamentDoublesEndSetHandler tournamentDoublesEndSetHandler;
+	private final TournamentDoublesBracketCreator tournamentDoublesBracketCreator;
 
 	@Override
 	public void checkLeagueRecruitingStatus(Long leagueId) {
@@ -53,12 +57,10 @@ public class TournamentBracketGenerationServiceImpl implements BracketGeneration
 	public MatchStrategy makeSinglesOrDoublesMatchStrategy(Long leagueId) {
 		League league = findLeague(leagueId);
 		return switch (league.getMatchType()) {
-			case SINGLES ->
-				new TournamentSinglesMatchStrategy(singlesMatchReader, singlesMatchStore, leagueParticipantReader,
-					leagueReader);
-			case DOUBLES ->
-				new TournamentDoublesMatchStrategy(doublesMatchReader, doublesMatchStore, leagueParticipantReader,
-					leagueReader);
+			case SINGLES -> new TournamentSinglesMatchStrategy(singlesMatchReader, singlesMatchStore,
+				tournamentSinglesBracketCreator, tournamentSinglesEndSetHandler);
+			case DOUBLES -> new TournamentDoublesMatchStrategy(doublesMatchReader, doublesMatchStore,
+				tournamentDoublesEndSetHandler, tournamentDoublesBracketCreator);
 		};
 	}
 
@@ -76,6 +78,7 @@ public class TournamentBracketGenerationServiceImpl implements BracketGeneration
 	}
 
 	@Override
+	@Transactional
 	public void startMatch(MatchStrategy matchStrategy, Long leagueId, Long matchId) {
 		League league = findLeague(leagueId);
 		league.startLeague();

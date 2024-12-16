@@ -3,15 +3,16 @@ package org.badminton.api.interfaces.league.controller;
 import java.time.LocalDate;
 import java.util.List;
 
+import org.badminton.api.application.league.LeagueFacade;
 import org.badminton.api.application.match.MatchFacade;
 import org.badminton.api.common.response.CommonResponse;
 import org.badminton.api.interfaces.club.dto.CustomPageResponse;
 import org.badminton.api.interfaces.league.dto.OngoingAndUpcomingLeagueResponse;
 import org.badminton.api.interfaces.match.dto.LeagueSetsScoreInProgressResponse;
 import org.badminton.api.interfaces.match.dto.SetScoreResponse;
-import org.badminton.domain.domain.league.LeagueService;
 import org.badminton.domain.domain.league.enums.AllowedLeagueStatus;
 import org.badminton.domain.domain.league.enums.Region;
+import org.badminton.domain.domain.league.info.LeagueReadPageInfo;
 import org.badminton.domain.domain.league.info.OngoingAndUpcomingLeagueInfo;
 import org.badminton.domain.domain.match.info.LeagueSetsScoreInProgressInfo;
 import org.badminton.domain.domain.match.info.SetInfo;
@@ -33,10 +34,11 @@ import lombok.RequiredArgsConstructor;
 @RestController
 @RequestMapping("/v1/leagues")
 public class MainLeagueController {
+
 	private static final String DEFAULT_PAGE_VALUE = "0";
 	private static final String DEFAULT_SIZE_VALUE = "9";
-	private final LeagueService leagueService;
 	private final MatchFacade matchFacade;
+	private final LeagueFacade leagueFacade;
 
 	@Operation(
 		summary = "메인페이지에서 일별로 진행 중, 또는 진행 예정인 경기 일정을 조회한다.",
@@ -54,7 +56,7 @@ public class MainLeagueController {
 	) {
 
 		Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.ASC, "leagueAt"));
-		Page<OngoingAndUpcomingLeagueInfo> leaguePage = leagueService.getOngoingAndUpcomingLeaguesByDate(
+		Page<OngoingAndUpcomingLeagueInfo> leaguePage = leagueFacade.getOngoingAndUpcomingLeaguesByDate(
 			leagueStatus, region, date, pageable);
 
 		Page<OngoingAndUpcomingLeagueResponse> response = leaguePage.map(OngoingAndUpcomingLeagueResponse::from);
@@ -94,5 +96,19 @@ public class MainLeagueController {
 	) {
 		SetInfo.Main setInfo = matchFacade.retrieveSetInfo(leagueId, matchId, setNumber);
 		return CommonResponse.success(SetScoreResponse.fromSetInfo(setInfo));
+	}
+
+	@Operation(
+		summary = "경기 전체에 대한 정보를 가져옵니다.",
+		description = "경기 전체에 대한 정보를 페이지네이션으로 가져옵니다.",
+		tags = {"main-league"}
+	)
+	@GetMapping("/all")
+	public CommonResponse<List<LeagueReadPageInfo>> getAllLeague(
+		@RequestParam(defaultValue = DEFAULT_PAGE_VALUE) int page,
+		@RequestParam(defaultValue = DEFAULT_SIZE_VALUE) int size
+	) {
+		Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.ASC, "leagueAt"));
+		return CommonResponse.success(leagueFacade.getLeaguePageList(pageable));
 	}
 }

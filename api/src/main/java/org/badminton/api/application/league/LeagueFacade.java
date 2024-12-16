@@ -1,5 +1,6 @@
 package org.badminton.api.application.league;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -8,6 +9,8 @@ import org.badminton.domain.domain.league.LeagueParticipantService;
 import org.badminton.domain.domain.league.LeagueService;
 import org.badminton.domain.domain.league.command.LeagueCreateNoIncludeClubCommand;
 import org.badminton.domain.domain.league.command.LeagueUpdateCommand;
+import org.badminton.domain.domain.league.enums.AllowedLeagueStatus;
+import org.badminton.domain.domain.league.enums.Region;
 import org.badminton.domain.domain.league.info.IsLeagueParticipantInfo;
 import org.badminton.domain.domain.league.info.LeagueByDateInfo;
 import org.badminton.domain.domain.league.info.LeagueByDateInfoWithParticipantCountInfo;
@@ -16,13 +19,17 @@ import org.badminton.domain.domain.league.info.LeagueCreateInfo;
 import org.badminton.domain.domain.league.info.LeagueDetailsInfo;
 import org.badminton.domain.domain.league.info.LeagueParticipantDetailsInfo;
 import org.badminton.domain.domain.league.info.LeagueReadInfo;
+import org.badminton.domain.domain.league.info.LeagueReadPageInfo;
 import org.badminton.domain.domain.league.info.LeagueRecruitingCompleteInfo;
 import org.badminton.domain.domain.league.info.LeagueSummaryInfo;
 import org.badminton.domain.domain.league.info.LeagueUpdateInfo;
 import org.badminton.domain.domain.league.info.LeagueUpdateInfoWithParticipantCountInfo;
+import org.badminton.domain.domain.league.info.OngoingAndUpcomingLeagueInfo;
 import org.badminton.domain.domain.match.service.MatchRetrieveService;
 import org.badminton.domain.domain.match.service.MatchStrategy;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import lombok.extern.slf4j.Slf4j;
@@ -96,5 +103,14 @@ public class LeagueFacade {
 	public LeagueRecruitingCompleteInfo completeLeagueRecruiting(String clubToken, Long leagueId, String memberToken) {
 		clubMemberPolicy.validateClubMember(memberToken, clubToken);
 		return leagueService.completeLeagueRecruiting(clubToken, leagueId, memberToken);
+	}
+
+	public Page<OngoingAndUpcomingLeagueInfo> getOngoingAndUpcomingLeaguesByDate(AllowedLeagueStatus leagueStatus,
+		Region region, LocalDate date, Pageable pageable) {
+		return leagueService.getOngoingAndUpcomingLeaguesByDate(leagueStatus, region, date, pageable);
+	}
+
+	public List<LeagueReadPageInfo> getLeaguePageList(Pageable pageable) {
+		return leagueService.getLeaguePageable(pageable);
 	}
 }

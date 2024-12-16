@@ -21,4 +21,6 @@ public interface LeagueParticipantRepository extends JpaRepository<LeaguePartici
 	int countByLeague(League league);
 
 	boolean existsByMemberIdAndLeagueLeagueId(Long memberId, Long leagueId);
+
+	List<LeagueParticipant> findAllByClubMemberClubMemberIdAndCanceledIsFalse(Long clubMemberId);
 }

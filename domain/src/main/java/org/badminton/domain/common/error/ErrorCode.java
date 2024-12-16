@@ -15,7 +15,7 @@ public enum ErrorCode {
 	LIMIT_EXCEEDED(400, "파라미터 또는 리소스 속성값이 제한을 초과했습니다."),
 	OUT_OF_RANGE(400, "파라미터 또는 리소스 속성값이 범위를 벗어났습니다."),
 	FILE_NOT_EXIST(400, "파일이 존재하지 않거나 잘못된 파일입니다."),
-	FILE_SIZE_OVER(400, "파일의 크기는 2.5MB 이내야 됩니다."),
+	FILE_SIZE_OVER(400, "파일의 크기는 2.5MB 이내여야 됩니다."),
 	VALIDATION_ERROR(400, "입력값 검증에 실패했습니다"),
 
 	// 401 Errors
@@ -78,6 +78,7 @@ public enum ErrorCode {
 	DELETED(410, "요청한 리소스가 삭제되었습니다."),
 
 	INVALID_PLAYER_COUNT(411, "아직 모집 인원이 채워지지 않았습니다."),
+	CANNOT_START_MATCH(411, "이미 시작하거나 종료된 경기입니다."),
 	PARTICIPANT_NOT_EXIST_IN_MATCH(411, "해당 매치에 참가자가 아직 존재하지 않습니다"),
 
 	LEAGUE_RECRUITING_MUST_BE_COMPLETED_WHEN_BRACKET_GENERATION(412, "모집이 완료되면 대진표를 만들 수 있습니다."),
@@ -86,8 +87,10 @@ public enum ErrorCode {
 	RECRUITMENT_END_DATE_AFTER_LEAGUE_START(412, "모집 마감 날짜는 경기 시작 날짜 이전이어야 합니다."),
 	PLAYER_LIMIT_COUNT_DECREASED_NOT_ALLOWED(412, "경기 수정 시 기존 모집 제한 인원보다 더 적은 인원을 설정할 수 없습니다."),
 	PLAYER_LIMIT_COUNT_MUST_BE_MULTIPLE_WHEN_DOUBLES(412, "경기 최대 참여 인원은 복식 경기일 경우 짝수여야 합니다."),
-	PLAYER_LIMIT_COUNT_MUST_BE_MORE_THAN_FOUR_WHEN_DOUBLES(412, "경기 최대 참여 인원은 복식 경기일 경우 4 이상이어야 합니다."),
-	PLAYER_LIMIT_COUNT_MUST_BE_MORE_THAN_TWO_WHEN_SINGLES(412, "경기 최대 참여 인원은 단식 경기일 경우 2 이상이어야 합니다."),
+	PLAYER_LIMIT_COUNT_MUST_BE_MORE_THAN_FOUR_WHEN_DOUBLES(412,
+		"경기 최대 참여 인원은 복식 경기일 경우 4 이상이어야 합니다. 프리 복식 경기일 경우 반드시 4배수여야 합니다."),
+	PLAYER_LIMIT_COUNT_MUST_BE_MORE_THAN_TWO_WHEN_SINGLES(412,
+		"경기 최대 참여 인원은 단식 경기일 경우 2 이상이어야 합니다. 프리 단식 경기일 경우 반드시 짝수여야 합니다."),
 	LEAGUE_OWNER_CANNOT_CANCEL_LEAGUE_PARTICIPATION(412, "경기를 생성한 사람은 경기 참여를 취소할 수 없습니다."),
 	LEAGUE_CANNOT_BE_CANCELED_WHEN_IS_NOT_RECRUITING(412, "경기 모집 중일 때만 경기를 취소할 수 있습니다."),
 	INVALID_LEAGUE_STATUS_TO_CANCEL_LEAGUE_PARTICIPATION(412, "모집 중인 경기에 대해서만 경기 참여를 취소할 수 있습니다."),
@@ -99,12 +102,14 @@ public enum ErrorCode {
 	LEAGUE_NOT_RECRUITING(412, "모집 중이 아닙니다."),
 	LEAGUE_PARTICIPANT_POWER_OF_TWO(412, "토너먼트 경기에서는 경기 참여 인원이 2의 제곱이어야 합니다"),
 	LEAGUE_PARTICIPANTS_NOT_DETERMINED(412, "해당 매치의 참여자가 아직 정해지지 않았습니다"),
-	SET_FINISHED(412, "Set 의 상태가 FINISHED 입니다"),
-	ALREADY_WINNER_DETERMINED(412, "매치의 승리자가 정해졌습니다"),
+	SET_FINISHED(412, "이미 종료된 세트입니다."),
+	ALREADY_WINNER_DETERMINED(412, "매치의 승리자가 정해졌습니다."),
 	CLUB_OWNER_CANT_WITHDRAW(412, "동호회원이 2명 이상인 동호회 회장은 동호회를 탈퇴할 수 없습니다."),
 	NOT_LEAGUE_OWNER(412, "경기를 만든 사용자만 이용할 수 있습니다."),
 	CLUB_MEMBER_EXPEL_EXCEPTION(412, "해당 동호회에서 제제를 받아 가입 신청을 할 수 없습니다."),
 	BYE_MATCH_ACTION_NOT_ALLOWED(412, "해당 매치는 부전승 매치이기 때문에 점수를 수정할 수 없습니다"),
+	TIE_SCORE_NOT_ALLOWED(412, "토너먼트 경기에서는 점수가 동일할 수 없습니다"),
+	SET_SCORE_NOT_REACHED(412, "토너먼트에서 승자의 점수는 최소 21점이어야 합니다"),
 
 	// 500 Errors
 	INTERNAL_SERVER_ERROR(500, "서버 내부 오류가 발생했습니다."),

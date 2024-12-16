@@ -2,6 +2,7 @@ package org.badminton.domain.domain.statistics;
 
 import java.util.List;
 
+import org.badminton.domain.domain.club.info.ClubCardInfo;
 import org.badminton.domain.domain.club.info.ClubCreateInfo;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -45,13 +46,26 @@ public class ClubStatisticsServiceImpl implements ClubStatisticsService {
 	}
 
 	@Override
-	public List<ClubStatistics> getTop10PopularClubStatistics() {
-		return clubStatisticsReader.readTop10PopularClubStatistics();
+	public List<ClubCardInfo> getTop10PopularClub() {
+
+		return clubStatisticsReader.readTop10PopularClub();
+
 	}
 
 	@Override
-	public List<ClubStatistics> getTop10RecentlyActiveClubStatistics() {
-		return clubStatisticsReader.readTop10RecentlyActiveClubStatistics();
+	public List<ClubCardInfo> getTop10RecentlyActiveClub() {
+
+		return clubStatisticsReader.readTop10RecentlyActiveClub();
+	}
+
+	@Override
+	public void refreshPopularClubsCache() {
+		clubStatisticsReader.refreshTop10PopularClubsCache();
+	}
+
+	@Override
+	public void refreshRecentlyActivityClubsCache() {
+		clubStatisticsReader.refreshActivityClubsCache();
 	}
 
 	@Override

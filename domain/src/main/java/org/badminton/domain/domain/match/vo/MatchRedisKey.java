@@ -5,14 +5,14 @@ import org.badminton.domain.common.enums.MatchType;
 import lombok.Getter;
 
 @Getter
-public class RedisKey {
+public class MatchRedisKey {
 	private final String key;
 	private final String field;
 	private final MatchType matchType;
 	private final Long matchId;
 	private final int setNumber;
 
-	public RedisKey(String key, String field) {
+	public MatchRedisKey(String key, String field) {
 		this.key = key;
 		this.field = field;
 		this.matchType = parseMatchType(key);

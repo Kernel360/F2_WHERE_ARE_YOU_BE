@@ -1,6 +1,7 @@
 package org.badminton.api.application.match;
 
 import org.badminton.api.interfaces.match.dto.StartMatchCommand;
+import org.badminton.domain.common.policy.MatchScorePolicy;
 import org.badminton.domain.domain.match.command.MatchCommand;
 import org.badminton.domain.domain.match.info.BracketInfo;
 import org.badminton.domain.domain.match.info.SetInfo;
@@ -19,15 +20,17 @@ public class FreeMatchFacade implements MatchOperationHandler {
 	private final BracketGenerationService freeBracketGenerationService;
 	private final MatchProgressService matchProgressService;
 	private final MatchRecordService matchRecordService;
+	private final MatchScorePolicy matchScorePolicy;
 
 	public FreeMatchFacade(
 		@Qualifier("freeBracketGenerationServiceImpl") BracketGenerationService freeBracketGenerationService,
 		@Qualifier("freeMatchProgressServiceImpl") MatchProgressService freematchProgressService,
-		MatchRecordService matchRecordService) {
+		MatchRecordService matchRecordService, MatchScorePolicy matchScorePolicy) {
 
 		this.freeBracketGenerationService = freeBracketGenerationService;
 		this.matchProgressService = freematchProgressService;
 		this.matchRecordService = matchRecordService;
+		this.matchScorePolicy = matchScorePolicy;
 	}
 
 	@Override
@@ -43,6 +46,7 @@ public class FreeMatchFacade implements MatchOperationHandler {
 
 	@Override
 	public void startMatch(StartMatchCommand startMatchCommand) {
+		matchScorePolicy.validateMatchStartAvailable(startMatchCommand.leagueId(), startMatchCommand.matchId());
 		MatchStrategy matchStrategy = freeBracketGenerationService.makeSinglesOrDoublesMatchStrategy(
 			startMatchCommand.leagueId());
 		freeBracketGenerationService.startMatch(matchStrategy, startMatchCommand.leagueId(),

@@ -79,6 +79,14 @@ public class SinglesMatch extends AbstractBaseTime {
 		this.roundNumber = roundNumber;
 	}
 
+	public boolean isLeagueParticipant1Exist() {
+		return this.leagueParticipant1 != null;
+	}
+
+	public boolean isLeagueParticipant2Exist() {
+		return this.leagueParticipant2 != null;
+	}
+
 	public void addSet(SinglesSet singlesSet) {
 		this.singlesSets.add(singlesSet);
 	}
@@ -99,6 +107,16 @@ public class SinglesMatch extends AbstractBaseTime {
 			this.player1MatchResult = MatchResult.LOSE;
 			this.matchStatus = MatchStatus.FINISHED;
 		}
+	}
+
+	public void setDrawMatch() {
+		this.player1MatchResult = MatchResult.DRAW;
+		this.player2MatchResult = MatchResult.DRAW;
+		this.matchStatus = MatchStatus.FINISHED;
+	}
+
+	public boolean isDrawMatch() {
+		return this.player1WinSetCount == this.player2WinSetCount;
 	}
 
 	public void defineLeagueParticipant1(LeagueParticipant leagueParticipant1) {
@@ -130,11 +148,49 @@ public class SinglesMatch extends AbstractBaseTime {
 		this.matchStatus = MatchStatus.FINISHED;
 	}
 
-	public void startMatch() {
+	public void startMatchSet(int setNumber) {
 		this.matchStatus = MatchStatus.IN_PROGRESS;
+		this.getSinglesSet(setNumber).open();
 	}
 
 	public void byeMatch() {
 		this.matchStatus = MatchStatus.BYE;
+	}
+
+	public LeagueParticipant determineWinner() {
+		if (this.getMatchStatus() == MatchStatus.BYE || this.getPlayer1MatchResult() == MatchResult.WIN) {
+			return this.getLeagueParticipant1();
+		}
+		if (this.getPlayer2MatchResult() == MatchResult.WIN) {
+			return this.getLeagueParticipant2();
+		}
+		return LeagueParticipant.emptyWinner();
+	}
+
+	public boolean isMatchWinnerDetermined() {
+		return this.player1MatchResult == MatchResult.WIN || this.player2MatchResult == MatchResult.WIN;
+	}
+
+	public boolean isByeMatch() {
+		return this.matchStatus == MatchStatus.BYE && this.isLeagueParticipant1Exist();
+	}
+
+	public void determineWinnerParticipant(LeagueParticipant leagueParticipant) {
+		if (leagueParticipant1 == leagueParticipant) {
+			this.player2MatchResult = MatchResult.WIN;
+			this.player1MatchResult = MatchResult.LOSE;
+			this.matchStatus = MatchStatus.FINISHED;
+		}
+
+		if (leagueParticipant2 == leagueParticipant) {
+			this.player1MatchResult = MatchResult.WIN;
+			this.player2MatchResult = MatchResult.LOSE;
+			this.matchStatus = MatchStatus.FINISHED;
+		}
+	}
+
+	public void closeMatchContainsBannedParticipant() {
+		this.singlesSets.forEach(set -> set.endSetScore(0, 0));
+		this.finishMatch();
 	}
 }

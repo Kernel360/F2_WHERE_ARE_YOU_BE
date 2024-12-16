@@ -8,7 +8,6 @@ import org.badminton.domain.common.enums.MatchStatus;
 import org.badminton.domain.common.error.ErrorCode;
 import org.badminton.domain.common.exception.BadmintonException;
 import org.badminton.domain.common.exception.match.MatchAlreadyStartedExceptionWhenBracketGenerationException;
-import org.badminton.domain.common.exception.match.RoundNotFinishedException;
 import org.badminton.domain.domain.league.entity.League;
 import org.badminton.domain.domain.league.entity.LeagueParticipant;
 import org.badminton.domain.domain.match.entity.DoublesMatch;
@@ -18,8 +17,8 @@ import org.badminton.domain.domain.match.info.LeagueSetsScoreInProgressInfo;
 import org.badminton.domain.domain.match.info.MatchInfo;
 import org.badminton.domain.domain.match.info.MatchSetInfo;
 import org.badminton.domain.domain.match.info.SetInfo;
-import org.badminton.domain.domain.match.reader.DoublesMatchStore;
-import org.badminton.domain.domain.match.store.DoublesMatchReader;
+import org.badminton.domain.domain.match.reader.DoublesMatchReader;
+import org.badminton.domain.domain.match.store.DoublesMatchStore;
 import org.springframework.stereotype.Service;
 
 import lombok.RequiredArgsConstructor;
@@ -112,21 +111,7 @@ public abstract class AbstractDoublesMatchStrategy implements MatchStrategy {
 	@Override
 	public void startMatch(Long matchId) {
 		DoublesMatch doublesMatch = doublesMatchReader.getDoublesMatch(matchId);
-		validatePreviousRoundCompletion(doublesMatch.getLeague().getLeagueId(), doublesMatch.getRoundNumber());
-		doublesMatch.startMatch();
-		doublesMatch.getDoublesSet(1).startSet();
+		doublesMatch.startMatchSet(1);
 		doublesMatchStore.store(doublesMatch);
-	}
-
-	private void validatePreviousRoundCompletion(Long leagueId, int roundNumber) {
-
-		if (roundNumber == 1) {
-			return;
-		}
-		int previousRoundNumber = roundNumber - 1;
-
-		if (!doublesMatchReader.allRoundMatchesDone(leagueId, previousRoundNumber)) {
-			throw new RoundNotFinishedException(previousRoundNumber);
-		}
 	}
 }

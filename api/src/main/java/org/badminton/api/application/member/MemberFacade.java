@@ -11,6 +11,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.badminton.api.aws.s3.event.memeber.MemberImageEvent;
 import org.badminton.api.aws.s3.model.dto.ImageUploadRequest;
 import org.badminton.api.common.exception.EmptyFileException;
+import org.badminton.api.common.exception.FileSizeOverException;
 import org.badminton.api.interfaces.match.dto.MatchResultResponse;
 import org.badminton.domain.domain.club.info.ClubCardInfo;
 import org.badminton.domain.domain.clubmember.info.ClubMemberMyPageInfo;
@@ -41,7 +42,7 @@ import lombok.extern.slf4j.Slf4j;
 @RequiredArgsConstructor
 public class MemberFacade {
 	private final ApplicationEventPublisher eventPublisher;
-
+	private static final long MAX_FILE_SIZE = 2548576;
 	private static final String CLOUDFRONT_URL_PREFIX = "https://d36om9pjoifd2y.cloudfront.net/member-profile/";
 	private static final String WEBP = "webp";
 	private static final String AVIF = "avif";
@@ -102,18 +103,23 @@ public class MemberFacade {
 		try {
 			byte[] byteFile = request.multipartFile().getBytes();
 
+			validateFileSize(byteFile);
+
 			String originalNam = request.multipartFile().getOriginalFilename();
-			// uuid 객체 생성
 			String uuid = UUID.randomUUID().toString();
 			String extension = getFileExtension(Objects.requireNonNull(originalNam));
 
-			// 비동기 처리
 			eventPublisher.publishEvent(new MemberImageEvent(byteFile, originalNam, uuid));
 
-			// url 만드는 곳으로 전달
 			return preReturnUrl(uuid, extension);
 		} catch (IOException e) {
 			throw new EmptyFileException(e);
+		}
+	}
+
+	private void validateFileSize(byte[] byteFile) {
+		if (byteFile.length > MAX_FILE_SIZE) {
+			throw new FileSizeOverException(byteFile.length);
 		}
 	}
 

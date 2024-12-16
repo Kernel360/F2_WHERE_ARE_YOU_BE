@@ -8,7 +8,7 @@ import org.badminton.domain.common.enums.MatchResult;
 import org.badminton.domain.common.enums.MatchStatus;
 import org.badminton.domain.common.enums.SetStatus;
 import org.badminton.domain.common.exception.match.AlreadyWinnerDeterminedException;
-import org.badminton.domain.common.exception.match.PreviousDetNotFinishedException;
+import org.badminton.domain.common.exception.match.PreviousSetNotFinishedException;
 import org.badminton.domain.common.exception.match.SetFinishedException;
 import org.badminton.domain.domain.league.LeagueReader;
 import org.badminton.domain.domain.league.entity.League;
@@ -19,9 +19,9 @@ import org.badminton.domain.domain.match.entity.SinglesSet;
 import org.badminton.domain.domain.match.info.BracketInfo;
 import org.badminton.domain.domain.match.info.SetInfo;
 import org.badminton.domain.domain.match.info.SetInfo.Main;
-import org.badminton.domain.domain.match.reader.SinglesMatchStore;
+import org.badminton.domain.domain.match.reader.SinglesMatchReader;
 import org.badminton.domain.domain.match.service.AbstractSinglesMatchStrategy;
-import org.badminton.domain.domain.match.store.SinglesMatchReader;
+import org.badminton.domain.domain.match.store.SinglesMatchStore;
 import org.springframework.stereotype.Component;
 
 import lombok.extern.slf4j.Slf4j;
@@ -62,7 +62,7 @@ public class FreeSinglesMatchStrategy extends AbstractSinglesMatchStrategy {
 	}
 
 	@Override
-	public SetInfo.Main registerSetScoreInMatch(Long matchId, Integer setNumber,
+	public SetInfo.Main endSet(Long matchId, Integer setNumber,
 		MatchCommand.UpdateSetScore updateSetScoreCommand) {
 		SinglesMatch singlesMatch = singlesMatchReader.getSinglesMatch(matchId);
 
@@ -81,8 +81,14 @@ public class FreeSinglesMatchStrategy extends AbstractSinglesMatchStrategy {
 
 		if (updateSetScoreCommand.getScore1() > updateSetScoreCommand.getScore2()) {
 			singlesMatch.player1WinSet();
-		} else {
+		}
+
+		if (updateSetScoreCommand.getScore2() > updateSetScoreCommand.getScore1()) {
 			singlesMatch.player2WinSet();
+		}
+
+		if (setNumber.equals(LIMIT_SET_GAME) && singlesMatch.isDrawMatch()) {
+			singlesMatch.setDrawMatch();
 		}
 
 		if (LIMIT_SET_GAME > setNumber) {
@@ -103,7 +109,7 @@ public class FreeSinglesMatchStrategy extends AbstractSinglesMatchStrategy {
 			return;
 		}
 		if (singlesMatch.getSinglesSet(setNumber - 1).getSetStatus() != SetStatus.FINISHED) {
-			throw new PreviousDetNotFinishedException(setNumber - 1);
+			throw new PreviousSetNotFinishedException(setNumber - 1);
 		}
 	}
 
