@@ -46,6 +46,12 @@ public class DoublesMatchReaderImpl implements DoublesMatchReader {
 	}
 
 	@Override
+	public DoublesMatch readDoublesMatch(Long leagueId, Long matchId) {
+		return doublesMatchRepository.findByIdAndLeagueLeagueId(matchId, leagueId)
+			.orElseThrow(() -> new MatchNotExistException(matchId, MatchType.DOUBLES));
+	}
+
+	@Override
 	public List<DoublesMatch> findAllCompletedByClubMemberId(Long clubMemberId) {
 		return doublesMatchRepositoryCustom.findAllCompletedByClubMemberId(clubMemberId);
 	}
