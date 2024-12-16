@@ -57,6 +57,7 @@ public class ClubServiceImpl implements ClubService {
 	}
 
 	@Override
+	@Transactional
 	public void refreshRecentlyCreatedClubsCache() {
 		clubReader.refreshRecentlyCreatedClubsCache();
 	}

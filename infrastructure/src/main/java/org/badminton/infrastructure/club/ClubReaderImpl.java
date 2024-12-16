@@ -31,7 +31,6 @@ public class ClubReaderImpl implements ClubReader {
 	private final ObjectMapper objectMapper;
 
 	@Override
-	@Transactional(readOnly = true)
 	public Page<ClubCache> readAllClubs(Pageable pageable) {
 		String key = ClubRedisKey.getClubsPageKey(pageable.getPageNumber());
 		Object cachedClubs = redisTemplate.opsForValue().get(key);
