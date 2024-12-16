@@ -69,7 +69,8 @@ public class MatchRecordService {
 		}
 
 		if (team1Result == MatchResult.DRAW) {
-			String[] memberTokens = getTeamsMemberToken(doublesMatch);
+
+			String[] memberTokens = doublesMatch.getAllMemberToken();
 			addDrawResults(memberTokens);
 
 		}
@@ -79,15 +80,6 @@ public class MatchRecordService {
 		return new String[] {
 			team.getLeagueParticipant1().getMember().getMemberToken(),
 			team.getLeagueParticipant2().getMember().getMemberToken()
-		};
-	}
-
-	private String[] getTeamsMemberToken(DoublesMatch match) {
-		return new String[] {
-			match.getTeam1().getLeagueParticipant1().getMember().getMemberToken(),
-			match.getTeam1().getLeagueParticipant2().getMember().getMemberToken(),
-			match.getTeam2().getLeagueParticipant1().getMember().getMemberToken(),
-			match.getTeam2().getLeagueParticipant2().getMember().getMemberToken()
 		};
 	}
 
