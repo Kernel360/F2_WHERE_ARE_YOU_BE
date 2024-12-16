@@ -81,8 +81,14 @@ public class FreeSinglesMatchStrategy extends AbstractSinglesMatchStrategy {
 
 		if (updateSetScoreCommand.getScore1() > updateSetScoreCommand.getScore2()) {
 			singlesMatch.player1WinSet();
-		} else {
+		}
+
+		if (updateSetScoreCommand.getScore2() > updateSetScoreCommand.getScore1()) {
 			singlesMatch.player2WinSet();
+		}
+
+		if (setNumber.equals(LIMIT_SET_GAME) && singlesMatch.isDrawMatch()) {
+			singlesMatch.setDrawMatch();
 		}
 
 		if (LIMIT_SET_GAME > setNumber) {

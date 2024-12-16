@@ -66,6 +66,9 @@ public class TournamentSinglesEndSetHandler {
 	public void processEndSet(SinglesMatch singlesMatch, Integer setNumber,
 		MatchCommand.UpdateSetScore updateSetScoreCommand) {
 
+		// 점수 검증
+		matchUtils.validateSetScores(updateSetScoreCommand);
+
 		// setScore 저장
 		updateWinnerWithSetScore(singlesMatch, setNumber, updateSetScoreCommand);
 

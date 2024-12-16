@@ -107,6 +107,8 @@ public enum ErrorCode {
 	NOT_LEAGUE_OWNER(412, "경기를 만든 사용자만 이용할 수 있습니다."),
 	CLUB_MEMBER_EXPEL_EXCEPTION(412, "해당 동호회에서 제제를 받아 가입 신청을 할 수 없습니다."),
 	BYE_MATCH_ACTION_NOT_ALLOWED(412, "해당 매치는 부전승 매치이기 때문에 점수를 수정할 수 없습니다"),
+	TIE_SCORE_NOT_ALLOWED(412, "토너먼트 경기에서는 점수가 동일할 수 없습니다"),
+	SET_SCORE_NOT_REACHED(412, "토너먼트에서 승자의 점수는 최소 21점이어야 합니다"),
 
 	// 500 Errors
 	INTERNAL_SERVER_ERROR(500, "서버 내부 오류가 발생했습니다."),

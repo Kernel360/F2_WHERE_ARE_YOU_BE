@@ -102,6 +102,16 @@ public class DoublesMatch extends AbstractBaseTime {
 		}
 	}
 
+	public void setDrawMatch() {
+		this.team1MatchResult = MatchResult.DRAW;
+		this.team2MatchResult = MatchResult.DRAW;
+		this.matchStatus = MatchStatus.FINISHED;
+	}
+
+	public boolean isDrawMatch() {
+		return this.team1WinSetCount == this.team2WinSetCount;
+	}
+
 	public void defineTeam1(Team winner) {
 		this.team1 = winner;
 	}
