@@ -46,8 +46,7 @@ public class ClubReaderImpl implements ClubReader {
 	}
 
 	private Page<ClubCache> refreshClubs(String key, Pageable pageable) {
-		Page<Club> clubs = clubRepository.findAllByIsClubDeletedIsFalse(pageable);
-		Page<ClubCache> redisClubs = clubs.map(ClubCache::from);
+		Page<ClubCache> redisClubs = clubRepository.findAllClubs(pageable);
 		redisTemplate.opsForValue().set(key, redisClubs, 5, TimeUnit.MINUTES);
 		return redisClubs;
 	}
