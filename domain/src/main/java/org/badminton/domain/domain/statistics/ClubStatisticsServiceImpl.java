@@ -28,17 +28,20 @@ public class ClubStatisticsServiceImpl implements ClubStatisticsService {
 	}
 
 	@Override
+	@Transactional
 	public void createStatistic(ClubCreateInfo clubCreateInfo) {
 		ClubStatistics clubStatistics = new ClubStatistics(clubCreateInfo);
 		clubStatisticsStore.store(clubStatistics);
 	}
 
 	@Override
+	@Transactional
 	public List<Long> clubIdByList() {
 		return clubStatisticsReader.findAllClubId();
 	}
 
 	@Override
+	@Transactional
 	public void updateByCountAndClubId(Long clubId, int count) {
 		var originStatistic = clubStatisticsReader.findByClubId(clubId);
 		originStatistic.increaseRegistrationCount(count);
@@ -46,6 +49,7 @@ public class ClubStatisticsServiceImpl implements ClubStatisticsService {
 	}
 
 	@Override
+	@Transactional
 	public List<ClubCardInfo> getTop10PopularClub() {
 
 		return clubStatisticsReader.readTop10PopularClub();
@@ -53,22 +57,26 @@ public class ClubStatisticsServiceImpl implements ClubStatisticsService {
 	}
 
 	@Override
+	@Transactional
 	public List<ClubCardInfo> getTop10RecentlyActiveClub() {
 
 		return clubStatisticsReader.readTop10RecentlyActiveClub();
 	}
 
 	@Override
+	@Transactional
 	public void refreshPopularClubsCache() {
 		clubStatisticsReader.refreshTop10PopularClubsCache();
 	}
 
 	@Override
+	@Transactional
 	public void refreshRecentlyActivityClubsCache() {
 		clubStatisticsReader.refreshActivityClubsCache();
 	}
 
 	@Override
+	@Transactional
 	public void updateLeagueCountByClubIdAndCount(Long clubId, int count) {
 		var originStatistic = clubStatisticsReader.findByClubId(clubId);
 		originStatistic.increaseLeagueCount(count);

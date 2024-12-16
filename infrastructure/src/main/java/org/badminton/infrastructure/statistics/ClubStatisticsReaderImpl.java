@@ -10,7 +10,6 @@ import org.badminton.domain.domain.statistics.ClubStatisticsReader;
 import org.badminton.domain.domain.statistics.ClubStatisticsRepositoryCustom;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -50,7 +49,6 @@ public class ClubStatisticsReaderImpl implements ClubStatisticsReader {
 	}
 
 	@Override
-	@Transactional(readOnly = true)
 	public List<ClubCardInfo> readTop10PopularClub() {
 
 		Object cachedClubs = redisTemplate.opsForValue().get(POPULAR_TOP10_REDIS_KEY);
@@ -66,7 +64,8 @@ public class ClubStatisticsReaderImpl implements ClubStatisticsReader {
 
 	@Override
 	public List<ClubCardInfo> refreshTop10PopularClubsCache() {
-		List<ClubStatistics> top10ByOrderByPopularityScoreDesc = clubStatisticsRepository.findTop10ByOrderByPopularityScoreDesc();
+		List<ClubStatistics> top10ByOrderByPopularityScoreDesc = clubStatisticsRepository
+			.findTop10ByOrderByPopularityScoreDesc();
 
 		List<ClubCardInfo> top10ClubCardInfo = top10ByOrderByPopularityScoreDesc.stream()
 			.map(clubStatistics -> ClubCardInfo.from(clubStatistics.getClub()))
@@ -91,9 +90,9 @@ public class ClubStatisticsReaderImpl implements ClubStatisticsReader {
 	}
 
 	@Override
-	@Transactional(readOnly = true)
 	public List<ClubCardInfo> refreshActivityClubsCache() {
-		List<ClubStatistics> top10RecentlyActiveClubStatistics = clubStatisticsRepository.findTop10ByOrderByActivityScoreDesc();
+		List<ClubStatistics> top10RecentlyActiveClubStatistics = clubStatisticsRepository
+			.findTop10ByOrderByActivityScoreDesc();
 
 		List<ClubCardInfo> top10ClubCardInfo = top10RecentlyActiveClubStatistics.stream()
 			.map(clubStatistics -> ClubCardInfo.from(clubStatistics.getClub()))
