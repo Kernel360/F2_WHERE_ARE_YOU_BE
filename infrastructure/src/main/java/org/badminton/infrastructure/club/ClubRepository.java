@@ -15,12 +15,8 @@ public interface ClubRepository extends JpaRepository<Club, Long> {
 
 	Optional<Club> findByClubTokenAndIsClubDeletedFalse(String clubToken);
 
-	Page<Club> findAllByIsClubDeletedIsFalse(Pageable pageable);
-
 	Page<Club> findAllByClubNameContainingIgnoreCaseAndIsClubDeletedIsFalse(String keyword, Pageable pageable);
-
-	List<Club> findAllByIsClubDeletedIsFalse();
-
+	
 	List<Club> findTop10ByIsClubDeletedIsFalseOrderByCreatedAtDesc();
 
 	Club findByClubId(Long clubId);
