@@ -1,12 +1,11 @@
-package org.badminton.domain.domain.club.info;
+package org.badminton.domain.domain.club.vo;
 
 import java.time.LocalDateTime;
 
 import org.badminton.domain.domain.club.entity.Club;
-import org.badminton.domain.domain.club.vo.ClubCache;
 import org.badminton.domain.domain.member.entity.Member;
 
-public record ClubCardInfo(
+public record ClubCache(
 	String clubToken,
 	String clubName,
 	String clubDescription,
@@ -16,10 +15,9 @@ public record ClubCardInfo(
 	Long goldClubMemberCount,
 	Long silverClubMemberCount,
 	Long bronzeClubMemberCount
-
 ) {
-	public static ClubCardInfo from(Club club) {
-		return new ClubCardInfo(
+	public static ClubCache from(Club club) {
+		return new ClubCache(
 			club.getClubToken(),
 			club.getClubName(),
 			club.getClubDescription(),
@@ -32,17 +30,4 @@ public record ClubCardInfo(
 		);
 	}
 
-	public static ClubCardInfo from(ClubCache club) {
-		return new ClubCardInfo(
-			club.clubToken(),
-			club.clubName(),
-			club.clubDescription(),
-			club.clubImage(),
-			club.createdAt(),
-			club.modifiedAt(),
-			club.goldClubMemberCount(),
-			club.silverClubMemberCount(),
-			club.bronzeClubMemberCount()
-		);
-	}
 }

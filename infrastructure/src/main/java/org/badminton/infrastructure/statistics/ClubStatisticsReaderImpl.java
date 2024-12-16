@@ -50,6 +50,7 @@ public class ClubStatisticsReaderImpl implements ClubStatisticsReader {
 	}
 
 	@Override
+	@Transactional(readOnly = true)
 	public List<ClubCardInfo> readTop10PopularClub() {
 
 		Object cachedClubs = redisTemplate.opsForValue().get(POPULAR_TOP10_REDIS_KEY);
@@ -64,7 +65,6 @@ public class ClubStatisticsReaderImpl implements ClubStatisticsReader {
 	}
 
 	@Override
-	@Transactional(readOnly = true)
 	public List<ClubCardInfo> refreshTop10PopularClubsCache() {
 		List<ClubStatistics> top10ByOrderByPopularityScoreDesc = clubStatisticsRepository.findTop10ByOrderByPopularityScoreDesc();
 

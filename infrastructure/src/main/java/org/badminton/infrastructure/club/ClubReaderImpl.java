@@ -7,6 +7,7 @@ import org.badminton.domain.common.exception.club.ClubNotExistException;
 import org.badminton.domain.domain.club.ClubReader;
 import org.badminton.domain.domain.club.entity.Club;
 import org.badminton.domain.domain.club.info.ClubCardInfo;
+import org.badminton.domain.domain.club.vo.ClubCache;
 import org.badminton.domain.domain.club.vo.ClubRedisKey;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -30,16 +31,37 @@ public class ClubReaderImpl implements ClubReader {
 	private final ObjectMapper objectMapper;
 
 	@Override
-	public Page<Club> readAllClubs(Pageable pageable) {
-		return clubRepository.findAllByIsClubDeletedIsFalse(pageable);
+	@Transactional(readOnly = true)
+	public Page<ClubCache> readAllClubs(Pageable pageable) {
+		String key = ClubRedisKey.getClubsPageKey(pageable.getPageNumber());
+		Object cachedClubs = redisTemplate.opsForValue().get(key);
+
+		if (cachedClubs != null) {
+			RedisPage<ClubCache> redisPage = objectMapper.convertValue(cachedClubs,
+				new TypeReference<>() {
+				});
+			return redisPage.toPage(pageable);
+		}
+
+		return refreshClubs(key, pageable);
+	}
+
+	private Page<ClubCache> refreshClubs(String key, Pageable pageable) {
+		Page<Club> clubs = clubRepository.findAllByIsClubDeletedIsFalse(pageable);
+		Page<ClubCache> redisClubs = clubs.map(ClubCache::from);
+		redisTemplate.opsForValue().set(key, redisClubs, 5, TimeUnit.MINUTES);
+		return redisClubs;
 	}
 
 	@Override
-	public Page<Club> keywordSearch(String keyword, Pageable pageable) {
-		return clubRepository.findAllByClubNameContainingIgnoreCaseAndIsClubDeletedIsFalse(keyword, pageable);
+	public Page<ClubCache> keywordSearch(String keyword, Pageable pageable) {
+		Page<Club> clubs = clubRepository.findAllByClubNameContainingIgnoreCaseAndIsClubDeletedIsFalse(keyword,
+			pageable);
+		return clubs.map(ClubCache::from);
 	}
 
 	@Override
+	@Transactional(readOnly = true)
 	public List<ClubCardInfo> readRecentlyCreatedClubs() {
 
 		Object cachedClubs = redisTemplate.opsForValue().get(RECENTLY_TOP10_REDIS_KEY);
@@ -54,7 +76,6 @@ public class ClubReaderImpl implements ClubReader {
 	}
 
 	@Override
-	@Transactional(readOnly = true)
 	public List<ClubCardInfo> refreshRecentlyCreatedClubsCache() {
 		List<Club> clubs = clubRepository.findTop10ByIsClubDeletedIsFalseOrderByCreatedAtDesc();
 
