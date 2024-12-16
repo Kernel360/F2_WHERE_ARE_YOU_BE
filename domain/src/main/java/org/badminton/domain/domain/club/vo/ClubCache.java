@@ -5,7 +5,7 @@ import java.time.LocalDateTime;
 import org.badminton.domain.domain.club.entity.Club;
 import org.badminton.domain.domain.member.entity.Member;
 
-public record RedisClub(
+public record ClubCache(
 	String clubToken,
 	String clubName,
 	String clubDescription,
@@ -16,8 +16,8 @@ public record RedisClub(
 	Long silverClubMemberCount,
 	Long bronzeClubMemberCount
 ) {
-	public static RedisClub from(Club club) {
-		return new RedisClub(
+	public static ClubCache from(Club club) {
+		return new ClubCache(
 			club.getClubToken(),
 			club.getClubName(),
 			club.getClubDescription(),

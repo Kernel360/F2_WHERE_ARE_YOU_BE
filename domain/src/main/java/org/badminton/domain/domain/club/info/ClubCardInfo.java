@@ -3,7 +3,7 @@ package org.badminton.domain.domain.club.info;
 import java.time.LocalDateTime;
 
 import org.badminton.domain.domain.club.entity.Club;
-import org.badminton.domain.domain.club.vo.RedisClub;
+import org.badminton.domain.domain.club.vo.ClubCache;
 import org.badminton.domain.domain.member.entity.Member;
 
 public record ClubCardInfo(
@@ -32,7 +32,7 @@ public record ClubCardInfo(
 		);
 	}
 
-	public static ClubCardInfo from(RedisClub club) {
+	public static ClubCardInfo from(ClubCache club) {
 		return new ClubCardInfo(
 			club.clubToken(),
 			club.clubName(),

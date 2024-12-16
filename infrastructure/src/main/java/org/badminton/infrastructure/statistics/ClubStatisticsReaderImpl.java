@@ -56,7 +56,7 @@ public class ClubStatisticsReaderImpl implements ClubStatisticsReader {
 		Object cachedClubs = redisTemplate.opsForValue().get(POPULAR_TOP10_REDIS_KEY);
 
 		if (cachedClubs != null) {
-			return objectMapper.convertValue(cachedClubs, new TypeReference<>() {
+			return objectMapper.convertValue(cachedClubs, new TypeReference<List<ClubCardInfo>>() {
 			});
 		}
 

@@ -4,14 +4,14 @@ import java.util.List;
 
 import org.badminton.domain.domain.club.entity.Club;
 import org.badminton.domain.domain.club.info.ClubCardInfo;
-import org.badminton.domain.domain.club.vo.RedisClub;
+import org.badminton.domain.domain.club.vo.ClubCache;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 public interface ClubReader {
-	Page<RedisClub> readAllClubs(Pageable pageable);
+	Page<ClubCache> readAllClubs(Pageable pageable);
 
-	Page<RedisClub> keywordSearch(String keyword, Pageable pageable);
+	Page<ClubCache> keywordSearch(String keyword, Pageable pageable);
 
 	List<ClubCardInfo> readRecentlyCreatedClubs();
 
