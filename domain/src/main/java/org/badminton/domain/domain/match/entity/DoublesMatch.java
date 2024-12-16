@@ -198,4 +198,13 @@ public class DoublesMatch extends AbstractBaseTime {
 		this.finishMatch();
 	}
 
+	public String[] getAllMemberToken() {
+		return new String[] {
+			this.getTeam1().getLeagueParticipant1().getMember().getMemberToken(),
+			this.getTeam1().getLeagueParticipant2().getMember().getMemberToken(),
+			this.getTeam2().getLeagueParticipant1().getMember().getMemberToken(),
+			this.getTeam2().getLeagueParticipant2().getMember().getMemberToken()
+		};
+	}
+
 }
