@@ -17,13 +17,15 @@ public class DistributeLockProcessorExecutorImpl implements DistributedLockProce
 
 	private final RedissonClient redissonClient;
 
+	private final String LOCK_NAME = "lock";
+
 	@Override
 	public void execute(String lockName, long waitMilliSecond, long releaseMilliSecond, Runnable runnable) {
 		RLock lock = redissonClient.getLock("lock");
 		try {
 			boolean isLocked = lock.tryLock(waitMilliSecond, releaseMilliSecond, TimeUnit.MILLISECONDS);
 			if (!isLocked) {
-				throw new IllegalArgumentException("[" + lockName + "] lock 획득 실패");
+				throw new IllegalArgumentException("[" + lockName + "] lock 획득 실패에 실패해서 lock이 걸리지 않았습니다.");
 			}
 			runnable.run();
 		} catch (InterruptedException e) {
