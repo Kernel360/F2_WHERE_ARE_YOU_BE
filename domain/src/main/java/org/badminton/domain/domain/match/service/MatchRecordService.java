@@ -43,6 +43,14 @@ public class MatchRecordService {
 			leagueRecordService.addWin(winnerToken);
 			leagueRecordService.addLoss(loserToken);
 		}
+
+		if (player1Result == MatchResult.DRAW) {
+			String participant1Token = singlesMatch.getLeagueParticipant1().getMember().getMemberToken();
+			String participant2Token = singlesMatch.getLeagueParticipant2().getMember().getMemberToken();
+
+			leagueRecordService.addDraw(participant1Token);
+			leagueRecordService.addDraw(participant2Token);
+		}
 	}
 
 	private void processDoublesMatchResult(Long matchId) {
@@ -59,6 +67,12 @@ public class MatchRecordService {
 
 			addMatchResults(winnerTokens, loserTokens);
 		}
+
+		if (team1Result == MatchResult.DRAW) {
+			String[] memberTokens = getTeamsMemberToken(doublesMatch);
+			addDrawResults(memberTokens);
+
+		}
 	}
 
 	private String[] getTeamMemberTokens(Team team) {
@@ -68,12 +82,27 @@ public class MatchRecordService {
 		};
 	}
 
+	private String[] getTeamsMemberToken(DoublesMatch match) {
+		return new String[] {
+			match.getTeam1().getLeagueParticipant1().getMember().getMemberToken(),
+			match.getTeam1().getLeagueParticipant2().getMember().getMemberToken(),
+			match.getTeam2().getLeagueParticipant1().getMember().getMemberToken(),
+			match.getTeam2().getLeagueParticipant2().getMember().getMemberToken()
+		};
+	}
+
 	private void addMatchResults(String[] winnerTokens, String[] loserTokens) {
 		for (String winnerToken : winnerTokens) {
 			leagueRecordService.addWin(winnerToken);
 		}
 		for (String loserToken : loserTokens) {
 			leagueRecordService.addLoss(loserToken);
+		}
+	}
+
+	private void addDrawResults(String[] memberTokens) {
+		for (String memberToken : memberTokens) {
+			leagueRecordService.addDraw(memberToken);
 		}
 	}
 }
