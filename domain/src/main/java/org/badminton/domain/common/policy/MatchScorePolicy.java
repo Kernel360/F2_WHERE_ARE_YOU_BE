@@ -1,8 +1,10 @@
 package org.badminton.domain.common.policy;
 
 import org.badminton.domain.common.enums.MatchGenerationType;
+import org.badminton.domain.common.enums.MatchStatus;
 import org.badminton.domain.common.enums.MatchType;
 import org.badminton.domain.common.enums.SetStatus;
+import org.badminton.domain.common.exception.match.CannotStartMatchException;
 import org.badminton.domain.common.exception.match.LeagueParticipantNotDeterminedException;
 import org.badminton.domain.common.exception.match.PreviousSetNotFinishedException;
 import org.badminton.domain.common.exception.match.RoundNotFinishedException;
@@ -29,33 +31,50 @@ public class MatchScorePolicy {
 
 		League league = leagueReader.readLeagueById(leagueId);
 		if (league.getMatchType() == MatchType.SINGLES) {
-			validateSinglesPreviousAndCurrentSetStatus(leagueId, matchId, setNumber);
+			SinglesMatch singlesMatch = singlesMatchReader.getSinglesMatch(leagueId, matchId);
+			validateSinglesPreviousAndCurrentSetStatus(leagueId, singlesMatch, setNumber);
 			if (league.getMatchGenerationType() == MatchGenerationType.TOURNAMENT) {
-				validateTournamentSinglesPreviousRoundDone(leagueId, matchId);
+				validateTournamentSinglesPreviousRoundDone(leagueId, singlesMatch);
 			}
 		} else if (league.getMatchType() == MatchType.DOUBLES) {
-			validateDoublesPreviousAndCurrentSetStatus(leagueId, matchId, setNumber);
+			DoublesMatch doublesMatch = doublesMatchReader.readDoublesMatch(leagueId, matchId);
+			validateDoublesPreviousAndCurrentSetStatus(leagueId, doublesMatch, setNumber);
 			if (league.getMatchGenerationType() == MatchGenerationType.TOURNAMENT) {
-				validateTournamentDoublesPreviousRoundDone(leagueId, matchId);
+				validateTournamentDoublesPreviousRoundDone(leagueId, doublesMatch);
 			}
 		}
 	}
 
 	public void validateMatchStartAvailable(Long leagueId, Long matchId) {
 		League league = leagueReader.readLeagueById(leagueId);
-		if (league.getMatchType() == MatchType.SINGLES
-			&& league.getMatchGenerationType() == MatchGenerationType.TOURNAMENT) {
-			validateTournamentSinglesPreviousRoundDone(leagueId, matchId);
-		} else if (league.getMatchType() == MatchType.DOUBLES
-			&& league.getMatchGenerationType() == MatchGenerationType.TOURNAMENT) {
-			validateTournamentDoublesPreviousRoundDone(leagueId, matchId);
+		if (league.getMatchType() == MatchType.SINGLES) {
+			SinglesMatch singlesMatch = singlesMatchReader.getSinglesMatch(leagueId, matchId);
+			if (singlesMatch.getSinglesSet(1).getSetStatus() == SetStatus.FINISHED) {
+				throw new SetFinishedException(1);
+			}
+			if (singlesMatch.getMatchStatus() != MatchStatus.NOT_STARTED) {
+				throw new CannotStartMatchException(matchId, singlesMatch.getMatchStatus());
+			}
+			if (league.getMatchGenerationType() == MatchGenerationType.TOURNAMENT) {
+				validateTournamentSinglesPreviousRoundDone(leagueId, singlesMatch);
+			}
+		} else if (league.getMatchType() == MatchType.DOUBLES) {
+			DoublesMatch doublesMatch = doublesMatchReader.readDoublesMatch(leagueId, matchId);
+			if (doublesMatch.getDoublesSet(1).getSetStatus() == SetStatus.FINISHED) {
+				throw new SetFinishedException(1);
+			}
+			if (doublesMatch.getMatchStatus() != MatchStatus.NOT_STARTED) {
+				throw new CannotStartMatchException(matchId, doublesMatch.getMatchStatus());
+			}
+			if (league.getMatchGenerationType() == MatchGenerationType.TOURNAMENT) {
+				validateTournamentDoublesPreviousRoundDone(leagueId, doublesMatch);
+			}
 		}
 	}
 
-	private void validateSinglesPreviousAndCurrentSetStatus(Long leagueId, Long matchId, int setNumber) {
-		SinglesMatch match = singlesMatchReader.getSinglesMatch(leagueId, matchId);
+	private void validateSinglesPreviousAndCurrentSetStatus(Long leagueId, SinglesMatch singlesMatch, int setNumber) {
 
-		if (match.getSinglesSet(setNumber).getSetStatus() == SetStatus.FINISHED) {
+		if (singlesMatch.getSinglesSet(setNumber).getSetStatus() == SetStatus.FINISHED) {
 			throw new SetFinishedException(setNumber);
 		}
 
@@ -63,19 +82,18 @@ public class MatchScorePolicy {
 			return;
 		}
 
-		if (match.getSinglesSet(setNumber - 1).getSetStatus() != SetStatus.FINISHED) {
+		if (singlesMatch.getSinglesSet(setNumber - 1).getSetStatus() != SetStatus.FINISHED) {
 			throw new PreviousSetNotFinishedException(setNumber - 1);
 		}
 	}
 
-	private void validateTournamentSinglesPreviousRoundDone(Long leagueId, Long matchId) {
-		SinglesMatch match = singlesMatchReader.getSinglesMatch(leagueId, matchId);
+	private void validateTournamentSinglesPreviousRoundDone(Long leagueId, SinglesMatch singlesMatch) {
 
-		if (match.getLeagueParticipant1() == null || match.getLeagueParticipant2() == null) {
-			throw new LeagueParticipantNotDeterminedException(matchId);
+		if (singlesMatch.getLeagueParticipant1() == null || singlesMatch.getLeagueParticipant2() == null) {
+			throw new LeagueParticipantNotDeterminedException(singlesMatch.getId());
 		}
 
-		int roundNumber = match.getRoundNumber();
+		int roundNumber = singlesMatch.getRoundNumber();
 		if (roundNumber == 1) {
 			return;
 		}
@@ -85,10 +103,9 @@ public class MatchScorePolicy {
 		}
 	}
 
-	private void validateDoublesPreviousAndCurrentSetStatus(Long leagueId, Long matchId, int setNumber) {
-		DoublesMatch match = doublesMatchReader.readDoublesMatch(leagueId, matchId);
+	private void validateDoublesPreviousAndCurrentSetStatus(Long leagueId, DoublesMatch doublesMatch, int setNumber) {
 
-		if (match.getDoublesSet(setNumber).getSetStatus() == SetStatus.FINISHED) {
+		if (doublesMatch.getDoublesSet(setNumber).getSetStatus() == SetStatus.FINISHED) {
 			throw new SetFinishedException(setNumber);
 		}
 
@@ -96,19 +113,18 @@ public class MatchScorePolicy {
 			return;
 		}
 
-		if (match.getDoublesSet(setNumber - 1).getSetStatus() != SetStatus.FINISHED) {
+		if (doublesMatch.getDoublesSet(setNumber - 1).getSetStatus() != SetStatus.FINISHED) {
 			throw new PreviousSetNotFinishedException(setNumber - 1);
 		}
 	}
 
-	private void validateTournamentDoublesPreviousRoundDone(Long leagueId, Long matchId) {
-		DoublesMatch match = doublesMatchReader.readDoublesMatch(leagueId, matchId);
+	private void validateTournamentDoublesPreviousRoundDone(Long leagueId, DoublesMatch doublesMatch) {
 
-		if (match.getTeam1() == null || match.getTeam2() == null) {
-			throw new LeagueParticipantNotDeterminedException(matchId);
+		if (doublesMatch.getTeam1() == null || doublesMatch.getTeam2() == null) {
+			throw new LeagueParticipantNotDeterminedException(doublesMatch.getId());
 		}
 
-		int roundNumber = match.getRoundNumber();
+		int roundNumber = doublesMatch.getRoundNumber();
 		if (roundNumber == 1) {
 			return;
 		}

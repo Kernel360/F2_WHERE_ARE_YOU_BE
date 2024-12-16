@@ -41,5 +41,5 @@ public interface SinglesMatchRepository extends JpaRepository<SinglesMatch, Long
 	Optional<SinglesMatch> findByLeagueParticipant(
 		@Param("leagueParticipant") LeagueParticipant leagueParticipant);
 
-	SinglesMatch findByIdAndLeagueLeagueId(Long matchId, Long leagueId);
+	Optional<SinglesMatch> findByIdAndLeagueLeagueId(Long matchId, Long leagueId);
 }

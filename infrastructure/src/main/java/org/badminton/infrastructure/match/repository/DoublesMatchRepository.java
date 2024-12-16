@@ -39,6 +39,6 @@ public interface DoublesMatchRepository extends JpaRepository<DoublesMatch, Long
 	Optional<DoublesMatch> findByLeagueParticipant(
 		@Param("leagueParticipant") LeagueParticipant leagueParticipant);
 
-	DoublesMatch findByIdAndLeagueLeagueId(Long matchId, Long leagueId);
+	Optional<DoublesMatch> findByIdAndLeagueLeagueId(Long matchId, Long leagueId);
 }
 

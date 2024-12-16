@@ -78,6 +78,7 @@ public enum ErrorCode {
 	DELETED(410, "요청한 리소스가 삭제되었습니다."),
 
 	INVALID_PLAYER_COUNT(411, "아직 모집 인원이 채워지지 않았습니다."),
+	CANNOT_START_MATCH(411, "이미 시작하거나 종료된 경기입니다."),
 	PARTICIPANT_NOT_EXIST_IN_MATCH(411, "해당 매치에 참가자가 아직 존재하지 않습니다"),
 
 	LEAGUE_RECRUITING_MUST_BE_COMPLETED_WHEN_BRACKET_GENERATION(412, "모집이 완료되면 대진표를 만들 수 있습니다."),
@@ -101,8 +102,8 @@ public enum ErrorCode {
 	LEAGUE_NOT_RECRUITING(412, "모집 중이 아닙니다."),
 	LEAGUE_PARTICIPANT_POWER_OF_TWO(412, "토너먼트 경기에서는 경기 참여 인원이 2의 제곱이어야 합니다"),
 	LEAGUE_PARTICIPANTS_NOT_DETERMINED(412, "해당 매치의 참여자가 아직 정해지지 않았습니다"),
-	SET_FINISHED(412, "Set 의 상태가 FINISHED 입니다"),
-	ALREADY_WINNER_DETERMINED(412, "매치의 승리자가 정해졌습니다"),
+	SET_FINISHED(412, "이미 종료된 세트입니다."),
+	ALREADY_WINNER_DETERMINED(412, "매치의 승리자가 정해졌습니다."),
 	CLUB_OWNER_CANT_WITHDRAW(412, "동호회원이 2명 이상인 동호회 회장은 동호회를 탈퇴할 수 없습니다."),
 	NOT_LEAGUE_OWNER(412, "경기를 만든 사용자만 이용할 수 있습니다."),
 	CLUB_MEMBER_EXPEL_EXCEPTION(412, "해당 동호회에서 제제를 받아 가입 신청을 할 수 없습니다."),

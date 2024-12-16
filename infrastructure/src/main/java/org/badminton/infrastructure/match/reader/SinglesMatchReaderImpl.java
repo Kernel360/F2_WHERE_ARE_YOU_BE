@@ -46,7 +46,8 @@ public class SinglesMatchReaderImpl implements SinglesMatchReader {
 
 	@Override
 	public SinglesMatch getSinglesMatch(Long leagueId, Long matchId) {
-		return singlesMatchRepository.findByIdAndLeagueLeagueId(matchId, leagueId);
+		return singlesMatchRepository.findByIdAndLeagueLeagueId(matchId, leagueId)
+			.orElseThrow(() -> new MatchNotExistException(matchId, MatchType.SINGLES));
 	}
 
 	@Override
