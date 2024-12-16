@@ -21,7 +21,7 @@ public class DistributeLockProcessorExecutorImpl implements DistributedLockProce
 
 	@Override
 	public void execute(String lockName, long waitMilliSecond, long releaseMilliSecond, Runnable runnable) {
-		RLock lock = redissonClient.getLock("lock");
+		RLock lock = redissonClient.getLock(LOCK_NAME);
 		try {
 			boolean isLocked = lock.tryLock(waitMilliSecond, releaseMilliSecond, TimeUnit.MILLISECONDS);
 			if (!isLocked) {
