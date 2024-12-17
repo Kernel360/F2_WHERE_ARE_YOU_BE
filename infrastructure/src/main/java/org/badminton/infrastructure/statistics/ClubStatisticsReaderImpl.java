@@ -8,6 +8,8 @@ import org.badminton.domain.domain.club.vo.ClubRedisKey;
 import org.badminton.domain.domain.statistics.ClubStatistics;
 import org.badminton.domain.domain.statistics.ClubStatisticsReader;
 import org.badminton.domain.domain.statistics.ClubStatisticsRepositoryCustom;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 
@@ -64,8 +66,9 @@ public class ClubStatisticsReaderImpl implements ClubStatisticsReader {
 
 	@Override
 	public List<ClubCardInfo> refreshTop10PopularClubsCache() {
+		Pageable pageable = PageRequest.of(0, 10);
 		List<ClubStatistics> top10ByOrderByPopularityScoreDesc = clubStatisticsRepository
-			.findTop10ByOrderByPopularityScoreDesc();
+			.findTopPopularClubs(pageable);
 
 		List<ClubCardInfo> top10ClubCardInfo = top10ByOrderByPopularityScoreDesc.stream()
 			.map(clubStatistics -> ClubCardInfo.from(clubStatistics.getClub()))
@@ -91,8 +94,9 @@ public class ClubStatisticsReaderImpl implements ClubStatisticsReader {
 
 	@Override
 	public List<ClubCardInfo> refreshActivityClubsCache() {
+		Pageable pageable = PageRequest.of(0, 10);
 		List<ClubStatistics> top10RecentlyActiveClubStatistics = clubStatisticsRepository
-			.findTop10ByOrderByActivityScoreDesc();
+			.findTop10ByActivityClubs(pageable);
 
 		List<ClubCardInfo> top10ClubCardInfo = top10RecentlyActiveClubStatistics.stream()
 			.map(clubStatistics -> ClubCardInfo.from(clubStatistics.getClub()))
