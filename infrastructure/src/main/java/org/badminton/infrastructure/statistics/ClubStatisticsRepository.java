@@ -3,6 +3,7 @@ package org.badminton.infrastructure.statistics;
 import java.util.List;
 
 import org.badminton.domain.domain.statistics.ClubStatistics;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
@@ -15,7 +16,23 @@ public interface ClubStatisticsRepository extends JpaRepository<ClubStatistics, 
 
 	ClubStatistics findByClubClubId(Long clubId);
 
-	List<ClubStatistics> findTop10ByOrderByPopularityScoreDesc();
+	@Query("SELECT DISTINCT cs " +
+		"FROM ClubStatistics cs " +
+		"JOIN FETCH cs.club c " +
+		"LEFT JOIN FETCH c.clubMembers cm " +
+		"LEFT JOIN FETCH cm.member m " +
+		"LEFT JOIN FETCH m.leagueRecord lr " +
+		"ORDER BY cs.popularityScore DESC"
+	)
+	List<ClubStatistics> findTopPopularClubs(Pageable pageable);
 
-	List<ClubStatistics> findTop10ByOrderByActivityScoreDesc();
+	@Query("SELECT DISTINCT cs " +
+		"FROM ClubStatistics cs " +
+		"JOIN FETCH cs.club c " +
+		"LEFT JOIN FETCH c.clubMembers cm " +
+		"LEFT JOIN FETCH cm.member m " +
+		"LEFT JOIN FETCH m.leagueRecord lr " +
+		"ORDER BY cs.activityScore DESC")
+	List<ClubStatistics> findTop10ByActivityClubs(Pageable pageable);
+
 }
