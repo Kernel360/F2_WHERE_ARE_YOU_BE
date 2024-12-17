@@ -70,10 +70,6 @@ public class ClubStatisticsReaderImpl implements ClubStatisticsReader {
 		List<ClubCache> top10ByOrderByPopularityScoreDesc = clubStatisticsRepository
 			.findTopPopularClubs(pageable);
 
-		// List<ClubCardInfo> top10ClubCardInfo = top10ByOrderByPopularityScoreDesc.stream()
-		// 	.map(clubStatistics -> ClubCardInfo.from(clubStatistics.getClub()))
-		// 	.toList();
-
 		redisTemplate.opsForValue()
 			.set(POPULAR_TOP10_REDIS_KEY, top10ByOrderByPopularityScoreDesc, 1, TimeUnit.MINUTES);
 
@@ -98,10 +94,6 @@ public class ClubStatisticsReaderImpl implements ClubStatisticsReader {
 		Pageable pageable = PageRequest.of(0, 10);
 		List<ClubCache> top10RecentlyActiveClubStatistics = clubStatisticsRepository
 			.findTop10ByActivityClubs(pageable);
-
-		// List<ClubCardInfo> top10ClubCardInfo = top10RecentlyActiveClubStatistics.stream()
-		// 	.map(clubStatistics -> ClubCardInfo.from(clubStatistics.getClub()))
-		// 	.toList();
 
 		redisTemplate.opsForValue()
 			.set(ACTIVITY_TOP10_REDIS_KEY, top10RecentlyActiveClubStatistics, 1, TimeUnit.MINUTES);
