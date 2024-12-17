@@ -21,9 +21,7 @@ public interface ClubStatisticsRepository extends JpaRepository<ClubStatistics, 
 		"JOIN FETCH cs.club c " +
 		"LEFT JOIN FETCH c.clubMembers cm " +
 		"LEFT JOIN FETCH cm.member m " +
-		"LEFT JOIN FETCH m.leagueRecord lr " +
-		"ORDER BY cs.popularityScore DESC"
-	)
+		"ORDER BY cs.popularityScore DESC")
 	List<ClubStatistics> findTopPopularClubs(Pageable pageable);
 
 	@Query("SELECT DISTINCT cs " +
@@ -31,7 +29,6 @@ public interface ClubStatisticsRepository extends JpaRepository<ClubStatistics, 
 		"JOIN FETCH cs.club c " +
 		"LEFT JOIN FETCH c.clubMembers cm " +
 		"LEFT JOIN FETCH cm.member m " +
-		"LEFT JOIN FETCH m.leagueRecord lr " +
 		"ORDER BY cs.activityScore DESC")
 	List<ClubStatistics> findTop10ByActivityClubs(Pageable pageable);
 
