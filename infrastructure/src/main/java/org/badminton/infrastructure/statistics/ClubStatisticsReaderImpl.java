@@ -3,7 +3,7 @@ package org.badminton.infrastructure.statistics;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-import org.badminton.domain.domain.club.info.ClubCardInfo;
+import org.badminton.domain.domain.club.vo.ClubCache;
 import org.badminton.domain.domain.club.vo.ClubRedisKey;
 import org.badminton.domain.domain.statistics.ClubStatistics;
 import org.badminton.domain.domain.statistics.ClubStatisticsReader;
@@ -51,12 +51,12 @@ public class ClubStatisticsReaderImpl implements ClubStatisticsReader {
 	}
 
 	@Override
-	public List<ClubCardInfo> readTop10PopularClub() {
+	public List<ClubCache> readTop10PopularClub() {
 
 		Object cachedClubs = redisTemplate.opsForValue().get(POPULAR_TOP10_REDIS_KEY);
 
 		if (cachedClubs != null) {
-			return objectMapper.convertValue(cachedClubs, new TypeReference<List<ClubCardInfo>>() {
+			return objectMapper.convertValue(cachedClubs, new TypeReference<List<ClubCache>>() {
 			});
 		}
 
@@ -65,27 +65,28 @@ public class ClubStatisticsReaderImpl implements ClubStatisticsReader {
 	}
 
 	@Override
-	public List<ClubCardInfo> refreshTop10PopularClubsCache() {
+	public List<ClubCache> refreshTop10PopularClubsCache() {
 		Pageable pageable = PageRequest.of(0, 10);
-		List<ClubStatistics> top10ByOrderByPopularityScoreDesc = clubStatisticsRepository
+		List<ClubCache> top10ByOrderByPopularityScoreDesc = clubStatisticsRepository
 			.findTopPopularClubs(pageable);
 
-		List<ClubCardInfo> top10ClubCardInfo = top10ByOrderByPopularityScoreDesc.stream()
-			.map(clubStatistics -> ClubCardInfo.from(clubStatistics.getClub()))
-			.toList();
+		// List<ClubCardInfo> top10ClubCardInfo = top10ByOrderByPopularityScoreDesc.stream()
+		// 	.map(clubStatistics -> ClubCardInfo.from(clubStatistics.getClub()))
+		// 	.toList();
 
-		redisTemplate.opsForValue().set(POPULAR_TOP10_REDIS_KEY, top10ClubCardInfo, 1, TimeUnit.MINUTES);
+		redisTemplate.opsForValue()
+			.set(POPULAR_TOP10_REDIS_KEY, top10ByOrderByPopularityScoreDesc, 1, TimeUnit.MINUTES);
 
-		return top10ClubCardInfo;
+		return top10ByOrderByPopularityScoreDesc;
 	}
 
 	@Override
-	public List<ClubCardInfo> readTop10RecentlyActiveClub() {
+	public List<ClubCache> readTop10RecentlyActiveClub() {
 
 		Object cachedClubs = redisTemplate.opsForValue().get(ACTIVITY_TOP10_REDIS_KEY);
 
 		if (cachedClubs != null) {
-			return objectMapper.convertValue(cachedClubs, new TypeReference<List<ClubCardInfo>>() {
+			return objectMapper.convertValue(cachedClubs, new TypeReference<List<ClubCache>>() {
 			});
 		}
 
@@ -93,17 +94,18 @@ public class ClubStatisticsReaderImpl implements ClubStatisticsReader {
 	}
 
 	@Override
-	public List<ClubCardInfo> refreshActivityClubsCache() {
+	public List<ClubCache> refreshActivityClubsCache() {
 		Pageable pageable = PageRequest.of(0, 10);
-		List<ClubStatistics> top10RecentlyActiveClubStatistics = clubStatisticsRepository
+		List<ClubCache> top10RecentlyActiveClubStatistics = clubStatisticsRepository
 			.findTop10ByActivityClubs(pageable);
 
-		List<ClubCardInfo> top10ClubCardInfo = top10RecentlyActiveClubStatistics.stream()
-			.map(clubStatistics -> ClubCardInfo.from(clubStatistics.getClub()))
-			.toList();
+		// List<ClubCardInfo> top10ClubCardInfo = top10RecentlyActiveClubStatistics.stream()
+		// 	.map(clubStatistics -> ClubCardInfo.from(clubStatistics.getClub()))
+		// 	.toList();
 
-		redisTemplate.opsForValue().set(ACTIVITY_TOP10_REDIS_KEY, top10ClubCardInfo, 1, TimeUnit.MINUTES);
+		redisTemplate.opsForValue()
+			.set(ACTIVITY_TOP10_REDIS_KEY, top10RecentlyActiveClubStatistics, 1, TimeUnit.MINUTES);
 
-		return top10ClubCardInfo;
+		return top10RecentlyActiveClubStatistics;
 	}
 }

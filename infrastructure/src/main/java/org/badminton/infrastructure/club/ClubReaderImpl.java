@@ -47,7 +47,7 @@ public class ClubReaderImpl implements ClubReader {
 
 	private Page<ClubCache> refreshClubs(String key, Pageable pageable) {
 		Page<ClubCache> redisClubs = clubRepository.findAllClubs(pageable);
-		redisTemplate.opsForValue().set(key, redisClubs, 5, TimeUnit.MINUTES);
+		redisTemplate.opsForValue().set(key, redisClubs, 1, TimeUnit.MINUTES);
 		return redisClubs;
 	}
 

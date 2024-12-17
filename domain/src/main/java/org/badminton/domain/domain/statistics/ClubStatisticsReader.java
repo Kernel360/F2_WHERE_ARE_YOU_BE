@@ -2,7 +2,7 @@ package org.badminton.domain.domain.statistics;
 
 import java.util.List;
 
-import org.badminton.domain.domain.club.info.ClubCardInfo;
+import org.badminton.domain.domain.club.vo.ClubCache;
 
 public interface ClubStatisticsReader {
 
@@ -14,11 +14,11 @@ public interface ClubStatisticsReader {
 
 	List<ClubStatistics> findAll();
 
-	List<ClubCardInfo> readTop10PopularClub();
+	List<ClubCache> readTop10PopularClub();
 
-	List<ClubCardInfo> readTop10RecentlyActiveClub();
+	List<ClubCache> readTop10RecentlyActiveClub();
 
-	List<ClubCardInfo> refreshTop10PopularClubsCache();
+	List<ClubCache> refreshTop10PopularClubsCache();
 
-	List<ClubCardInfo> refreshActivityClubsCache();
+	List<ClubCache> refreshActivityClubsCache();
 }
