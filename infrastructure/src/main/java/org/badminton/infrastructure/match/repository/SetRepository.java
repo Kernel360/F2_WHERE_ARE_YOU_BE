@@ -90,7 +90,7 @@ public class SetRepository {
 	}
 
 	public List<LeagueSetsScoreInProgressInfo> getInProgressSet(Long leagueId) {
-		Set<String> keys = redisTemplate2.keys(IN_PROGRESS_MATCH_PREFIX + "*");
+		Set<String> keys = redisTemplate2.keys(IN_PROGRESS_MATCH_PREFIX + leagueId + "*");
 		if (keys == null || keys.isEmpty()) {
 			return Collections.emptyList();
 		}
