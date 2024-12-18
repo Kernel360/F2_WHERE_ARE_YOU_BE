@@ -20,11 +20,7 @@ public class ClubStatisticsServiceImpl implements ClubStatisticsService {
 	@Override
 	@Transactional
 	public void increaseVisitedClubCount(String clubToken) {
-		ClubStatistics clubStatistics = clubStatisticsReader.readClubStatistics(clubToken);
-		clubStatistics.increaseVisitedCount();
-		clubStatisticsStore.store(clubStatistics);
-		log.info("**** 스레드 이름 : {}", Thread.currentThread().getName());
-		log.info("***** club visit count : {}", clubStatistics.getVisitedCount());
+		clubStatisticsStore.increaseClubVisitCount(clubToken);
 	}
 
 	@Override

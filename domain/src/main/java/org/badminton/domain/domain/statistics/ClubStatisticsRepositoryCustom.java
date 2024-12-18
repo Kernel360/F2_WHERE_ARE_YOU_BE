@@ -4,4 +4,6 @@ import java.util.List;
 
 public interface ClubStatisticsRepositoryCustom {
 	List<Long> findAllClubId();
+
+	void increaseClubVisitCount(String clubToken);
 }

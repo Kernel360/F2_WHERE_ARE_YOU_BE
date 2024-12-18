@@ -7,9 +7,11 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.event.TransactionalEventListener;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @Component
 @RequiredArgsConstructor
+@Slf4j
 public class ReadClubEventHandler {
 
 	private final ClubStatisticsService clubStatisticsService;
@@ -18,9 +20,6 @@ public class ReadClubEventHandler {
 	@Async
 	@TransactionalEventListener
 	public void readClubEventListener(ReadClubEvent event) {
-		String lockName = "CLUB_VISIT_LOCK_" + event.getClubToken();
-		distributedLockProcessor.execute(lockName, 10000, 10000,
-			() -> clubStatisticsService.increaseVisitedClubCount(event.getClubToken())
-		);
+		clubStatisticsService.increaseVisitedClubCount(event.getClubToken());
 	}
 }
