@@ -6,7 +6,7 @@ import lombok.Getter;
 public class LeagueMatchSetRedisKey {
 
 	public static final String IN_PROGRESS_MATCH_PREFIX = "IN_PROGRESS_";
-	private static final String LEAGUE_ID_PREFIX = "_LEAGUE_";
+	public static final String LEAGUE_ID_PREFIX = "_LEAGUE_";
 	private static final String MATCH_ID_PREFIX = "_MATCH_";
 	private static final String SET_NUMBER_PREFIX = "_SET_";
 
