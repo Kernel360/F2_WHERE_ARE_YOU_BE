@@ -87,7 +87,7 @@ public class LeagueReaderImpl implements LeagueReader {
 	public Page<League> readLeagueStatusIsNotAllAndRegionIsNotAll(AllowedLeagueStatus leagueStatus, Region region,
 		LocalDate date, Pageable pageable) {
 		LocalDateTime startOfDay = date.atStartOfDay();
-		LocalDateTime endOfDay = date.atTime(23, 59, 59);
+		LocalDateTime endOfDay = date.atTime(23, 59, 59, 9);
 
 		return leagueRepository.findAllByLeagueAtBetweenAndLeagueStatusAndAddressRegion(
 			startOfDay,
@@ -101,7 +101,7 @@ public class LeagueReaderImpl implements LeagueReader {
 	@Override
 	public Page<League> readLeagueStatusIsAllAndRegionIsNotAll(Region region, LocalDate date, Pageable pageable) {
 		LocalDateTime startOfDay = date.atStartOfDay();
-		LocalDateTime endOfDay = date.atTime(23, 59, 59);
+		LocalDateTime endOfDay = date.atTime(23, 59, 59, 9);
 		return leagueRepository.findAllByLeagueAtBetweenAndAddressRegion(
 			startOfDay,
 			endOfDay,
@@ -114,7 +114,7 @@ public class LeagueReaderImpl implements LeagueReader {
 	public Page<League> readLeagueStatusIsNotAllAndRegionIsAll(AllowedLeagueStatus leagueStatus, LocalDate date,
 		Pageable pageable) {
 		LocalDateTime startOfDay = date.atStartOfDay();
-		LocalDateTime endOfDay = date.atTime(23, 59, 59);
+		LocalDateTime endOfDay = date.atTime(23, 59, 59, 9);
 		return leagueRepository.findAllByLeagueAtBetweenAndLeagueStatus(
 			startOfDay,
 			endOfDay,
@@ -126,7 +126,7 @@ public class LeagueReaderImpl implements LeagueReader {
 	@Override
 	public Page<League> readLeagueStatusIsAllAndRegionIsAll(LocalDate date, Pageable pageable) {
 		LocalDateTime startOfDay = date.atStartOfDay();
-		LocalDateTime endOfDay = date.atTime(23, 59, 59);
+		LocalDateTime endOfDay = date.atTime(23, 59, 59, 9);
 		return leagueRepository.findAllByLeagueAtBetween(
 			startOfDay,
 			endOfDay,
