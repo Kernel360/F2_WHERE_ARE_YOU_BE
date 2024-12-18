@@ -25,7 +25,7 @@ public class SinglesMatchReaderImpl implements SinglesMatchReader {
 
 	@Override
 	public List<SinglesMatch> getSinglesBracket(Long leagueId) {
-		List<SinglesMatch> bracketInLeague = singlesMatchRepository.findAllByLeague_LeagueId(leagueId);
+		List<SinglesMatch> bracketInLeague = singlesMatchRepository.findAllSinglesMatch(leagueId);
 		if (bracketInLeague.isEmpty()) {
 			throw new BracketNotExistException(leagueId);
 		}

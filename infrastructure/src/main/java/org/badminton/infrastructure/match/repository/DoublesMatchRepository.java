@@ -20,6 +20,25 @@ public interface DoublesMatchRepository extends JpaRepository<DoublesMatch, Long
 
 	List<DoublesMatch> findAllByLeague_LeagueId(Long leagueId);
 
+	@Query("""
+		    SELECT dm
+		    FROM DoublesMatch dm
+		    LEFT JOIN FETCH dm.league l
+		    LEFT JOIN FETCH l.club c
+		    LEFT JOIN FETCH dm.team1 t1
+		    LEFT JOIN FETCH t1.leagueParticipant1 lp1
+		    LEFT JOIN FETCH lp1.member m1
+		    LEFT JOIN FETCH t1.leagueParticipant2 lp2
+		    LEFT JOIN FETCH lp2.member m2
+		    LEFT JOIN FETCH dm.team2 t2
+		    LEFT JOIN FETCH t2.leagueParticipant1 lp3
+		    LEFT JOIN FETCH lp3.member m3
+		    LEFT JOIN FETCH t2.leagueParticipant2 lp4
+		    LEFT JOIN FETCH lp4.member m4
+		    WHERE dm.league.leagueId = :leagueId
+		""")
+	List<DoublesMatch> findAllDoublesMatch(@Param("leagueId") Long leagueId);
+
 	void deleteAllByLeague_LeagueId(Long leagueId);
 
 	List<DoublesMatch> findAllByLeague_LeagueIdAndRoundNumber(Long leagueId, Integer roundNumber);

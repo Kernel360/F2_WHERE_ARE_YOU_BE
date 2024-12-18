@@ -20,6 +20,23 @@ public interface SinglesMatchRepository extends JpaRepository<SinglesMatch, Long
 
 	List<SinglesMatch> findAllByLeague_LeagueId(Long leagueId);
 
+	@Query("""
+		    SELECT sm
+		    FROM SinglesMatch sm
+		    LEFT JOIN FETCH sm.league l
+		    LEFT JOIN FETCH l.club c
+		    LEFT JOIN FETCH sm.leagueParticipant1 lp1
+		    LEFT JOIN FETCH lp1.member m1
+		    LEFT JOIN FETCH m1.leagueRecord lr1
+		    LEFT JOIN FETCH lp1.clubMember cm1
+		    LEFT JOIN FETCH sm.leagueParticipant2 lp2
+		    LEFT JOIN FETCH lp2.member m2
+		    LEFT JOIN FETCH m2.leagueRecord lr2
+		    LEFT JOIN FETCH lp2.clubMember cm2
+		    WHERE l.leagueId = :leagueId
+		""")
+	List<SinglesMatch> findAllSinglesMatch(@Param("leagueId") Long leagueId);
+
 	void deleteAllByLeague_LeagueId(Long leagueId);
 
 	List<SinglesMatch> findAllByLeague_LeagueIdAndRoundNumber(Long leagueId, Integer roundNumber);
