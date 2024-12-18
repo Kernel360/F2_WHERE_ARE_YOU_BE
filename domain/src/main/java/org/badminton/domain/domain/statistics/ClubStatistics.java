@@ -48,11 +48,6 @@ public class ClubStatistics extends AbstractBaseTime {
 		this.activityScore = 0.0;
 	}
 
-	public void increaseVisitedCount() {
-		this.visitedCount++;
-		updateScore();
-	}
-
 	public void increaseRegistrationCount(int count) {
 		this.registrationCount = count;
 		updateScore();
