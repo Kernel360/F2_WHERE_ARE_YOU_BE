@@ -37,7 +37,7 @@ public interface DoublesMatchRepository extends JpaRepository<DoublesMatch, Long
 		    LEFT JOIN FETCH lp4.member m4
 		    WHERE dm.league.leagueId = :leagueId
 		""")
-	List<DoublesMatch> findAllByLeagueIdWithJpql(@Param("leagueId") Long leagueId);
+	List<DoublesMatch> findAllDoublesMatch(@Param("leagueId") Long leagueId);
 
 	void deleteAllByLeague_LeagueId(Long leagueId);
 

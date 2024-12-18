@@ -35,7 +35,7 @@ public interface SinglesMatchRepository extends JpaRepository<SinglesMatch, Long
 		    LEFT JOIN FETCH lp2.clubMember cm2
 		    WHERE l.leagueId = :leagueId
 		""")
-	List<SinglesMatch> findAllByLeagueIdWithJpql(@Param("leagueId") Long leagueId);
+	List<SinglesMatch> findAllSinglesMatch(@Param("leagueId") Long leagueId);
 
 	void deleteAllByLeague_LeagueId(Long leagueId);
 
