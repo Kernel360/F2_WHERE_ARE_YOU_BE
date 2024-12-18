@@ -26,7 +26,7 @@ public class DoublesMatchReaderImpl implements DoublesMatchReader {
 
 	@Override
 	public List<DoublesMatch> getDoublesBracket(Long leagueId) {
-		List<DoublesMatch> bracketInLeague = doublesMatchRepository.findAllByLeague_LeagueId(leagueId);
+		List<DoublesMatch> bracketInLeague = doublesMatchRepository.findAllByLeagueIdWithAllByJpql(leagueId);
 		if (bracketInLeague.isEmpty()) {
 			throw new BracketNotExistException(leagueId);
 		}
