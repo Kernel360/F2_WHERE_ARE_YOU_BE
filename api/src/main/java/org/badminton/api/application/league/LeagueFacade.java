@@ -66,6 +66,7 @@ public class LeagueFacade {
 	public LeagueCreateInfo createLeague(String memberToken, String clubToken,
 		LeagueCreateNoIncludeClubCommand leagueCreateNoIncludeClubCommand) {
 		clubMemberPolicy.validateClubMember(memberToken, clubToken);
+		clubMemberPolicy.validateTier(memberToken, leagueCreateNoIncludeClubCommand.tierLimit());
 		LeagueCreateInfo leagueCreateInfo = leagueService.createLeague(memberToken, clubToken,
 			leagueCreateNoIncludeClubCommand);
 		leagueParticipantService.participantInLeague(memberToken, clubToken, leagueCreateInfo.leagueId());

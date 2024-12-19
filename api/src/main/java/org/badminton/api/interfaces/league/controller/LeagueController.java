@@ -87,7 +87,7 @@ public class LeagueController {
 		summary = "경기를 생성합니다.",
 		description = """
 			경기 생성하고를 데이터베이스에 저장합니다.
-						
+			
 			1. 경기 이름 2 ~ 20 글자
 			2. 경기 설명 2 ~ 1000 글자
 			3. 경기 장소 2 ~ 100 글자
@@ -98,7 +98,7 @@ public class LeagueController {
 				토너먼트 더블: 참가자 수/2 가 2의 제곱
 				프리 싱글: 2의 배수
 				프리 더블: 4의 배수
-						
+			
 			""",
 		tags = {"league"}
 	)
@@ -148,7 +148,7 @@ public class LeagueController {
 		summary = "경기의 세부 정보를 변경합니다.",
 		description = """
 			경기 이름, 설명, 참가자, 싱글/더블, 프리/토너먼트 변경
-						
+			
 			1. 경기 이름 2 ~ 20 글자
 			2. 경기 설명 2 ~ 1000 글자
 			3. 참가인원:
@@ -156,7 +156,7 @@ public class LeagueController {
 				토너먼트 더블: 참가자 수/2 가 2의 제곱
 				프리 싱글: 2의 배수
 				프리 더블: 4의 배수
-						
+			
 			""",
 		tags = {"league"}
 	)
