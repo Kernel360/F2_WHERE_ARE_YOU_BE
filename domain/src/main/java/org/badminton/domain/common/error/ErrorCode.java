@@ -69,7 +69,7 @@ public enum ErrorCode {
 	LEAGUE_PARTICIPATION_ALREADY_CANCELED(409, "이미 참여 신청을 취소한 경기 일정입니다."),
 	CLUB_MEMBER_ALREADY_BANNED(409, "해당 회원은 이미 제제를 받은 상태입니다"),
 	LEAGUE_ALREADY_CANCELED(409, "해당하는 경기는 이미 취소된 경기입니다."),
-	LEAGUE_AT_LESS_THAN_THREE_HOUR_INTERVAL(409, "3시간 이후에 경기를 생성할 수 있습니다."),
+	LEAGUE_AT_LESS_THAN_THREE_HOUR_INTERVAL(409, "경기를 생성할 수 없습니다. 기존에 등록된 경기 시간의 3시간 전후로는 새로운 경기를 등록할 수 없습니다."),
 	CLUB_MEMBER_OWNER_PROTECT(409, "동호회 회장의 리소스는 보호되어야 합니다."),
 	ROUND_NOT_FINISHED(409, "이전 라운드가 끝나야 해당 라운드의 경기를 시작할 수 있습니다."),
 	SET_NOT_FINISHED(409, "이전 세트의 경기가 끝나야 해당 경기를 진행할 수 있습니다"),
