@@ -24,7 +24,8 @@ public class ClubApplyReaderImpl implements ClubApplyReader {
 
 	@Override
 	public void validateApply(String clubToken, String memberToken) {
-		if (clubApplyRepository.existsByClubClubTokenAndMemberMemberToken(clubToken, memberToken)) {
+		if (clubApplyRepository.existsByClubClubTokenAndMemberMemberTokenAndStatus(clubToken, memberToken,
+			ClubApply.ApplyStatus.PENDING)) {
 			throw new MemberAlreadyApplyClubException(memberToken, clubToken);
 		}
 	}
