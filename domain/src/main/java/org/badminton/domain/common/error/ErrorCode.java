@@ -80,6 +80,7 @@ public enum ErrorCode {
 	INVALID_PLAYER_COUNT(411, "아직 모집 인원이 채워지지 않았습니다."),
 	CANNOT_START_MATCH(411, "이미 시작하거나 종료된 경기입니다."),
 	PARTICIPANT_NOT_EXIST_IN_MATCH(411, "해당 매치에 참가자가 아직 존재하지 않습니다"),
+	LEAGUE_LIMIT_TIER(411, "본인 티어보다 높은 티어의 경기는 만들 수 없습니다"),
 
 	LEAGUE_RECRUITING_MUST_BE_COMPLETED_WHEN_BRACKET_GENERATION(412, "모집이 완료되면 대진표를 만들 수 있습니다."),
 	INSUFFICIENT_TIER(412, "현재 경기의 티어와 맞지 않습니다"),
