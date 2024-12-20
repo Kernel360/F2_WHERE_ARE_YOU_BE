@@ -46,16 +46,43 @@
 ## 👧 팀원 구성
 
 
-<div align="center">
 
-|                                                                                 **박소은**                                                                                 |                                                                             **이강민**                                                                              |                                                                               **이선우**                                                                               |
-|:-----------------------------------------------------------------------------------------------------------------------------------------------------------------------:|:----------------------------------------------------------------------------------------------------------------------------------------------------------------:|:-------------------------------------------------------------------------------------------------------------------------------------------------------------------:|
+<table>
 
+  <tr>
+    <td align="center"><b>Backend</b></td>
+    <td align="center"><b>Frontend</b></td>
+    <td align="center"><b>Backend</b></td>
+    <td align="center"><b>Backend</b></td>
+  </tr>
+  <tr>
+    <td align="center">
+      <a href="https://github.com/soeunnPark">
+        <img src="https://github.com/user-attachments/assets/ac25ece8-4c7e-4651-9c53-4f5c82d2487f" width="100px;" alt="박소은"/><br />
+        <sub><b>팀장 : 박소은</b></sub>
+      </a>
+    </td>
+    <td align="center">
+      <a href="https://github.com/Yejin0O0">
+        <img src="https://github.com/user-attachments/assets/d7c93921-c0bd-4a9b-8891-5c7bfabb0cc9" width="100px;" alt="윤예진"/><br />
+        <sub><b>팀원 : 윤예진</b></sub>
+      </a>
+    </td>	  
+    <td align="center">
+      <a href="https://github.com/km2535">
+        <img src="https://github.com/user-attachments/assets/ab2803a4-e389-4861-887f-c3b8db822b62" width="100px;" alt="이강민"/><br />
+        <sub><b>팀원 : 이강민</b></sub>
+      </a>
+    </td>
+    <td align="center">
+      <a href="https://github.com/I-migi">
+        <img src="https://github.com/user-attachments/assets/7a5e4048-829e-452d-80c9-1eb0df3bb848" width="100px;" alt="이선우"/><br />
+        <sub><b>팀원 : 이선우</b></sub>
+      </a>
+    </td>
+  </tr>
+</table>
 
-</div>
-
-
-<br>
 
 ## 🍳 기술 스택
 
