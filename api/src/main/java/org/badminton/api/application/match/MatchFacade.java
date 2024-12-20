@@ -1,5 +1,6 @@
 package org.badminton.api.application.match;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -98,6 +99,7 @@ public class MatchFacade {
 	public List<LeagueSetsScoreInProgressInfo> retrieveLeagueMatchSetsScoreInProgress(Long leagueId) {
 		List<LeagueSetsScoreInProgressInfo> inProgressSet = setRepository.getInProgressSet(leagueId);
 		if (!inProgressSet.isEmpty()) {
+			inProgressSet.sort(Comparator.comparing(LeagueSetsScoreInProgressInfo::matchId));
 			return inProgressSet;
 		}
 		MatchRetrieveService matchRetrieveService = getMatchRetrieveService(leagueId);
